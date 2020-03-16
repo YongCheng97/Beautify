@@ -55,11 +55,19 @@ public class Customer implements Serializable {
 
     @OneToMany(mappedBy = "customer")
     private List<CreditCard> creditCards;
+    
+    @OneToMany(mappedBy = "customer")
+    private List<Booking> bookings;
+    
+    @OneToMany(mappedBy = "customer")
+    private List<Review> reviews;
 
     public Customer() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
         
         creditCards = new ArrayList<>();
+        reviews = new ArrayList<>();
+        bookings = new ArrayList<>();
     }
 
     public Customer(String firstName, String lastName, String email, String password, String username, Long contactNum) {
@@ -180,6 +188,34 @@ public class Customer implements Serializable {
      */
     public void setCreditCards(List<CreditCard> creditCards) {
         this.creditCards = creditCards;
+    }
+
+    /**
+     * @return the reviews
+     */
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    /**
+     * @param reviews the reviews to set
+     */
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    /**
+     * @return the bookings
+     */
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    /**
+     * @param bookings the bookings to set
+     */
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
 }
