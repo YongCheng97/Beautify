@@ -3,7 +3,6 @@ package entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,12 +18,13 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class SalesRecord implements Serializable {
+public class SalesForUs implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long salesRecordId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long salesId;
+    
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
     @DecimalMin("0.00")
@@ -37,48 +36,48 @@ public class SalesRecord implements Serializable {
     @NotNull
     private Date dateOfPayment;
     
-    @OneToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @OneToOne(optional = true)
+    @JoinColumn(nullable = true)
     private Booking booking;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
-    private Product product;
+    @ManyToOne(optional = true)
+    @JoinColumn(nullable = true)
+    private ServiceProvider serviceProvider;
     
-    public SalesRecord() {
+    public SalesForUs() {
         
     }
 
-    public SalesRecord(BigDecimal amount, Date dateOfPayment) {
+    public SalesForUs(BigDecimal amount, Date dateOfPayment) {
         this.amount = amount;
         this.dateOfPayment = dateOfPayment;
     }
     
     
 
-    public Long getSalesRecordId() {
-        return salesRecordId;
+    public Long getSalesId() {
+        return salesId;
     }
 
-    public void setSalesRecordId(Long salesRecordId) {
-        this.salesRecordId = salesRecordId;
+    public void setSalesId(Long salesId) {
+        this.salesId = salesId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (salesRecordId != null ? salesRecordId.hashCode() : 0);
+        hash += (salesId != null ? salesId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SalesRecord)) {
+        if (!(object instanceof SalesForUs)) {
             return false;
         }
-        SalesRecord other = (SalesRecord) object;
-        if ((this.salesRecordId == null && other.salesRecordId != null) || (this.salesRecordId != null && !this.salesRecordId.equals(other.salesRecordId))) {
+        SalesForUs other = (SalesForUs) object;
+        if ((this.salesId == null && other.salesId != null) || (this.salesId != null && !this.salesId.equals(other.salesId))) {
             return false;
         }
         return true;
@@ -86,7 +85,7 @@ public class SalesRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.SalesRecordEntity[ id=" + salesRecordId + " ]";
+        return "entity.SalesForUs[ id=" + salesId + " ]";
     }
 
     /**
@@ -132,17 +131,17 @@ public class SalesRecord implements Serializable {
     }
 
     /**
-     * @return the product
+     * @return the serviceProvider
      */
-    public Product getProduct() {
-        return product;
+    public ServiceProvider getServiceProvider() {
+        return serviceProvider;
     }
 
     /**
-     * @param product the product to set
+     * @param serviceProvider the serviceProvider to set
      */
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setServiceProvider(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
     
 }

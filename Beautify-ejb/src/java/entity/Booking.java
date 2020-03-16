@@ -43,6 +43,10 @@ public class Booking implements Serializable {
     @JoinColumn(nullable = false)
     private Customer customer;
     
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private Services services;
+    
     public Booking() {
         
     }
@@ -158,4 +162,18 @@ public class Booking implements Serializable {
         this.customer = customer;
     }
     
+    
+    /**
+     * @return the services
+     */
+    public Services getServices() {
+        return services;
+    }
+
+    /**
+     * @param services the services to set
+     */
+    public void setServices(Services services) {
+        this.services = services;
+    }
 }
