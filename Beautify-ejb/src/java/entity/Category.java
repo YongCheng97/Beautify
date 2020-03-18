@@ -3,12 +3,15 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Category implements Serializable {
@@ -17,7 +20,13 @@ public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long categoryId;
+    @Column(nullable = false, unique = true, length = 32)
+    @NotNull
+    @Size(max = 32)
     private String name;
+    @Column(nullable = false, length = 128)
+    @NotNull
+    @Size(max = 128)
     private String description;
 
     @OneToMany(mappedBy = "parentCategoryEntity")
@@ -33,9 +42,9 @@ public class Category implements Serializable {
         products = new ArrayList<>();
     }
 
-    public Category(String name) {
+    public Category(String name, String description) {
         this();
-        
+
         this.name = name;
         this.description = description;
     }
@@ -133,22 +142,17 @@ public class Category implements Serializable {
     /**
      * @param parentCategoryEntity the parentCategoryEntity to set
      */
-    public void setParentCategoryEntity(Category parentCategoryEntity) 
-    {
-        if(this.parentCategoryEntity != null)
-        {
-            if(this.parentCategoryEntity.getSubCategoryEntities().contains(this))
-            {
+    public void setParentCategoryEntity(Category parentCategoryEntity) {
+        if (this.parentCategoryEntity != null) {
+            if (this.parentCategoryEntity.getSubCategoryEntities().contains(this)) {
                 this.parentCategoryEntity.getSubCategoryEntities().remove(this);
             }
         }
-        
+
         this.parentCategoryEntity = parentCategoryEntity;
-        
-        if(this.parentCategoryEntity != null)
-        {
-            if(!this.parentCategoryEntity.getSubCategoryEntities().contains(this))
-            {
+
+        if (this.parentCategoryEntity != null) {
+            if (!this.parentCategoryEntity.getSubCategoryEntities().contains(this)) {
                 this.parentCategoryEntity.getSubCategoryEntities().add(this);
             }
         }

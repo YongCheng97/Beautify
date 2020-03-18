@@ -73,7 +73,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
 
     @Override
     public List<Category> retrieveAllCategories() {
-        Query query = em.createQuery("SELECT c FROM CategoryEntity c ORDER BY c.name ASC");
+        Query query = em.createQuery("SELECT c FROM Category c ORDER BY c.name ASC");
         List<Category> categoryEntities = query.getResultList();
 
         for (Category categoryEntity : categoryEntities) {
@@ -87,7 +87,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
 
     @Override
     public List<Category> retrieveAllRootCategories() {
-        Query query = em.createQuery("SELECT c FROM CategoryEntity c WHERE c.parentCategoryEntity IS NULL ORDER BY c.name ASC");
+        Query query = em.createQuery("SELECT c FROM Category c WHERE c.parentCategoryEntity IS NULL ORDER BY c.name ASC");
         List<Category> rootCategoryEntities = query.getResultList();
 
         for (Category rootCategoryEntity : rootCategoryEntities) {
@@ -101,7 +101,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
 
     @Override
     public List<Category> retrieveAllLeafCategories() {
-        Query query = em.createQuery("SELECT c FROM CategoryEntity c WHERE c.subCategoryEntities IS EMPTY ORDER BY c.name ASC");
+        Query query = em.createQuery("SELECT c FROM Category c WHERE c.subCategoryEntities IS EMPTY ORDER BY c.name ASC");
         List<Category> leafCategoryEntities = query.getResultList();
 
         for (Category leafCategoryEntity : leafCategoryEntities) {
@@ -113,7 +113,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
 
     @Override
     public List<Category> retrieveAllCategoriesWithoutProduct() {
-        Query query = em.createQuery("SELECT c FROM CategoryEntity c WHERE c.productEntities IS EMPTY ORDER BY c.name ASC");
+        Query query = em.createQuery("SELECT c FROM Category c WHERE c.productEntities IS EMPTY ORDER BY c.name ASC");
         List<Category> rootCategoryEntities = query.getResultList();
 
         for (Category rootCategoryEntity : rootCategoryEntities) {
@@ -142,7 +142,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
             if (categoryEntity.getCategoryId() != null) {
                 Category categoryEntityToUpdate = retrieveCategoryByCategoryId(categoryEntity.getCategoryId());
 
-                Query query = em.createQuery("SELECT c FROM CategoryEntity c WHERE c.name = :inName AND c.categoryId <> :inCategoryId");
+                Query query = em.createQuery("SELECT c FROM Category c WHERE c.name = :inName AND c.categoryId <> :inCategoryId");
                 query.setParameter("inName", categoryEntity.getName());
                 query.setParameter("inCategoryId", categoryEntity.getCategoryId());
 

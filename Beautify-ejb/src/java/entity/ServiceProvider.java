@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -56,12 +57,16 @@ public class ServiceProvider implements Serializable {
 
     @OneToMany(mappedBy = "serviceProvider")
     private List<Product> products;
+    
+    @ManyToMany(mappedBy = "serviceProviders")
+    private List<Tags> tags;
 
     public ServiceProvider() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
         
         creditCards = new ArrayList<>();
         products = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
     public ServiceProvider(String name, String email, String password, String address, Date openingHours, File certification, boolean isApproved) {
@@ -207,6 +212,20 @@ public class ServiceProvider implements Serializable {
     // Newly added in v4.5
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    /**
+     * @return the tags
+     */
+    public List<Tags> getTags() {
+        return tags;
+    }
+
+    /**
+     * @param tags the tags to set
+     */
+    public void setTags(List<Tags> tags) {
+        this.tags = tags;
     }
 
 }

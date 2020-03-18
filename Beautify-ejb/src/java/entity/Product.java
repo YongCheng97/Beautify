@@ -2,12 +2,15 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
@@ -46,9 +49,14 @@ public class Product implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private ServiceProvider serviceProvider;
+    
+    @ManyToMany(mappedBy = "products")
+    private List<Tags> tags;
 
     public Product() {
         price = new BigDecimal("0.00");
+        
+        tags = new ArrayList<>();
     }
 
     public Product(String name, BigDecimal price, String description, String photo) {
@@ -178,6 +186,20 @@ public class Product implements Serializable {
      */
     public void setSkuCode(String skuCode) {
         this.skuCode = skuCode;
+    }
+
+    /**
+     * @return the tags
+     */
+    public List<Tags> getTags() {
+        return tags;
+    }
+
+    /**
+     * @param tags the tags to set
+     */
+    public void setTags(List<Tags> tags) {
+        this.tags = tags;
     }
 
 }

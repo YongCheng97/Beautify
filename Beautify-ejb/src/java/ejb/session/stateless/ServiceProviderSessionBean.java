@@ -68,7 +68,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
 
     @Override
     public List<ServiceProvider> retrieveAllServiceProviders() {
-        Query query = em.createQuery("SELECT s FROM ServiceProviders s");
+        Query query = em.createQuery("SELECT s FROM ServiceProvider s");
 
         return query.getResultList();
     }

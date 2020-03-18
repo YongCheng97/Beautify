@@ -166,7 +166,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public Product retrieveProductByProductSkuCode(String skuCode) throws ProductNotFoundException {
-        Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.skuCode = :inSkuCode");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.skuCode = :inSkuCode");
         query.setParameter("inSkuCode", skuCode);
 
         try {
