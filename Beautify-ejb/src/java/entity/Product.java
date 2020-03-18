@@ -22,7 +22,7 @@ public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
     @Column(nullable = false, unique = true, length = 7)
     @NotNull
@@ -51,7 +51,7 @@ public class Product implements Serializable {
     private ServiceProvider serviceProvider;
     
     @ManyToMany(mappedBy = "products")
-    private List<Tags> tags;
+    private List<Tag> tags;
 
     public Product() {
         price = new BigDecimal("0.00");
@@ -191,14 +191,14 @@ public class Product implements Serializable {
     /**
      * @return the tags
      */
-    public List<Tags> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
     /**
      * @param tags the tags to set
      */
-    public void setTags(List<Tags> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 

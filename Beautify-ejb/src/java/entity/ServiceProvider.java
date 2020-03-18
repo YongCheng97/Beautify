@@ -24,7 +24,7 @@ public class ServiceProvider implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long serviceProviderId;
     @Column(nullable = false, length = 32)
     @NotNull
@@ -59,7 +59,10 @@ public class ServiceProvider implements Serializable {
     private List<Product> products;
     
     @ManyToMany(mappedBy = "serviceProviders")
-    private List<Tags> tags;
+    private List<Tag> tags;
+    
+    @OneToMany(mappedBy = "serviceProvider")
+    private List<Service> services;
 
     public ServiceProvider() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
@@ -67,6 +70,7 @@ public class ServiceProvider implements Serializable {
         creditCards = new ArrayList<>();
         products = new ArrayList<>();
         tags = new ArrayList<>();
+        services = new ArrayList<>();
     }
 
     public ServiceProvider(String name, String email, String password, String address, Date openingHours, File certification, boolean isApproved) {
@@ -217,15 +221,23 @@ public class ServiceProvider implements Serializable {
     /**
      * @return the tags
      */
-    public List<Tags> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
     /**
      * @param tags the tags to set
      */
-    public void setTags(List<Tags> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
     }
 
 }

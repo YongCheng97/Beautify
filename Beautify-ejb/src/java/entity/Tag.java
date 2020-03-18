@@ -10,30 +10,30 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 @Entity
-public class Tags implements Serializable {
+public class Tag implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tagId;
     private String name;
     
-    @ManyToMany 
+    @ManyToMany (mappedBy = "tags")
     private List<ServiceProvider> serviceProviders;
     
-    @ManyToMany
+    @ManyToMany (mappedBy = "tags")
     private List<Product> products;
     
-    @ManyToMany
-    private List<Services> services;
+    @ManyToMany (mappedBy = "tags")
+    private List<Service> services;
 
-    public Tags() {
+    public Tag() {
         serviceProviders = new ArrayList<>();
         products = new ArrayList<>();
         services = new ArrayList<>();
     }
 
-    public Tags(String name) {
+    public Tag(String name) {
         this();
         
         this.name = name;
@@ -57,10 +57,10 @@ public class Tags implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the tagId fields are not set
-        if (!(object instanceof Tags)) {
+        if (!(object instanceof Tag)) {
             return false;
         }
-        Tags other = (Tags) object;
+        Tag other = (Tag) object;
         if ((this.tagId == null && other.tagId != null) || (this.tagId != null && !this.tagId.equals(other.tagId))) {
             return false;
         }
@@ -117,14 +117,14 @@ public class Tags implements Serializable {
     /**
      * @return the services
      */
-    public List<Services> getServices() {
+    public List<Service> getServices() {
         return services;
     }
 
     /**
      * @param services the services to set
      */
-    public void setServices(List<Services> services) {
+    public void setServices(List<Service> services) {
         this.services = services;
     }
     

@@ -2,6 +2,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,18 +10,33 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class CreditCard implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long creditCardId;
+    @Column(nullable = false, unique = true, length = 32)
+    @NotNull
+    @Size(max = 32)
     private String type;
+    @Column(nullable = false, unique = true, length = 32)
+    @NotNull
+    @Size(max = 32)
     private String cardName;
+    @Column(nullable = false, unique = true, length = 19)
+    @NotNull
+    @Size(max = 19)
     private String cardNumber;
-    private Date expiryDate;
+    @Column(nullable = false, unique = true, length = 5)
+    @NotNull
+    @Size(max = 5)
+    private String expiryDate;
     
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
@@ -33,7 +49,7 @@ public class CreditCard implements Serializable {
     public CreditCard() {
     }
 
-    public CreditCard(String type, String cardName, String cardNumber, Date expiryDate) {
+    public CreditCard(String type, String cardName, String cardNumber, String expiryDate) {
         this.type = type;
         this.cardName = cardName;
         this.cardNumber = cardNumber;
@@ -97,11 +113,11 @@ public class CreditCard implements Serializable {
         this.cardNumber = cardNumber;
     }
 
-    public Date getExpiryDate() {
+    public String getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(Date expiryDate) {
+    public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
 

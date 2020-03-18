@@ -45,7 +45,7 @@ public class Booking implements Serializable {
     
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
-    private Services services;
+    private Service service;
     
     public Booking() {
         
@@ -164,16 +164,16 @@ public class Booking implements Serializable {
     
     
     /**
-     * @return the services
+     * @return the service
      */
-    public Services getServices() {
-        return services;
+    public Service getService() {
+        return service;
     }
 
     /**
-     * @param services the services to set
+     * @param service the service to set
      */
-    public void setServices(Services services) {
-        this.services = services;
+    public void setService(Service service) {
+        this.service = service;
     }
 }

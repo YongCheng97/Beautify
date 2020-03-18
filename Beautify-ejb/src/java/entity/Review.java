@@ -1,5 +1,6 @@
 package entity;
 
+import java.io.File;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,10 +31,8 @@ public class Review implements Serializable {
     private Integer rating;
     @Column(length = 128)
     @Size(max = 128)
-    private String description;
-    
-    
-    private String photo;
+    private String description;    
+    private File photo;
     
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
@@ -47,7 +46,7 @@ public class Review implements Serializable {
         
     }
     
-    public Review(Integer rating,String description, String photo) {
+    public Review(Integer rating,String description, File photo) {
         this();
         
         this.rating = rating;
@@ -119,14 +118,14 @@ public class Review implements Serializable {
     /**
      * @return the photo
      */
-    public String getPhoto() {
+    public File getPhoto() {
         return photo;
     }
 
     /**
      * @param photo the photo to set
      */
-    public void setPhoto(String photo) {
+    public void setPhoto(File photo) {
         this.photo = photo;
     }
 
