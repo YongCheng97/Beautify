@@ -80,7 +80,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
         if (serviceProvider != null) {
             return serviceProvider;
         } else {
-            throw new ServiceProviderNotFoundException("Staff ID " + serviceProviderId + " does not exist!");
+            throw new ServiceProviderNotFoundException("Service Provider ID " + serviceProviderId + " does not exist!");
         }
     }
 
