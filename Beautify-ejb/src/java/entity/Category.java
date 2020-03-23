@@ -18,7 +18,7 @@ public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
     @Column(nullable = false, unique = true, length = 32)
     @NotNull
@@ -36,10 +36,14 @@ public class Category implements Serializable {
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;
+    
+    @OneToMany(mappedBy = "category")
+    private List<Service> services;
 
     public Category() {
         subCategoryEntities = new ArrayList<>();
         products = new ArrayList<>();
+        services = new ArrayList<>();
     }
 
     public Category(String name, String description) {
@@ -156,6 +160,14 @@ public class Category implements Serializable {
                 this.parentCategoryEntity.getSubCategoryEntities().add(this);
             }
         }
+    }
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
     }
 
 }

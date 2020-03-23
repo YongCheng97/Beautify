@@ -1,6 +1,6 @@
 package ejb.session.stateless;
 
-import entity.Tags;
+import entity.Tag;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Local;
@@ -36,8 +36,8 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
     }
 
     @Override
-    public Tags createNewTagEntity(Tags newTagEntity) throws InputDataValidationException, CreateNewTagException {
-        Set<ConstraintViolation<Tags>> constraintViolations = validator.validate(newTagEntity);
+    public Tag createNewTagEntity(Tag newTagEntity) throws InputDataValidationException, CreateNewTagException {
+        Set<ConstraintViolation<Tag>> constraintViolations = validator.validate(newTagEntity);
 
         if (constraintViolations.isEmpty()) {
             try {
@@ -62,11 +62,11 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
     }
 
     @Override
-    public List<Tags> retrieveAllTags() {
+    public List<Tag> retrieveAllTags() {
         Query query = em.createQuery("SELECT t FROM Tags t ORDER BY t.name ASC");
-        List<Tags> tagEntities = query.getResultList();
+        List<Tag> tagEntities = query.getResultList();
 
-        for (Tags tagEntity : tagEntities) {
+        for (Tag tagEntity : tagEntities) {
             tagEntity.getProducts().size();
             tagEntity.getServiceProviders().size();
         }
@@ -75,8 +75,8 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
     }
 
     @Override
-    public Tags retrieveTagByTagId(Long tagId) throws TagNotFoundException {
-        Tags tagEntity = em.find(Tags.class, tagId);
+    public Tag retrieveTagByTagId(Long tagId) throws TagNotFoundException {
+        Tag tagEntity = em.find(Tag.class, tagId);
 
         if (tagEntity != null) {
             return tagEntity;
@@ -86,12 +86,12 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
     }
 
     @Override
-    public void updateTag(Tags tagEntity) throws InputDataValidationException, TagNotFoundException, UpdateTagException {
-        Set<ConstraintViolation<Tags>> constraintViolations = validator.validate(tagEntity);
+    public void updateTag(Tag tagEntity) throws InputDataValidationException, TagNotFoundException, UpdateTagException {
+        Set<ConstraintViolation<Tag>> constraintViolations = validator.validate(tagEntity);
 
         if (constraintViolations.isEmpty()) {
             if (tagEntity.getTagId() != null) {
-                Tags tagEntityToUpdate = retrieveTagByTagId(tagEntity.getTagId());
+                Tag tagEntityToUpdate = retrieveTagByTagId(tagEntity.getTagId());
 
                 Query query = em.createQuery("SELECT t FROM Tags t WHERE t.name = :inName AND t.tagId <> :inTagId");
                 query.setParameter("inName", tagEntity.getName());
@@ -112,7 +112,7 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
 
     @Override
     public void deleteTag(Long tagId) throws TagNotFoundException, DeleteTagException {
-        Tags tagEntityToRemove = retrieveTagByTagId(tagId);
+        Tag tagEntityToRemove = retrieveTagByTagId(tagId);
 
         if (!tagEntityToRemove.getProducts().isEmpty()) {
             throw new DeleteTagException("Tag ID " + tagId + " is associated with existing products and cannot be deleted!");
@@ -121,7 +121,7 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
         }
     }
 
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Tags>> constraintViolations) {
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Tag>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {
