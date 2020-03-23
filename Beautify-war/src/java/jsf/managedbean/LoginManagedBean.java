@@ -32,9 +32,9 @@ public class LoginManagedBean {
     {
         try
         {
-            Customer currentStaffEntity = customerSessionBeanLocal.customerLogin(username, password);FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            Customer currentCustomerEntity = customerSessionBeanLocal.customerLogin(username, password);FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentStaffEntity", currentStaffEntity);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", currentCustomerEntity);
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
         }
         catch(InvalidLoginCredentialException ex)
