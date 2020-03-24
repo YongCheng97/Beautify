@@ -1,0 +1,281 @@
+package ejb.session.stateless;
+
+import entity.Category;
+import entity.Product;
+import entity.Review;
+import entity.Service;
+import entity.ServiceProvider;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import util.exception.CategoryNotFoundException;
+import util.exception.CreateNewProductException;
+import util.exception.CreateNewServiceException;
+import util.exception.InputDataValidationException;
+import util.exception.ProductExistException;
+import util.exception.ServiceExistException;
+import util.exception.ServiceNotFoundException;
+import util.exception.ServiceProviderNotFoundException;
+import util.exception.UnknownPersistenceException;
+
+
+@Stateless
+@Local(ServiceSessionBeanLocal.class)
+
+public class ServiceSessionBean implements ServiceSessionBeanLocal {
+
+    @EJB
+    private ServiceProviderSessionBeanLocal serviceProviderSessionBeanLocal;
+
+    @PersistenceContext(unitName = "Beautify-ejbPU")
+    private EntityManager em;
+    
+    @EJB
+    private CategorySessionBeanLocal categorySessionBeanLocal;
+    
+    
+
+    
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+    
+    public ServiceSessionBean() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+    }
+    
+    @Override
+    public Service createNewService(Service newService, Long serviceProviderId, Long categoryId) throws ServiceExistException, UnknownPersistenceException, InputDataValidationException, CreateNewServiceException {
+        Set<ConstraintViolation<Service>> constraintViolations = validator.validate(newService);
+
+        if (constraintViolations.isEmpty()) {
+            try {
+
+                if (categoryId == null) {
+                    throw new CreateNewServiceException("The new service must be associated a leaf category");
+                }
+
+                Category category = categorySessionBeanLocal.retrieveCategoryByCategoryId(categoryId);
+
+                if (!category.getSubCategoryEntities().isEmpty()) {
+                    throw new CreateNewServiceException("Selected category for the new service is not a leaf category");
+                }
+
+                newService.setCategory(category);
+                category.getServices().add(newService);
+                
+                if (serviceProviderId == null) {
+                    throw new CreateNewServiceException("The new service must be assoicated a service provider");
+                }
+
+                ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderId);
+                
+                newService.setServiceProvider(serviceProvider);
+                serviceProvider.getServices().add(newService);
+
+                em.persist(newService);
+                em.flush();
+
+                return newService;
+                
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new ServiceExistException();
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } catch (CategoryNotFoundException | ServiceProviderNotFoundException ex) {
+                throw new CreateNewServiceException("An error has occurred while creating the new service: " + ex.getMessage());
+            }
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+        
+    }
+    
+    @Override
+    public List<Service> retrieveAllServices() {
+        Query query = em.createQuery("SELECT s FROM Service s ORDER BY s.price ASC");
+        List<Service> services = query.getResultList();
+
+        for (Service service : services) {
+            service.getBookings().size();
+            service.getPromotions().size();
+            service.getTags().size();
+            
+            service.getCategory();
+            service.getServiceProvider();
+        }
+
+        return services;
+    }
+    
+    @Override
+    public Service retrieveServiceByServiceId(Long serviceId) throws ServiceNotFoundException {
+        Service service = em.find(Service.class, serviceId);
+
+        if (service != null) {
+            service.getBookings().size();
+            service.getPromotions().size();
+            service.getTags().size();
+            
+            service.getCategory();
+            service.getServiceProvider();
+            
+            return service;
+        } else {
+            throw new ServiceNotFoundException("Service ID " + serviceId + " does not exist!");
+        }
+    }
+    
+    @Override
+    public List<Service> searchServicesByName(String searchString) {
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.serviceName LIKE :inSearchString ORDER BY s.price ASC");
+        query.setParameter("inSearchString", "%" + searchString + "%");
+        List<Service> services = query.getResultList();
+
+        for (Service service : services) {
+            service.getBookings().size();
+            service.getPromotions().size();
+            service.getTags().size();
+            
+            service.getCategory();
+            service.getServiceProvider();
+        }
+
+        return services;
+    }
+    
+    @Override
+    public List<Service> filterServicesByCategory(Long categoryId) throws CategoryNotFoundException {
+        List<Service> services = new ArrayList<>();
+        Category category = categorySessionBeanLocal.retrieveCategoryByCategoryId(categoryId);
+
+        if (category.getSubCategoryEntities().isEmpty()) {
+            services = category.getServices();
+        } else {
+            for (Category subCategory : category.getSubCategoryEntities()) {
+                services.addAll(addSubCategoryServices(subCategory));
+            }
+        }
+
+        for (Service service : services) {
+            service.getBookings().size();
+            service.getPromotions().size();
+            service.getTags().size();
+            
+            service.getCategory();
+            service.getServiceProvider();
+        }
+
+        Collections.sort(services, new Comparator<Service>() {
+            public int compare(Service se1, Service se2) {
+                return se1.getServiceName().compareTo(se2.getServiceName());
+            }
+        });
+
+        return services;
+    }
+    
+    @Override
+    public List<Service> filterServicesByTags(List<Long> tagIds, String condition)
+    {
+        List<Service> services = new ArrayList<>();
+        
+        if(tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR")))
+        {
+            return services;
+        }
+        else {
+           if(condition.equals("OR")) {
+                Query query = em.createQuery("SELECT DISTINCT s FROM Service s, IN (s.tags) t WHERE t.tagId IN :inTagIds ORDER BY s.serviceName ASC");
+                query.setParameter("inTagIds", tagIds);
+                services = query.getResultList();                                                          
+           }
+            else // AND
+           {
+               String selectClause = "SELECT s FROM Service s";
+               String whereClause = "";
+               Boolean firstTag = true;
+               Integer tagCount = 1;  
+               
+               for(Long tagId:tagIds)
+                {
+                    selectClause += ", IN (s.tags) t" + tagCount;
+
+                    if(firstTag)
+                    {
+                        whereClause = "WHERE t1.tagId = " + tagId;
+                        firstTag = false;
+                    }
+                    else
+                    {
+                        whereClause += " AND t" + tagCount + ".tagId = " + tagId; 
+                    }
+                    
+                    tagCount++;
+                }
+                
+                String jpql = selectClause + " " + whereClause + " ORDER BY s.serviceName ASC";
+                Query query = em.createQuery(jpql);
+                services = query.getResultList();
+           }
+           
+           for(Service service:services)
+            {
+                service.getCategory();
+                service.getTags().size();
+            }
+            
+            Collections.sort(services, new Comparator<Service>()
+            {
+                public int compare(Service se1, Service se2) {
+                    return se1.getServiceName().compareTo(se1.getServiceName());
+                }
+            });
+            
+            return services;
+        }
+    }
+    
+    private List<Service> addSubCategoryServices(Category categoryEntity) {
+        List<Service> services = new ArrayList<>();
+
+        if (categoryEntity.getSubCategoryEntities().isEmpty()) {
+            return categoryEntity.getServices();
+        } else {
+            for (Category subCategoryEntity : categoryEntity.getSubCategoryEntities()) {
+                services.addAll(addSubCategoryServices(subCategoryEntity));
+            }
+
+            return services;
+        }
+    }    
+    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Service>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+
+        return msg;
+    }
+}
