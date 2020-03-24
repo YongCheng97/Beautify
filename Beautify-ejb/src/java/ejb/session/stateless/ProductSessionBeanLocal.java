@@ -31,4 +31,6 @@ public interface ProductSessionBeanLocal {
     public void updateProduct(Product productEntity, Long categoryId) throws ProductNotFoundException, CategoryNotFoundException, UpdateProductException, InputDataValidationException;
 
     public void deleteProduct(Long productId) throws ProductNotFoundException, DeleteProductException;
+
+    public List<Product> filterProductsByTags(List<Long> tagIds, String condition);
 }

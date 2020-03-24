@@ -150,6 +150,69 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
         return products;
     }
+    
+    @Override
+    public List<Product> filterProductsByTags(List<Long> tagIds, String condition)
+    {
+        List<Product> products = new ArrayList<>();
+        
+        if(tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR")))
+        {
+            return products;
+        }
+        else
+        {
+            if(condition.equals("OR"))
+            {
+                Query query = em.createQuery("SELECT DISTINCT p FROM Product p, IN (p.tags) t WHERE t.tagId IN :inTagIds ORDER BY p.skuCode ASC");
+                query.setParameter("inTagIds", tagIds);
+                products = query.getResultList();                                                          
+            }
+            else // AND
+            {
+                String selectClause = "SELECT p FROM Product p";
+                String whereClause = "";
+                Boolean firstTag = true;
+                Integer tagCount = 1;
+
+                for(Long tagId:tagIds)
+                {
+                    selectClause += ", IN (p.tags) t" + tagCount;
+
+                    if(firstTag)
+                    {
+                        whereClause = "WHERE t1.tagId = " + tagId;
+                        firstTag = false;
+                    }
+                    else
+                    {
+                        whereClause += " AND t" + tagCount + ".tagId = " + tagId; 
+                    }
+                    
+                    tagCount++;
+                }
+                
+                String jpql = selectClause + " " + whereClause + " ORDER BY p.skuCode ASC";
+                Query query = em.createQuery(jpql);
+                products = query.getResultList();                                
+            }
+            
+            for(Product product:products)
+            {
+                product.getCategory();
+                product.getTags().size();
+            }
+            
+            Collections.sort(products, new Comparator<Product>()
+            {
+                public int compare(Product pe1, Product pe2) {
+                    return pe1.getSkuCode().compareTo(pe2.getSkuCode());
+                }
+            });
+            
+            return products;
+        }
+    }
 
     public Product retrieveProductByProdId(Long productId) throws ProductNotFoundException {
         Product product = em.find(Product.class, productId);
