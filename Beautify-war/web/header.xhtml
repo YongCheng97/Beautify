@@ -6,7 +6,8 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns="http://www.w3.org/1999/xhtml">
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <header style="text-align: right;">
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
@@ -23,7 +24,7 @@
                 </p:password>
                 &nbsp;
                 <p:commandButton type="reset" value="Clear" icon="fa fa-undo" />&nbsp;
-                <p:commandButton type="submit" value="Login" actionListener="#{loginManagedBean.login}" icon="fa fa-sign-in" />
+                <p:commandButton type="submit" value="Login" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
 
                 <p:growl>
                     <p:autoUpdate />
@@ -44,36 +45,7 @@
     <h:form>  
         <p:growl id="messages"/>
 
-        <p:menubar>
-
-            <p:submenu label="Nails">
-                <p:submenu label="Products">
-                    <p:menuitem value="Save"/>
-                    <p:menuitem value="Update"/>
-                </p:submenu>
-                <p:submenu label="Services">
-                </p:submenu>
-            </p:submenu>
-
-            <p:submenu label="Hair">
-                <p:submenu label="Products">
-                    <p:menuitem value="Save"/>
-                    <p:menuitem value="Update"/>
-                </p:submenu>
-                <p:submenu label="Services">
-                    <p:menuitem value="Delete" />
-                </p:submenu>
-            </p:submenu>
-
-            <p:submenu label="Makeup">
-                <p:submenu label="Products">
-                    <p:menuitem value="Save"/>
-                    <p:menuitem value="Update"/>
-                </p:submenu>
-                <p:submenu label="Services">
-                    <p:menuitem value="Delete"/>
-                </p:submenu>
-            </p:submenu>
+            <p:menubar model="#{menuBean.model}">
 
             <f:facet name="options">
                 <p:inputText style="margin:1px 10px 1px 1px;" placeholder="Search"/>

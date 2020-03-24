@@ -54,10 +54,10 @@ public class Service implements Serializable {
     @JoinColumn(nullable = false)
     private Category category;
     
-    @ManyToMany(mappedBy = "services")
+    @ManyToMany
     private List<Tag> tags;
     
-    @OneToMany(mappedBy = "service")
+    @OneToMany
     private List<Promotion> promotions;
     
     @OneToMany(mappedBy = "service")

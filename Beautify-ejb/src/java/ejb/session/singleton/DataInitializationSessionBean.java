@@ -11,20 +11,27 @@ import entity.Category;
 import entity.Customer;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.CreateNewCategoryException;
 import util.exception.CustomerExistException;
+import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
-@Stateless
+
+/**
+ *
+ * @author fooyo
+ */
+@Singleton
 @LocalBean
 @Startup
-public class DataInitSessionBean {
+
+public class DataInitializationSessionBean {
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
@@ -35,17 +42,24 @@ public class DataInitSessionBean {
     @EJB(name = "CustomerSessionBeanLocal")
     private CustomerSessionBeanLocal customerSessionBeanLocal;
 
-    public DataInitSessionBean() {
+    public DataInitializationSessionBean() {
     }
 
     @PostConstruct
     public void postConstruct() {
-        initialiseData();
+        try
+        {
+            customerSessionBeanLocal.retrieveCustomerByCustId(Long.valueOf(2));
+        }
+        catch(CustomerNotFoundException ex)
+        {
+            initialiseData();
+        }
     }
 
     private void initialiseData() {
         try {
-            customerSessionBeanLocal.createNewCustomer(new Customer("Bob", "Lim", "boblim@gmail.com", "boblim", "password", Long.parseLong("98023457")));
+            customerSessionBeanLocal.createNewCustomer(new Customer("Bob", "Lim", "boblim@gmail.com", "password", "boblim", Long.parseLong("98023457")));
             
             Category categoryNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Nails", "Nail Services"), null); 
             Category categoryHair = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair", "Hair Services"), null); 

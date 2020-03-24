@@ -50,7 +50,7 @@ public class Product implements Serializable {
     @JoinColumn(nullable = false)
     private ServiceProvider serviceProvider;
     
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany
     private List<Tag> tags;
 
     public Product() {
