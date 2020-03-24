@@ -69,7 +69,7 @@ public class Customer implements Serializable {
         bookings = new ArrayList<>();
     }
 
-    public Customer(String firstName, String lastName, String email, String password, String username, Long contactNum) {
+    public Customer(String firstName, String lastName, String email, String username, String password, Long contactNum) {
         this();
         
         this.firstName = firstName;

@@ -12,35 +12,170 @@
         <h:outputStylesheet library="css" name="default.css" />
     </h:head>
     <h:body>
-        
+
+
         <p:layout fullPage="true">
-            
-            <p:layoutUnit position="north" size="250">
-                
+
+            <p:layoutUnit position="north" size="100">
+
                 <h1>BEAUTIFY</h1>
-                
-                <ui:insert name="header">
-                    <ui:include src="/header.xhtml" />
-                </ui:insert>
-                
+
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="center" >
-                
+
+                <h:form id="loginForm">
+
+                    <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+                        <p:commandButton value = "Login" onclick="PF('dialogLogin').show()" immediate="true" style="float:right;"/>&nbsp;
+                        <p:commandButton value = "Register" onclick="PF('dialogRegister').show()" immediate="true" style="float:right;"/>
+                    </h:panelGroup>
+
+                    <p:dialog id="dialogLogin" widgetVar="dialogLogin" header="Login" closable="true" height="120">
+                        <p:outputLabel for="username" value="Username" />&nbsp;
+                        <p:inputText id="username" value="#{loginManagedBean.username}" size="16" required="true" requiredMessage="Username is required" maxlength="32">
+                            <f:validateLength minimum="4" />
+                        </p:inputText>
+                        <br/>
+                        <br/>
+                        <p:outputLabel for="password" value="Password" />&nbsp;
+                        <p:password id="password" value="#{loginManagedBean.password}" size="16" required="true" requiredMessage="Password is required" maxlength="32">
+                            <f:validateLength minimum="4" />
+                        </p:password>
+                        <br/>
+                        <br/>
+                        <p:commandButton type="reset" value="Clear" icon="fa fa-undo" />&nbsp;
+                        <p:commandButton type="submit" value="Submit" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
+
+                        <p:growl>
+                            <p:autoUpdate />
+                        </p:growl>
+
+                    </p:dialog>
+
+                    <h:form id ="formCreateNewCustomer">
+
+                        <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register As New User" closable ="true">
+                            <p:messages id="messagesCreateNewCustomer" redisplay="false" />
+
+                            <p:panelGrid>
+
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="firstName" value="First Name: " style="font-weight: bold;" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="firstName" value="#{loginManagedBean.newCustomer.firstName}" required="true" requiredMessage="First Name is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="firstName" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="lastName" value="Last Name: " style="font-weight: bold;" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="lastName" value="#{loginManagedBean.newCustomer.lastName}" required="true" requiredMessage="Last Name is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="lastName" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="email" value="Email: " style="font-weight: bold;" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="email" value="#{loginManagedBean.newCustomer.email}" required="true" requiredMessage="Email is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="email" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="contactNum" value="Contact Number: " style="font-weight: bold;" />
+                                    </p:column>
+                                    <p:column>                            
+                                        <p:inputText id="contactNum" value="#{loginManagedBean.newCustomer.contactNum}" required="true" requiredMessage="Unit Price is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="contactNum" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="username" value="Username: " style="font-weight: bold;" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="username" value="#{loginManagedBean.newCustomer.username}" required="true" requiredMessage="Username is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="username" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="password" value="Password: " style="font-weight: bold;" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="password" value="#{loginManagedBean.newCustomer.password}" required="true" requiredMessage="Password is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="password" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column colspan="3">
+                                        <p:commandButton type="reset" value="Clear" />&nbsp;
+                                        <p:commandButton  value="Create New Account" actionListener="#{loginManagedBean.register}"  />
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+                        </p:dialog>
+                    </h:form>
+
+                </h:form>
+
+                <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+                    <h:form id="logoutForm">
+                        <h:outputText value="You are login as #{sessionScope.currentStaffEntity.firstName} #{sessionScope.currentStaffEntity.lastName} (Access Right: #{sessionScope.currentStaffEntity.accessRightEnum})" />&nbsp;
+                        <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" />
+                    </h:form>
+                </h:panelGroup>
+
+                <h:form>  
+                    <p:growl id="messages"/>
+
+                    <p:megaMenu model="#{menuBean.model}" style="z-index: 100;">
+                        <f:facet name="options">
+                            <p:inputText style="margin:1px 10px 1px 1px;" placeholder="Search"/>
+                        </f:facet>
+                    </p:megaMenu>
+                </h:form>
+
                 <ui:insert name="content">Content</ui:insert>
-                
+
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="south" size="70" >
-                
+
                 <ui:insert name="footer">
                     <ui:include src="/footer.xhtml" />
                 </ui:insert>
-                
+
             </p:layoutUnit>                
-            
+
         </p:layout>
-        
+
     </h:body>
 </html>
 

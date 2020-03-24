@@ -22,7 +22,6 @@ import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
-
 /**
  *
  * @author fooyo
@@ -47,12 +46,9 @@ public class DataInitializationSessionBean {
 
     @PostConstruct
     public void postConstruct() {
-        try
-        {
+        try {
             customerSessionBeanLocal.retrieveCustomerByCustId(Long.valueOf(2));
-        }
-        catch(CustomerNotFoundException ex)
-        {
+        } catch (CustomerNotFoundException ex) {
             initialiseData();
         }
     }
@@ -60,17 +56,20 @@ public class DataInitializationSessionBean {
     private void initialiseData() {
         try {
             customerSessionBeanLocal.createNewCustomer(new Customer("Bob", "Lim", "boblim@gmail.com", "password", "boblim", Long.parseLong("98023457")));
-            
-            Category categoryNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Nails", "Nail Services"), null); 
-            Category categoryHair = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair", "Hair Services"), null); 
-            Category categoryFace = categorySessionBeanLocal.createNewCategoryEntity(new Category("Face", "Facial Services"), null); 
-            
-            Category categoryGelNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Gel Nails", "Gel Nail Services"), categoryNails.getCategoryId()); 
+
+            Category categoryNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Nails", "Nail Services"), null);
+            Category categoryHair = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair", "Hair Services"), null);
+            Category categoryFace = categorySessionBeanLocal.createNewCategoryEntity(new Category("Face", "Facial Services"), null);
+
+            Category categoryGelNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Gel Nails", "Gel Nail Services"), categoryNails.getCategoryId());
+            Category categoryANails = categorySessionBeanLocal.createNewCategoryEntity(new Category("A Nails", "Gel Nail Services"), categoryNails.getCategoryId());
+            Category categoryBNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("B Nails", "Gel Nail Services"), categoryNails.getCategoryId());
+            Category categoryCNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("C Nails", "Gel Nail Services"), categoryNails.getCategoryId());
             Category categoryHaircut = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair cut", "Hait Cut Services"), categoryHair.getCategoryId());
             Category categoryMakeup = categorySessionBeanLocal.createNewCategoryEntity(new Category("Makeup", "Makeup Services"), categoryFace.getCategoryId());
-            
+
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException ex) {
-            ex.printStackTrace(); 
+            ex.printStackTrace();
         }
     }
 
