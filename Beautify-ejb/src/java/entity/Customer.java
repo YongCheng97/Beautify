@@ -47,7 +47,6 @@ public class Customer implements Serializable {
     @Column(nullable = false)
     @NotNull
     @Min(8)
-    @Max(8)
     private Long contactNum;
 
     @Column(columnDefinition = "CHAR(32) NOT NULL")

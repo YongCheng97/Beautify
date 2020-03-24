@@ -110,6 +110,19 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
 
         return leafCategoryEntities;
     }
+    
+    @Override
+    public List<Category> retrieveLeafCategory(Long rootCategoryId) {
+        Query query = em.createQuery("SELECT c FROM Category c WHERE c.parentCategoryEntity.categoryId = :inRootCategoryId ORDER BY c.name ASC");
+        query.setParameter("inRootCategoryId", rootCategoryId);
+        List<Category> leafCategories = query.getResultList();
+        
+        for (Category leafCategory : leafCategories) {
+            leafCategory.getProducts().size();
+        }
+        
+        return leafCategories;
+    }
 
     @Override
     public List<Category> retrieveAllCategoriesWithoutProduct() {

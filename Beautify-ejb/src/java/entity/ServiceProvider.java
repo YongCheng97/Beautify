@@ -58,7 +58,7 @@ public class ServiceProvider implements Serializable {
     @OneToMany(mappedBy = "serviceProvider")
     private List<Product> products;
     
-    @ManyToMany(mappedBy = "serviceProviders")
+    @ManyToMany
     private List<Tag> tags;
     
     @OneToMany(mappedBy = "serviceProvider")
