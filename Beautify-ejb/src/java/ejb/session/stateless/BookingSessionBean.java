@@ -21,6 +21,7 @@ import util.exception.CreateNewBookingException;
 import util.exception.CreateNewReviewException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.ServiceNotFoundException;
 
 
 import util.exception.UnknownPersistenceException;
@@ -82,7 +83,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException ex) {
+            } catch (CustomerNotFoundException | ServiceNotFoundException ex) {
                 throw new CreateNewBookingException("An error has occured while creating the new review: " + ex.getMessage());
             }
         } else {
