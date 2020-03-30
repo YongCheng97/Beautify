@@ -86,7 +86,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException | ServiceNotFoundException ex) {
+            } catch (CustomerNotFoundException | ServiceNotFoundException ex) { 
                 throw new CreateNewBookingException("An error has occured while creating the new review: " + ex.getMessage());
             }
         } else {
