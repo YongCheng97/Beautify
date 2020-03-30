@@ -22,9 +22,13 @@ public class Promotion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long promotionId;
-    @Column(nullable = false, unique = true, length = 32)
+    @Column(nullable = false, unique = true, length = 7)
     @NotNull
-    @Size(max = 19)
+    @Size(min = 7, max = 7)
+    private String promoCode;
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(max = 64)
     private String name;
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
@@ -43,7 +47,8 @@ public class Promotion implements Serializable {
     public Promotion() {
     }
 
-    public Promotion(String name, BigDecimal discountRate, Date startDate, Date endDate) {
+    public Promotion(String promoCode, String name, BigDecimal discountRate, Date startDate, Date endDate) {
+        this.promoCode = promoCode;
         this.name = name;
         this.discountRate = discountRate;
         this.startDate = startDate;
@@ -113,6 +118,20 @@ public class Promotion implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    /**
+     * @return the promoCode
+     */
+    public String getPromoCode() {
+        return promoCode;
+    }
+
+    /**
+     * @param promoCode the promoCode to set
+     */
+    public void setPromoCode(String promoCode) {
+        this.promoCode = promoCode;
     }
     
 }

@@ -4,6 +4,7 @@ import entity.Booking;
 import entity.Customer;
 import entity.Review;
 import entity.Service;
+import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -11,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -47,6 +49,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
     
+    @Override
     public Booking createNewBooking(Booking newBooking, Long customerId, Long serviceId) throws BookingExistException, UnknownPersistenceException, InputDataValidationException, CreateNewBookingException, CustomerNotFoundException {
         Set<ConstraintViolation<Booking>> constraintViolations = validator.validate(newBooking);
 
@@ -91,6 +94,20 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         }
     }
 
+    @Override
+    public List<Booking> retrieveAllBookings() 
+    {
+        Query query = em.createQuery("SELECT b FROM Booking b");
+        List<Booking> bookings = query.getResultList();
+        
+        for (Booking booking:bookings)
+        {
+            booking.getCustomer();
+            booking.getService();
+        }
+        
+        return bookings;
+    }
     
     @Override
     public Booking retrieveBookingByBookingId(Long bookingId) throws BookingNotFoundException {
