@@ -5,7 +5,11 @@
  */
 package ejb.session.stateless;
 
+import entity.SalesForUs;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.CreateNewSalesForUsException;
+import util.exception.SalesForUsNotFoundException;
 
 /**
  *
@@ -13,5 +17,15 @@ import javax.ejb.Local;
  */
 @Local
 public interface SalesForUsSessionBeanLocal {
+
+    public SalesForUs createNewSalesForUs(SalesForUs newSalesForUs, Long bookingId, Long serviceProviderId) throws CreateNewSalesForUsException;
+
+    public List<SalesForUs> retrieveAllSalesForUs();
+
+    public SalesForUs retrieveSalesForUsRecordById(Long salesForUsId) throws SalesForUsNotFoundException;
+
+    public void updateSalesForUsRecord(SalesForUs salesForUs);
+
+    public void deleteSalesForUsRecord(SalesForUs salesForUs);
     
 }
