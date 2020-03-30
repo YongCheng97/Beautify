@@ -7,21 +7,23 @@
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns="http://www.w3.org/1999/xhtml">
-    
+
     <ui:define name="content">
-        
+
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <article>
                 <h3>Welcome</h3>
+                <p:button value = "Next" outcome="/customerOperations/listingsOfACategory"/>
             </article>
         </h:panelGroup>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
             <article>
                 <h3>Logged In</h3>
+                <p:button value = "Next" outcome="/customerOperations/listingsOfACategory"/>
             </article>
         </h:panelGroup>
-        
+
     </ui:define>
 
 </ui:composition>
