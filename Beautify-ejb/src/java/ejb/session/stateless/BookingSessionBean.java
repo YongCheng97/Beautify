@@ -36,8 +36,8 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
     
-    @EJB
-    private ServiceSessionBeanLocal serviceSessionBeanLocal;
+//    @EJB
+//    private ServiceSessionBeanLocal serviceSessionBeanLocal;
     
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
@@ -65,9 +65,9 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                     throw new CreateNewBookingException("A new booking must be associated with a service");
                 }
                 
-                Service service = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceId);
-                newBooking.setService(service);
-                service.getBookings().add(newBooking);
+//                Service service = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceId);
+//                newBooking.setService(service);
+//                service.getBookings().add(newBooking);
                
                 em.persist(newBooking);
                 em.flush();
@@ -83,7 +83,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException | ServiceNotFoundException ex) {
+            } catch (CustomerNotFoundException ex) { // | ServiceNotFoundException ex
                 throw new CreateNewBookingException("An error has occured while creating the new review: " + ex.getMessage());
             }
         } else {

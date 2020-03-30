@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -32,30 +33,33 @@ public class MenuBean {
     private CategorySessionBeanLocal categorySessionBean;
 
     private MenuModel model;
-    
-    public MenuBean() {}
+
+    public MenuBean() {
+    }
 
     @PostConstruct
     public void postConstruct() {
         model = new DefaultMenuModel();
         List<Category> rootCategories = categorySessionBean.retrieveAllRootCategories();
         List<DefaultSubMenu> subMenus = new ArrayList<>(rootCategories.size());
-        
+
         for (int i = 0; i < rootCategories.size(); i++) {
             DefaultSubMenu subMenu = new DefaultSubMenu(rootCategories.get(i).getName());
             subMenus.add(subMenu);
-            List<Category> leafCategories = categorySessionBean.retrieveAllLeafCategories();
-            for (Category leafCategory : leafCategories) {
-                if (leafCategory.getParentCategoryEntity().getCategoryId() == rootCategories.get(i).getCategoryId()) {
-                    DefaultMenuItem item = new DefaultMenuItem(leafCategory.getName());
-                    subMenus.get(i).addElement(item);
-                }
-            }
+            DefaultMenuItem item1 = new DefaultMenuItem("Products");
+            subMenus.get(i).addElement(item1);
+            DefaultMenuItem item2 = new DefaultMenuItem("Services");
+            subMenus.get(i).addElement(item2);
+//            List<Category> leafCategories = categorySessionBean.retrieveAllLeafCategories();
+//            for (Category leafCategory : leafCategories) {
+//                if (leafCategory.getParentCategoryEntity().getCategoryId() == rootCategories.get(i).getCategoryId()) {
+//                    DefaultMenuItem item = new DefaultMenuItem(leafCategory.getName());
+//                    subMenus.get(i).addElement(item);
+//                }
+//            }
             model.addElement(subMenus.get(i));
-       }
+        }
     }
-
-    
 
     public MenuModel getModel() {
         return model;

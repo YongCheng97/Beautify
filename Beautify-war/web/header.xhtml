@@ -10,28 +10,39 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <header style="text-align: right;">
-        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-            <h:form id="loginForm">
 
-                <p:outputLabel for="username" value="Username" />&nbsp;
-                <p:inputText id="username" value="#{loginManagedBean.username}" size="16" required="true" requiredMessage="Username is required" maxlength="32">
-                    <f:validateLength minimum="4" />
-                </p:inputText>
-                &nbsp;
-                <p:outputLabel for="password" value="Password" />&nbsp;
-                <p:password id="password" value="#{loginManagedBean.password}" size="16" required="true" requiredMessage="Password is required" maxlength="32">
-                    <f:validateLength minimum="4" />
-                </p:password>
-                &nbsp;
-                <p:commandButton type="reset" value="Clear" icon="fa fa-undo" />&nbsp;
-                <p:commandButton type="submit" value="Login" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
 
-                <p:growl>
-                    <p:autoUpdate />
-                </p:growl>
+        <h:form id="loginForm">
 
-            </h:form>
-        </h:panelGroup>
+            <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+                <p:commandButton value = "Login" onclick="alert('1');PF('dialogLogin').show()" immediate="true"/>&nbsp;
+                <p:commandButton value = "Register"/>
+            </h:panelGroup>
+
+            <p:dialog id="loginDialog" widgetVar="dialogLogin" header="Login" closable="true" modal="false" height="100">
+
+                <h:outputText value="This is a Modal Dialog." />
+
+                <!--                <p:outputLabel for="username" value="Username" />&nbsp;
+                                <p:inputText id="username" value="#{loginManagedBean.username}" size="16" required="true" requiredMessage="Username is required" maxlength="32">
+                                    <f:validateLength minimum="4" />
+                                </p:inputText>
+                                <br/>
+                                <p:outputLabel for="password" value="Password" />&nbsp;
+                                <p:password id="password" value="#{loginManagedBean.password}" size="16" required="true" requiredMessage="Password is required" maxlength="32">
+                                    <f:validateLength minimum="4" />
+                                </p:password>
+                                <br/>
+                                <p:commandButton type="reset" value="Clear" icon="fa fa-undo" />&nbsp;
+                                <p:commandButton type="submit" value="Submit" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
+                
+                                <p:growl>
+                                    <p:autoUpdate />
+                                </p:growl>-->
+
+            </p:dialog>
+
+        </h:form>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
             <h:form id="logoutForm">
@@ -41,17 +52,6 @@
         </h:panelGroup>
 
     </header>
-
-    <h:form>  
-        <p:growl id="messages"/>
-
-            <p:menubar model="#{menuBean.model}">
-
-            <f:facet name="options">
-                <p:inputText style="margin:1px 10px 1px 1px;" placeholder="Search"/>
-            </f:facet>
-        </p:menubar>
-    </h:form>
 
 
 </ui:composition>

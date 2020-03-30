@@ -49,6 +49,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
 
+    @Override
     public Product createNewProduct(Product newProduct, Long categoryId, Long serviceProviderId) throws ProductExistException, UnknownPersistenceException, InputDataValidationException, CreateNewProductException {
 
         Set<ConstraintViolation<Product>> constraintViolations = validator.validate(newProduct);

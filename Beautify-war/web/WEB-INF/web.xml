@@ -29,10 +29,4 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
-    <ejb-local-ref>
-        <ejb-ref-name>CategorySessionBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.CategorySessionBeanLocal</local>
-        <ejb-link>Beautify-ejb.jar#CategorySessionBean</ejb-link>
-    </ejb-local-ref>
 </web-app>
