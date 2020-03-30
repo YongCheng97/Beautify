@@ -46,6 +46,10 @@ public class ServiceProvider implements Serializable {
     @Temporal(TemporalType.TIME)
     @NotNull
     private Date openingHours;
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIME)
+    @NotNull
+    private Date closingHours;
     private File certification;
     private boolean isApproved;
 
@@ -57,23 +61,23 @@ public class ServiceProvider implements Serializable {
 
     @OneToMany(mappedBy = "serviceProvider")
     private List<Product> products;
-    
+
     @ManyToMany
     private List<Tag> tags;
-    
+
     @OneToMany(mappedBy = "serviceProvider")
     private List<Service> services;
 
     public ServiceProvider() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
-        
+
         creditCards = new ArrayList<>();
         products = new ArrayList<>();
         tags = new ArrayList<>();
         services = new ArrayList<>();
     }
 
-    public ServiceProvider(String name, String email, String password, String address, Date openingHours, File certification, boolean isApproved) {
+    public ServiceProvider(String name, String email, String password, String address, Date openingHours, Date closingHours, File certification, boolean isApproved) {
 
         this();
 
@@ -81,6 +85,7 @@ public class ServiceProvider implements Serializable {
         this.email = email;
         this.address = address;
         this.openingHours = openingHours;
+        this.closingHours = closingHours; 
         this.certification = certification;
         this.isApproved = isApproved;
 

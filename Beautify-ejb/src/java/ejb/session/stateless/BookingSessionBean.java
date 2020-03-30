@@ -4,6 +4,7 @@ import entity.Booking;
 import entity.Customer;
 import entity.Review;
 import entity.Service;
+import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -11,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -36,8 +38,8 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
     
-//    @EJB
-//    private ServiceSessionBeanLocal serviceSessionBeanLocal;
+    @EJB
+    private ServiceSessionBeanLocal serviceSessionBeanLocal;
     
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
@@ -47,6 +49,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
     
+    @Override
     public Booking createNewBooking(Booking newBooking, Long customerId, Long serviceId) throws BookingExistException, UnknownPersistenceException, InputDataValidationException, CreateNewBookingException, CustomerNotFoundException {
         Set<ConstraintViolation<Booking>> constraintViolations = validator.validate(newBooking);
 
@@ -65,9 +68,9 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                     throw new CreateNewBookingException("A new booking must be associated with a service");
                 }
                 
-//                Service service = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceId);
-//                newBooking.setService(service);
-//                service.getBookings().add(newBooking);
+                Service service = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceId);
+                newBooking.setService(service);
+                service.getBookings().add(newBooking);
                
                 em.persist(newBooking);
                 em.flush();
@@ -83,7 +86,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException | ServiceNotFoundException ex) {
+            } catch (CustomerNotFoundException | ServiceNotFoundException ex) { 
                 throw new CreateNewBookingException("An error has occured while creating the new review: " + ex.getMessage());
             }
         } else {
@@ -91,6 +94,20 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         }
     }
 
+    @Override
+    public List<Booking> retrieveAllBookings() 
+    {
+        Query query = em.createQuery("SELECT b FROM Booking b");
+        List<Booking> bookings = query.getResultList();
+        
+        for (Booking booking:bookings)
+        {
+            booking.getCustomer();
+            booking.getService();
+        }
+        
+        return bookings;
+    }
     
     @Override
     public Booking retrieveBookingByBookingId(Long bookingId) throws BookingNotFoundException {

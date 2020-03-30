@@ -33,4 +33,6 @@ public interface ProductSessionBeanLocal {
     public void deleteProduct(Long productId) throws ProductNotFoundException, DeleteProductException;
 
     public List<Product> filterProductsByTags(List<Long> tagIds, String condition);
+
+    public Product retrieveProductByProdId(Long productId) throws ProductNotFoundException;
 }

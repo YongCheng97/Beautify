@@ -5,7 +5,15 @@
  */
 package ejb.session.stateless;
 
+import entity.Promotion;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.DeletePromotionException;
+import util.exception.InputDataValidationException;
+import util.exception.PromotionNameExistException;
+import util.exception.PromotionNotFoundException;
+import util.exception.UnknownPersistenceException;
+import util.exception.UpdatePromotionException;
 
 /**
  *
@@ -13,5 +21,17 @@ import javax.ejb.Local;
  */
 @Local
 public interface PromotionSessionBeanLocal {
+
+    public Promotion createNewPromotion(Promotion newPromotion) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException;
+
+    public List<Promotion> retrieveAllPromotions();
+
+    public Promotion retrievePromotionByPromotionId(Long promotionId) throws PromotionNotFoundException;
+
+    public Promotion retrievePromotionByName(String name) throws PromotionNotFoundException;
+
+    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException;
+
+    public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException;
     
 }
