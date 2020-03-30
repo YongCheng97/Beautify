@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.CategorySessionBeanLocal;
 import entity.Category;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -15,7 +16,7 @@ import javax.faces.view.ViewScoped;
 
 @Named(value = "categoryManagementManagedBean")
 @ViewScoped
-public class CategoryManagementManagedBean {
+public class CategoryManagementManagedBean implements Serializable{
 
     @EJB
     private CategorySessionBeanLocal categorySessionBean;
