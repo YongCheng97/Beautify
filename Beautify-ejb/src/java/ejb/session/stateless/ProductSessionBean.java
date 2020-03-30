@@ -221,6 +221,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         if (product != null) {
             product.getCategory();
             product.getServiceProvider();
+            product.getTags().size();
 
             return product;
         } else {

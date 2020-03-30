@@ -59,10 +59,10 @@ public class Product implements Serializable {
         tags = new ArrayList<>();
     }
 
-    public Product(String name, BigDecimal price, String description, String photo) {
+    public Product(String skuCode, String name, BigDecimal price, String description, String photo) {
 
         this();
-
+        this.skuCode = skuCode;
         this.name = name;
         this.price = price;
         this.description = description;
