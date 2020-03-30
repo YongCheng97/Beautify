@@ -100,19 +100,19 @@ public class DataInitializationSessionBean {
             ServiceProvider provider3 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Makeup Place", "themakeupplace@gmail.com", "password", "56 Serangoon Way",
                     sdf.parse("09:00:00"), sdf.parse("17:00:00"), null, true)));
 
-            productSessionBeanLocal.createNewProduct(new Product("Red Nail Polish", new BigDecimal("20.00"), "Red nail polish is historically bold, daring, and adventurous", null),
+            productSessionBeanLocal.createNewProduct(new Product("PROD001", "Red Nail Polish", new BigDecimal("20.00"), "Red nail polish is historically bold, daring, and adventurous", null),
                     categoryNailPolish.getCategoryId(), provider1.getServiceProviderId());
-            productSessionBeanLocal.createNewProduct(new Product("Yellow Nail Polish", new BigDecimal("20.00"), "Bright and cheery yellow nail polish", null),
+            productSessionBeanLocal.createNewProduct(new Product("PROD002", "Yellow Nail Polish", new BigDecimal("20.00"), "Bright and cheery yellow nail polish", null),
                     categoryNailPolish.getCategoryId(), provider1.getServiceProviderId());
 
-            productSessionBeanLocal.createNewProduct(new Product("Shampoo", new BigDecimal("18.00"), "Cleanse your scalp and leave your hair healthy and smooth", null),
+            productSessionBeanLocal.createNewProduct(new Product("PROD003", "Shampoo", new BigDecimal("18.00"), "Cleanse your scalp and leave your hair healthy and smooth", null),
                     categoryHairProducts.getCategoryId(), provider2.getServiceProviderId());
-            productSessionBeanLocal.createNewProduct(new Product("Hair Treatment", new BigDecimal("18.00"), "Transform your dry and damaged hair", null),
+            productSessionBeanLocal.createNewProduct(new Product("PROD004", "Hair Treatment", new BigDecimal("18.00"), "Transform your dry and damaged hair", null),
                     categoryHairProducts.getCategoryId(), provider2.getServiceProviderId());
 
-            productSessionBeanLocal.createNewProduct(new Product("Lipstick", new BigDecimal("13.00"), "Hydrating lipstick that adds colour to your lips", null),
+            productSessionBeanLocal.createNewProduct(new Product("PROD005", "Lipstick", new BigDecimal("13.00"), "Hydrating lipstick that adds colour to your lips", null),
                     categoryMakeup.getCategoryId(), provider3.getServiceProviderId());
-            productSessionBeanLocal.createNewProduct(new Product("Facewash", new BigDecimal("15.00"), "Facewash that revitalises and cleanses your skin", null),
+            productSessionBeanLocal.createNewProduct(new Product("PROD006", "Facewash", new BigDecimal("15.00"), "Facewash that revitalises and cleanses your skin", null),
                     categoryFaceCare.getCategoryId(), provider3.getServiceProviderId());
 
             serviceSessionBeanLocal.createNewService(new Service("Gel Manicure", new BigDecimal("80.00"), "Gels last longer, feel stronger, and shine like no one's business!", null), provider1.getServiceProviderId(), categoryManicure.getCategoryId());
