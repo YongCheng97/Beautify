@@ -26,52 +26,45 @@
             <h3> Service Provider Listings </h3> 
 
             <h:body> 
+
                 <h:form id="formAllServices">
                     <p:messages id="messages" redisplay="false" closable="true" />
-                    <p:carousel value="#{listingsManagedBean.serviceEntities}" headerText="Services" var="service" itemStyle="text-align:center" responsive="true">
+                    <p:carousel value="#{listingsManagedBean.serviceEntities}" headerText="Services" var="service" itemStyle="text-align:left" responsive="true">
                         <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                             <f:facet name="header">
-                                <p:outputPanel style="text-align: right;">
-                                    <h:outputText value="Search all fields:" />
-                                </p:outputPanel>
+                                <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt="photo"/> 
                             </f:facet>
 
-                            <h:outputText value="Service Id: "/>
-                            <h:outputText value ="#{service.serviceId}" />
-
-                            <h:outputText value="Service Name: "/>
+                            <h:outputText style="font-weight: bold" value="Service Name: "/>
                             <h:outputText value="#{service.serviceName}" />
 
-                            <h:outputText value ="Price: $" />
-                            <h:outputText value="#{service.price}" />
+                            <h:outputText style="font-weight: bold" value ="Price:" />
+                            <h:outputText value="$#{service.price}" />
 
-                            <h:outputText value="Description: " />
+                            <h:outputText style="font-weight: bold" value="Description: " />
                             <h:outputText value ="#{service.description}" />
 
                         </p:panelGrid>
                     </p:carousel>
-                </h:form>
+                </h:form> 
 
                 <br/><br/>
 
                 <h:form id="formAllProducts">
                     <p:messages id="messages" redisplay="false" closable="true" />
-                    <p:carousel value="#{listingsManagedBean.productEntities}" headerText="Products" var="product" itemStyle="text-align:center" responsive="true">
+                    <p:carousel value="#{listingsManagedBean.productEntities}" headerText="Products" var="product" itemStyle="text-align:left" responsive="true">
                         <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                             <f:facet name="header">
                                 <p:graphicImage /> 
                             </f:facet>
 
-                            <h:outputText value="Product Id:" />
-                            <h:outputText value="#{product.productId}" />
+                            <h:outputText style="font-weight: bold;" value="Product Name:" />
+                            <h:outputText value="#{product.name}" /> 
 
-                            <h:outputText value="Product Name:" />
-                            <h:outputText value="#{product.name}" />
+                            <h:outputText style="font-weight: bold;" value="Price:" />
+                            <h:outputText value="$#{product.price}"/>
 
-                            <h:outputText value="Price: $" />
-                            <h:outputText value="#{product.price}"/>
-
-                            <h:outputText value="Description:" />
+                            <h:outputText style="font-weight: bold;" value="Description:" />
                             <h:outputText value="#{product.description}" />
                         </p:panelGrid>
 

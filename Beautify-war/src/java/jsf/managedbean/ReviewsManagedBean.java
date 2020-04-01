@@ -7,11 +7,12 @@ package jsf.managedbean;
 
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import entity.Review;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 
 /**
  *
@@ -19,7 +20,7 @@ import javax.faces.bean.ViewScoped;
  */
 @Named(value = "reviewsManagedBean")
 @ViewScoped
-public class ReviewsManagedBean {
+public class ReviewsManagedBean implements Serializable {
 
     @EJB(name = "ReviewSessionBeanLocal")
     private ReviewSessionBeanLocal reviewSessionBeanLocal;

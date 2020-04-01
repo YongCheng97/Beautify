@@ -9,21 +9,44 @@
 
     <ui:define name="content"> 
 
-        <p:tabMenu activeIndex="#{param.i}">
-            <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="pi pi-star">
-                <f:param name="i" value="0" />
-            </p:menuitem>
-            <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="pi pi-search">
-                <f:param name="i" value="1" />
-            </p:menuitem>
-            <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews" icon="pi pi-file">
-                <f:param name="i" value="2" />
-            </p:menuitem>
-        </p:tabMenu>
-
         <div> 
+            <p:tabMenu activeIndex="#{param.i}">
+                <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="pi pi-star">
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="pi pi-search">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews" icon="pi pi-file">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+            </p:tabMenu>
+
             <h3> Service Provider Profile </h3> 
 
+            <h:body>
+                <p:layout style="min-width:400px;min-height:200px;">
+                    <p:layoutUnit position="west" resizable="false" size="200">
+                        Photo
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+
+                        <h:outputText style="font-weight: bold;" value="Name:"/>
+                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.name}"/>
+                        <br/><br/>
+                        <h:outputText style="font-weight: bold;" value="Address:"/>
+                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.address}"/>
+                        <br/><br/>
+                        <h:outputText style="font-weight: bold;" value="Opening Hours:"/>
+                        <h:outputText value="#{viewServiceProviderManagedBean.providerToView.openingHours}"/>
+                        <br/><br/>
+                        <h:outputText style="font-weight: bold;" value="Closing Hours:"/>
+                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.closingHours}"/>
+
+                    </p:layoutUnit> 
+                </p:layout>
+            </h:body>
 
         </div>
     </ui:define>

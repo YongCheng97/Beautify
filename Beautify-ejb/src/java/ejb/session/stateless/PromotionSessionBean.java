@@ -43,7 +43,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public Promotion createNewPromotion(Promotion newPromotion) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException 
+    public Promotion createNewPromotion(Promotion newPromotion, Long serviceId) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException
     {
         try {
             Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(newPromotion);
