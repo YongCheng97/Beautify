@@ -139,6 +139,8 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
     @Override
     public Category retrieveCategoryByCategoryId(Long categoryId) throws CategoryNotFoundException {
         Category categoryEntity = em.find(Category.class, categoryId);
+        
+        categoryEntity.getProducts().size();
 
         if (categoryEntity != null) {
             return categoryEntity;

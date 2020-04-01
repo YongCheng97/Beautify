@@ -31,6 +31,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.BookingExistException;
 import util.exception.CreateNewBookingException;
+import util.enumeration.CategoryTypeEnum;
 import util.exception.CreateNewCategoryException;
 import util.exception.CreateNewProductException;
 import util.exception.CreateNewReviewException;
@@ -74,6 +75,8 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
+    
+    private CategoryTypeEnum type;
 
     public DataInitializationSessionBean() {
     }
@@ -95,16 +98,16 @@ public class DataInitializationSessionBean {
             Category categoryHair = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair", "Hair Services and Products"), null);
             Category categoryFace = categorySessionBeanLocal.createNewCategoryEntity(new Category("Face", "Facial Services and Products"), null);
 
-            Category categoryManicure = categorySessionBeanLocal.createNewCategoryEntity(new Category("Manicure", "Manicure Services"), categoryNails.getCategoryId());
-            Category categoryPedicure = categorySessionBeanLocal.createNewCategoryEntity(new Category("Pedicure", "Pedicure Services"), categoryNails.getCategoryId());
-            Category categoryNailPolish = categorySessionBeanLocal.createNewCategoryEntity(new Category("Nail Polish", "Nail Polish Products"), categoryNails.getCategoryId());
-            Category categoryHaircut = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair Cut", "Hair Cut Services"), categoryHair.getCategoryId());
-            Category categoryHairColour = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair Colouring", "Hair Colour Services"), categoryHair.getCategoryId());
-            Category categoryHairProducts = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair Products", "Hair Products"), categoryHair.getCategoryId());
-            Category categoryMakeover = categorySessionBeanLocal.createNewCategoryEntity(new Category("Makeover", "Makeup Services"), categoryFace.getCategoryId());
-            Category categoryFacial = categorySessionBeanLocal.createNewCategoryEntity(new Category("Facial", "Facial Services"), categoryFace.getCategoryId());
-            Category categoryFaceCare = categorySessionBeanLocal.createNewCategoryEntity(new Category("Face Care", "Face Care Products"), categoryFace.getCategoryId());
-            Category categoryMakeup = categorySessionBeanLocal.createNewCategoryEntity(new Category("Makeup", "Makeup Products"), categoryFace.getCategoryId());
+            Category categoryManicure = categorySessionBeanLocal.createNewCategoryEntity(new Category("Manicure", "Manicure Services", type.SERVICE), categoryNails.getCategoryId());
+            Category categoryPedicure = categorySessionBeanLocal.createNewCategoryEntity(new Category("Pedicure", "Pedicure Services", type.SERVICE), categoryNails.getCategoryId());
+            Category categoryNailPolish = categorySessionBeanLocal.createNewCategoryEntity(new Category("Nail Polish", "Nail Polish Products", type.PRODUCT), categoryNails.getCategoryId());
+            Category categoryHaircut = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair Cut", "Hair Cut Services", type.SERVICE), categoryHair.getCategoryId());
+            Category categoryHairColour = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair Colouring", "Hair Colour Services", type.SERVICE), categoryHair.getCategoryId());
+            Category categoryHairProducts = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair Products", "Hair Products", type.PRODUCT), categoryHair.getCategoryId());
+            Category categoryMakeover = categorySessionBeanLocal.createNewCategoryEntity(new Category("Makeover", "Makeup Services", type.SERVICE), categoryFace.getCategoryId());
+            Category categoryFacial = categorySessionBeanLocal.createNewCategoryEntity(new Category("Facial", "Facial Services", type.SERVICE), categoryFace.getCategoryId());
+            Category categoryFaceCare = categorySessionBeanLocal.createNewCategoryEntity(new Category("Face Care", "Face Care Products", type.PRODUCT), categoryFace.getCategoryId());
+            Category categoryMakeup = categorySessionBeanLocal.createNewCategoryEntity(new Category("Makeup", "Makeup Products", type.PRODUCT), categoryFace.getCategoryId());
 
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             ServiceProvider provider1 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Nail Lounge", "thenaillounge@gmail.com", "password", "123 Hougang Road",
