@@ -1,12 +1,56 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="content"> 
+        <ez:menubar/>
+        <div> 
+            <p:tabMenu activeIndex="#{param.i}">
+                <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="pi pi-star">
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="pi pi-search">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews" icon="pi pi-file">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+            </p:tabMenu>
+
+            <h3> Service Provider Profile </h3> 
+
+            <h:body>
+                <p:layout style="min-width:400px;min-height:200px;">
+                    <p:layoutUnit position="west" resizable="false" size="200">
+                        Photo
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+
+                        <h:outputText style="font-weight: bold;" value="Name:"/>
+                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.name}"/>
+                        <br/><br/>
+                        <h:outputText style="font-weight: bold;" value="Address:"/>
+                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.address}"/>
+                        <br/><br/>
+                        <h:outputText style="font-weight: bold;" value="Opening Hours:"/>
+                        <h:outputText value="#{viewServiceProviderManagedBean.providerToView.openingHours}"/>
+                        <br/><br/>
+                        <h:outputText style="font-weight: bold;" value="Closing Hours:"/>
+                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.closingHours}"/>
+
+                    </p:layoutUnit> 
+                </p:layout>
+            </h:body>
+
+        </div>
+    </ui:define>
+
+</ui:composition>
 
