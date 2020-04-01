@@ -36,22 +36,93 @@
 
                     <p:layoutUnit position="center">
                        
-                        <h:outputText style="font-weight: bold;" value="First Name:"/>
-                        <h:outputText value="#{viewCustomerProfileManagedBean.customerToView.firstName}"/>
+                        <h:outputText style="font-weight: bold;" value="First Name: "/>
+                        <h:outputText value="#{customerManagementManagedBean.currentCustomer.firstName}"/>
                         <br/><br/>
-                        <h:outputText style="font-weight: bold;" value="Last Name:"/>
-                        <h:outputText value="#{viewCustomerProfileManagedBean.customerToView.lastName}"/>
+                        <h:outputText style="font-weight: bold;" value="Last Name: "/>
+                        <h:outputText value="#{customerManagementManagedBean.currentCustomer.lastName}"/>
                         <br/><br/>
-                        <h:outputText style="font-weight: bold;" value="Email:"/>
-                        <h:outputText value="#{viewCustomerProfileManagedBean.customerToView.email}"/>
+                        <h:outputText style="font-weight: bold;" value="Email: "/>
+                        <h:outputText value="#{customerManagementManagedBean.currentCustomer.email}"/>
                         <br/><br/>
-                        <h:outputText style="font-weight: bold;" value="Contact Number:"/>
-                        <h:outputText value="#{viewCustomerProfileManagedBean.customerToView.contactNum}"/>
-                
+                        <h:outputText style="font-weight: bold;" value="Contact Number: "/>
+                        <h:outputText value="#{customerManagementManagedBean.currentCustomer.contactNum}"/>
+                        <br/><br/>
+                        <p:commandButton actionListener="#{customerManagementManagedBean.doUpdateCustomer}" update="formUpdateCustomer" oncomplete="PF('dialogUpdateCustomer').show()" value="Update Profile" icon="ui-icon-pencil" title="Update">
+                            <f:attribute name="customerEntityToUpdate" value="#{customerManagementManagedBean.currentCustomer}" />
+                        </p:commandButton>
+                        
                     </p:layoutUnit> 
                 </p:layout>
             </h:body>
             
+            <h:form id="formUpdateCustomer">
+
+                <p:dialog id="dialogUpdateCustomer" widgetVar="dialogUpdateCustomer" header="Update Profile" closable="true">
+
+                    <p:messages id="messagesUpdateCustomer" redisplay="false" />
+
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="firstName" value="First Name: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="firstName" value="#{customerManagementManagedBean.currentCustomer.firstName}" placeholder="First Name" required="true" requiredMessage="First Name is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="firstName" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="lastName" value="Last Name: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="lastName" value="#{customerManagementManagedBean.currentCustomer.lastName}" placeholder="Last Name" required="true" requiredMessage="Last Name is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="lastName" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="email" value="Email: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="email" value="#{customerManagementManagedBean.currentCustomer.email}" placeholder="abc@example.com" required="true" requiredMessage="Email is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="email" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="contactNumber" value="Contact Number: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="contactNumber" value="#{customerManagementManagedBean.currentCustomer.contactNum}" placeholder="81234567" required="true" requiredMessage="Contact Number is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="contactNumber" />
+                            </p:column>
+                        </p:row>      
+
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton value="Confirm Update" update="@form formUpdateCustomer" actionListener="#{customerManagementManagedBean.updateCustomer}" oncomplete="PF('dialogUpdateCustomer').show();" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
             
         </div>   
     </ui:define>
