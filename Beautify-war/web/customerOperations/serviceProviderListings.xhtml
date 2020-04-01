@@ -8,55 +8,79 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <ui:define name="content"> 
+
         <div> 
+            <p:tabMenu activeIndex="#{param.i}">
+                <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="pi pi-file">
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="pi pi-file">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews" icon="pi pi-file">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+            </p:tabMenu>
+
+
             <h3> Service Provider Listings </h3> 
 
+            <h:body> 
+                <h:form id="formAllServices">
+                    <p:messages id="messages" redisplay="false" closable="true" />
+                    <p:carousel value="#{listingsManagedBean.serviceEntities}" headerText="Services" var="service" itemStyle="text-align:center" responsive="true">
+                        <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                            <f:facet name="header">
+                                <p:outputPanel style="text-align: right;">
+                                    <h:outputText value="Search all fields:" />
+                                </p:outputPanel>
+                            </f:facet>
 
-            <h:form id="formAllServices">
-                <p:carousel value="#{listingsManagedBean.serviceEntities}" headerText="Services" var="service" itemStyle="text-align:center" responsive="true">
-                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
-                        <f:facet name="header">
-                            <p:graphicImage /> 
-                        </f:facet>
+                            <h:outputText value="Service Id: "/>
+                            <h:outputText value ="#{service.serviceId}" />
 
-                        <h:outputText value="Service Id: #{service.serviceId}" />
+                            <h:outputText value="Service Name: "/>
+                            <h:outputText value="#{service.serviceName}" />
 
-                        <h:outputText value="Service Name: #{service.serviceName}" />
+                            <h:outputText value ="Price: $" />
+                            <h:outputText value="#{service.price}" />
 
-                        <h:outputText value="Price: $#{service.price}" />
+                            <h:outputText value="Description: " />
+                            <h:outputText value ="#{service.description}" />
 
-                        <h:outputText value="Description: #{service.description}" />
+                        </p:panelGrid>
+                    </p:carousel>
+                </h:form>
 
-                    </p:panelGrid>
-                </p:carousel>
-            </h:form>
+                <br/><br/>
 
+                <h:form id="formAllProducts">
+                    <p:messages id="messages" redisplay="false" closable="true" />
+                    <p:carousel value="#{listingsManagedBean.productEntities}" headerText="Products" var="product" itemStyle="text-align:center" responsive="true">
+                        <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                            <f:facet name="header">
+                                <p:graphicImage /> 
+                            </f:facet>
 
-            <h:form id="formAllProducts">
-                <p:carousel value="#{listingsManagedBean.productEntities}" headerText="Products" var="product" itemStyle="text-align:center" responsive="true">
-                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
-                        <f:facet name="header">
-                            <p:graphicImage /> 
-                        </f:facet>
+                            <h:outputText value="Product Id:" />
+                            <h:outputText value="#{product.productId}" />
 
-                        <h:outputText value="Product Id:" />
-                        <h:outputText value="#{product.productId}" />
+                            <h:outputText value="Product Name:" />
+                            <h:outputText value="#{product.name}" />
 
-                        <h:outputText value="Product Name:" />
-                        <h:outputText value="#{product.name}" />
+                            <h:outputText value="Price: $" />
+                            <h:outputText value="#{product.price}"/>
 
-                        <h:outputText value="Price:" />
-                        <h:outputText value="$#{product.price}"/>
+                            <h:outputText value="Description:" />
+                            <h:outputText value="#{product.description}" />
+                        </p:panelGrid>
 
-                        <h:outputText value="Description:" />
-                        <h:outputText value="#{product.description}" />
-                    </p:panelGrid>
+                    </p:carousel>
 
-                </p:carousel>
+                </h:form>
+            </h:body> 
 
-            </h:form>
-
-        </div>
+        </div> 
     </ui:define>
 
 </ui:composition>

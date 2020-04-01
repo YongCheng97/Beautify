@@ -70,7 +70,7 @@ public class DataInitializationSessionBean {
             customerSessionBeanLocal.retrieveCustomerByCustId(Long.valueOf(2));
         } catch (CustomerNotFoundException ex) {
             initialiseData();
-        }
+        } 
     }
 
     private void initialiseData() {
