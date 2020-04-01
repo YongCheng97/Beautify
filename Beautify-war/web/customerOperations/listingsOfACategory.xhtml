@@ -5,12 +5,19 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 template="/template/defaultTemplate.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <ui:define name="content">
-        <p:layout style="min-width:400px;min-height:1px; max-height: 2px;">
+
+            <ez:menubar/>
+
+            <h:body>
+        <p:layout>
             <p:layoutUnit position="west" size="150" minSize="40" maxSize="200">
-                West
+                <f:facet name="header"> 
+                    <h:outputText value="Filter" />
+                </f:facet>
             </p:layoutUnit>
 
             <p:layoutUnit position="center">
@@ -21,19 +28,18 @@
                                 rowsPerPageTemplate="6,12,16">
 
                         <f:facet name="header">
-                            <h:outputText value =" "/>
+                            <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}"/>
                         </f:facet>
 
-                        <p:panel header="#{category}" style="text-align:center">
+                        <p:panel header="#{category.categoryId}" style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
-                                <p:graphicImage name="demo/images/car/#{car.brand}.gif"/> 
 
-                                <h:outputText value="#{car.year}" />
+                                <h:outputText value="" />
 
-                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
-                                    <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
-                                    <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
-                                </p:commandLink>
+                                <!--                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
+                                                                    <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
+                                                                    <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
+                                                                </p:commandLink>-->
                             </h:panelGrid>
                         </p:panel>
 
@@ -42,6 +48,7 @@
                 </h:form>
             </p:layoutUnit>
         </p:layout>
+            </h:body>
     </ui:define>
 </ui:composition>
 
