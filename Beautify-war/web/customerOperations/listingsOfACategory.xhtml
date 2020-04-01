@@ -31,16 +31,13 @@
                             <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}"/>
                         </f:facet>
 
-                        <p:panel header="#{category.categoryId}" style="text-align:center">
+                        <p:panel header="#{category.name}" style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
-
-                                <h:outputText value="" />
-
-                                <!--                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
-                                                                    <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
-                                                                    <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
-                                                                </p:commandLink>-->
+                                <h:outputText value="#{category.description}" />
                             </h:panelGrid>
+                            <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                                <h:outputText value = "Click here for more information!"/>
+                            </p:commandLink>
                         </p:panel>
 
                     </p:dataGrid>

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -53,19 +54,16 @@ public class MenuBean implements Serializable{
             for (Category leafCategory : leafCategories) {
                 if (leafCategory.getType().toString() == "PRODUCT") {
                     DefaultMenuItem leafCategoryProduct = new DefaultMenuItem(leafCategory.getName());
-                    //leafCategoryProduct.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfACategory.xhtml?categoryId=");
-                    //leafCategoryProduct.setParam("categoryId", leafCategory.getCategoryId());
-                    //leafCategoryProduct.setOutcome("/customerOperations/listingsOfACategory.xtnl");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("categoryId", leafCategory.getCategoryId());
+                    //leafCategoryProduct.setParam("categoryId",leafCategory.getCategoryId());
+                    leafCategoryProduct.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfACategory.xhtml");
                     products1.addElement(leafCategoryProduct);
 
                 }
                 if (leafCategory.getType().toString() == "SERVICE") {
                     DefaultMenuItem leafCategoryService = new DefaultMenuItem(leafCategory.getName());
-                    leafCategoryService.setParam("param", leafCategory.getCategoryId());
+                    leafCategoryService.setParam("categoryId", leafCategory.getCategoryId());
                     leafCategoryService.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfACategory.xhtml");
-                    //leafCategoryService.setOutcome("/customerOperations/listingsOfACategory.xtml");
-                    //leafCategoryService.setParam("categoryId", leafCategory.getCategoryId());
-                    //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("categoryId", leafCategory.getCategoryId());
                     products2.addElement(leafCategoryService);
                 }
             }

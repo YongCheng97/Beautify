@@ -7,12 +7,14 @@ package jsf.managedbean;
 
 import ejb.session.stateless.CategorySessionBeanLocal;
 import entity.Category;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import util.exception.CategoryNotFoundException;
@@ -37,13 +39,17 @@ public class CategoryManagementManagedBean implements Serializable {
 
     public void retrieveCategoryId() {
         try {
-            Long categoryId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("param"));
+            Long categoryId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("categoryId"));
             newCategory = categorySessionBean.retrieveCategoryByCategoryId(categoryId);
         } catch (CategoryNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving category: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
+    }
+    
+    public void clickLink(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/eachListing.xhtml");
     }
 
     //use requestParameterMap
