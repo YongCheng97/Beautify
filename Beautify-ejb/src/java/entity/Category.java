@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.enumeration.CategoryTypeEnum;
 
 @Entity
 public class Category implements Serializable {
@@ -28,6 +31,9 @@ public class Category implements Serializable {
     @NotNull
     @Size(max = 128)
     private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private CategoryTypeEnum type;
 
     @OneToMany(mappedBy = "parentCategoryEntity")
     private List<Category> subCategoryEntities;
@@ -36,7 +42,7 @@ public class Category implements Serializable {
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;
-    
+
     @OneToMany(mappedBy = "category")
     private List<Service> services;
 
@@ -51,6 +57,14 @@ public class Category implements Serializable {
 
         this.name = name;
         this.description = description;
+    }
+
+    public Category(String name, String description, CategoryTypeEnum type) {
+        this();
+
+        this.name = name;
+        this.description = description;
+        this.type = type;
     }
 
     public Long getCategoryId() {
@@ -168,6 +182,20 @@ public class Category implements Serializable {
 
     public void setServices(List<Service> services) {
         this.services = services;
+    }
+
+    /**
+     * @return the type
+     */
+    public CategoryTypeEnum getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(CategoryTypeEnum type) {
+        this.type = type;
     }
 
 }

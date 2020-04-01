@@ -7,15 +7,14 @@ package jsf.managedbean;
 
 import ejb.session.stateless.CategorySessionBeanLocal;
 import entity.Category;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -26,8 +25,9 @@ import org.primefaces.model.menu.MenuModel;
  * @author fooyo
  */
 @Named(value = "menuBean")
-@ApplicationScoped
-public class MenuBean {
+@ViewScoped
+
+public class MenuBean implements Serializable{
 
     @EJB
     private CategorySessionBeanLocal categorySessionBean;
@@ -46,17 +46,27 @@ public class MenuBean {
         for (int i = 0; i < rootCategories.size(); i++) {
             DefaultSubMenu subMenu = new DefaultSubMenu(rootCategories.get(i).getName());
             subMenus.add(subMenu);
-            DefaultMenuItem item1 = new DefaultMenuItem("Products");
-            subMenus.get(i).addElement(item1);
-            DefaultMenuItem item2 = new DefaultMenuItem("Services");
-            subMenus.get(i).addElement(item2);
-//            List<Category> leafCategories = categorySessionBean.retrieveAllLeafCategories();
-//            for (Category leafCategory : leafCategories) {
-//                if (leafCategory.getParentCategoryEntity().getCategoryId() == rootCategories.get(i).getCategoryId()) {
-//                    DefaultMenuItem item = new DefaultMenuItem(leafCategory.getName());
-//                    subMenus.get(i).addElement(item);
-//                }
-//            }
+            DefaultSubMenu products1 = new DefaultSubMenu("Products");
+            subMenus.get(i).addElement(products1);
+            DefaultSubMenu products2 = new DefaultSubMenu("Services");
+            subMenus.get(i).addElement(products2);
+            List<Category> leafCategories = categorySessionBean.retrieveLeafCategory(rootCategories.get(i).getCategoryId());
+            for (Category leafCategory : leafCategories) {
+                if (leafCategory.getType().toString() == "PRODUCT") {
+                    DefaultMenuItem leafCategoryProduct = new DefaultMenuItem(leafCategory.getName());
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("categoryId", leafCategory.getCategoryId());
+                    //leafCategoryProduct.setParam("categoryId",leafCategory.getCategoryId());
+                    leafCategoryProduct.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfACategory.xhtml");
+                    products1.addElement(leafCategoryProduct);
+
+                }
+                if (leafCategory.getType().toString() == "SERVICE") {
+                    DefaultMenuItem leafCategoryService = new DefaultMenuItem(leafCategory.getName());
+                    leafCategoryService.setParam("categoryId", leafCategory.getCategoryId());
+                    leafCategoryService.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfACategory.xhtml");
+                    products2.addElement(leafCategoryService);
+                }
+            }
             model.addElement(subMenus.get(i));
         }
     }
