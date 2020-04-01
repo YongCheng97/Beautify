@@ -22,7 +22,7 @@ import util.exception.UpdatePromotionException;
 @Local
 public interface PromotionSessionBeanLocal {
 
-    public Promotion createNewPromotion(Promotion newPromotion, Long service) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException;
+    public Promotion createNewPromotion(Promotion newPromotion) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException;
 
     public List<Promotion> retrieveAllPromotions();
 
