@@ -58,7 +58,7 @@ public class CustomerManagementManagedBean implements Serializable{
     
     public void doUpdateCustomer(ActionEvent event)
     {
-        selectedCustomerEntityToUpdate = (Customer)event.getComponent().getAttributes().get("customerToUpdate");
+        selectedCustomerEntityToUpdate = (Customer)event.getComponent().getAttributes().get("customerEntityToUpdate");
     }
     
     public void updateCustomer(ActionEvent event)
@@ -66,7 +66,8 @@ public class CustomerManagementManagedBean implements Serializable{
         try
         {
             customerSessionBeanLocal.updateCustomerDetails(selectedCustomerEntityToUpdate);
-    
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
+
         }
         catch(UpdateCustomerException | CustomerNotFoundException |InputDataValidationException ex)
         {
@@ -92,5 +93,13 @@ public class CustomerManagementManagedBean implements Serializable{
 
     public void setCurrentCustomer(Customer currentCustomer) {
         this.currentCustomer = currentCustomer;
+    }
+
+    public Customer getSelectedCustomerEntityToUpdate() {
+        return selectedCustomerEntityToUpdate;
+    }
+
+    public void setSelectedCustomerEntityToUpdate(Customer selectedCustomerEntityToUpdate) {
+        this.selectedCustomerEntityToUpdate = selectedCustomerEntityToUpdate;
     }
 }

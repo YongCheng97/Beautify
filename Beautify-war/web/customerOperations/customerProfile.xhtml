@@ -29,7 +29,7 @@
             <br/>
             
             <h:body>
-                <p:layout style="min-width:400px;min-height:200px;">
+                <p:layout id="profileInfo" style="min-width:400px;min-height:200px;">
                     <p:layoutUnit position="west" resizable="false" size="200">
                         Photo
                     </p:layoutUnit>
@@ -69,7 +69,7 @@
                                 <p:outputLabel for="firstName" value="First Name: " />
                             </p:column>
                             <p:column>
-                                <p:inputText id="firstName" value="#{customerManagementManagedBean.currentCustomer.firstName}" placeholder="First Name" required="true" requiredMessage="First Name is required" />
+                                <p:inputText id="firstName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.firstName}" placeholder="First Name" required="true" requiredMessage="First Name is required" />
                             </p:column>
                             <p:column>
                                 <p:message for="firstName" />
@@ -81,7 +81,7 @@
                                 <p:outputLabel for="lastName" value="Last Name: " />
                             </p:column>
                             <p:column>
-                                <p:inputText id="lastName" value="#{customerManagementManagedBean.currentCustomer.lastName}" placeholder="Last Name" required="true" requiredMessage="Last Name is required" />
+                                <p:inputText id="lastName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.lastName}" placeholder="Last Name" required="true" requiredMessage="Last Name is required" />
                             </p:column>
                             <p:column>
                                 <p:message for="lastName" />
@@ -93,7 +93,7 @@
                                 <p:outputLabel for="email" value="Email: " />
                             </p:column>
                             <p:column>
-                                <p:inputText id="email" value="#{customerManagementManagedBean.currentCustomer.email}" placeholder="abc@example.com" required="true" requiredMessage="Email is required" />
+                                <p:inputText id="email" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.email}" placeholder="abc@example.com" required="true" requiredMessage="Email is required" />
                             </p:column>
                             <p:column>
                                 <p:message for="email" />
@@ -105,7 +105,7 @@
                                 <p:outputLabel for="contactNumber" value="Contact Number: " />
                             </p:column>
                             <p:column>
-                                <p:inputText id="contactNumber" value="#{customerManagementManagedBean.currentCustomer.contactNum}" placeholder="81234567" required="true" requiredMessage="Contact Number is required" />
+                                <p:inputText id="contactNumber" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.contactNum}" placeholder="81234567" required="true" requiredMessage="Contact Number is required" />
                             </p:column>
                             <p:column>
                                 <p:message for="contactNumber" />
@@ -114,7 +114,7 @@
 
                         <p:row>
                             <p:column colspan="3">
-                                <p:commandButton value="Confirm Update" update="@form formUpdateCustomer" actionListener="#{customerManagementManagedBean.updateCustomer}" oncomplete="PF('dialogUpdateCustomer').show();" />
+                                <p:commandButton value="Confirm Update" update="@form profileInfo" actionListener="#{customerManagementManagedBean.updateCustomer}" oncomplete="PF('dialogUpdateCustomer').show();" />
                             </p:column>
                         </p:row>
 
