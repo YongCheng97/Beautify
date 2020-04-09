@@ -1,9 +1,11 @@
 package jsf.managedbean;
 import ejb.session.stateless.CustomerSessionBeanLocal;
+import entity.Booking;
 import entity.Customer;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -29,6 +31,9 @@ public class CustomerManagementManagedBean implements Serializable{
     private Customer currentCustomer;
     
     private Customer selectedCustomerEntityToUpdate;
+    
+    private List<Booking> customerBookings;
+    private Booking selectedBooking;
 
     public CustomerManagementManagedBean() {
         newCustomer = new Customer();
@@ -38,6 +43,7 @@ public class CustomerManagementManagedBean implements Serializable{
     public void postConstruct()
     {
         currentCustomer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
+//        customerBookings = currentCustomer.getBookings();
     }
     
     public void createNewCustomer(ActionEvent event) {
@@ -50,15 +56,9 @@ public class CustomerManagementManagedBean implements Serializable{
         }
     }
     
-    public void viewCustomerProfile(ActionEvent event) throws IOException
-    {
-        Long customerIdToView = currentCustomer.getCustomerId();
-        
-    }
-    
     public void doUpdateCustomer(ActionEvent event)
     {
-        selectedCustomerEntityToUpdate = (Customer)event.getComponent().getAttributes().get("customerEntityToUpdate");
+        selectedCustomerEntityToUpdate = currentCustomer;
     }
     
     public void updateCustomer(ActionEvent event)
@@ -67,7 +67,6 @@ public class CustomerManagementManagedBean implements Serializable{
         {
             customerSessionBeanLocal.updateCustomerDetails(selectedCustomerEntityToUpdate);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
-
         }
         catch(UpdateCustomerException | CustomerNotFoundException |InputDataValidationException ex)
         {
@@ -101,5 +100,21 @@ public class CustomerManagementManagedBean implements Serializable{
 
     public void setSelectedCustomerEntityToUpdate(Customer selectedCustomerEntityToUpdate) {
         this.selectedCustomerEntityToUpdate = selectedCustomerEntityToUpdate;
+    }
+
+    public List<Booking> getCustomerBookings() {
+        return customerBookings;
+    }
+
+    public void setCustomerBookings(List<Booking> customerBookings) {
+        this.customerBookings = customerBookings;
+    }
+
+    public Booking getSelectedBooking() {
+        return selectedBooking;
+    }
+
+    public void setSelectedBooking(Booking selectedBooking) {
+        this.selectedBooking = selectedBooking;
     }
 }
