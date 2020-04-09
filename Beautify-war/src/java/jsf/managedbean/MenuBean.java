@@ -54,8 +54,8 @@ public class MenuBean implements Serializable{
             for (Category leafCategory : leafCategories) {
                 if (leafCategory.getType().toString() == "PRODUCT") {
                     DefaultMenuItem leafCategoryProduct = new DefaultMenuItem(leafCategory.getName());
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("categoryId", leafCategory.getCategoryId());
-                    //leafCategoryProduct.setParam("categoryId",leafCategory.getCategoryId());
+                    //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("categoryId", leafCategory.getCategoryId());
+                    leafCategoryProduct.setParam("categoryId",leafCategory.getCategoryId());
                     leafCategoryProduct.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfACategory.xhtml");
                     products1.addElement(leafCategoryProduct);
 
