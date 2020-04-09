@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <ez:menubar/>
+        <!--        <ez:Breadcrumb pageName="viewProductDetails" />-->
+        <div>
+            <h3>View Product Details</h3>
+
+            <br/>
+
+            #{viewProductDetailsManagedBean.foo()}
+<!--            <h:messages errorClass="errorTextsWithBullet" fatalClass="errorTextsWithBullet" infoClass="infoTextsWithBullet" globalOnly="true" />
+            <br/>
+
+            <h:form rendered="#{viewProductDetailsManagedBean.productToView != null}">
+                <h:commandLink value="Back" actionListener="#{viewProductDetailsManagedBean.back}" />
+            </h:form>-->
+
+            <br/>  
+            <h:body>
+                <p:layout style="min-width: 500px;min-height:425px">
+
+                    <p:layoutUnit position="west" size="520">
+
+                        <p:galleria value="#{imagesView.images}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
+                            <p:graphicImage name="demo/images/nature/#{image}" alt="Image Description for #{image}" title="#{image}"/>
+                        </p:galleria>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+                        <h2>Product Details</h2>
+                        <p:panelGrid columns="2">
+                            <h:outputLabel value="Seller Name:"/>
+                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}"/>
+                            
+                            <h:outputLabel value="Product SKU code:"/>
+                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.skuCode}"/>
+
+                            <h:outputLabel value="Product Name:"/>
+                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.name}"/>
+
+                            <h:outputLabel value="Product Desription:"/>
+                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.description}"/>
+
+                            <h:outputLabel value="Product Price:"/>
+                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.price}"/>
+                            
+                            <h:outputLabel value="Product Tags"/>
+                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.tags}"/>
+
+
+                        </p:panelGrid>
+                    </p:layoutUnit>
+                </p:layout>
+            </h:body>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+

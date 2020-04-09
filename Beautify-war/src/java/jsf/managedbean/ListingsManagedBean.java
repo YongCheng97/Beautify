@@ -8,18 +8,17 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.faces.bean.ViewScoped;
-
 
 @Named(value = "listingsManagedBean")
 @ViewScoped
 public class ListingsManagedBean implements Serializable {
 
-    @EJB(name = "ServiceSessionBeanLocal")
+    @EJB
     private ServiceSessionBeanLocal serviceSessionBeanLocal;
 
-    @EJB(name = "ProductSessionBeanLocal")
+    @EJB
     private ProductSessionBeanLocal productSessionBeanLocal;
     
     private List<Product> productEntities; 
@@ -30,8 +29,8 @@ public class ListingsManagedBean implements Serializable {
     
     @PostConstruct
     public void postConstruct() {
-        setProductEntities(productSessionBeanLocal.retrieveAllProducts());
-        setServiceEntities(serviceSessionBeanLocal.retrieveAllServices()); 
+        productEntities = productSessionBeanLocal.retrieveAllProducts();
+        serviceEntities = serviceSessionBeanLocal.retrieveAllServices(); 
     }
 
     public List<Product> getProductEntities() {
