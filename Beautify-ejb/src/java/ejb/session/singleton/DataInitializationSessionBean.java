@@ -93,6 +93,7 @@ public class DataInitializationSessionBean {
     private void initialiseData() {
         try {
             Customer customer1 = customerSessionBeanLocal.retrieveCustomerByCustId(customerSessionBeanLocal.createNewCustomer(new Customer("Bob", "Lim", "boblim@gmail.com", "boblim", "password", Long.parseLong("98023457"))));
+            Customer customer2 = customerSessionBeanLocal.retrieveCustomerByCustId(customerSessionBeanLocal.createNewCustomer(new Customer("Mary", "Tan", "marytan@gmail.com", "marytan", "password", Long.parseLong("95634137")))); 
 
             Category categoryNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Nails", "Nail Services and Products"), null);
             Category categoryHair = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair", "Hair Services and Products"), null);
@@ -138,9 +139,10 @@ public class DataInitializationSessionBean {
 
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yy HH:mm");
             Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "approved", "remarks"), customer1.getCustomerId(), manicure.getServiceId());
-            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "approved", "remarks"), customer1.getCustomerId(), haircut.getServiceId());
+            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "approved", "remarks"), customer2.getCustomerId(), haircut.getServiceId());
             
             Review review1 = reviewSessionBeanLocal.createNewReview(new Review(5, "Very good service", null), customer1.getCustomerId(), booking1.getBookingId());
+            Review review2 = reviewSessionBeanLocal.createNewReview(new Review(5, "Excellent hair cut!", null), customer2.getCustomerId(), booking2.getBookingId()); 
 
             /*
             Category categoryGelNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Gel Nails", "Gel Nail Services"), categoryNails.getCategoryId());

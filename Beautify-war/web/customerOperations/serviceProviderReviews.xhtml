@@ -25,6 +25,13 @@
         <div>
             <h3> Service Provider Reviews </h3> 
 
+            <style type="text/css">
+                .ui-datascroller .ui-datascroller-item {
+                    border-bottom: 1px solid #A8A8A8;
+                    padding: 25px 10px;
+                }
+            </style>
+
             <h:form> 
                 <p:dataScroller value="#{reviewsManagedBean.reviews}" var="review" chunkSize="10">
                     <f:facet name="header">
@@ -35,6 +42,10 @@
 
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputText value="#{review.customer.firstName}" style="font-weight: bold" />
+
+                                <br></br>
+
                                 <h:outputText value="Rating:" />
                                 <h:outputText value="#{review.rating}" style="font-weight: bold"/>
 
