@@ -22,8 +22,8 @@
 
             <p:layoutUnit position="center">
                 <h:form id="form">
-                    <p:dataGrid var="category" value="#{categoryManagementManagedBean.categories}" columns="3" layout="grid"
-                                rows="12" paginator="true" id="categories"
+                    <p:dataGrid var="product" value="#{categoryManagementManagedBean.newCategory.products}" columns="3" layout="grid"
+                                rows="12" paginator="true" id="products"
                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                 rowsPerPageTemplate="6,12,16">
 
@@ -31,9 +31,12 @@
                             <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}"/>
                         </f:facet>
 
-                        <p:panel header="#{category.name}" style="text-align:center">
+                        <p:panel header="#{product.name}" style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
-                                <h:outputText value="#{category.description}" />
+                                <h:outputText value="#{product.skuCode}" />
+                                <h:outputText value= "$#{product.price}" />
+                                <h:outputText value="#{product.description}" />
+                                <p:graphicImage library="images" name="Facial.jpg" height="120" width="150" alt ="" />
                             </h:panelGrid>
                             <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
                                 <h:outputText value = "Click here for more information!"/>

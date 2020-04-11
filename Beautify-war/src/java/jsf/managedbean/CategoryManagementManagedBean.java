@@ -28,6 +28,7 @@ public class CategoryManagementManagedBean implements Serializable {
 
     private List<Category> categories;
     private Category newCategory;
+    private Long categoryId;
 
     public CategoryManagementManagedBean() {
     }
@@ -35,11 +36,8 @@ public class CategoryManagementManagedBean implements Serializable {
     @PostConstruct
     public void postConstruct() {
         categories = categorySessionBean.retrieveAllCategories();
-    }
-
-    public void retrieveCategoryId() {
+        categoryId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("categoryId"));
         try {
-            Long categoryId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("categoryId"));
             newCategory = categorySessionBean.retrieveCategoryByCategoryId(categoryId);
         } catch (CategoryNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving category: " + ex.getMessage(), null));
@@ -47,9 +45,9 @@ public class CategoryManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
-    
+
     public void clickLink(ActionEvent event) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/eachListing.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml");
     }
 
     //use requestParameterMap
@@ -71,9 +69,6 @@ public class CategoryManagementManagedBean implements Serializable {
      * @return the newCategory
      */
     public Category getNewCategory() {
-        if (newCategory != null) {
-            System.err.println("HELOOOOOOOO " + newCategory.getCategoryId());
-        }
         return newCategory;
     }
 
@@ -82,6 +77,14 @@ public class CategoryManagementManagedBean implements Serializable {
      */
     public void setNewCategory(Category newCategory) {
         this.newCategory = newCategory;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
 }

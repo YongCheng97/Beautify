@@ -9,22 +9,49 @@
                 xmlns="http://www.w3.org/1999/xhtml">
 
     <ui:define name="content">
-        
+
         <ez:menubar/>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <article>
                 <h3>Welcome</h3>
-                <p:button value = "Next" outcome="/customerOperations/listingsOfACategory"/>
                 <p:button value = "Test Service Provider" outcome="/customerOperations/serviceProviderProfile"/>
                 <p:button value = "Test Product Details" outcome="/customerOperations/viewProductDetails"/>
+                <p:button value = "Test Customer Profile" outcome="/customerOperations/customerProfile"/>
+                <p:button value = "Test Service Providers" outcome="/customerOperations/viewAllServiceProviders"/>
+                <p:carousel value="#{viewAllCategoriesManagedBean.categories}" headerText="Categories" var="category" itemStyle="text-align:center" responsive="true">
+                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                        <f:facet name="header">
+                            <h:outputText value="#{category.name}"/>
+                        </f:facet>
+
+                        <h:outputText value="Type:" />
+                        <h:outputText value="#{category.type}" />
+
+                        <h:outputText value="Description" />
+                        <h:outputText value="#{category.description}" />
+                    </p:panelGrid>
+                    <p:graphicImage library="images" name="Facial.jpg" height="120" width="150" alt ="" />
+                </p:carousel>
             </article>
         </h:panelGroup>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
             <article>
-                <h3>Logged In</h3>
-                <p:button value = "Next" outcome="/customerOperations/listingsOfACategory"/>
+                <p:carousel value="#{viewAllCategoriesManagedBean.categories}" headerText="Categories" var="category" itemStyle="text-align:center" responsive="true">
+                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                        <f:facet name="header">
+                            <h:outputText value="#{category.name}"/>
+                        </f:facet>
+
+                        <h:outputText value="Type:" />
+                        <h:outputText value="#{category.type}" />
+
+                        <h:outputText value="Description" />
+                        <h:outputText value="#{category.description}" />
+                    </p:panelGrid>
+                    <p:graphicImage library="images" name="Facial.jpg" height="120" width="150" alt ="" />
+                </p:carousel>
             </article>
         </h:panelGroup>
 

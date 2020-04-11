@@ -59,6 +59,9 @@ public class Customer implements Serializable {
     private List<Booking> bookings;
     
     @OneToMany(mappedBy = "customer")
+    private List<Booking> favouriteBookings;
+    
+    @OneToMany(mappedBy = "customer")
     private List<Review> reviews;
 
     public Customer() {
@@ -67,6 +70,7 @@ public class Customer implements Serializable {
         creditCards = new ArrayList<>();
         reviews = new ArrayList<>();
         bookings = new ArrayList<>();
+        favouriteBookings = new ArrayList<>();
     }
 
     public Customer(String firstName, String lastName, String email, String username, String password, Long contactNum) {
@@ -215,6 +219,20 @@ public class Customer implements Serializable {
      */
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
+    }
+
+    /**
+     * @return the favouriteBookings
+     */
+    public List<Booking> getFavouriteBookings() {
+        return favouriteBookings;
+    }
+
+    /**
+     * @param favouriteBookings the favouriteBookings to set
+     */
+    public void setFavouriteBookings(List<Booking> favouriteBookings) {
+        this.favouriteBookings = favouriteBookings;
     }
 
 }

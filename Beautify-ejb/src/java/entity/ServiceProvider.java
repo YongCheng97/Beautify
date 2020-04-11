@@ -245,4 +245,18 @@ public class ServiceProvider implements Serializable {
         this.services = services;
     }
 
+    /**
+     * @return the closingHours
+     */
+    public Date getClosingHours() {
+        return closingHours;
+    }
+
+    /**
+     * @param closingHours the closingHours to set
+     */
+    public void setClosingHours(Date closingHours) {
+        this.closingHours = closingHours;
+    }
+
 }
