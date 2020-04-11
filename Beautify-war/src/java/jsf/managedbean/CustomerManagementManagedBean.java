@@ -1,4 +1,5 @@
 package jsf.managedbean;
+
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Booking;
 import entity.Customer;
@@ -22,62 +23,54 @@ import util.exception.UpdateCustomerException;
 @Named(value = "customerManagementManagedBean")
 @ViewScoped
 
-public class CustomerManagementManagedBean implements Serializable{
+public class CustomerManagementManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
 
     private Customer newCustomer;
     private Customer currentCustomer;
-    
+
     private Customer selectedCustomerEntityToUpdate;
-    
+
     private List<Booking> customerBookings;
     private Booking selectedBooking;
 
     public CustomerManagementManagedBean() {
         newCustomer = new Customer();
-    }    
+    }
 
     @PostConstruct
-    public void postConstruct()
-    {
-        currentCustomer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
+    public void postConstruct() {
+        currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
 //        customerBookings = currentCustomer.getBookings();
     }
-    
-    public void createNewCustomer(ActionEvent event) {
+
+    public void createNewCustomer(ActionEvent event) throws IOException {
         try {
             Long customerId = customerSessionBeanLocal.createNewCustomer(getNewCustomer());
-
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Account successfully created!", null));
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
         } catch (InputDataValidationException | CustomerExistException | UnknownPersistenceException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating new account: " + ex.getMessage(), null));
         }
     }
-    
-    public void doUpdateCustomer(ActionEvent event)
-    {
+
+    public void doUpdateCustomer(ActionEvent event) {
         selectedCustomerEntityToUpdate = currentCustomer;
     }
-    
-    public void updateCustomer(ActionEvent event)
-    {
-        try
-        {
+
+    public void updateCustomer(ActionEvent event) {
+        try {
             customerSessionBeanLocal.updateCustomerDetails(selectedCustomerEntityToUpdate);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
-        }
-        catch(UpdateCustomerException | CustomerNotFoundException |InputDataValidationException ex)
-        {
+        } catch (UpdateCustomerException | CustomerNotFoundException | InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
-    
+
     public Customer getNewCustomer() {
         return newCustomer;
     }

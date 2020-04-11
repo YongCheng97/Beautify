@@ -40,6 +40,10 @@ public class LoginManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
         }
     }
+    
+    public void directToCustProfile(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/customerProfile.xhtml");
+    }
 
     public void logout(ActionEvent event) throws IOException {
         ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();

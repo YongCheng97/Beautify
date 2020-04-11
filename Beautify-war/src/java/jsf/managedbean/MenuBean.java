@@ -54,16 +54,15 @@ public class MenuBean implements Serializable{
             for (Category leafCategory : leafCategories) {
                 if (leafCategory.getType().toString() == "PRODUCT") {
                     DefaultMenuItem leafCategoryProduct = new DefaultMenuItem(leafCategory.getName());
-                    //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("categoryId", leafCategory.getCategoryId());
                     leafCategoryProduct.setParam("categoryId",leafCategory.getCategoryId());
-                    leafCategoryProduct.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfACategory.xhtml");
+                    leafCategoryProduct.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfAProductCategory.xhtml");
                     products1.addElement(leafCategoryProduct);
 
                 }
                 if (leafCategory.getType().toString() == "SERVICE") {
                     DefaultMenuItem leafCategoryService = new DefaultMenuItem(leafCategory.getName());
                     leafCategoryService.setParam("categoryId", leafCategory.getCategoryId());
-                    leafCategoryService.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfACategory.xhtml");
+                    leafCategoryService.setUrl("http://localhost:8080/Beautify-war/customerOperations/listingsOfAServiceCategory.xhtml");
                     products2.addElement(leafCategoryService);
                 }
             }

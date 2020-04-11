@@ -36,9 +36,6 @@ public class CategoryManagementManagedBean implements Serializable {
     @PostConstruct
     public void postConstruct() {
         categories = categorySessionBean.retrieveAllCategories();
-    }
-
-    public void retrieveCategoryId() {
         categoryId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("categoryId"));
         try {
             newCategory = categorySessionBean.retrieveCategoryByCategoryId(categoryId);
@@ -50,7 +47,7 @@ public class CategoryManagementManagedBean implements Serializable {
     }
 
     public void clickLink(ActionEvent event) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/eachListing.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml");
     }
 
     //use requestParameterMap
@@ -72,9 +69,6 @@ public class CategoryManagementManagedBean implements Serializable {
      * @return the newCategory
      */
     public Category getNewCategory() {
-        if (newCategory != null) {
-            System.err.println("HELOOOOOOOO " + newCategory.getCategoryId());
-        }
         return newCategory;
     }
 

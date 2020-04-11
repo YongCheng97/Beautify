@@ -8,10 +8,12 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    
+
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+
     <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-        <p:commandButton value = "Login" onclick="PF('dialogLogin').show()" style="float:right;"/>&nbsp;
-        <p:commandButton value = "Register" onclick="PF('dialogRegister').show()" style="float:right;"/>
+        <p:commandButton value = "Login" onclick="PF('dialogLogin').show()" style="float:right;" icon="fa fa-envelope"/>&nbsp;
+        <p:commandButton value = "Register" onclick="PF('dialogRegister').show()" style="float:right;" icon="fa fa-user-plus"/>
     </h:panelGroup>
 
     <h:form id="loginForm">
@@ -30,7 +32,7 @@
             <br/>
             <br/>
             <p:commandButton type="reset" value="Clear" icon="fa fa-undo" />&nbsp;
-            <p:commandButton type="submit" value="Submit" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
+            <p:commandButton type="submit" value="Submit" actionListener="#{loginManagedBean.login}" icon="fa fa-sign-in" />
 
             <p:growl>
                 <p:autoUpdate />
@@ -120,8 +122,8 @@
 
                 <p:row>
                     <p:column colspan="3">
-                        <p:commandButton type="reset" value="Clear" />&nbsp;
-                        <p:commandButton  value="Create New Account" actionListener="#{customerManagementManagedBean.createNewCustomer}"  />
+                        <p:commandButton type="reset" value="Clear" icon="fa fa-undo"/>&nbsp;
+                        <p:commandButton  value="Create New Account" actionListener="#{customerManagementManagedBean.createNewCustomer}"  icon="fa fa-sign-in"/>
                     </p:column>
                 </p:row>
 
@@ -131,12 +133,12 @@
 
     <h:panelGroup rendered="#{sessionScope.isLogin == true}">
         <h:form id="logoutForm">
-            <h:outputText value="You are login as #{sessionScope.currentStaffEntity.firstName} #{sessionScope.currentStaffEntity.lastName} (Access Right: #{sessionScope.currentStaffEntity.accessRightEnum})" />&nbsp;
-            <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" />
+            <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" style="float:right;"/>&nbsp;
+            <p:commandLink actionListener="#{loginManagedBean.directToCustProfile}" style="float:right;">
+                <h:outputText value = "#{customerManagementManagedBean.currentCustomer.firstName} #{customerManagementManagedBean.currentCustomer.lastName}"/>
+            </p:commandLink>&nbsp;
+            <i class="pi pi-user" style="float:right;"></i>
         </h:form>
     </h:panelGroup>
-
-   
-
 
 </ui:composition>

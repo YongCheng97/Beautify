@@ -36,7 +36,7 @@ public class ViewServiceProviderProfileManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        providerIdToView = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("providerIdToView");
+        providerIdToView = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("serviceProviderId"));
         try {
             providerToView = serviceProviderSessionBeanLocal.retrieveServiceProviderById(providerIdToView);
         } catch (ServiceProviderNotFoundException ex) {

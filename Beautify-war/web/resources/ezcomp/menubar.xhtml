@@ -4,25 +4,144 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+
     <cc:interface>
     </cc:interface>
 
     <cc:implementation>
-        <h:form>  
-            <p:growl id="messages"/>
 
-            <p:menubar model="#{menuBean.model}">
-                <f:facet name="options">
-                    <p:inputText style="margin:1px 10px 1px 1px;" placeholder="Search"/>
-                </f:facet>
-            </p:menubar>
+        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+            <h:form>  
+                <p:growl id="messages"/>
+                <p:menubar model="#{menuBean.model}">
+                    <f:facet name="options">
+                        <p:commandButton value = "Login" onclick="PF('dialogLogin').show()" style="margin:1px 10px 1px 1px;" icon="fa fa-envelope"/>
+                        <p:commandButton value = "Register" onclick="PF('dialogRegister').show()" style="margin:1px 10px 1px 1px;" icon="fa fa-user-plus"/>
+                    </f:facet>
+                </p:menubar>
+            </h:form>
+        </h:panelGroup>
+
+        <h:form id="loginForm">
+
+            <p:dialog id="dialogLogin" widgetVar="dialogLogin" header="Login" closable="true" height="120" closeOnEscape="true">
+                <p:outputLabel for="username" value="Username" />&nbsp;
+                <p:inputText id="username" value="#{loginManagedBean.username}" size="16" required="true" requiredMessage="Username is required" maxlength="32">
+                    <f:validateLength minimum="4" />
+                </p:inputText>
+                <br/>
+                <br/>
+                <p:outputLabel for="password" value="Password" />&nbsp;
+                <p:password id="password" value="#{loginManagedBean.password}" size="16" required="true" requiredMessage="Password is required" maxlength="32">
+                    <f:validateLength minimum="4" />
+                </p:password>
+                <br/>
+                <br/>
+                <p:commandButton type="reset" value="Clear" icon="fa fa-undo" />&nbsp;
+                <p:commandButton type="submit" value="Submit" actionListener="#{loginManagedBean.login}" icon="fa fa-sign-in" />
+
+                <p:growl>
+                    <p:autoUpdate />
+                </p:growl>
+
+            </p:dialog>
         </h:form>
+
+        <h:form id ="formCreateNewCustomer">
+
+            <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register As New User" closable ="true" closeOnEscape="true">
+                <p:messages id="messagesCreateNewCustomer" redisplay="false" />
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="firstName" value="First Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="firstName" value="#{customerManagementManagedBean.newCustomer.firstName}" required="true" requiredMessage="First Name is required" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="lastName" value="Last Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="lastName" value="#{customerManagementManagedBean.newCustomer.lastName}" required="true" requiredMessage="Last Name is required" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{customerManagementManagedBean.newCustomer.email}" required="true" requiredMessage="Email is required" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="contactNum" value="Contact Number: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>                            
+                            <p:inputText id="contactNum" value="#{customerManagementManagedBean.newCustomer.contactNum}" required="true" requiredMessage="Contact Number is required" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="username" value="Username: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="username" value="#{customerManagementManagedBean.newCustomer.username}" required="true" requiredMessage="Username is required" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="password" value="Password: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:password id="password" value="#{customerManagementManagedBean.newCustomer.password}" required="true" requiredMessage="Password is required" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Clear" icon="fa fa-undo"/>&nbsp;
+                            <p:commandButton  value="Create New Account" actionListener="#{customerManagementManagedBean.createNewCustomer}" icon="fa fa-sign-in"/>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+                <p:growl>
+                    <p:autoUpdate />
+                </p:growl>
+            </p:dialog>
+        </h:form>
+
+        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+            <h:form>  
+                <p:growl id="messages"/>
+
+                <p:menubar model="#{menuBean.model}">
+                    <f:facet name="options">
+                        <p:commandButton value = "#{customerManagementManagedBean.currentCustomer.firstName} #{customerManagementManagedBean.currentCustomer.lastName}" actionListener="#{loginManagedBean.directToCustProfile}" icon="fa fa-user" style="margin:1px 10px 1px 1px;" />
+                        <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" style="margin:1px 10px 1px 1px;"/>
+                    </f:facet>
+                </p:menubar>
+            </h:form>
+        </h:panelGroup>
     </cc:implementation>
 </html>
