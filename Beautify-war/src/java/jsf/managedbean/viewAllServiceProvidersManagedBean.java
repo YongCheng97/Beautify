@@ -10,6 +10,7 @@ import entity.ServiceProvider;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -54,6 +55,10 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
      */
     public void setServiceProviders(List<ServiceProvider> serviceProviders) {
         this.serviceProviders = serviceProviders;
+    }
+
+    public TimeZone getTimeZone() {
+        return TimeZone.getDefault();
     }
 
 }
