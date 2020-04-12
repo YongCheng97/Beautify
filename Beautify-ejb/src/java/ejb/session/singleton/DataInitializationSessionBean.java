@@ -141,14 +141,10 @@ public class DataInitializationSessionBean {
             Service facial = serviceSessionBeanLocal.createNewService(new Service("Facial", new BigDecimal("80.00"), "The best and most relaxing Facial Treatement", null), provider3.getServiceProviderId(), categoryFacial.getCategoryId());
 
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yy HH:mm");
-<<<<<<< HEAD
+
             Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf1.parse("03/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), manicure.getServiceId());
             Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Approved", "remarks", sdf1.parse("20/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), haircut.getServiceId());
-=======
-            Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "approved", "remarks"), customer1.getCustomerId(), manicure.getServiceId());
-            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "approved", "remarks"), customer2.getCustomerId(), haircut.getServiceId());
->>>>>>> 7627195e024ac25c6b177f914d76bf58384b0d82
-            
+
             Review review1 = reviewSessionBeanLocal.createNewReview(new Review(5, "Very good service", null), customer1.getCustomerId(), booking1.getBookingId());
             Review review2 = reviewSessionBeanLocal.createNewReview(new Review(5, "Excellent hair cut!", null), customer2.getCustomerId(), booking2.getBookingId()); 
 
