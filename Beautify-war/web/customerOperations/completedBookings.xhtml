@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <ez:menubar/>
+
+        <p:tabMenu activeIndex="#{param.i}">
+            <p:menuitem value="Profile" outcome="customerProfile.xhtml" icon="fa fa-user">
+                <f:param name="i" value="0" />
+            </p:menuitem>
+            <p:menuitem value="Bookings" outcome="upcomingBookings.xhtml" icon="fa fa-calendar">
+                <f:param name="i" value="1" />
+            </p:menuitem>
+            <p:menuitem value="Favourites" outcome="customerFavourites.xhtml" icon="fa fa-star">
+                <f:param name="i" value="2" />
+            </p:menuitem>
+            <p:menuitem value="Products Purchased" outcome="customerProductsPurchased.xhtml" icon="fa fa-shopping-cart">
+                <f:param name="i" value="3" />
+            </p:menuitem>
+
+        </p:tabMenu>
+
+        <br></br>
+        <div style="text-align:center;">
+            <p:button value = "Upcoming Bookings" outcome="/customerOperations/upcomingBookings" icon="fa fa-clock-o"/>
+            <span style="display:inline-block; width: 200;"></span>
+            <p:button value = "Completed Bookings" outcome="/customerOperations/completedBookings" icon="fa fa-check-square-o"/>
+        </div>
+        <br></br>
+
+        <h:body style="margin: 0; height:100%">
+
+            <h:form id="bookingInfo">
+
+                <p:dataGrid var="booking" value="#{customerManagementManagedBean.completedBookings}" columns="3" layout="grid"
+                            rows="12" paginator="true" id="bookings"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="6,12,16">
+
+                    <f:facet name="header">
+                        Upcoming Bookings
+                    </f:facet>
+
+                    <p:panel header="Booking ID: #{booking.bookingId}" style="text-align:center">
+                        <p:graphicImage style="width:80%;text-align:center" library="images" name="#{booking.service.serviceName}.jpg"/> 
+
+                        <h:panelGrid columns="2" cellpadding="5" style="width:100%; text-align:left">
+
+                            <h:outputText value="Date of Appointment:"  style="font-weight: bold"/>
+                            <h:outputText value="#{booking.dateOfAppointment}"/>
+
+                            <h:outputText value="Start Time:" style="font-weight: bold"/>
+                            <h:outputText value="#{booking.startTime}" />
+
+                            <h:outputText value="End Time" style="font-weight: bold"/>
+                            <h:outputText value="#{booking.endTime}" />
+
+                            <h:outputText value="Location:" style="font-weight: bold"/>
+                            <h:outputText value="#{booking.service.serviceProvider.address}" />
+
+                            <h:outputText value="Status:" style="font-weight: bold"/>
+                            <h:outputText value="#{booking.status}"/>
+
+                            <!--link the the individual service page-->
+                            <!--                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
+                                                                <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
+                                                                <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
+                                                            </p:commandLink>-->
+                        </h:panelGrid>
+                    </p:panel>
+
+                </p:dataGrid>
+
+            </h:form>
+
+        </h:body>
+
+    </ui:define>
+
+</ui:composition>

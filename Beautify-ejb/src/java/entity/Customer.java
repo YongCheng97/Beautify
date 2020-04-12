@@ -1,5 +1,6 @@
 package entity;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class Customer implements Serializable {
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     @NotNull
     private String password;
-    @Column(nullable = false, length = 32)
+    @Column(unique = true, nullable = false, length = 32)
     @NotNull
     @Size(max = 32)
     private String username;
@@ -48,6 +49,7 @@ public class Customer implements Serializable {
     @NotNull
     @Min(8)
     private Long contactNum;
+//    private File profilePhoto;
 
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;
@@ -234,5 +236,13 @@ public class Customer implements Serializable {
     public void setFavouriteBookings(List<Booking> favouriteBookings) {
         this.favouriteBookings = favouriteBookings;
     }
+
+//    public File getProfilePhoto() {
+//        return profilePhoto;
+//    }
+//
+//    public void setProfilePhoto(File profilePhoto) {
+//        this.profilePhoto = profilePhoto;
+//    }
 
 }

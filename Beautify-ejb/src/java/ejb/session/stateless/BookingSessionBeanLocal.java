@@ -18,5 +18,7 @@ public interface BookingSessionBeanLocal {
     public List<Booking> retrieveAllBookings();
 
     public Booking createNewBooking(Booking newBooking, Long customerId, Long serviceId) throws BookingExistException, UnknownPersistenceException, InputDataValidationException, CreateNewBookingException, CustomerNotFoundException;
+
+    public List<Booking> retrieveAllBookingsByCustomerId(Long customerId);
     
 }
