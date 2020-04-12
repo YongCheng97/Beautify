@@ -31,23 +31,11 @@ import util.exception.ServiceProviderNotFoundException;
 @ViewScoped
 public class ViewServiceProviderReviewsManagedBean implements Serializable {
 
-    @EJB
-    private ServiceSessionBeanLocal serviceSessionBean;
-
-    @EJB
-    private BookingSessionBeanLocal bookingSessionBean;
-
-    @EJB
-    private ServiceProviderSessionBeanLocal serviceProviderSessionBean;
-
     @EJB(name = "ReviewSessionBeanLocal")
     private ReviewSessionBeanLocal reviewSessionBeanLocal;
 
     private List<Review> reviews;
     private Long providerIdToView;
-    private ServiceProvider providerToView;
-    private List<Service> services;
-    private List<Booking> bookings;
 
     public ViewServiceProviderReviewsManagedBean() {
     }
@@ -56,18 +44,7 @@ public class ViewServiceProviderReviewsManagedBean implements Serializable {
     public void postConstruct() {
         providerIdToView = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("serviceProviderId"));
         try {
-            providerToView = serviceProviderSessionBean.retrieveServiceProviderById(providerIdToView);
-            services = providerToView.getServices();
-            for (Service service : services) {
-                List<Booking> bookingList = service.getBookings();
-                for (Booking booking : bookingList) {
-                    bookings.add((Booking) booking);
-                }
-            }
-            for (Booking booking : bookings) {
-                reviews.add(booking.getReview());
-            }
-            setReviews(reviews);
+            setReviews(reviewSessionBeanLocal.retrieveReviewsByServiceProviderId(providerIdToView)); 
         } catch (ServiceProviderNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the service provider details: " + ex.getMessage(), null));
         } catch (Exception ex) {
