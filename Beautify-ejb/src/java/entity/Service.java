@@ -63,11 +63,15 @@ public class Service implements Serializable {
     @OneToMany(mappedBy = "service")
     private List<Booking> bookings;
     
+    @ManyToMany
+    private List<Customer> favouritedCustomers;
+    
     public Service()
     {
         this.tags = new ArrayList<>();
         this.promotions = new ArrayList<>();
         this.bookings = new ArrayList<>();
+        this.favouritedCustomers = new ArrayList<>();
     }
 
     public Service(String serviceName, BigDecimal price, String description, File photo) {
@@ -180,6 +184,14 @@ public class Service implements Serializable {
 
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
+    }
+
+    public List<Customer> getFavouritedCustomers() {
+        return favouritedCustomers;
+    }
+
+    public void setFavouritedCustomers(List<Customer> favouritedCustomers) {
+        this.favouritedCustomers = favouritedCustomers;
     }
     
 }

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -51,12 +52,16 @@ public class Product implements Serializable {
     private ServiceProvider serviceProvider;
     
     @ManyToMany
+    private List<Customer> favouritedCustomers;
+    
+    @ManyToMany
     private List<Tag> tags;
 
     public Product() {
-        price = new BigDecimal("0.00");
+        this.price = new BigDecimal("0.00");
         
-        tags = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.favouritedCustomers = new ArrayList<>();
     }
 
     public Product(String skuCode, String name, BigDecimal price, String description, String photo) {
@@ -200,6 +205,14 @@ public class Product implements Serializable {
      */
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public List<Customer> getFavouritedCustomers() {
+        return favouritedCustomers;
+    }
+
+    public void setFavouritedCustomers(List<Customer> favouritedCustomers) {
+        this.favouritedCustomers = favouritedCustomers;
     }
 
 }

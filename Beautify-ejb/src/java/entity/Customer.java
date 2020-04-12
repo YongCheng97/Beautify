@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -60,8 +61,11 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer")
     private List<Booking> bookings;
     
-    @OneToMany(mappedBy = "customer")
-    private List<Booking> favouriteBookings;
+    @ManyToMany(mappedBy = "favouritedCustomers")
+    private List<Service> favouriteServices;
+    
+    @ManyToMany(mappedBy = "favouritedCustomers")
+    private List<Product> favouriteProducts;
     
     @OneToMany(mappedBy = "customer")
     private List<Review> reviews;
@@ -72,7 +76,8 @@ public class Customer implements Serializable {
         creditCards = new ArrayList<>();
         reviews = new ArrayList<>();
         bookings = new ArrayList<>();
-        favouriteBookings = new ArrayList<>();
+        favouriteServices = new ArrayList<>();
+        favouriteProducts = new ArrayList<>();
     }
 
     public Customer(String firstName, String lastName, String email, String username, String password, Long contactNum) {
@@ -223,20 +228,6 @@ public class Customer implements Serializable {
         this.bookings = bookings;
     }
 
-    /**
-     * @return the favouriteBookings
-     */
-    public List<Booking> getFavouriteBookings() {
-        return favouriteBookings;
-    }
-
-    /**
-     * @param favouriteBookings the favouriteBookings to set
-     */
-    public void setFavouriteBookings(List<Booking> favouriteBookings) {
-        this.favouriteBookings = favouriteBookings;
-    }
-
 //    public File getProfilePhoto() {
 //        return profilePhoto;
 //    }
@@ -244,5 +235,21 @@ public class Customer implements Serializable {
 //    public void setProfilePhoto(File profilePhoto) {
 //        this.profilePhoto = profilePhoto;
 //    }
+
+    public List<Service> getFavouriteServices() {
+        return favouriteServices;
+    }
+
+    public void setFavouriteServices(List<Service> favouriteServices) {
+        this.favouriteServices = favouriteServices;
+    }
+
+    public List<Product> getFavouriteProducts() {
+        return favouriteProducts;
+    }
+
+    public void setFavouriteProducts(List<Product> favouriteProducts) {
+        this.favouriteProducts = favouriteProducts;
+    }
 
 }
