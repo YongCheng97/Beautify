@@ -5,41 +5,46 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.BookingSessionBeanLocal;
+import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
+import ejb.session.stateless.ServiceSessionBeanLocal;
+import entity.Booking;
+import entity.Review;
+import entity.Service;
 import entity.ServiceProvider;
 import java.io.Serializable;
-import java.util.TimeZone;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import static org.primefaces.behavior.validate.ClientValidator.PropertyKeys.event;
 import util.exception.ServiceProviderNotFoundException;
 
 /**
  *
  * @author jilon
  */
-@Named(value = "viewServiceProviderProfileManagedBean")
+@Named(value = "reviewsManagedBean")
 @ViewScoped
-public class ViewServiceProviderProfileManagedBean implements Serializable {
+public class ViewServiceProviderReviewsManagedBean implements Serializable {
 
-    @EJB(name = "ServiceProviderSessionBeanLocal")
-    private ServiceProviderSessionBeanLocal serviceProviderSessionBeanLocal;
+    @EJB(name = "ReviewSessionBeanLocal")
+    private ReviewSessionBeanLocal reviewSessionBeanLocal;
 
+    private List<Review> reviews;
     private Long providerIdToView;
-    private ServiceProvider providerToView;
 
-    public ViewServiceProviderProfileManagedBean() {
+    public ViewServiceProviderReviewsManagedBean() {
     }
 
     @PostConstruct
     public void postConstruct() {
-        setProviderIdToView((Long) Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("serviceProviderId")));
+        providerIdToView = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("serviceProviderId"));
         try {
-            providerToView = serviceProviderSessionBeanLocal.retrieveServiceProviderById(getProviderIdToView());
+            setReviews(reviewSessionBeanLocal.retrieveReviewsByServiceProviderId(providerIdToView)); 
         } catch (ServiceProviderNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the service provider details: " + ex.getMessage(), null));
         } catch (Exception ex) {
@@ -47,24 +52,12 @@ public class ViewServiceProviderProfileManagedBean implements Serializable {
         }
     }
 
-    public ServiceProvider getProviderToView() {
-        return providerToView;
+    public List<Review> getReviews() {
+        return reviews;
     }
 
-    public void setProviderToView(ServiceProvider providerToView) {
-        this.providerToView = providerToView;
-    }
-
-    public Long getProviderIdToView() {
-        return providerIdToView;
-    }
-
-    public void setProviderIdToView(Long providerIdToView) {
-        this.providerIdToView = providerIdToView;
-    }
-
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
 }

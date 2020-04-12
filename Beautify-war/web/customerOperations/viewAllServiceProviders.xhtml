@@ -34,9 +34,13 @@
                             <p:panel header="#{serviceProvider.name}" style="text-align:center">
                                 <h:panelGrid columns="1" style="width:100%">
                                     <h:outputText value="#{serviceProvider.address}" />
-                                    <h:outputText value= "Opening Hours: #{serviceProvider.openingHours}">
+                                    <h:outputText value= "Opening Hours: " />
+                                    <h:outputText value ="#{serviceProvider.openingHours}">
+                                        <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewAllServiceProvidersManagedBean.timeZone}"/>
                                     </h:outputText>
-                                    <h:outputText value= "Closing Hours: #{serviceProvider.closingHours}">
+                                    <h:outputText value= "Closing Hours: " />
+                                    <h:outputText value ="#{serviceProvider.closingHours}">
+                                        <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewAllServiceProvidersManagedBean.timeZone}"/>
                                     </h:outputText>
                                 </h:panelGrid>
                                 <p:commandLink actionListener="#{viewAllServiceProvidersManagedBean.clickLink(serviceProvider.serviceProviderId)}" style="text-decoration:none;color:blue;">
