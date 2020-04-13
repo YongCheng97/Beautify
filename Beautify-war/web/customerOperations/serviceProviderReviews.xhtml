@@ -11,13 +11,13 @@
     <ui:define name="content"> 
         <ez:menubar/>
         <p:tabMenu>
-            <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile">
+            <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="fa fa-user">
                 <f:param name="serviceProviderId" value="#{viewServiceProviderProfileManagedBean.providerIdToView}" />
             </p:menuitem>
-            <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings">
+            <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="fa fa-shopping-cart">
                 <f:param name="serviceProviderId" value="#{viewServiceProviderProfileManagedBean.providerIdToView}" />
             </p:menuitem>
-            <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews">
+            <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews" icon="fa fa-envelope">
                 <f:param name="serviceProviderId" value="#{viewServiceProviderProfileManagedBean.providerIdToView}" />
             </p:menuitem>
         </p:tabMenu>
@@ -42,6 +42,7 @@
 
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
+                                
                                 <h:outputText value="#{review.customer.firstName}" style="font-weight: bold" />
 
                                 <br></br>
