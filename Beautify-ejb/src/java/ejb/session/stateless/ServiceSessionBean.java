@@ -5,6 +5,7 @@ import entity.Product;
 import entity.Review;
 import entity.Service;
 import entity.ServiceProvider;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,7 +32,6 @@ import util.exception.ServiceNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
 import util.exception.UnknownPersistenceException;
 
-
 @Stateless
 @Local(ServiceSessionBeanLocal.class)
 
@@ -42,21 +42,18 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
-    
+
     @EJB
     private CategorySessionBeanLocal categorySessionBeanLocal;
-    
-    
 
-    
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
+
     public ServiceSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public Service createNewService(Service newService, Long serviceProviderId, Long categoryId) throws ServiceExistException, UnknownPersistenceException, InputDataValidationException, CreateNewServiceException {
         Set<ConstraintViolation<Service>> constraintViolations = validator.validate(newService);
@@ -76,13 +73,13 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
                 newService.setCategory(category);
                 category.getServices().add(newService);
-                
+
                 if (serviceProviderId == null) {
                     throw new CreateNewServiceException("The new service must be assoicated a service provider");
                 }
 
                 ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderId);
-                
+
                 newService.setServiceProvider(serviceProvider);
                 serviceProvider.getServices().add(newService);
 
@@ -90,7 +87,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
                 em.flush();
 
                 return newService;
-                
+
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -107,9 +104,9 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
-        
+
     }
-    
+
     @Override
     public List<Service> retrieveAllServices() {
         Query query = em.createQuery("SELECT s FROM Service s ORDER BY s.price ASC");
@@ -119,14 +116,32 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
             service.getBookings().size();
             service.getPromotions().size();
             service.getTags().size();
-            
+
             service.getCategory();
             service.getServiceProvider();
         }
 
         return services;
     }
-    
+
+    @Override
+    public List<Service> retrieveAllServicesFromCategory(Long categoryId) {
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.category.categoryId = :categoryId ORDER BY s.price ASC");
+        query.setParameter("categoryId", categoryId);
+        List<Service> services = query.getResultList();
+
+        for (Service service : services) {
+            service.getBookings().size();
+            service.getPromotions().size();
+            service.getTags().size();
+
+            service.getCategory();
+            service.getServiceProvider();
+        }
+
+        return services;
+    }
+
     @Override
     public Service retrieveServiceByServiceId(Long serviceId) throws ServiceNotFoundException {
         Service service = em.find(Service.class, serviceId);
@@ -135,34 +150,91 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
             service.getBookings().size();
             service.getPromotions().size();
             service.getTags().size();
-            
+
             service.getCategory();
             service.getServiceProvider();
-            
+
             return service;
         } else {
             throw new ServiceNotFoundException("Service ID " + serviceId + " does not exist!");
         }
     }
-    
+
     @Override
-    public List<Service> searchServicesByName(String searchString) {
+    public List<Service> filterServicesByName(String searchString, Long categoryId) {
         Query query = em.createQuery("SELECT s FROM Service s WHERE s.serviceName LIKE :inSearchString ORDER BY s.price ASC");
         query.setParameter("inSearchString", "%" + searchString + "%");
         List<Service> services = query.getResultList();
+        List<Service> newServices = new ArrayList<>();
 
         for (Service service : services) {
+            if (service.getCategory().getCategoryId() == categoryId) {
+                newServices.add(service);
+            }
+        }
+
+        for (Service service : newServices) {
             service.getBookings().size();
             service.getPromotions().size();
             service.getTags().size();
-            
+
             service.getCategory();
             service.getServiceProvider();
         }
 
-        return services;
+        return newServices;
     }
-    
+
+    @Override
+    public List<Service> filterServicesByMinimumPrice(BigDecimal minPrice, Long categoryId) {
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.price >= :minPrice ORDER BY s.price ASC");
+        query.setParameter("minPrice", minPrice);
+        List<Service> services = query.getResultList();
+        List<Service> newServices = new ArrayList<>();
+
+        for (Service service : services) {
+            if (service.getCategory().getCategoryId() == categoryId) {
+                newServices.add(service);
+            }
+        }
+
+        for (Service service : newServices) {
+            service.getBookings().size();
+            service.getPromotions().size();
+            service.getTags().size();
+
+            service.getCategory();
+            service.getServiceProvider();
+        }
+
+        return newServices;
+    }
+
+    @Override
+    public List<Service> filterServicesByMaximumPrice(BigDecimal maxPrice, Long categoryId) {
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.price >= :maxPrice ORDER BY s.price ASC");
+        query.setParameter("maxPrice", maxPrice);
+        List<Service> services = query.getResultList();
+        List<Service> newServices = new ArrayList<>();
+
+        for (Service service : services) {
+            if (service.getCategory().getCategoryId() == categoryId) {
+                newServices.add(service);
+            }
+        }
+
+        for (Service service : newServices) {
+            service.getBookings().size();
+            service.getPromotions().size();
+            service.getTags().size();
+
+            service.getCategory();
+            service.getServiceProvider();
+        }
+
+        return newServices;
+    }
+
     @Override
     public List<Service> filterServicesByCategory(Long categoryId) throws CategoryNotFoundException {
         List<Service> services = new ArrayList<>();
@@ -180,7 +252,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
             service.getBookings().size();
             service.getPromotions().size();
             service.getTags().size();
-            
+
             service.getCategory();
             service.getServiceProvider();
         }
@@ -193,68 +265,58 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
         return services;
     }
-    
+
     @Override
-    public List<Service> filterServicesByTags(List<Long> tagIds, String condition)
-    {
+    public List<Service> filterServicesByTags(List<Long> tagIds, String condition) {
         List<Service> services = new ArrayList<>();
-        
-        if(tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR")))
-        {
+
+        if (tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR"))) {
             return services;
-        }
-        else {
-           if(condition.equals("OR")) {
+        } else {
+            if (condition.equals("OR")) {
                 Query query = em.createQuery("SELECT DISTINCT s FROM Service s, IN (s.tags) t WHERE t.tagId IN :inTagIds ORDER BY s.serviceName ASC");
                 query.setParameter("inTagIds", tagIds);
-                services = query.getResultList();                                                          
-           }
-            else // AND
-           {
-               String selectClause = "SELECT s FROM Service s";
-               String whereClause = "";
-               Boolean firstTag = true;
-               Integer tagCount = 1;  
-               
-               for(Long tagId:tagIds)
-                {
+                services = query.getResultList();
+            } else // AND
+            {
+                String selectClause = "SELECT s FROM Service s";
+                String whereClause = "";
+                Boolean firstTag = true;
+                Integer tagCount = 1;
+
+                for (Long tagId : tagIds) {
                     selectClause += ", IN (s.tags) t" + tagCount;
 
-                    if(firstTag)
-                    {
+                    if (firstTag) {
                         whereClause = "WHERE t1.tagId = " + tagId;
                         firstTag = false;
+                    } else {
+                        whereClause += " AND t" + tagCount + ".tagId = " + tagId;
                     }
-                    else
-                    {
-                        whereClause += " AND t" + tagCount + ".tagId = " + tagId; 
-                    }
-                    
+
                     tagCount++;
                 }
-                
+
                 String jpql = selectClause + " " + whereClause + " ORDER BY s.serviceName ASC";
                 Query query = em.createQuery(jpql);
                 services = query.getResultList();
-           }
-           
-           for(Service service:services)
-            {
+            }
+
+            for (Service service : services) {
                 service.getCategory();
                 service.getTags().size();
             }
-            
-            Collections.sort(services, new Comparator<Service>()
-            {
+
+            Collections.sort(services, new Comparator<Service>() {
                 public int compare(Service se1, Service se2) {
                     return se1.getServiceName().compareTo(se1.getServiceName());
                 }
             });
-            
+
             return services;
         }
     }
-    
+
     private List<Service> addSubCategoryServices(Category categoryEntity) {
         List<Service> services = new ArrayList<>();
 
@@ -267,8 +329,8 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
             return services;
         }
-    }    
-    
+    }
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Service>> constraintViolations) {
         String msg = "Input data validation error!:";
 
