@@ -7,6 +7,7 @@ import util.exception.CreateNewReviewException;
 import util.exception.InputDataValidationException;
 import util.exception.ReviewExistException;
 import util.exception.ReviewNotFoundException;
+import util.exception.ServiceProviderNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateReviewException;
 
@@ -18,8 +19,10 @@ public interface ReviewSessionBeanLocal {
 
     public Review retrieveReviewByReviewId(Long reviewId) throws ReviewNotFoundException;
 
+    public List<Review> retrieveReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException;
+
     public void updateReview(Review review) throws ReviewNotFoundException, UpdateReviewException, InputDataValidationException;
 
     public void deleteReview(Long reviewId) throws ReviewNotFoundException;
-    
+
 }

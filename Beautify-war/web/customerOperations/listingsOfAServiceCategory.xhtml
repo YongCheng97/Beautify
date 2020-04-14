@@ -32,7 +32,7 @@
                         <h:panelGrid columns="1" style="width:100%">
                             <h:outputText value="$#{service.price}" />
                             <h:outputText value="#{service.description}" />
-                            <p:graphicImage library="images" name="Gel Manicure.jpg" height="120" width="150" alt ="" />
+                            <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
                         </h:panelGrid>
                         <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
                             <h:outputText value = "Click here for more information!"/>
@@ -42,7 +42,6 @@
                 </p:dataGrid>
 
             </h:form>
-
         </h:body>
     </ui:define>
 </ui:composition>

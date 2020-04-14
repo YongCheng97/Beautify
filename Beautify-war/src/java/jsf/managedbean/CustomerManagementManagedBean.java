@@ -1,11 +1,13 @@
 package jsf.managedbean;
 
+import ejb.session.stateless.BookingSessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Booking;
 import entity.Customer;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -19,6 +21,7 @@ import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateCustomerException;
+import util.security.CryptographicHelper;
 
 @Named(value = "customerManagementManagedBean")
 @ViewScoped
@@ -27,23 +30,51 @@ public class CustomerManagementManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
+    @EJB
+    private BookingSessionBeanLocal bookingSessionBeanLocal;
 
     private Customer newCustomer;
     private Customer currentCustomer;
 
+    //to update customer
     private Customer selectedCustomerEntityToUpdate;
 
-    private List<Booking> customerBookings;
-    private Booking selectedBooking;
-
+    //to change password
+    private String oldPassword;
+    private String newPassword;
+    private String confirmPassword;
+    
+    //to get bookings
+    private List<Booking> upcomingBookings;
+    private List<Booking> completedBookings;
+    
     public CustomerManagementManagedBean() {
         newCustomer = new Customer();
     }
 
     @PostConstruct
-    public void postConstruct() {
+    public void postConstruct() 
+    {
         currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
-//        customerBookings = currentCustomer.getBookings();
+        
+        if(currentCustomer != null)
+        {
+            upcomingBookings = new ArrayList<>();
+            completedBookings = new ArrayList<>();
+            List<Booking> bookings = bookingSessionBeanLocal.retrieveAllBookingsByCustomerId(currentCustomer.getCustomerId());
+
+            for(Booking booking:bookings)
+            {
+                if(!booking.getStatus().equals("Completed"))
+                {
+                    upcomingBookings.add(booking);
+                }
+                else
+                {
+                    completedBookings.add(booking);
+                }
+            }
+        }
     }
 
     public void createNewCustomer(ActionEvent event) throws IOException {
@@ -64,6 +95,35 @@ public class CustomerManagementManagedBean implements Serializable {
         try {
             customerSessionBeanLocal.updateCustomerDetails(selectedCustomerEntityToUpdate);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
+        } catch (UpdateCustomerException | CustomerNotFoundException | InputDataValidationException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
+    }
+    
+    public void changePassword()
+    {
+        try {
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + currentCustomer.getSalt()));
+            if(passwordHash.equals(currentCustomer.getPassword()))
+            {
+                if(newPassword.equals(confirmPassword)){
+                    Customer changePWCustomer = currentCustomer;
+                    changePWCustomer.setPassword(newPassword);
+                    customerSessionBeanLocal.updateCustomerDetails(changePWCustomer);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Password changed successfully", null));
+                }
+                else
+                {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New password does not match", null));
+                }
+            }
+            else
+            {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Old password is incorrect", null));
+            }
+            
         } catch (UpdateCustomerException | CustomerNotFoundException | InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
         } catch (Exception ex) {
@@ -94,20 +154,44 @@ public class CustomerManagementManagedBean implements Serializable {
     public void setSelectedCustomerEntityToUpdate(Customer selectedCustomerEntityToUpdate) {
         this.selectedCustomerEntityToUpdate = selectedCustomerEntityToUpdate;
     }
-
-    public List<Booking> getCustomerBookings() {
-        return customerBookings;
+    
+    public String getOldPassword() {
+        return oldPassword;
     }
 
-    public void setCustomerBookings(List<Booking> customerBookings) {
-        this.customerBookings = customerBookings;
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
-    public Booking getSelectedBooking() {
-        return selectedBooking;
+    public String getNewPassword() {
+        return newPassword;
     }
 
-    public void setSelectedBooking(Booking selectedBooking) {
-        this.selectedBooking = selectedBooking;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public List<Booking> getUpcomingBookings() {
+        return upcomingBookings;
+    }
+
+    public void setUpcomingBookings(List<Booking> upcomingBookings) {
+        this.upcomingBookings = upcomingBookings;
+    }
+
+    public List<Booking> getCompletedBookings() {
+        return completedBookings;
+    }
+
+    public void setCompletedBookings(List<Booking> completedBookings) {
+        this.completedBookings = completedBookings;
     }
 }

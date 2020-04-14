@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +35,16 @@ public class Booking implements Serializable {
     @NotNull
     @Size(max = 128)
     private String remarks;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    @NotNull
+    private Date dateOfAppointment;
+    @Column(nullable = false)
+    @NotNull
+    private Time startTime;
+    @Column(nullable = false)
+    @NotNull
+    private Time endTime;
     
     @OneToOne(optional = true)
     @JoinColumn(nullable = true)
@@ -51,12 +62,15 @@ public class Booking implements Serializable {
         
     }
     
-    public Booking(Date dateOfBooking, String status, String remarks) {
+    public Booking(Date dateOfBooking, String status, String remarks, Date dateOfAppointment, Time startTime, Time endTime) {
         this();
         
         this.dateOfBooking = dateOfBooking;
         this.status = status;
         this.remarks = remarks;
+        this.dateOfAppointment = dateOfAppointment;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public Long getBookingId() {
@@ -175,5 +189,29 @@ public class Booking implements Serializable {
      */
     public void setService(Service service) {
         this.service = service;
+    }
+
+    public Date getDateOfAppointment() {
+        return dateOfAppointment;
+    }
+
+    public void setDateOfAppointment(Date dateOfAppointment) {
+        this.dateOfAppointment = dateOfAppointment;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
     }
 }

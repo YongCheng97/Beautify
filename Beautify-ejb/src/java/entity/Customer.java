@@ -1,5 +1,6 @@
 package entity;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -40,7 +42,7 @@ public class Customer implements Serializable {
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     @NotNull
     private String password;
-    @Column(nullable = false, length = 32)
+    @Column(unique = true, nullable = false, length = 32)
     @NotNull
     @Size(max = 32)
     private String username;
@@ -48,6 +50,7 @@ public class Customer implements Serializable {
     @NotNull
     @Min(8)
     private Long contactNum;
+//    private File profilePhoto;
 
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;
@@ -58,8 +61,11 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer")
     private List<Booking> bookings;
     
-    @OneToMany(mappedBy = "customer")
-    private List<Booking> favouriteBookings;
+    @ManyToMany(mappedBy = "favouritedCustomers")
+    private List<Service> favouriteServices;
+    
+    @ManyToMany(mappedBy = "favouritedCustomers")
+    private List<Product> favouriteProducts;
     
     @OneToMany(mappedBy = "customer")
     private List<Review> reviews;
@@ -70,7 +76,8 @@ public class Customer implements Serializable {
         creditCards = new ArrayList<>();
         reviews = new ArrayList<>();
         bookings = new ArrayList<>();
-        favouriteBookings = new ArrayList<>();
+        favouriteServices = new ArrayList<>();
+        favouriteProducts = new ArrayList<>();
     }
 
     public Customer(String firstName, String lastName, String email, String username, String password, Long contactNum) {
@@ -221,18 +228,28 @@ public class Customer implements Serializable {
         this.bookings = bookings;
     }
 
-    /**
-     * @return the favouriteBookings
-     */
-    public List<Booking> getFavouriteBookings() {
-        return favouriteBookings;
+//    public File getProfilePhoto() {
+//        return profilePhoto;
+//    }
+//
+//    public void setProfilePhoto(File profilePhoto) {
+//        this.profilePhoto = profilePhoto;
+//    }
+
+    public List<Service> getFavouriteServices() {
+        return favouriteServices;
     }
 
-    /**
-     * @param favouriteBookings the favouriteBookings to set
-     */
-    public void setFavouriteBookings(List<Booking> favouriteBookings) {
-        this.favouriteBookings = favouriteBookings;
+    public void setFavouriteServices(List<Service> favouriteServices) {
+        this.favouriteServices = favouriteServices;
+    }
+
+    public List<Product> getFavouriteProducts() {
+        return favouriteProducts;
+    }
+
+    public void setFavouriteProducts(List<Product> favouriteProducts) {
+        this.favouriteProducts = favouriteProducts;
     }
 
 }

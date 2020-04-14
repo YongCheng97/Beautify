@@ -11,15 +11,15 @@
     <ui:define name="content"> 
         <ez:menubar/>
         <div> 
-            <p:tabMenu activeIndex="#{param.i}">
-                <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="pi pi-star">
-                    <f:param name="i" value="0" />
+            <p:tabMenu>
+                <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="fa fa-user">
+                    <f:param name="serviceProviderId" value="#{viewServiceProviderProfileManagedBean.providerIdToView}" />
                 </p:menuitem>
-                <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="pi pi-search">
-                    <f:param name="i" value="1" />
+                <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="fa fa-shopping-cart">
+                    <f:param name="serviceProviderId" value="#{viewServiceProviderProfileManagedBean.providerIdToView}" />
                 </p:menuitem>
-                <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews" icon="pi pi-file">
-                    <f:param name="i" value="2" />
+                <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews" icon="fa fa-envelope">
+                    <f:param name="serviceProviderId" value="#{viewServiceProviderProfileManagedBean.providerIdToView}" />
                 </p:menuitem>
             </p:tabMenu>
 
@@ -28,22 +28,26 @@
             <h:body>
                 <p:layout style="min-width:400px;min-height:200px;">
                     <p:layoutUnit position="west" resizable="false" size="200">
-                        Photo
+                        <p:graphicImage library="images" name ="#{viewServiceProviderProfileManagedBean.providerToView.name}.jpg" height="150" width="190" alt="photo"/> 
                     </p:layoutUnit>
 
                     <p:layoutUnit position="center">
 
-                        <h:outputText style="font-weight: bold;" value="Name:"/>
+                        <h:outputText style="font-weight: bold;" value="Name: "/>
                         <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.name}"/>
                         <br/><br/>
-                        <h:outputText style="font-weight: bold;" value="Address:"/>
+                        <h:outputText style="font-weight: bold;" value="Address: "/>
                         <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.address}"/>
                         <br/><br/>
-                        <h:outputText style="font-weight: bold;" value="Opening Hours:"/>
-                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.openingHours}"/>
+                        <h:outputText style="font-weight: bold;" value="Opening Hours: "/>
+                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.openingHours}" >
+                            <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewServiceProviderProfileManagedBean.timeZone}"/>
+                        </h:outputText>
                         <br/><br/>
-                        <h:outputText style="font-weight: bold;" value="Closing Hours:"/>
-                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.closingHours}"/>
+                        <h:outputText style="font-weight: bold;" value="Closing Hours: "/>
+                        <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.closingHours}">
+                            <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewServiceProviderProfileManagedBean.timeZone}"/>
+                        </h:outputText>
 
                     </p:layoutUnit> 
                 </p:layout>

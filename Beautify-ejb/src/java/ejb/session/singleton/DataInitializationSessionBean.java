@@ -20,8 +20,11 @@ import entity.Review;
 import entity.Service;
 import entity.ServiceProvider;
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -93,6 +96,7 @@ public class DataInitializationSessionBean {
     private void initialiseData() {
         try {
             Customer customer1 = customerSessionBeanLocal.retrieveCustomerByCustId(customerSessionBeanLocal.createNewCustomer(new Customer("Bob", "Lim", "boblim@gmail.com", "boblim", "password", Long.parseLong("98023457"))));
+            Customer customer2 = customerSessionBeanLocal.retrieveCustomerByCustId(customerSessionBeanLocal.createNewCustomer(new Customer("Mary", "Tan", "marytan@gmail.com", "marytan", "password", Long.parseLong("95634137")))); 
 
             Category categoryNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Nails", "Nail Services and Products"), null);
             Category categoryHair = categorySessionBeanLocal.createNewCategoryEntity(new Category("Hair", "Hair Services and Products"), null);
@@ -137,10 +141,12 @@ public class DataInitializationSessionBean {
             Service facial = serviceSessionBeanLocal.createNewService(new Service("Facial", new BigDecimal("80.00"), "The best and most relaxing Facial Treatement", null), provider3.getServiceProviderId(), categoryFacial.getCategoryId());
 
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yy HH:mm");
-            Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "approved", "remarks"), customer1.getCustomerId(), manicure.getServiceId());
-            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "approved", "remarks"), customer1.getCustomerId(), haircut.getServiceId());
-            
+
+            Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf1.parse("03/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), manicure.getServiceId());
+            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Approved", "remarks", sdf1.parse("20/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), haircut.getServiceId());
+
             Review review1 = reviewSessionBeanLocal.createNewReview(new Review(5, "Very good service", null), customer1.getCustomerId(), booking1.getBookingId());
+            Review review2 = reviewSessionBeanLocal.createNewReview(new Review(5, "Excellent hair cut!", null), customer2.getCustomerId(), booking2.getBookingId()); 
 
             /*
             Category categoryGelNails = categorySessionBeanLocal.createNewCategoryEntity(new Category("Gel Nails", "Gel Nail Services"), categoryNails.getCategoryId());

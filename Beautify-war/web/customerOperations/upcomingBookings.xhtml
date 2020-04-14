@@ -1,4 +1,4 @@
-<!--<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -26,7 +26,13 @@
             </p:menuitem>
 
         </p:tabMenu>
-        
+
+        <br></br>
+        <div style="text-align:center;">
+            <p:button value = "Upcoming Bookings" outcome="/customerOperations/upcomingBookings" icon="fa fa-clock-o"/>
+            <span style="display:inline-block; width: 200;"></span>
+            <p:button value = "Completed Bookings" outcome="/customerOperations/completedBookings" icon="fa fa-check-square-o"/>
+        </div>
         <br></br>
 
         <h:body style="margin: 0; height:100%">
@@ -39,7 +45,7 @@
                             rowsPerPageTemplate="6,12,16">
 
                     <f:facet name="header">
-                        Favourite Bookings
+                        Upcoming Bookings
                     </f:facet>
 
                     <p:panel header="Booking ID: #{booking.bookingId}" style="text-align:center">
@@ -62,11 +68,11 @@
                             <h:outputText value="Status:" style="font-weight: bold"/>
                             <h:outputText value="#{booking.status}"/>
 
-                            link the the individual service page
-                                                            <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
+                            <!--link the the individual service page-->
+                            <!--                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
                                                                 <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
                                                                 <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
-                                                            </p:commandLink>
+                                                            </p:commandLink>-->
                         </h:panelGrid>
                     </p:panel>
 
@@ -78,4 +84,4 @@
 
     </ui:define>
 
-</ui:composition>-->
+</ui:composition>
