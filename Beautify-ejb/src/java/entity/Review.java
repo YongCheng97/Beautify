@@ -31,7 +31,8 @@ public class Review implements Serializable {
     private Integer rating;
     @Column(length = 128)
     @Size(max = 128)
-    private String description;    
+    private String description;
+    
     private File photo;
     
     @ManyToOne(optional = false)
@@ -39,7 +40,7 @@ public class Review implements Serializable {
     private Customer customer;
     
     @OneToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, unique = true)
     private Booking booking;
     
     public Review() {
