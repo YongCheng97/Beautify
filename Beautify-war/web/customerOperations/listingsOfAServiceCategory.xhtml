@@ -15,40 +15,33 @@
         <ez:menubar/>
 
         <h:body>
-            <p:layout>
-                <p:layoutUnit position="west" size="150" minSize="40" maxSize="200">
-                    <f:facet name="header"> 
-                        <h:outputText value="Filter"/>
+
+            <h:form id="form">
+                <p:dataGrid var="service" value="#{categoryManagementManagedBean.newCategory.services}" columns="3" layout="grid"
+                            rows="12" paginator="true" id="services"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="6,12,16">
+
+                    <f:facet name="header">
+                        <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}"/>
+                        &nbsp;&nbsp;
+                        <p:commandButton value="Filter" actionListener="#{categoryManagementManagedBean.goToFilterService}" icon="fa fa-filter" />
                     </f:facet>
-                </p:layoutUnit>
 
-                <p:layoutUnit position="center">
-                    <h:form id="form">
-                        <p:dataGrid var="service" value="#{categoryManagementManagedBean.newCategory.services}" columns="3" layout="grid"
-                                    rows="12" paginator="true" id="services"
-                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                    rowsPerPageTemplate="6,12,16">
+                    <p:panel header="#{service.serviceName}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+                            <h:outputText value="$#{service.price}" />
+                            <h:outputText value="#{service.description}" />
+                            <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
+                        </h:panelGrid>
+                        <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                            <h:outputText value = "Click here for more information!"/>
+                        </p:commandLink>
+                    </p:panel>
 
-                            <f:facet name="header">
-                                <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}"/>
-                            </f:facet>
+                </p:dataGrid>
 
-                            <p:panel header="#{service.serviceName}" style="text-align:center">
-                                <h:panelGrid columns="1" style="width:100%">
-                                    <h:outputText value="$#{service.price}" />
-                                    <h:outputText value="#{service.description}" />
-                                    <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
-                                </h:panelGrid>
-                                <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
-                                    <h:outputText value = "Click here for more information!"/>
-                                </p:commandLink>
-                            </p:panel>
-
-                        </p:dataGrid>
-
-                    </h:form>
-                </p:layoutUnit>
-            </p:layout>
+            </h:form>
         </h:body>
     </ui:define>
 </ui:composition>

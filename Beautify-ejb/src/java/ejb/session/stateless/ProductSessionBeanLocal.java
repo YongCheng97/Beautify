@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Product;
+import java.math.BigDecimal;
 import java.util.List;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateNewProductException;
@@ -22,10 +23,10 @@ public interface ProductSessionBeanLocal {
 
     public Product createNewProduct(Product newProduct, Long categoryId, Long serviceProviderId) throws ProductExistException, UnknownPersistenceException, InputDataValidationException, CreateNewProductException;
 
-    public List<Product> searchProductsByName(String searchString);
+    public List<Product> filterProductsByName(String searchString, Long categoryId);
 
     public List<Product> filterProductsByCategory(Long categoryId) throws CategoryNotFoundException;
-    
+
     public Product retrieveProductByProductSkuCode(String skuCode) throws ProductNotFoundException;
 
     public void updateProduct(Product productEntity, Long categoryId) throws ProductNotFoundException, CategoryNotFoundException, UpdateProductException, InputDataValidationException;
@@ -35,4 +36,11 @@ public interface ProductSessionBeanLocal {
     public List<Product> filterProductsByTags(List<Long> tagIds, String condition);
 
     public Product retrieveProductByProdId(Long productId) throws ProductNotFoundException;
+
+    public List<Product> retrieveAllProductsFromCategory(Long categoryId);
+
+    public List<Product> filterProductsByMinimumPrice(BigDecimal minPrice, Long categoryId);
+
+    public List<Product> filterProductsByMaximumPrice(BigDecimal maxPrice, Long categoryId);
+
 }

@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.Category;
 import entity.Product;
 import entity.ServiceProvider;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -111,18 +112,80 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         return products;
     }
 
-    @Override
-    public List<Product> searchProductsByName(String searchString) {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.name LIKE :inSearchString ORDER BY p.skuCode ASC");
-        query.setParameter("inSearchString", "%" + searchString + "%");
+    public List<Product> retrieveAllProductsFromCategory(Long categoryId) {
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.category.categoryId = :categoryId ORDER BY p.skuCode ASC");
+        query.setParameter("categoryId", categoryId);
         List<Product> products = query.getResultList();
 
         for (Product product : products) {
+            product.getServiceProvider();
+            product.getCategory();
+        }
+
+        return products;
+    }
+
+    @Override
+    public List<Product> filterProductsByName(String searchString, Long categoryId) {
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.name LIKE :inSearchString ORDER BY p.skuCode ASC");
+        query.setParameter("inSearchString", "%" + searchString + "%");
+        List<Product> products = query.getResultList();
+        List<Product> newProducts = new ArrayList<>();
+
+        for (Product product : products) {
+            if (product.getCategory().getCategoryId() == categoryId) {
+                newProducts.add(product);
+            }
+        }
+
+        for (Product product : newProducts) {
             product.getCategory();
             product.getServiceProvider();
         }
 
-        return products;
+        return newProducts;
+    }
+
+    @Override
+    public List<Product> filterProductsByMinimumPrice(BigDecimal minPrice, Long categoryId) {
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.price >= :minPrice ORDER BY p.skuCode ASC");
+        query.setParameter("minPrice", minPrice);
+        List<Product> products = query.getResultList();
+        List<Product> newProducts = new ArrayList<>();
+
+        for (Product product : products) {
+            if (product.getCategory().getCategoryId() == categoryId) {
+                newProducts.add(product);
+            }
+        }
+
+        for (Product product : newProducts) {
+            product.getCategory();
+            product.getServiceProvider();
+        }
+
+        return newProducts;
+    }
+
+    @Override
+    public List<Product> filterProductsByMaximumPrice(BigDecimal maxPrice, Long categoryId) {
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.price <= :minPrice ORDER BY p.skuCode ASC");
+        query.setParameter("minPrice", maxPrice);
+        List<Product> products = query.getResultList();
+        List<Product> newProducts = new ArrayList<>();
+
+        for (Product product : products) {
+            if (product.getCategory().getCategoryId() == categoryId) {
+                newProducts.add(product);
+            }
+        }
+
+        for (Product product : newProducts) {
+            product.getCategory();
+            product.getServiceProvider();
+        }
+
+        return newProducts;
     }
 
     @Override
@@ -151,66 +214,54 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
         return products;
     }
-    
+
     @Override
-    public List<Product> filterProductsByTags(List<Long> tagIds, String condition)
-    {
+    public List<Product> filterProductsByTags(List<Long> tagIds, String condition) {
         List<Product> products = new ArrayList<>();
-        
-        if(tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR")))
-        {
+
+        if (tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR"))) {
             return products;
-        }
-        else
-        {
-            if(condition.equals("OR"))
-            {
+        } else {
+            if (condition.equals("OR")) {
                 Query query = em.createQuery("SELECT DISTINCT p FROM Product p, IN (p.tags) t WHERE t.tagId IN :inTagIds ORDER BY p.skuCode ASC");
                 query.setParameter("inTagIds", tagIds);
-                products = query.getResultList();                                                          
-            }
-            else // AND
+                products = query.getResultList();
+            } else // AND
             {
                 String selectClause = "SELECT p FROM Product p";
                 String whereClause = "";
                 Boolean firstTag = true;
                 Integer tagCount = 1;
 
-                for(Long tagId:tagIds)
-                {
+                for (Long tagId : tagIds) {
                     selectClause += ", IN (p.tags) t" + tagCount;
 
-                    if(firstTag)
-                    {
+                    if (firstTag) {
                         whereClause = "WHERE t1.tagId = " + tagId;
                         firstTag = false;
+                    } else {
+                        whereClause += " AND t" + tagCount + ".tagId = " + tagId;
                     }
-                    else
-                    {
-                        whereClause += " AND t" + tagCount + ".tagId = " + tagId; 
-                    }
-                    
+
                     tagCount++;
                 }
-                
+
                 String jpql = selectClause + " " + whereClause + " ORDER BY p.skuCode ASC";
                 Query query = em.createQuery(jpql);
-                products = query.getResultList();                                
+                products = query.getResultList();
             }
-            
-            for(Product product:products)
-            {
+
+            for (Product product : products) {
                 product.getCategory();
                 product.getTags().size();
             }
-            
-            Collections.sort(products, new Comparator<Product>()
-            {
+
+            Collections.sort(products, new Comparator<Product>() {
                 public int compare(Product pe1, Product pe2) {
                     return pe1.getSkuCode().compareTo(pe2.getSkuCode());
                 }
             });
-            
+
             return products;
         }
     }

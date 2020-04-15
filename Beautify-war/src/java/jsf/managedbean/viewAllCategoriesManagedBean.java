@@ -23,7 +23,7 @@ public class viewAllCategoriesManagedBean implements Serializable{
     
     @PostConstruct
     public void postConstruct() {
-        setCategories(categorySessionBean.retrieveAllCategories());
+        setCategories(categorySessionBean.retrieveAllLeafCategories());
     }
 
     /**
