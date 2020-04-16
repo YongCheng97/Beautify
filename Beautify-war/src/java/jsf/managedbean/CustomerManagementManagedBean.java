@@ -4,6 +4,8 @@ import ejb.session.stateless.BookingSessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Booking;
 import entity.Customer;
+import entity.Product;
+import entity.Service;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -48,6 +50,10 @@ public class CustomerManagementManagedBean implements Serializable {
     private List<Booking> upcomingBookings;
     private List<Booking> completedBookings;
     
+    //to get favourites
+    private List<Service> favouriteServices;
+    private List<Product> favouriteProducts;
+    
     public CustomerManagementManagedBean() {
         newCustomer = new Customer();
     }
@@ -74,6 +80,9 @@ public class CustomerManagementManagedBean implements Serializable {
                     completedBookings.add(booking);
                 }
             }
+            
+            favouriteServices = currentCustomer.getFavouriteServices();
+            favouriteProducts = currentCustomer.getFavouriteProducts();
         }
     }
 
@@ -193,5 +202,21 @@ public class CustomerManagementManagedBean implements Serializable {
 
     public void setCompletedBookings(List<Booking> completedBookings) {
         this.completedBookings = completedBookings;
+    }
+
+    public List<Service> getFavouriteServices() {
+        return favouriteServices;
+    }
+
+    public void setFavouriteServices(List<Service> favouriteServices) {
+        this.favouriteServices = favouriteServices;
+    }
+
+    public List<Product> getFavouriteProducts() {
+        return favouriteProducts;
+    }
+
+    public void setFavouriteProducts(List<Product> favouriteProducts) {
+        this.favouriteProducts = favouriteProducts;
     }
 }
