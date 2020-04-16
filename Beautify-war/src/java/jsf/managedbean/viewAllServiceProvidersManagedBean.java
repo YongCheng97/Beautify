@@ -11,12 +11,15 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import util.exception.ServiceProviderNotFoundException;
 
 /**
  *
@@ -40,7 +43,13 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
     }
 
     public void clickLink(Long serviceProviderId) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/serviceProviderProfile.xhtml?serviceProviderId=" + serviceProviderId);
+        try {
+            ServiceProvider serviceProvider = serviceProviderSessionBean.retrieveServiceProviderById(serviceProviderId);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("serviceProvider", serviceProvider);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/serviceProviderProfile.xhtml");
+        } catch (ServiceProviderNotFoundException ex) {
+            Logger.getLogger(viewAllServiceProvidersManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
