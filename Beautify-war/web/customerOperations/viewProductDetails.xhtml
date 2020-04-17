@@ -16,12 +16,12 @@
             <br/>
 
             #{viewProductDetailsManagedBean.foo()}
-<!--            <h:messages errorClass="errorTextsWithBullet" fatalClass="errorTextsWithBullet" infoClass="infoTextsWithBullet" globalOnly="true" />
+            <h:messages errorClass="errorTextsWithBullet" fatalClass="errorTextsWithBullet" infoClass="infoTextsWithBullet" globalOnly="true" />
             <br/>
 
             <h:form rendered="#{viewProductDetailsManagedBean.productToView != null}">
                 <h:commandLink value="Back" actionListener="#{viewProductDetailsManagedBean.back}" />
-            </h:form>-->
+            </h:form>
 
             <br/>  
             <h:body>
@@ -30,7 +30,7 @@
                     <p:layoutUnit position="west" size="520">
 
                         <p:galleria value="#{imagesView.images}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
-                            <p:graphicImage name="demo/images/nature/#{image}" alt="Image Description for #{image}" title="#{image}"/>
+                            <p:graphicImage library="images" name ="#{productToView.name}.jpg" alt=""/>
                         </p:galleria>
                     </p:layoutUnit>
 

@@ -56,6 +56,8 @@ public class CategoryManagementManagedBean implements Serializable {
     }
 
     public void clickLink(ActionEvent event) throws IOException {
+        Long productIdToView = (Long)event.getComponent().getAttributes().get("productId");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("productIdToView", productIdToView);
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml");
     }
 
