@@ -36,6 +36,7 @@
                         </h:panelGrid>
                         <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
                             <h:outputText value = "Click here for more information!"/>
+                            <f:attribute name="productId" value="#{product.productId}" />
                         </p:commandLink>
                     </p:panel>
 
