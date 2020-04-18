@@ -32,14 +32,32 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
     @EJB
     private ServiceProviderSessionBeanLocal serviceProviderSessionBean;
 
+    private String searchString;
     private List<ServiceProvider> serviceProviders;
 
     public viewAllServiceProvidersManagedBean() {
+        searchString = ""; 
     }
 
     @PostConstruct
     public void postConstruct() {
+
         setServiceProviders(serviceProviderSessionBean.retrieveAllServiceProviders());
+        /*if (searchString == "" || searchString.trim().length() == 0) {
+            serviceProviders = serviceProviderSessionBean.retrieveAllServiceProviders();
+        } else {
+            serviceProviders = serviceProviderSessionBean.searchServiceProviderByName(searchString);
+        }
+        */
+        
+    }
+
+    public void searchServiceProvider() {
+        if (searchString == "" || searchString.trim().length() == 0) {
+            serviceProviders = serviceProviderSessionBean.retrieveAllServiceProviders();
+        } else {
+            serviceProviders = serviceProviderSessionBean.searchServiceProviderByName(searchString);
+        }
     }
 
     public void clickLink(Long serviceProviderId) throws IOException {
@@ -50,6 +68,16 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
         } catch (ServiceProviderNotFoundException ex) {
             Logger.getLogger(viewAllServiceProvidersManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
+
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ProviderSearchString", searchString);
     }
 
     /**

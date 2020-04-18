@@ -30,5 +30,7 @@ public interface ServiceProviderSessionBeanLocal {
     public void updateStaff(ServiceProvider serviceProvider) throws ServiceProviderNotFoundException, UpdateServiceProviderException, InputDataValidationException;
 
     public void deleteServiceProvider(Long serviceProviderId) throws ServiceProviderNotFoundException, DeleteServiceProviderException;
+
+    public List<ServiceProvider> searchServiceProviderByName(String searchString);
     
 }

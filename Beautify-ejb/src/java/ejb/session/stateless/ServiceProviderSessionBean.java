@@ -150,6 +150,22 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
             throw new DeleteServiceProviderException("Staff ID " + serviceProviderId + " is associated with existing sale transaction(s) and cannot be deleted!");
         //}
     }
+    
+    @Override
+    public List<ServiceProvider> searchServiceProviderByName(String searchString) {
+        Query query = em.createQuery("SEELCT s FROM ServiceProvider s WHERE s.name LIKE :inSearchString"); 
+        query.setParameter("inSearchString", "%" + searchString + "%"); 
+        List<ServiceProvider> serviceProviders = query.getResultList(); 
+        
+        for (ServiceProvider serviceProvider:serviceProviders) {
+            serviceProvider.getServices().size(); 
+            serviceProvider.getTags().size();
+            serviceProvider.getCreditCards().size(); 
+            serviceProvider.getProducts().size(); 
+        }
+        
+        return serviceProviders; 
+    }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<ServiceProvider>> constraintViolations) {
         String msg = "Input data validation error!:";
