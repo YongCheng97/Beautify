@@ -18,9 +18,9 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import util.exception.CategoryNotFoundException;
 
-@Named(value = "filterServicesManagedBean")
+@Named(value = "filterServicesByNameManagedBean")
 @ViewScoped
-public class FilterServicesManagedBean implements Serializable{
+public class FilterServicesByNameManagedBean implements Serializable {
 
     @EJB
     private ServiceSessionBeanLocal serviceSessionBean;
@@ -35,7 +35,7 @@ public class FilterServicesManagedBean implements Serializable{
     private List<Service> services;
     private Category category;
 
-    public FilterServicesManagedBean() {
+    public FilterServicesByNameManagedBean() {
         searchString = "";
         minPrice = "";
         maxPrice = "";
@@ -49,7 +49,7 @@ public class FilterServicesManagedBean implements Serializable{
         try {
             category = categorySessionBean.retrieveCategoryByCategoryId(categoryId);
         } catch (CategoryNotFoundException ex) {
-            Logger.getLogger(FilterProductsManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FilterProductsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         services = (serviceSessionBean.retrieveAllServicesFromCategory(categoryId));
     }
@@ -70,6 +70,22 @@ public class FilterServicesManagedBean implements Serializable{
 
     public void clickLink(ActionEvent event) throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterServiceByName(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByName.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterServiceByMinPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByMinPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterServiceByMaxPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByMaxPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void viewAllServices(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/listingsOfAServiceCategory.xhtml?categoryId=" + categoryId);
     }
 
     /**

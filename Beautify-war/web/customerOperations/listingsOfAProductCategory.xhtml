@@ -13,36 +13,48 @@
         <ez:menubar/>
 
         <h:body>
+            <p:layout>
+                <p:layoutUnit position="west" size="182" minSize="40" maxSize="200">
+                    <h:form>
+                        <p:menu>
+                            <p:submenu label="Filter" icon="fa fa-filter">
+                                <p:menuitem value="Filter By Name" icon="fa fa-search" actionListener="#{categoryManagementManagedBean.goToFilterProductByName}"/>
+                                <p:menuitem value="Filter By Min Price" icon="fa fa-search" actionListener="#{categoryManagementManagedBean.goToFilterProductByMinPrice}"/>
+                                <p:menuitem value="Filter By Max Price" icon="fa fa-search" actionListener="#{categoryManagementManagedBean.goToFilterProductByMaxPrice}"/>
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
+                </p:layoutUnit>
 
+                <p:layoutUnit position="center">
+                    <h:form id="form">
+                        <p:dataGrid var="product" value="#{categoryManagementManagedBean.newCategory.products}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="products"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,16">
 
-            <h:form id="form">
-                <p:dataGrid var="product" value="#{categoryManagementManagedBean.newCategory.products}" columns="3" layout="grid"
-                            rows="12" paginator="true" id="products"
-                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                            rowsPerPageTemplate="6,12,16">
+                            <f:facet name="header">
+                                <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}" />
+                            </f:facet>
 
-                    <f:facet name="header">
-                        <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}" />
-                        &nbsp;&nbsp;
-                        <p:commandButton value="Filter" actionListener="#{categoryManagementManagedBean.goToFilterProduct}" icon="fa fa-filter" />
-                    </f:facet>
+                            <p:panel header="#{product.name}" style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <h:outputText value="#{product.skuCode}" style="text-align:center"/>
+                                    <h:outputText value= "$#{product.price}" style="text-align:center"/>
+                                    <h:outputText value="#{product.description}" style="text-align:center"/>
+                                    <p:graphicImage library="images" name ="#{product.name}.jpg" height="120" width="170" alt ="" />
+                                </h:panelGrid>
+                                <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                                    <h:outputText value = "Click here for more information!"/>
+                                    <f:attribute name="productId" value="#{product.productId}" />
+                                </p:commandLink>
+                            </p:panel>
 
-                    <p:panel header="#{product.name}" style="text-align:center">
-                        <h:panelGrid columns="1" style="width:100%">
-                            <h:outputText value="#{product.skuCode}" style="text-align:center"/>
-                            <h:outputText value= "$#{product.price}" style="text-align:center"/>
-                            <h:outputText value="#{product.description}" style="text-align:center"/>
-                           <p:graphicImage library="images" name ="#{product.name}.jpg" height="120" width="170" alt ="" />
-                        </h:panelGrid>
-                        <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
-                            <h:outputText value = "Click here for more information!"/>
-                            <f:attribute name="productId" value="#{product.productId}" />
-                        </p:commandLink>
-                    </p:panel>
+                        </p:dataGrid>
 
-                </p:dataGrid>
-
-            </h:form>
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
         </h:body>
     </ui:define>
 </ui:composition>

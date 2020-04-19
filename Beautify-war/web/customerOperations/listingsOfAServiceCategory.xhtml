@@ -15,33 +15,46 @@
         <ez:menubar/>
 
         <h:body>
+            <p:layout>
+                <p:layoutUnit position="west" size="182" minSize="40" maxSize="200">
+                    <h:form>
+                        <p:menu>
+                            <p:submenu label="Filter" icon="fa fa-filter">
+                                <p:menuitem value="Filter By Name" icon="fa fa-search" actionListener="#{categoryManagementManagedBean.goToFilterServiceByName}"/>
+                                <p:menuitem value="Filter By Min Price" icon="fa fa-search" actionListener="#{categoryManagementManagedBean.goToFilterServiceByMinPrice}"/>
+                                <p:menuitem value="Filter By Max Price" icon="fa fa-search" actionListener="#{categoryManagementManagedBean.goToFilterServiceByMaxPrice}"/>
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
+                </p:layoutUnit>
 
-            <h:form id="form">
-                <p:dataGrid var="service" value="#{categoryManagementManagedBean.newCategory.services}" columns="3" layout="grid"
-                            rows="12" paginator="true" id="services"
-                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                            rowsPerPageTemplate="6,12,16">
+                <p:layoutUnit position="center">
+                    <h:form id="form">
+                        <p:dataGrid var="service" value="#{categoryManagementManagedBean.newCategory.services}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="services"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,16">
 
-                    <f:facet name="header">
-                        <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}"/>
-                        &nbsp;&nbsp;
-                        <p:commandButton value="Filter" actionListener="#{categoryManagementManagedBean.goToFilterService}" icon="fa fa-filter" />
-                    </f:facet>
+                            <f:facet name="header">
+                                <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}"/>
+                            </f:facet>
 
-                    <p:panel header="#{service.serviceName}" style="text-align:center">
-                        <h:panelGrid columns="1" style="width:100%">
-                            <h:outputText value="$#{service.price}" />
-                            <h:outputText value="#{service.description}" />
-                            <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
-                        </h:panelGrid>
-                        <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
-                            <h:outputText value = "Click here for more information!"/>
-                        </p:commandLink>
-                    </p:panel>
+                            <p:panel header="#{service.serviceName}" style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <h:outputText value="$#{service.price}" />
+                                    <h:outputText value="#{service.description}" />
+                                    <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
+                                </h:panelGrid>
+                                <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                                    <h:outputText value = "Click here for more information!"/>
+                                </p:commandLink>
+                            </p:panel>
 
-                </p:dataGrid>
+                        </p:dataGrid>
 
-            </h:form>
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
         </h:body>
     </ui:define>
 </ui:composition>

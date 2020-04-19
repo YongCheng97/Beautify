@@ -212,7 +212,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
     @Override
     public List<Service> filterServicesByMaximumPrice(BigDecimal maxPrice, Long categoryId) {
-        Query query = em.createQuery("SELECT s FROM Service s WHERE s.price >= :maxPrice ORDER BY s.price ASC");
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.price <= :maxPrice ORDER BY s.price ASC");
         query.setParameter("maxPrice", maxPrice);
         List<Service> services = query.getResultList();
         List<Service> newServices = new ArrayList<>();

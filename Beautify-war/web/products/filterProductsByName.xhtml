@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+
+        <ez:menubar/>
+        <h:body>
+            <p:layout>
+                <p:layoutUnit position="west" size="182" minSize="40" maxSize="200">
+                    <h:form>
+                        <p:menu>
+                            <p:submenu label="Filter" icon="fa fa-filter">
+                                <p:menuitem value="Filter By Name" icon="fa fa-search" actionListener="#{filterProductsByNameManagedBean.goToFilterProductByName}"/>
+                                <p:menuitem value="Filter By Min Price" icon="fa fa-search" actionListener="#{filterProductsByNameManagedBean.goToFilterProductByMinPrice}"/>
+                                <p:menuitem value="Filter By Max Price" icon="fa fa-search" actionListener="#{filterProductsByNameManagedBean.goToFilterProductByMaxPrice}"/>
+                                <p:menuitem value="View All Products" icon="fa fa-list" actionListener="#{filterProductsByNameManagedBean.viewAllProducts}"/>
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+
+                    <h:form id="formMain">
+
+                        <br />
+
+                        <div style="text-align: center;">
+
+                        <p:inputText id="txtSearchString" value="#{filterProductsByNameManagedBean.searchString}" style="font-size: medium;" placeholder="Filter By Name">
+                            <p:ajax event="keyup" process="@this" update="formMain:dataGridMain" listener="#{filterProductsByNameManagedBean.searchProduct}" />
+                        </p:inputText>
+                            &nbsp;
+                            <p:commandButton value="Search" style="font-size: medium;">
+                                <p:ajax event="click" process="@this formMain:txtSearchString" update="formMain:dataGridMain" listener="#{filterProductsByNameManagedBean.searchProduct}" />
+                            </p:commandButton>
+                        </div>
+                        <br />
+
+                        <p:dataGrid widgetVar="dataGridMain" var="product" value="#{filterProductsByNameManagedBean.products}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="dataGridMain"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,16">
+
+                            <f:facet name="header">
+                                <h:outputText value = "#{filterProductsByNameManagedBean.category.name}"/>
+                            </f:facet>
+
+                            <p:panel header="#{product.name}" style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <h:outputText value="#{product.skuCode}" />
+                                    <h:outputText value= "$#{product.price}" />
+                                    <h:outputText value="#{product.description}" />
+                                    <p:graphicImage library="images" name="Facial.jpg" height="120" width="150" alt ="" />
+                                </h:panelGrid>
+                                <p:commandLink actionListener="#{filterProductsManagedBean.clickLink(product.productId)}" style="text-decoration:none;color:blue;">
+                                    <h:outputText value = "Click here for more information!"/>
+                                </p:commandLink>
+                            </p:panel>
+
+                        </p:dataGrid>
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+    </ui:define>
+</ui:composition>
