@@ -32,5 +32,7 @@ public interface ServiceProviderSessionBeanLocal {
     public void deleteServiceProvider(Long serviceProviderId) throws ServiceProviderNotFoundException, DeleteServiceProviderException;
 
     public List<ServiceProvider> searchServiceProviderByName(String searchString);
+
+    public List<ServiceProvider> filterServiceProviderByTags(List<Long> tagIds, String condition); 
     
 }

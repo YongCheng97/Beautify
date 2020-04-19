@@ -60,7 +60,7 @@ public class LeaveReviewManagedBean implements Serializable {
         Long bookingToReviewId = bookingToReview.getBookingId();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review posted successfully", null));
         try {
-            Review reviewId = reviewSessionBeanLocal.createNewReview(review, currentCustomerId, bookingToReviewId);
+            Review reviewId = reviewSessionBeanLocal.createNewServiceReview(review, currentCustomerId, bookingToReviewId);
         } catch (ReviewExistException | UnknownPersistenceException | InputDataValidationException | CreateNewReviewException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
         } catch (Exception ex) {

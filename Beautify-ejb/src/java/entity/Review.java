@@ -39,12 +39,15 @@ public class Review implements Serializable {
     @JoinColumn(nullable = false)
     private Customer customer;
     
-    @OneToOne(optional = false)
-    @JoinColumn(nullable = false, unique = true)
+    @OneToOne(optional = true)
+    @JoinColumn(nullable = true, unique = true)
     private Booking booking;
     
-    public Review() {
-        
+    @OneToOne(optional = true)
+    @JoinColumn(nullable = true, unique = true)
+    private PurchasedLineItem purchasedLineItem;
+    
+    public Review() {      
     }
     
     public Review(Integer rating,String description, File photo) {
@@ -156,6 +159,14 @@ public class Review implements Serializable {
      */
     public void setBooking(Booking booking) {
         this.booking = booking;
+    }
+
+    public PurchasedLineItem getPurchasedLineItem() {
+        return purchasedLineItem;
+    }
+
+    public void setPurchasedLineItem(PurchasedLineItem purchasedLineItem) {
+        this.purchasedLineItem = purchasedLineItem;
     }
     
 }

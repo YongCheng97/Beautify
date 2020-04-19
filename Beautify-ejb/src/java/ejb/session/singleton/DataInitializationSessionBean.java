@@ -176,9 +176,9 @@ public class DataInitializationSessionBean {
             Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf1.parse("03/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), manicure.getServiceId());
             Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Approved", "remarks", sdf1.parse("20/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), haircut.getServiceId());
 
-            // booking reviews
-            Review review1 = reviewSessionBeanLocal.createNewReview(new Review(5, "Very good service", null), customer1.getCustomerId(), manicure.getServiceId());
-            Review review2 = reviewSessionBeanLocal.createNewReview(new Review(5, "Excellent hair cut!", null), customer2.getCustomerId(), haircut.getServiceId());
+            // service reviews
+            Review review1 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Very good service", null), customer1.getCustomerId(), manicure.getServiceId());
+            Review review2 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Excellent hair cut!", null), customer2.getCustomerId(), haircut.getServiceId()); 
 
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException

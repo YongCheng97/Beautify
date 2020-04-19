@@ -13,13 +13,17 @@ import util.exception.UpdateReviewException;
 
 public interface ReviewSessionBeanLocal {
 
-    public Review createNewReview(Review newReview, Long customerId, Long bookingId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException;
+    public Review createNewServiceReview(Review newReview, Long customerId, Long bookingId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException;
+
+    public Review createNewProductReview(Review newReview, Long customerId, Long bookingId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException;
 
     public List<Review> retrieveAllReviews();
 
     public Review retrieveReviewByReviewId(Long reviewId) throws ReviewNotFoundException;
 
-    public List<Review> retrieveReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException;
+    public List<Review> retrieveServiceReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException;
+
+    public List<Review> retrieveProductReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException;
 
     public void updateReview(Review review) throws ReviewNotFoundException, UpdateReviewException, InputDataValidationException;
 

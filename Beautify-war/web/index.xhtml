@@ -15,6 +15,8 @@
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <article>
                 <h3>Welcome To Beautify!</h3>
+                <p:button value = "Test Product Details" outcome="/customerOperations/viewProductDetails"/>
+                <p:button value = "Test Customer Profile" outcome="/customerOperations/customerProfile"/>
                 <p:button value = "View All Service Providers" outcome="/customerOperations/viewAllServiceProviders"/>
                 
                 <p:carousel value="#{viewAllCategoriesManagedBean.categories}" headerText="Browse by Categories" var="category" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">

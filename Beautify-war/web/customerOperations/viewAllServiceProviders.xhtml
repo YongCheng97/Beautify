@@ -17,13 +17,30 @@
             <p:layout>
                 <p:layoutUnit position="west">
                     <p:menu>
-                        <p:menuitem value="Filter By Tags" icon="fa fa-filter" />
+                        <p:submenu label="Filter By Tags" icon="fa fa-filter" />
                     </p:menu>
-                    <ui:repeat value="#{viewAllServiceProvidersManagedBean.tags}" var="tags">
-                        <p:selectManyCheckbox id="basic" value="#{viewAllServiceProvidersManagedBean.tags}" layout="pageDirection" columns="1">
-                            <f:selectItem itemLabel="#{tags.name}" itemValue="#{tags.name}" />
-                        </p:selectManyCheckbox>
-                    </ui:repeat>
+
+                    <br />
+
+                    <p:outputLabel value="Tags: " style="font-weight: bold;" />
+                    <p:selectManyCheckbox id="grid" value="#{viewAllServiceProvidersManagedBean.selectedTagIds}" layout="grid" columns="1">
+                        <f:selectItems value="#{viewAllServiceProvidersManagedBean.tags}" var="tags" itemLabel="#{tags.name}" itemValue="#{tags.name}" />
+
+                        <p:ajax process="@form" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.filterServiceProvider}" />
+
+                    </p:selectManyCheckbox>
+
+                    <br />
+
+                    <p:outputLabel for="selCondition" value="Condition: " style="font-weight: bold;" />
+                    <p:selectOneMenu id="selCondition" value="#{viewAllServiceProvidersManagedBean.condition}">
+
+                        <f:selectItem itemValue="OR" itemLabel="OR" itemDescription="OR" />
+                        <f:selectItem itemValue="AND" itemLabel="AND" itemDescription="AND" />
+
+                        <p:ajax process="@form" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.filterServiceProvider}" />
+
+                    </p:selectOneMenu>
 
                 </p:layoutUnit>
 

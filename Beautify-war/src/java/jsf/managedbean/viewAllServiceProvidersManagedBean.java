@@ -11,7 +11,11 @@ import entity.ServiceProvider;
 import entity.Tag;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import util.exception.ServiceProviderNotFoundException;
@@ -39,13 +44,25 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
 
     private String searchString;
     private List<ServiceProvider> serviceProviders;
-    private List<Tag> tags; 
+
+    private List<Tag> tags;
+    private List<SelectItem> selectItems;
+    private List<Long> selectedTagIds;
+    private String condition;
 
     public viewAllServiceProvidersManagedBean() {
+        condition = "OR";
     }
 
     @PostConstruct
     public void postConstruct() {
+
+        tags = tagsSessionBean.retrieveAllTags();
+        setSelectItems(new ArrayList<>());
+
+        for (Tag tag : tags) {
+            getSelectItems().add(new SelectItem(tag.getTagId(), tag.getName(), tag.getName()));
+        }
 
         searchString = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("providerSearchString");
         if (searchString == null || searchString.trim().length() == 0) {
@@ -54,6 +71,18 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
             serviceProviders = serviceProviderSessionBean.searchServiceProviderByName(searchString);
         }
 
+        setCondition((String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filterCondition"));
+        setSelectedTagIds((List<Long>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filterTags"));
+
+        filterServiceProvider();
+    }
+
+    public void filterServiceProvider() {
+        if (getSelectedTagIds() != null && getSelectedTagIds().size() > 0) {
+            serviceProviders = serviceProviderSessionBean.filterServiceProviderByTags(selectedTagIds, condition); 
+        } else {
+            serviceProviders = serviceProviderSessionBean.retrieveAllServiceProviders();
+        }
     }
 
     public void searchServiceProvider() {
@@ -73,7 +102,7 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
             Logger.getLogger(viewAllServiceProvidersManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   
+
     public String getSearchString() {
         return searchString;
     }
@@ -108,6 +137,34 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public List<SelectItem> getSelectItems() {
+        return selectItems;
+    }
+
+    public void setSelectItems(List<SelectItem> selectItems) {
+        this.selectItems = selectItems;
+    }
+
+    public List<Long> getSelectedTagIds() {
+        return selectedTagIds;
+    }
+
+    public void setSelectedTagIds(List<Long> selectedTagIds) {
+        this.selectedTagIds = selectedTagIds;
+
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("filterTags", selectedTagIds);
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("filterCondition", condition);
     }
 
 }
