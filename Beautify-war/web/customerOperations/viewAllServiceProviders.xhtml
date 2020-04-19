@@ -15,25 +15,31 @@
         <h:form id="formMain">
 
             <p:layout>
-                <p:layoutUnit position="west" size="150">
-                    <p:menu style="width:150px;">
-                        <p:menuitem value="Filter" icon="fa fa-filter" />
+                <p:layoutUnit position="west">
+                    <p:menu>
+                        <p:menuitem value="Filter By Tags" icon="fa fa-filter" />
                     </p:menu>
+                    <ui:repeat value="#{viewAllServiceProvidersManagedBean.tags}" var="tags">
+                        <p:selectManyCheckbox id="basic" value="#{viewAllServiceProvidersManagedBean.tags}" layout="pageDirection" columns="1">
+                            <f:selectItem itemLabel="#{tags.name}" itemValue="#{tags.name}" />
+                        </p:selectManyCheckbox>
+                    </ui:repeat>
+
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
-                    
+
                     <div style="text-align: center;"> 
 
                         <h:outputText value="Search: " />
-                        <p:inputText id="txtSearchString" value="#{searchProductsByNameManagedBean.searchString}" style="width:300px" placeholder="Enter name">
+                        <p:inputText id="txtSearchString" value="#{viewAllServiceProvidersManagedBean.searchString}" style="width:300px" placeholder="Enter name">
                             <p:ajax event="keyup" process="@this" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.searchServiceProvider}" />
                         </p:inputText>
                         &nbsp;
                         <p:commandButton value="Search" style="width:100px">
                             <p:ajax event="click" process="@this formMain:txtSearchString" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.searchServiceProvider}" />
                         </p:commandButton>
-                        
+
                     </div>
 
                     &nbsp; &nbsp;

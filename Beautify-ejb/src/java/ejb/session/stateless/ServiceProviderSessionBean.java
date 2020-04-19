@@ -153,13 +153,12 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
     
     @Override
     public List<ServiceProvider> searchServiceProviderByName(String searchString) {
-        Query query = em.createQuery("SEELCT s FROM ServiceProvider s WHERE s.name LIKE :inSearchString"); 
+        Query query = em.createQuery("SELECT s FROM ServiceProvider s WHERE s.name LIKE :inSearchString"); 
         query.setParameter("inSearchString", "%" + searchString + "%"); 
         List<ServiceProvider> serviceProviders = query.getResultList(); 
         
         for (ServiceProvider serviceProvider:serviceProviders) {
             serviceProvider.getServices().size(); 
-            serviceProvider.getTags().size();
             serviceProvider.getCreditCards().size(); 
             serviceProvider.getProducts().size(); 
         }

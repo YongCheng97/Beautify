@@ -68,7 +68,6 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
 
         for (Tag tagEntity : tagEntities) {
             tagEntity.getProducts().size();
-            tagEntity.getServiceProviders().size();
         }
 
         return tagEntities;

@@ -6,7 +6,9 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
+import ejb.session.stateless.TagsSessionBeanLocal;
 import entity.ServiceProvider;
+import entity.Tag;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -30,30 +32,32 @@ import util.exception.ServiceProviderNotFoundException;
 public class viewAllServiceProvidersManagedBean implements Serializable {
 
     @EJB
+    private TagsSessionBeanLocal tagsSessionBean;
+
+    @EJB
     private ServiceProviderSessionBeanLocal serviceProviderSessionBean;
 
     private String searchString;
     private List<ServiceProvider> serviceProviders;
+    private List<Tag> tags; 
 
     public viewAllServiceProvidersManagedBean() {
-        searchString = ""; 
     }
 
     @PostConstruct
     public void postConstruct() {
 
-        setServiceProviders(serviceProviderSessionBean.retrieveAllServiceProviders());
-        /*if (searchString == "" || searchString.trim().length() == 0) {
+        searchString = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("providerSearchString");
+        if (searchString == null || searchString.trim().length() == 0) {
             serviceProviders = serviceProviderSessionBean.retrieveAllServiceProviders();
         } else {
             serviceProviders = serviceProviderSessionBean.searchServiceProviderByName(searchString);
         }
-        */
-        
+
     }
 
     public void searchServiceProvider() {
-        if (searchString == "" || searchString.trim().length() == 0) {
+        if (searchString == null || searchString.trim().length() == 0) {
             serviceProviders = serviceProviderSessionBean.retrieveAllServiceProviders();
         } else {
             serviceProviders = serviceProviderSessionBean.searchServiceProviderByName(searchString);
@@ -69,7 +73,7 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
             Logger.getLogger(viewAllServiceProvidersManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+   
     public String getSearchString() {
         return searchString;
     }
@@ -77,7 +81,7 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
     public void setSearchString(String searchString) {
         this.searchString = searchString;
 
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ProviderSearchString", searchString);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("providerSearchString", searchString);
     }
 
     /**
@@ -96,6 +100,14 @@ public class viewAllServiceProvidersManagedBean implements Serializable {
 
     public TimeZone getTimeZone() {
         return TimeZone.getDefault();
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
 }

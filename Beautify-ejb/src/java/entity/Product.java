@@ -206,6 +206,31 @@ public class Product implements Serializable {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+    
+    public void addTag(Tag tag) {
+        if (tag != null) {
+            if (!this.tags.contains(tag)) {
+                this.tags.add(tag);
+                
+                if (!tag.getProducts().contains(this)) {
+                    tag.getProducts().add(this); 
+                }
+                      
+            }
+        }
+    }
+    
+    public void removeTag(Tag tag) {
+        if (tag != null) {
+            if (this.tags.contains(tag)) {
+                this.tags.remove(tag); 
+                if (tag.getProducts().contains(this)) {
+                    tag.getProducts().remove(this); 
+                }
+            }
+        }
+    }
+        
 
     public List<Customer> getFavouritedCustomers() {
         return favouritedCustomers;

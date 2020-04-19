@@ -62,9 +62,6 @@ public class ServiceProvider implements Serializable {
     @OneToMany(mappedBy = "serviceProvider")
     private List<Product> products;
 
-    @ManyToMany
-    private List<Tag> tags;
-
     @OneToMany(mappedBy = "serviceProvider")
     private List<Service> services;
 
@@ -73,7 +70,6 @@ public class ServiceProvider implements Serializable {
 
         creditCards = new ArrayList<>();
         products = new ArrayList<>();
-        tags = new ArrayList<>();
         services = new ArrayList<>();
     }
 
@@ -221,20 +217,6 @@ public class ServiceProvider implements Serializable {
     // Newly added in v4.5
     public void setSalt(String salt) {
         this.salt = salt;
-    }
-
-    /**
-     * @return the tags
-     */
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    /**
-     * @param tags the tags to set
-     */
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
     }
 
     public List<Service> getServices() {
