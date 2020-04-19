@@ -2,6 +2,7 @@ package ejb.session.stateless;
 
 import entity.Booking;
 import entity.Customer;
+import entity.PurchasedLineItem;
 import entity.Review;
 import entity.Service;
 import entity.ServiceProvider;
@@ -23,6 +24,7 @@ import util.exception.BookingNotFoundException;
 import util.exception.CreateNewReviewException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.PurchasedLineItemNotFoundException;
 import util.exception.ReviewExistException;
 import util.exception.ReviewNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
@@ -38,6 +40,9 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
+    
+    @EJB
+    private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
@@ -51,7 +56,7 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
 
     @Override
-    public Review createNewReview(Review newReview, Long customerId, Long bookingId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException {
+    public Review createNewServiceReview(Review newReview, Long customerId, Long bookingId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException {
 
         Set<ConstraintViolation<Review>> constraintViolations = validator.validate(newReview);
 
@@ -91,6 +96,54 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
             } catch (CustomerNotFoundException | BookingNotFoundException ex) {
+                throw new CreateNewReviewException("An error has occured while creating the new review: " + ex.getMessage());
+            }
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+    
+    @Override
+    public Review createNewProductReview(Review newReview, Long customerId, Long purchasedLineItemId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException {
+
+        Set<ConstraintViolation<Review>> constraintViolations = validator.validate(newReview);
+
+        if (constraintViolations.isEmpty()) {
+            try {
+                if (customerId == null) {
+                    throw new CreateNewReviewException("A new review must be associated with a customer");
+                }
+
+                Customer customer = customerSessionBeanLocal.retrieveCustomerByCustId(customerId);
+
+                newReview.setCustomer(customer);
+                customer.getReviews().add(newReview);
+
+                if (purchasedLineItemId == null) {
+                    throw new CreateNewReviewException("A new review must be associated with a purchase");
+                }
+
+                PurchasedLineItem purchasedLineItem = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemId);
+
+                newReview.setPurchasedLineItem(purchasedLineItem);
+                purchasedLineItem.setReview(newReview);
+
+                em.persist(newReview);
+                em.flush();
+
+                return newReview;
+
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new ReviewExistException();
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } catch (CustomerNotFoundException | PurchasedLineItemNotFoundException ex) {
                 throw new CreateNewReviewException("An error has occured while creating the new review: " + ex.getMessage());
             }
         } else {

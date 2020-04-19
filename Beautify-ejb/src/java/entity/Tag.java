@@ -19,16 +19,12 @@ public class Tag implements Serializable {
     private String name;
     
     @ManyToMany (mappedBy = "tags")
-    private List<ServiceProvider> serviceProviders;
-    
-    @ManyToMany (mappedBy = "tags")
     private List<Product> products;
     
     @ManyToMany (mappedBy = "tags")
     private List<Service> services;
 
     public Tag() {
-        serviceProviders = new ArrayList<>();
         products = new ArrayList<>();
         services = new ArrayList<>();
     }
@@ -85,21 +81,7 @@ public class Tag implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    /**
-     * @return the serviceProviders
-     */
-    public List<ServiceProvider> getServiceProviders() {
-        return serviceProviders;
-    }
-
-    /**
-     * @param serviceProviders the serviceProviders to set
-     */
-    public void setServiceProviders(List<ServiceProvider> serviceProviders) {
-        this.serviceProviders = serviceProviders;
-    }
-
+    
     /**
      * @return the products
      */

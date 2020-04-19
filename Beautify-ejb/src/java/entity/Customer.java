@@ -1,5 +1,6 @@
 package entity;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -69,6 +70,9 @@ public class Customer implements Serializable {
     
     @OneToMany(mappedBy = "customer")
     private List<Review> reviews;
+    
+    @OneToMany(mappedBy = "customer")
+    private List<Purchased> purchaseds;
 
     public Customer() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
@@ -78,6 +82,7 @@ public class Customer implements Serializable {
         bookings = new ArrayList<>();
         favouriteServices = new ArrayList<>();
         favouriteProducts = new ArrayList<>();
+        purchaseds = new ArrayList<>();
     }
 
     public Customer(String firstName, String lastName, String email, String username, String password, Long contactNum) {
@@ -250,6 +255,14 @@ public class Customer implements Serializable {
 
     public void setFavouriteProducts(List<Product> favouriteProducts) {
         this.favouriteProducts = favouriteProducts;
+    }
+
+    public List<Purchased> getPurchaseds() {
+        return purchaseds;
+    }
+
+    public void setPurchaseds(List<Purchased> purchaseds) {
+        this.purchaseds = purchaseds;
     }
 
 }

@@ -44,6 +44,10 @@ public class SalesForUs implements Serializable {
     @JoinColumn(nullable = true)
     private ServiceProvider serviceProvider;
     
+    @OneToOne(optional = true)
+    @JoinColumn(nullable = true)
+    private PurchasedLineItem purchasedLineItem;
+    
     public SalesForUs() {
         
     }
@@ -142,6 +146,14 @@ public class SalesForUs implements Serializable {
      */
     public void setServiceProvider(ServiceProvider serviceProvider) {
         this.serviceProvider = serviceProvider;
+    }
+
+    public PurchasedLineItem getPurchasedLineItem() {
+        return purchasedLineItem;
+    }
+
+    public void setPurchasedLineItem(PurchasedLineItem purchasedLineItem) {
+        this.purchasedLineItem = purchasedLineItem;
     }
     
 }

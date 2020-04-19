@@ -56,12 +56,16 @@ public class Product implements Serializable {
     
     @ManyToMany
     private List<Tag> tags;
+    
+    @OneToMany
+    private List<Promotion> promotions;
 
     public Product() {
         this.price = new BigDecimal("0.00");
         
         this.tags = new ArrayList<>();
         this.favouritedCustomers = new ArrayList<>();
+        this.promotions = new ArrayList<>();
     }
 
     public Product(String skuCode, String name, BigDecimal price, String description, String photo) {
@@ -213,6 +217,14 @@ public class Product implements Serializable {
 
     public void setFavouritedCustomers(List<Customer> favouritedCustomers) {
         this.favouritedCustomers = favouritedCustomers;
+    }
+
+    public List<Promotion> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
     }
 
 }

@@ -68,7 +68,6 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
 
         for (Tag tagEntity : tagEntities) {
             tagEntity.getProducts().size();
-            tagEntity.getServiceProviders().size();
         }
 
         return tagEntities;
@@ -116,6 +115,8 @@ public class TagsSessionBean implements TagsSessionBeanLocal {
 
         if (!tagEntityToRemove.getProducts().isEmpty()) {
             throw new DeleteTagException("Tag ID " + tagId + " is associated with existing products and cannot be deleted!");
+        } else if (!tagEntityToRemove.getServices().isEmpty()) {
+            throw new DeleteTagException("Tag ID " + tagId + " is associated with existing services and cannot be deleted!");
         } else {
             em.remove(tagEntityToRemove);
         }
