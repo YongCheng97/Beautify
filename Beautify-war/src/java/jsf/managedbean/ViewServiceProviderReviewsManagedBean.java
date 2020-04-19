@@ -5,13 +5,8 @@
  */
 package jsf.managedbean;
 
-import ejb.session.stateless.BookingSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
-import ejb.session.stateless.ServiceProviderSessionBeanLocal;
-import ejb.session.stateless.ServiceSessionBeanLocal;
-import entity.Booking;
 import entity.Review;
-import entity.Service;
 import entity.ServiceProvider;
 import java.io.Serializable;
 import java.util.List;
@@ -36,15 +31,17 @@ public class ViewServiceProviderReviewsManagedBean implements Serializable {
 
     private List<Review> reviews;
     private Long providerIdToView;
+    private ServiceProvider providerToView; 
 
     public ViewServiceProviderReviewsManagedBean() {
     }
 
     @PostConstruct
     public void postConstruct() {
-        providerIdToView = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("serviceProviderId"));
+        setProviderToView((ServiceProvider) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("serviceProvider"));
         try {
-            setReviews(reviewSessionBeanLocal.retrieveReviewsByServiceProviderId(providerIdToView)); 
+            setProviderIdToView(getProviderToView().getServiceProviderId());
+            setReviews(reviewSessionBeanLocal.retrieveReviewsByServiceProviderId(getProviderIdToView())); 
         } catch (ServiceProviderNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the service provider details: " + ex.getMessage(), null));
         } catch (Exception ex) {
@@ -58,6 +55,22 @@ public class ViewServiceProviderReviewsManagedBean implements Serializable {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public Long getProviderIdToView() {
+        return providerIdToView;
+    }
+
+    public void setProviderIdToView(Long providerIdToView) {
+        this.providerIdToView = providerIdToView;
+    }
+
+    public ServiceProvider getProviderToView() {
+        return providerToView;
+    }
+
+    public void setProviderToView(ServiceProvider providerToView) {
+        this.providerToView = providerToView;
     }
 
 }

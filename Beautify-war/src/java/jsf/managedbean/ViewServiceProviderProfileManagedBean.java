@@ -9,6 +9,8 @@ import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import entity.ServiceProvider;
 import java.io.Serializable;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -29,7 +31,6 @@ public class ViewServiceProviderProfileManagedBean implements Serializable {
     @EJB(name = "ServiceProviderSessionBeanLocal")
     private ServiceProviderSessionBeanLocal serviceProviderSessionBeanLocal;
 
-    private Long providerIdToView;
     private ServiceProvider providerToView;
 
     public ViewServiceProviderProfileManagedBean() {
@@ -37,14 +38,7 @@ public class ViewServiceProviderProfileManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        setProviderIdToView((Long) Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("serviceProviderId")));
-        try {
-            providerToView = serviceProviderSessionBeanLocal.retrieveServiceProviderById(getProviderIdToView());
-        } catch (ServiceProviderNotFoundException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the service provider details: " + ex.getMessage(), null));
-        } catch (Exception ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
-        }
+        providerToView = (ServiceProvider) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("serviceProvider");
     }
 
     public ServiceProvider getProviderToView() {
@@ -53,14 +47,6 @@ public class ViewServiceProviderProfileManagedBean implements Serializable {
 
     public void setProviderToView(ServiceProvider providerToView) {
         this.providerToView = providerToView;
-    }
-
-    public Long getProviderIdToView() {
-        return providerIdToView;
-    }
-
-    public void setProviderIdToView(Long providerIdToView) {
-        this.providerIdToView = providerIdToView;
     }
 
     public TimeZone getTimeZone() {

@@ -33,7 +33,6 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
 
     private List<Product> productEntities;
     private List<Service> serviceEntities;
-    private Long providerIdToView;
     private ServiceProvider providerToView;
 
     public ViewServiceProviderListingsManagedBean() {
@@ -41,19 +40,12 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        providerIdToView = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("serviceProviderId"));
-        try {
-            providerToView = serviceProviderSessionBean.retrieveServiceProviderById(providerIdToView);
-            productEntities = providerToView.getProducts();
-            setProductEntities(productEntities);
+        setProviderToView((ServiceProvider) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("serviceProvider"));
+        productEntities = getProviderToView().getProducts();
+        setProductEntities(productEntities);
 
-            serviceEntities = providerToView.getServices();
-            setServiceEntities(serviceEntities);
-        } catch (ServiceProviderNotFoundException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the service provider details: " + ex.getMessage(), null));
-        } catch (Exception ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
-        }
+        serviceEntities = getProviderToView().getServices();
+        setServiceEntities(serviceEntities);
     }
 
     public void clickLink(ActionEvent event) throws IOException {
@@ -74,6 +66,14 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
 
     public void setServiceEntities(List<Service> serviceEntities) {
         this.serviceEntities = serviceEntities;
+    }
+
+    public ServiceProvider getProviderToView() {
+        return providerToView;
+    }
+
+    public void setProviderToView(ServiceProvider providerToView) {
+        this.providerToView = providerToView;
     }
 
 }

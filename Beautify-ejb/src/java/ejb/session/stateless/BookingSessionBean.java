@@ -126,7 +126,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     @Override
     public List<Booking> retrieveAllBookingsByCustomerId(Long customerId)
     {
-        Query query = em.createQuery("SELECT b FROM Booking b, Customer c WHERE b.customer.customerId = :inCustomerId ORDER BY b.dateOfAppointment DESC, b.startTime ASC");
+        Query query = em.createQuery("SELECT b FROM Booking b WHERE b.customer.customerId = :inCustomerId ORDER BY b.dateOfAppointment DESC, b.startTime ASC");
         query.setParameter("inCustomerId", customerId);
         List<Booking> bookings = query.getResultList();
         

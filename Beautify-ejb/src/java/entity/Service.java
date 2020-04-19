@@ -193,5 +193,6 @@ public class Service implements Serializable {
     public void setFavouritedCustomers(List<Customer> favouritedCustomers) {
         this.favouritedCustomers = favouritedCustomers;
     }
+
     
 }

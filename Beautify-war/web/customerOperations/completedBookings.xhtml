@@ -18,7 +18,7 @@
             <p:menuitem value="Bookings" outcome="upcomingBookings.xhtml" icon="fa fa-calendar">
                 <f:param name="i" value="1" />
             </p:menuitem>
-            <p:menuitem value="Favourites" outcome="customerFavourites.xhtml" icon="fa fa-star">
+            <p:menuitem value="Favourites" outcome="favouriteServices.xhtml" icon="fa fa-star">
                 <f:param name="i" value="2" />
             </p:menuitem>
             <p:menuitem value="Products Purchased" outcome="customerProductsPurchased.xhtml" icon="fa fa-shopping-cart">
@@ -73,10 +73,16 @@
                                                                 <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
                                                                 <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
                                                             </p:commandLink>-->
-                            
+
 <!--                            <p:commandButton actionListener="#{customerManagementManagedBean.doUpdateCustomer}" update="formUpdateCustomer" oncomplete="PF('dialogUpdateCustomer').show()" value="Update Profile" icon="fa fa-pencil" title="Update">
-                            </p:commandButton>-->
+</p:commandButton>-->
+                            
+                            <p:commandButton actionListener="#{leaveReviewManagedBean.doLeaveReview}" update="formLeaveReview" oncomplete="PF('dialogLeaveReview').show()" value="Leave Review" icon="fa fa-thumbs-o-up" title="Leave Review">
+                                <f:attribute name="bookingToReview" value="#{booking}" />
+                            </p:commandButton>
+
                         </h:panelGrid>
+
                     </p:panel>
 
                 </p:dataGrid>
@@ -84,6 +90,45 @@
             </h:form>
 
         </h:body>
+
+        <h:form id="formLeaveReview">
+
+            <p:dialog id="dialogLeaveReview" widgetVar="dialogLeaveReview" header="Leave Review" closable="true">
+
+                <p:messages id="messagesLeaveReview" redisplay="false" />
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <h:outputText value="Rating:" />
+                    <p:rating value="#{leaveReviewManagedBean.review.rating}" />
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="description" value="Description: " />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:inputText id="description" value="#{leaveReviewManagedBean.review.description}" placeholder="How was the service?" required="false" style="height:100px;width:500px"/>
+                        </p:column>
+                        <p:column>
+                            <p:message for="description" />
+                        </p:column>
+                    </p:row>
+
+                    <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
+
+                    <p:row>
+                        <p:column colspan="2" style="text-align:center">
+                            <p:commandButton value="Submit Review" update="@form bookingInfo" actionListener="#{leaveReviewManagedBean.leaveReview}" oncomplete="PF('dialogLeaveReview').show();" />
+                        </p:column>
+                    </p:row>
+
+                </h:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
 
     </ui:define>
 

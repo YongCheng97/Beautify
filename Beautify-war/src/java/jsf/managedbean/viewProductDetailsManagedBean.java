@@ -58,7 +58,7 @@ public class viewProductDetailsManagedBean implements Serializable
     {
         if(backMode == null || backMode.trim().length() == 0)
         {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("viewAllProducts.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("listingsOfAProductCategory.xhtml");
         }
         else
         {
