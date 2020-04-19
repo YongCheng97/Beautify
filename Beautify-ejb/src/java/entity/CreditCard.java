@@ -38,12 +38,12 @@ public class CreditCard implements Serializable {
     @Size(max = 5)
     private String expiryDate;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @ManyToOne(optional = true)
+    @JoinColumn(nullable = true)
     private Customer customer;
     
-    @ManyToOne (optional = false)
-    @JoinColumn (nullable = false)
+    @ManyToOne (optional = true)
+    @JoinColumn (nullable = true)
     private ServiceProvider serviceProvider;
 
     public CreditCard() {

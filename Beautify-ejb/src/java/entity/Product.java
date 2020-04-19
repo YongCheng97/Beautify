@@ -56,12 +56,16 @@ public class Product implements Serializable {
     
     @ManyToMany
     private List<Tag> tags;
+    
+    @OneToMany
+    private List<Promotion> promotions;
 
     public Product() {
         this.price = new BigDecimal("0.00");
         
         this.tags = new ArrayList<>();
         this.favouritedCustomers = new ArrayList<>();
+        this.promotions = new ArrayList<>();
     }
 
     public Product(String skuCode, String name, BigDecimal price, String description, String photo) {
@@ -206,6 +210,31 @@ public class Product implements Serializable {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+    
+    public void addTag(Tag tag) {
+        if (tag != null) {
+            if (!this.tags.contains(tag)) {
+                this.tags.add(tag);
+                
+                if (!tag.getProducts().contains(this)) {
+                    tag.getProducts().add(this); 
+                }
+                      
+            }
+        }
+    }
+    
+    public void removeTag(Tag tag) {
+        if (tag != null) {
+            if (this.tags.contains(tag)) {
+                this.tags.remove(tag); 
+                if (tag.getProducts().contains(this)) {
+                    tag.getProducts().remove(this); 
+                }
+            }
+        }
+    }
+        
 
     public List<Customer> getFavouritedCustomers() {
         return favouritedCustomers;
@@ -213,6 +242,14 @@ public class Product implements Serializable {
 
     public void setFavouritedCustomers(List<Customer> favouritedCustomers) {
         this.favouritedCustomers = favouritedCustomers;
+    }
+
+    public List<Promotion> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
     }
 
 }

@@ -17,7 +17,7 @@
             <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="fa fa-shopping-cart">
                 <f:param  name="i" value="1" />
             </p:menuitem>
-            <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderReviews" icon="fa fa-envelope">
+            <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderProductReviews" icon="fa fa-envelope">
                 <f:param name="i" value="2" />
             </p:menuitem>
         </p:tabMenu>
@@ -32,10 +32,17 @@
                 }
             </style>
 
+            <div style="text-align:center;">
+                <p:button value = "Product Reviews" outcome="/customerOperations/serviceProviderProductReviews"/>
+                <span style="display:inline-block; width: 200;"></span>
+                <p:button value = "Service Reviews" outcome="/customerOperations/serviceProviderServiceReviews"/>
+            </div>
+            <br></br>
+
             <h:form> 
-                <p:dataScroller value="#{reviewsManagedBean.reviews}" var="review" chunkSize="10">
+                <p:dataScroller value="#{viewServiceProviderReviewsManagedBean.serviceReviews}" var="serviceReview" chunkSize="10">
                     <f:facet name="header">
-                        Scroll Down to Load More Reviews
+                        Scroll Down to Load More Service Reviews
                     </f:facet>
 
                     <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
@@ -43,15 +50,18 @@
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
 
-                                <h:outputText value="#{review.customer.firstName}" style="font-weight: bold" />
+                                <h:outputText value="#{serviceReview.customer.firstName}" style="font-weight: bold" />
 
                                 <br></br>
 
+                                <h:outputText value="Service Purchased:" />
+                                <h:outputText value="#{serviceReview.booking.service.serviceName}" style="font-weight: bold"/>
+
                                 <h:outputText value="Rating:" />
-                                <h:outputText value="#{review.rating}" style="font-weight: bold"/>
+                                <p:rating value="#{serviceReview.rating}" readonly="true" />
 
                                 <h:outputText value="Description:" />
-                                <h:outputText value="#{review.description}" style="font-weight: bold"/>
+                                <h:outputText value="#{serviceReview.description}" style="font-weight: bold"/>
 
                             </h:panelGrid>
                         </p:outputPanel>

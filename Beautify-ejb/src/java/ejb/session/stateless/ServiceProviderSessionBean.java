@@ -1,6 +1,9 @@
 package ejb.session.stateless;
 
 import entity.ServiceProvider;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Local;
@@ -144,11 +147,71 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
         ServiceProvider serviceProviderToRemove = retrieveServiceProviderById(serviceProviderId);
 
         //if (serviceProviderToRemove.getSaleTransactionEntities().isEmpty()) {
-            em.remove(serviceProviderToRemove);
+        em.remove(serviceProviderToRemove);
         //} else {
-            // New in v4.1 to prevent deleting staff with existing sale transaction(s)
-            throw new DeleteServiceProviderException("Staff ID " + serviceProviderId + " is associated with existing sale transaction(s) and cannot be deleted!");
+        // New in v4.1 to prevent deleting staff with existing sale transaction(s)
+        throw new DeleteServiceProviderException("Staff ID " + serviceProviderId + " is associated with existing sale transaction(s) and cannot be deleted!");
         //}
+    }
+
+    @Override
+    public List<ServiceProvider> searchServiceProviderByName(String searchString) {
+        Query query = em.createQuery("SELECT s FROM ServiceProvider s WHERE s.name LIKE :inSearchString");
+        query.setParameter("inSearchString", "%" + searchString + "%");
+        List<ServiceProvider> serviceProviders = query.getResultList();
+
+        for (ServiceProvider serviceProvider : serviceProviders) {
+            serviceProvider.getServices().size();
+            serviceProvider.getCreditCards().size();
+            serviceProvider.getProducts().size();
+        }
+
+        return serviceProviders;
+    }
+
+    @Override
+    public List<ServiceProvider> filterServiceProviderByTags(List<Long> tagIds, String condition) {
+        List<ServiceProvider> providers = new ArrayList<>();
+
+        if (tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR"))) {
+            return providers; 
+        } else {
+            if (condition.equals("OR")) {
+                Query query = em.createQuery("SELECT DISTINCT p FROM ServiceProvider p, IN (p.services) s, IN (s.tags) te WHERE te.tagId IN :inTagIds");
+                query.setParameter("inTagIds", tagIds);
+                providers = query.getResultList();
+            } else // AND
+            {
+                String selectClause = "SELECT p FROM ServiceProvider p";
+                String whereClause = "";
+                Boolean firstTag = true;
+                Integer tagCount = 1;
+
+                for (Long tagId : tagIds) {
+                    selectClause += ", IN (p.services) s, IN (s.tags) te" + tagCount;
+
+                    if (firstTag) {
+                        whereClause = "WHERE te1.tagId = " + tagId;
+                        firstTag = false;
+                    } else {
+                        whereClause += " AND te" + tagCount + ".tagId = " + tagId;
+                    }
+
+                    tagCount++;
+                }
+
+                String jpql = selectClause + " " + whereClause; 
+                Query query = em.createQuery(jpql);
+                providers = query.getResultList();
+            }
+
+            for (ServiceProvider provider : providers) {
+                provider.getProducts().size();
+                provider.getServices().size(); 
+            }
+
+            return providers; 
+        }
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<ServiceProvider>> constraintViolations) {

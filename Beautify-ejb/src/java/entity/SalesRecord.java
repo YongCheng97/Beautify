@@ -45,6 +45,10 @@ public class SalesRecord implements Serializable {
     @JoinColumn(nullable = false)
     private Product product;
     
+    @OneToOne(optional = true)
+    @JoinColumn(nullable = true)
+    private PurchasedLineItem purchasedLineItem;
+    
     public SalesRecord() {
         
     }
@@ -143,6 +147,14 @@ public class SalesRecord implements Serializable {
      */
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public PurchasedLineItem getPurchasedLineItem() {
+        return purchasedLineItem;
+    }
+
+    public void setPurchasedLineItem(PurchasedLineItem purchasedLineItem) {
+        this.purchasedLineItem = purchasedLineItem;
     }
     
 }

@@ -37,6 +37,7 @@ public class Category implements Serializable {
 
     @OneToMany(mappedBy = "parentCategoryEntity")
     private List<Category> subCategoryEntities;
+    
     @ManyToOne
     private Category parentCategoryEntity;
 

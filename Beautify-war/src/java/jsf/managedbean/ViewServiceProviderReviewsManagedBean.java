@@ -22,16 +22,17 @@ import util.exception.ServiceProviderNotFoundException;
  *
  * @author jilon
  */
-@Named(value = "reviewsManagedBean")
+@Named(value = "viewServiceProviderReviewsManagedBean")
 @ViewScoped
 public class ViewServiceProviderReviewsManagedBean implements Serializable {
 
     @EJB(name = "ReviewSessionBeanLocal")
     private ReviewSessionBeanLocal reviewSessionBeanLocal;
 
-    private List<Review> reviews;
+    private List<Review> productReviews;
+    private List<Review> serviceReviews;
     private Long providerIdToView;
-    private ServiceProvider providerToView; 
+    private ServiceProvider providerToView;
 
     public ViewServiceProviderReviewsManagedBean() {
     }
@@ -41,20 +42,13 @@ public class ViewServiceProviderReviewsManagedBean implements Serializable {
         setProviderToView((ServiceProvider) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("serviceProvider"));
         try {
             setProviderIdToView(getProviderToView().getServiceProviderId());
-            setReviews(reviewSessionBeanLocal.retrieveReviewsByServiceProviderId(getProviderIdToView())); 
+            setServiceReviews(reviewSessionBeanLocal.retrieveServiceReviewsByServiceProviderId(getProviderIdToView()));
+            setProductReviews(reviewSessionBeanLocal.retrieveProductReviewsByServiceProviderId(getProviderIdToView()));
         } catch (ServiceProviderNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the service provider details: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
     }
 
     public Long getProviderIdToView() {
@@ -71,6 +65,22 @@ public class ViewServiceProviderReviewsManagedBean implements Serializable {
 
     public void setProviderToView(ServiceProvider providerToView) {
         this.providerToView = providerToView;
+    }
+
+    public List<Review> getProductReviews() {
+        return productReviews;
+    }
+
+    public void setProductReviews(List<Review> productReviews) {
+        this.productReviews = productReviews;
+    }
+
+    public List<Review> getServiceReviews() {
+        return serviceReviews;
+    }
+
+    public void setServiceReviews(List<Review> serviceReviews) {
+        this.serviceReviews = serviceReviews;
     }
 
 }
