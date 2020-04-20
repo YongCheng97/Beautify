@@ -19,18 +19,14 @@
             <h:messages errorClass="errorTextsWithBullet" fatalClass="errorTextsWithBullet" infoClass="infoTextsWithBullet" globalOnly="true" />
             <br/>
 
-            <h:form rendered="#{viewProductDetailsManagedBean.productToView != null}">
-                <h:commandLink value="Back" actionListener="#{viewProductDetailsManagedBean.back}" />
-            </h:form>
-
             <br/>  
             <h:body>
                 <p:layout style="min-width: 500px;min-height:425px">
 
                     <p:layoutUnit position="west" size="520">
 
-                        <p:galleria value="#{imagesView.images}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
-                            <p:graphicImage library="images" name ="#{productToView.name}.jpg" alt=""/>
+                        <p:galleria value="#{viewProductDetailsManagedBean.productImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
+                            <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
                         </p:galleria>
                     </p:layoutUnit>
 
