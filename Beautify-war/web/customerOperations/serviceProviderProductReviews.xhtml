@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="content"> 
+        <ez:menubar/>
+        <p:tabMenu activeIndex="#{param.i}">
+            <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="fa fa-user">
+                <f:param name="i" value="0" />
+            </p:menuitem>
+            <p:menuitem value="Listings" outcome="/customerOperations/serviceProviderListings" icon="fa fa-shopping-cart">
+                <f:param  name="i" value="1" />
+            </p:menuitem>
+            <p:menuitem value="Reviews" outcome="/customerOperations/serviceProviderProductReviews" icon="fa fa-envelope">
+                <f:param name="i" value="2" />
+            </p:menuitem>
+        </p:tabMenu>
+
+        <div>
+            <h3> Service Provider Reviews </h3> 
+
+            <style type="text/css">
+                .ui-datascroller .ui-datascroller-item {
+                    border-bottom: 1px solid #A8A8A8;
+                    padding: 25px 10px;
+                }
+            </style>
+
+            <div style="text-align:center;">
+                <p:button value = "Product Reviews" outcome="/customerOperations/serviceProviderProductReviews"/>
+                <span style="display:inline-block; width: 200;"></span>
+                <p:button value = "Service Reviews" outcome="/customerOperations/serviceProviderServiceReviews"/>
+            </div>
+            <br></br>
+
+            <h:form> 
+                <p:dataScroller value="#{viewServiceProviderReviewsManagedBean.productReviews}" var="productReview" chunkSize="10">
+                    <f:facet name="header">
+                        Scroll Down to Load More Product Reviews
+                    </f:facet>
+
+                    <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="5">
+
+                                <h:outputText value="#{productReview.customer.firstName}" style="font-weight: bold" />
+
+                                <br></br>
+
+                                <h:outputText value="Product Purchased:" />
+                                <h:outputText value="#{productReview.purchasedLineItem.product.name}" style="font-weight: bold"/>
+
+                                <h:outputText value="Rating:" />
+                                <p:rating value="#{productReview.rating}" readonly="true" />
+
+                                <h:outputText value="Description:" />
+                                <h:outputText value="#{productReview.description}" style="font-weight: bold"/>
+
+                            </h:panelGrid>
+                        </p:outputPanel>
+                    </h:panelGrid>
+                </p:dataScroller>
+            </h:form>
+
+        </div>
+    </ui:define>
+
+</ui:composition>
+

@@ -21,7 +21,9 @@ public interface ReviewSessionBeanLocal {
 
     public Review retrieveReviewByReviewId(Long reviewId) throws ReviewNotFoundException;
 
-    public List<Review> retrieveReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException;
+    public List<Review> retrieveServiceReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException;
+
+    public List<Review> retrieveProductReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException;
 
     public void updateReview(Review review) throws ReviewNotFoundException, UpdateReviewException, InputDataValidationException;
 

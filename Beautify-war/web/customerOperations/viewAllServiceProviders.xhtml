@@ -12,47 +12,80 @@
 
         <ez:menubar/>
 
-        <h:body>
+        <h:form id="formMain">
+
             <p:layout>
-                <p:layoutUnit position="west" size="150" minSize="40" maxSize="200">
-                    <f:facet name="header"> 
-                        <h:outputText value="Filter" />
-                    </f:facet>
+                <p:layoutUnit position="west">
+                    <p:menu>
+                        <p:submenu label="Filter By Tags" icon="fa fa-filter" />
+                    </p:menu>
+
+                    <br />
+
+                    <p:outputLabel value="Tags: " style="font-weight: bold;" />
+                    <p:selectManyCheckbox id="grid" value="#{viewAllServiceProvidersManagedBean.selectedTagIds}" layout="grid" columns="1">
+                        <f:selectItems value="#{viewAllServiceProvidersManagedBean.tags}" var="tags" itemLabel="#{tags.name}" itemValue="#{tags.tagId}" />
+
+                        <p:ajax process="@form" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.filterServiceProvider}" />
+
+                    </p:selectManyCheckbox>
+
+                    <br />
+
+                    <p:outputLabel for="selCondition" value="Condition: " style="font-weight: bold;" />
+                    <p:selectOneMenu id="selCondition" value="#{viewAllServiceProvidersManagedBean.condition}">
+
+                        <f:selectItem itemValue="OR" itemLabel="OR" itemDescription="OR" />
+                        <f:selectItem itemValue="AND" itemLabel="AND" itemDescription="AND" />
+
+                        <p:ajax process="@form" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.filterServiceProvider}" />
+
+                    </p:selectOneMenu>
+
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
-                    <h:form id="form">
-                        <p:dataGrid var="serviceProvider" value="#{viewAllServiceProvidersManagedBean.serviceProviders}" columns="3" layout="grid"
-                                    rows="12" paginator="true" id="products"
-                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                    rowsPerPageTemplate="6,12,16">
 
-                            <f:facet name="header">
-                                <h:outputText value = "Service Providers"/>
-                            </f:facet>
+                    <div style="text-align: center;"> 
 
-                            <p:panel header="#{serviceProvider.name}" style="text-align:center">
-                                <h:panelGrid columns="1" style="width:100%">
-                                    <h:outputText value="#{serviceProvider.address}" />
-                                    <h:outputText value= "Opening Hours: " />
-                                    <h:outputText value ="#{serviceProvider.openingHours}">
-                                        <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewAllServiceProvidersManagedBean.timeZone}"/>
-                                    </h:outputText>
-                                    <h:outputText value= "Closing Hours: " />
-                                    <h:outputText value ="#{serviceProvider.closingHours}">
-                                        <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewAllServiceProvidersManagedBean.timeZone}"/>
-                                    </h:outputText>
-                                </h:panelGrid>
-                                <p:commandLink actionListener="#{viewAllServiceProvidersManagedBean.clickLink(serviceProvider.serviceProviderId)}" style="text-decoration:none;color:blue;">
-                                    <h:outputText value = "Click here for more information!"/>
-                                </p:commandLink>
-                            </p:panel>
+                        <h:outputText value="Search: " />
+                        <p:inputText id="txtSearchString" value="#{viewAllServiceProvidersManagedBean.searchString}" style="width:300px" placeholder="Enter name">
+                            <p:ajax event="keyup" process="@this" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.searchServiceProvider}" />
+                        </p:inputText>
+                        &nbsp;
+                        <p:commandButton value="Search" style="width:100px">
+                            <p:ajax event="click" process="@this formMain:txtSearchString" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.searchServiceProvider}" />
+                        </p:commandButton>
 
-                        </p:dataGrid>
+                    </div>
 
-                    </h:form>
+                    &nbsp; &nbsp;
+
+                    <p:dataGrid widgetVar="dataGridMain" var="serviceProvider" value="#{viewAllServiceProvidersManagedBean.serviceProviders}" columns="3" layout="grid"
+                                rows="12" paginator="true" id="dataGridMain"
+                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                rowsPerPageTemplate="6,12,16">
+
+                        <p:panel header="#{serviceProvider.name}" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:outputText value="#{serviceProvider.address}" />
+                                <h:outputText value= "Opening Hours: " />
+                                <h:outputText value ="#{serviceProvider.openingHours}">
+                                    <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewAllServiceProvidersManagedBean.timeZone}"/>
+                                </h:outputText>
+                                <h:outputText value= "Closing Hours: " />
+                                <h:outputText value ="#{serviceProvider.closingHours}">
+                                    <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewAllServiceProvidersManagedBean.timeZone}"/>
+                                </h:outputText>
+                            </h:panelGrid>
+                            <p:commandLink actionListener="#{viewAllServiceProvidersManagedBean.clickLink(serviceProvider.serviceProviderId)}" style="text-decoration:none;color:blue;">
+                                <h:outputText value = "Click here for more information!"/>
+                            </p:commandLink>
+                        </p:panel>
+
+                    </p:dataGrid>
                 </p:layoutUnit>
             </p:layout>
-        </h:body>
+        </h:form>
     </ui:define>
 </ui:composition>

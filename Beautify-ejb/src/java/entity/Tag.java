@@ -81,7 +81,7 @@ public class Tag implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
      * @return the products
      */

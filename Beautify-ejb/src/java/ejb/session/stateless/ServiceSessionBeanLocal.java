@@ -16,7 +16,7 @@ public interface ServiceSessionBeanLocal {
 
     public Service retrieveServiceByServiceId(Long serviceId) throws ServiceNotFoundException;
 
-    public Service createNewService(Service newService, Long serviceProviderId, Long categoryId) throws ServiceExistException, UnknownPersistenceException, InputDataValidationException, CreateNewServiceException;
+    public Service createNewService(Service newService, Long serviceProviderId, Long categoryId, List<Long> tagIds) throws ServiceExistException, UnknownPersistenceException, InputDataValidationException, CreateNewServiceException;
 
     public List<Service> retrieveAllServices();
 

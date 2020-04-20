@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.Category;
 import entity.Product;
 import entity.ServiceProvider;
+import entity.Tag;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +29,7 @@ import util.exception.DeleteProductException;
 import util.exception.InputDataValidationException;
 import util.exception.ProductExistException;
 import util.exception.ProductNotFoundException;
+import util.exception.TagNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateProductException;
 
@@ -35,6 +37,9 @@ import util.exception.UpdateProductException;
 @Local(ProductSessionBeanLocal.class)
 
 public class ProductSessionBean implements ProductSessionBeanLocal {
+
+    @EJB
+    private TagsSessionBeanLocal tagsSessionBeanLocal;
 
     @EJB
     private CategorySessionBeanLocal categorySessionBeanLocal;
@@ -51,7 +56,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     }
 
     @Override
-    public Product createNewProduct(Product newProduct, Long categoryId, Long serviceProviderId) throws ProductExistException, UnknownPersistenceException, InputDataValidationException, CreateNewProductException {
+    public Product createNewProduct(Product newProduct, Long categoryId, Long serviceProviderId, List<Long> tagIds) throws ProductExistException, UnknownPersistenceException, InputDataValidationException, CreateNewProductException {
 
         Set<ConstraintViolation<Product>> constraintViolations = validator.validate(newProduct);
 
@@ -78,6 +83,14 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                 serviceProvider.getProducts().add(newProduct);
 
                 em.persist(newProduct);
+                
+                if (tagIds != null && (!tagIds.isEmpty())) {
+                    for (Long tagId:tagIds) {
+                        Tag tag = tagsSessionBeanLocal.retrieveTagByTagId(tagId); 
+                        newProduct.addTag(tag); 
+                    }
+                }
+                
                 em.flush();
 
                 return newProduct;
@@ -91,7 +104,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CategoryNotFoundException ex) {
+            } catch (CategoryNotFoundException | TagNotFoundException ex) {
                 throw new CreateNewProductException("An error has occurred while creating the new product: " + ex.getMessage());
             }
         } else {
@@ -112,6 +125,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         return products;
     }
 
+    @Override
     public List<Product> retrieveAllProductsFromCategory(Long categoryId) {
         Query query = em.createQuery("SELECT p FROM Product p WHERE p.category.categoryId = :categoryId ORDER BY p.skuCode ASC");
         query.setParameter("categoryId", categoryId);

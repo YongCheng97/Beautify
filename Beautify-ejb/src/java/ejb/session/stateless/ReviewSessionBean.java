@@ -2,6 +2,7 @@ package ejb.session.stateless;
 
 import entity.Booking;
 import entity.Customer;
+import entity.Product;
 import entity.PurchasedLineItem;
 import entity.Review;
 import entity.Service;
@@ -40,7 +41,7 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
-    
+
     @EJB
     private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
 
@@ -102,7 +103,7 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     @Override
     public Review createNewProductReview(Review newReview, Long customerId, Long purchasedLineItemId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException {
 
@@ -179,25 +180,39 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
 
     @Override
-    public List<Review> retrieveReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException {
+    public List<Review> retrieveServiceReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException {
         ServiceProvider serviceProvider = em.find(ServiceProvider.class, serviceProviderId);
-        
+
         if (serviceProvider != null) {
-            serviceProvider.getServices().size(); 
+            serviceProvider.getServices().size();
             List<Service> services = serviceProvider.getServices();
-            List<Review> reviews = new ArrayList<>(); 
+            List<Review> reviews = new ArrayList<>();
             for (Service service : services) {
-                service.getBookings().size(); 
+                service.getBookings().size();
                 List<Booking> bookings = service.getBookings();
                 for (Booking booking : bookings) {
                     Review review = booking.getReview();
-                    reviews.add(review); 
+                    reviews.add(review);
                 }
             }
             return reviews;
         } else {
             throw new ServiceProviderNotFoundException("Service Provider ID " + serviceProviderId + " does not exist!");
         }
+    }
+
+    @Override
+    public List<Review> retrieveProductReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException {
+        List<Review> retrievedReviews = new ArrayList<>(); 
+        List<Review> reviews = retrieveAllReviews(); 
+        
+        for (Review review : reviews) {
+            Long providerId = review.getPurchasedLineItem().getProduct().getServiceProvider().getServiceProviderId();
+            if (providerId == serviceProviderId) {
+                retrievedReviews.add(review); 
+            }
+        }
+        return retrievedReviews;
     }
 
     @Override

@@ -169,6 +169,31 @@ public class Service implements Serializable {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+    
+    public void addTag(Tag tag) {
+        if (tag != null) {
+            if (!this.tags.contains(tag)) {
+                this.tags.add(tag);
+                
+                if (!tag.getServices().contains(this)) {
+                    tag.getServices().add(this); 
+                }
+                      
+            }
+        }
+    }
+    
+    public void removeTag(Tag tag) {
+        if (tag != null) {
+            if (this.tags.contains(tag)) {
+                this.tags.remove(tag); 
+                if (tag.getServices().contains(this)) {
+                    tag.getServices().remove(this); 
+                }
+            }
+        }
+    }
+        
 
     public List<Promotion> getPromotions() {
         return promotions;

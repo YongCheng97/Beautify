@@ -1,10 +1,9 @@
 package ejb.session.stateless;
 
 import entity.Category;
-import entity.Product;
-import entity.Review;
 import entity.Service;
 import entity.ServiceProvider;
+import entity.Tag;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,19 +22,21 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CategoryNotFoundException;
-import util.exception.CreateNewProductException;
 import util.exception.CreateNewServiceException;
 import util.exception.InputDataValidationException;
-import util.exception.ProductExistException;
 import util.exception.ServiceExistException;
 import util.exception.ServiceNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
+import util.exception.TagNotFoundException;
 import util.exception.UnknownPersistenceException;
 
 @Stateless
 @Local(ServiceSessionBeanLocal.class)
 
 public class ServiceSessionBean implements ServiceSessionBeanLocal {
+
+    @EJB(name = "TagsSessionBeanLocal")
+    private TagsSessionBeanLocal tagsSessionBeanLocal;
 
     @EJB
     private ServiceProviderSessionBeanLocal serviceProviderSessionBeanLocal;
@@ -55,7 +56,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
     }
 
     @Override
-    public Service createNewService(Service newService, Long serviceProviderId, Long categoryId) throws ServiceExistException, UnknownPersistenceException, InputDataValidationException, CreateNewServiceException {
+    public Service createNewService(Service newService, Long serviceProviderId, Long categoryId, List<Long> tagIds) throws ServiceExistException, UnknownPersistenceException, InputDataValidationException, CreateNewServiceException {
         Set<ConstraintViolation<Service>> constraintViolations = validator.validate(newService);
 
         if (constraintViolations.isEmpty()) {
@@ -84,6 +85,14 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
                 serviceProvider.getServices().add(newService);
 
                 em.persist(newService);
+                
+                if (tagIds != null && (!tagIds.isEmpty())) {
+                    for (Long tagId:tagIds) {
+                        Tag tag = tagsSessionBeanLocal.retrieveTagByTagId(tagId); 
+                        newService.addTag(tag); 
+                    }
+                }
+                
                 em.flush();
 
                 return newService;
@@ -98,7 +107,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CategoryNotFoundException | ServiceProviderNotFoundException ex) {
+            } catch (CategoryNotFoundException | ServiceProviderNotFoundException | TagNotFoundException ex) {
                 throw new CreateNewServiceException("An error has occurred while creating the new service: " + ex.getMessage());
             }
         } else {
@@ -339,5 +348,9 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
         }
 
         return msg;
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
 }

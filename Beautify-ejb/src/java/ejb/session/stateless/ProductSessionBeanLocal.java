@@ -21,7 +21,7 @@ public interface ProductSessionBeanLocal {
 
     public List<Product> retrieveAllProducts();
 
-    public Product createNewProduct(Product newProduct, Long categoryId, Long serviceProviderId) throws ProductExistException, UnknownPersistenceException, InputDataValidationException, CreateNewProductException;
+    public Product createNewProduct(Product newProduct, Long categoryId, Long serviceProviderId, List<Long> tagIds) throws ProductExistException, UnknownPersistenceException, InputDataValidationException, CreateNewProductException;
 
     public List<Product> filterProductsByName(String searchString, Long categoryId);
 
