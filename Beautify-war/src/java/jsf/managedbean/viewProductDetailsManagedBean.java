@@ -9,6 +9,8 @@ import ejb.session.stateless.ProductSessionBeanLocal;
 import entity.Product;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -28,8 +30,8 @@ public class viewProductDetailsManagedBean implements Serializable
     private ProductSessionBeanLocal productSessionBeanLocal;
 
     private Long productIdToView;
-    private String backMode;
     private Product productToView;
+    private List<String> productImages;
     
     public viewProductDetailsManagedBean() {
     }
@@ -38,11 +40,14 @@ public class viewProductDetailsManagedBean implements Serializable
     public void postConstruct()
     {
         productIdToView = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("productIdToView");
-        backMode = (String)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("backMode");
-        
         try
         {            
             productToView = productSessionBeanLocal.retrieveProductByProdId(productIdToView);
+            productImages = new ArrayList<String>();
+            
+            for (int i=1; i<=5; i++) {
+                productImages.add(productToView.getName() + i + ".jpg");
+            }
         }
         catch(ProductNotFoundException ex)
         {
@@ -54,24 +59,13 @@ public class viewProductDetailsManagedBean implements Serializable
         }
     }
     
-    public void back(ActionEvent event) throws IOException
-    {
-        if(backMode == null || backMode.trim().length() == 0)
-        {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("listingsOfAProductCategory.xhtml");
-        }
-        else
-        {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(backMode + ".xhtml");
-        }
-    }
-    
-    
-    
     public void foo()
     {        
     }
     
+    public List<String> getProductImages() {
+        return productImages;
+    }
     
     public Product getProductToView() {
         return productToView;
