@@ -24,7 +24,7 @@
 
                     <p:outputLabel value="Tags: " style="font-weight: bold;" />
                     <p:selectManyCheckbox id="grid" value="#{viewAllServiceProvidersManagedBean.selectedTagIds}" layout="grid" columns="1">
-                        <f:selectItems value="#{viewAllServiceProvidersManagedBean.tags}" var="tags" itemLabel="#{tags.name}" itemValue="#{tags.name}" />
+                        <f:selectItems value="#{viewAllServiceProvidersManagedBean.tags}" var="tags" itemLabel="#{tags.name}" itemValue="#{tags.tagId}" />
 
                         <p:ajax process="@form" update="formMain:dataGridMain" listener="#{viewAllServiceProvidersManagedBean.filterServiceProvider}" />
 

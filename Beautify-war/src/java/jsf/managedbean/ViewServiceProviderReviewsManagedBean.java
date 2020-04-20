@@ -39,14 +39,19 @@ public class ViewServiceProviderReviewsManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
+        System.out.println("********** ViewServiceProviderReviewsManagedBean");
         setProviderToView((ServiceProvider) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("serviceProvider"));
         try {
             setProviderIdToView(getProviderToView().getServiceProviderId());
-            setServiceReviews(reviewSessionBeanLocal.retrieveServiceReviewsByServiceProviderId(getProviderIdToView()));
+            this.serviceReviews = reviewSessionBeanLocal.retrieveServiceReviewsByServiceProviderId(getProviderIdToView());
+            System.out.println("********** serviceReviews: " + serviceReviews.size());
+                    
             setProductReviews(reviewSessionBeanLocal.retrieveProductReviewsByServiceProviderId(getProviderIdToView()));
         } catch (ServiceProviderNotFoundException ex) {
+            ex.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the service provider details: " + ex.getMessage(), null));
         } catch (Exception ex) {
+            ex.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }

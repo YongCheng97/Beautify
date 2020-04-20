@@ -174,12 +174,19 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
         List<ServiceProvider> providers = new ArrayList<>();
 
         if (tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR"))) {
-            return providers; 
+            return providers;
         } else {
             if (condition.equals("OR")) {
                 Query query = em.createQuery("SELECT DISTINCT p FROM ServiceProvider p, IN (p.services) s, IN (s.tags) te WHERE te.tagId IN :inTagIds");
                 query.setParameter("inTagIds", tagIds);
                 providers = query.getResultList();
+
+                Query query2 = em.createQuery("SELECT DISTINCT p FROM ServiceProvider p, IN (p.products) pe, IN (pe.tags) te WHERE te.tagId IN :inTagIds");
+                query2.setParameter("inTagIds", tagIds);
+                List<ServiceProvider> result = query2.getResultList();
+                for (ServiceProvider p : result) {
+                    providers.add(p);
+                }
             } else // AND
             {
                 String selectClause = "SELECT p FROM ServiceProvider p";
@@ -200,17 +207,43 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
                     tagCount++;
                 }
 
-                String jpql = selectClause + " " + whereClause; 
+                String jpql = selectClause + " " + whereClause;
                 Query query = em.createQuery(jpql);
                 providers = query.getResultList();
+
+                // products 
+                String selectClause1 = "SELECT p FROM ServiceProvider p";
+                String whereClause1 = "";
+                Boolean firstTag1 = true;
+                Integer tagCount1 = 1;
+
+                for (Long tagId : tagIds) {
+                    selectClause1 += ", IN (p.products) pe, IN (pe.tags) te" + tagCount1;
+
+                    if (firstTag1) {
+                        whereClause1 = "WHERE te1.tagId = " + tagId;
+                        firstTag1 = false;
+                    } else {
+                        whereClause1 += " AND te" + tagCount1 + ".tagId = " + tagId;
+                    }
+
+                    tagCount1++;
+                }
+
+                String jpql1 = selectClause1 + " " + whereClause1;
+                Query query1 = em.createQuery(jpql1);
+                List<ServiceProvider> result = query1.getResultList();
+                for (ServiceProvider sp : result) {
+                    providers.add(sp); 
+                }
             }
 
             for (ServiceProvider provider : providers) {
                 provider.getProducts().size();
-                provider.getServices().size(); 
+                provider.getServices().size();
             }
 
-            return providers; 
+            return providers;
         }
     }
 
