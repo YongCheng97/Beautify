@@ -7,6 +7,7 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.BookingSessionBeanLocal;
 import ejb.session.stateless.CategorySessionBeanLocal;
+import ejb.session.stateless.CreditCardSessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
@@ -15,6 +16,7 @@ import ejb.session.stateless.ServiceSessionBeanLocal;
 import ejb.session.stateless.TagsSessionBeanLocal;
 import entity.Booking;
 import entity.Category;
+import entity.CreditCard;
 import entity.Customer;
 import entity.Product;
 import entity.Review;
@@ -39,11 +41,14 @@ import javax.persistence.PersistenceContext;
 import util.exception.BookingExistException;
 import util.exception.CreateNewBookingException;
 import util.enumeration.CategoryTypeEnum;
+import util.enumeration.CreditCardTypeEnum;
 import util.exception.CreateNewCategoryException;
+import util.exception.CreateNewCreditCardException;
 import util.exception.CreateNewProductException;
 import util.exception.CreateNewReviewException;
 import util.exception.CreateNewServiceException;
 import util.exception.CreateNewTagException;
+import util.exception.CreditCardExistsException;
 import util.exception.CustomerExistException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
@@ -59,6 +64,9 @@ import util.exception.UnknownPersistenceException;
 @Startup
 
 public class DataInitializationSessionBean {
+
+    @EJB(name = "CreditCardSessionBeanLocal")
+    private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
 
     @EJB(name = "TagsSessionBeanLocal")
     private TagsSessionBeanLocal tagsSessionBeanLocal;
@@ -86,8 +94,9 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
-
+    
     private CategoryTypeEnum type;
+    private CreditCardTypeEnum creditCardTypeEnum;
 
     public DataInitializationSessionBean() {
     }
@@ -179,10 +188,16 @@ public class DataInitializationSessionBean {
             // service reviews
             Review review1 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Very good service", null), customer1.getCustomerId(), manicure.getServiceId());
             Review review2 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Excellent hair cut!", null), customer2.getCustomerId(), haircut.getServiceId()); 
+            
+            // credit cards
+            CreditCard creditCard1 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard(creditCardTypeEnum.VISA, "Bob Lim", "4024007176761897", "02/23"), customer1.getCustomerId());
+            CreditCard creditCard2 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard(creditCardTypeEnum.MasterCard, "Bob Lim", "5381253539232416", "06/23"), customer1.getCustomerId());
+            CreditCard creditCard3 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard(creditCardTypeEnum.VISA, "The Nail Lounge", "4929954364297059", "06/24"), provider1.getServiceProviderId());
+            CreditCard creditCard4 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard(creditCardTypeEnum.MasterCard, "The Nail Lounge", "5288773275293797", "01/22"), provider1.getServiceProviderId());
 
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException
-                | CreateNewTagException ex) {
+                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException ex) {
             ex.printStackTrace();
         }
     }

@@ -31,7 +31,7 @@
 
         <h:body>
             <h:form id="profileInfo">
-                <p:layout style="min-width:400px;min-height:200px;">
+                <p:layout style="min-width:400px;min-height:300px;">
                     <p:layoutUnit position="west" resizable="false" size="200">
                         Photo
                         
@@ -51,13 +51,13 @@
                         <h:outputText style="font-weight: bold;" value="Contact Number: "/>
                         <h:outputText value="#{customerManagementManagedBean.currentCustomer.contactNum}"/>
                         <br/><br/>
+                        <p:commandButton update="formViewCreditCards" oncomplete="PF('dialogViewCreditCards').show()" value="View Credit Cards" icon="fa fa-credit-card" title="View Credit Cards">
+                        </p:commandButton>
+                        <br/><br/>
                         <p:commandButton actionListener="#{customerManagementManagedBean.doUpdateCustomer}" update="formUpdateCustomer" oncomplete="PF('dialogUpdateCustomer').show()" value="Update Profile" icon="fa fa-pencil" title="Update">
                         </p:commandButton>
                         <span style="display:inline-block; width: 200;"></span>
                         <p:commandButton actionListener="#{customerManagementManagedBean.changePassword}" update="formChangePassword" oncomplete="PF('dialogChangePassword').show()" value="Change Password" icon="fa fa-pencil" title="Change Password">
-                        </p:commandButton>
-                        <span style="display:inline-block; width: 200;"></span>
-                        <p:commandButton update="formViewCreditCards" oncomplete="PF('dialogViewCreditCards').show()" value="View Credit Cards" icon="fa fa-credit-card" title="View Credit Cards">
                         </p:commandButton>
                         
                     </p:layoutUnit> 
@@ -72,10 +72,7 @@
                 <p:messages id="messagesViewCreditCards" redisplay="false" />
                 
                 <p:dataScroller value="#{customerManagementManagedBean.creditCards}" var="creditCard" chunkSize="10">
-                    <f:facet name="header">
-                        Scroll Down to Load More Credit Cards
-                    </f:facet>
-
+                    
                     <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
 
                         <p:outputPanel>
@@ -92,6 +89,16 @@
                                 
                                 <h:outputText value="Expiry Date:" />
                                 <h:outputText value="#{creditCard.expiryDate}" style="font-weight: bold"/>
+                                
+                                <p:commandButton actionListener="#{creditCardManagedBean.doDeleteCreditCard}" update="formViewCreditCards" value="Delete" icon="fa fa-minus-circle" title="Delete">
+                                    <f:attribute name="creditCardToDelete" value="#{creditCard}" />
+                                    <p:confirm header="Delete" message="Are you sure?" icon="fa fa-exclamation-triangle" />
+                                </p:commandButton>
+                                
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times" />
+                                </p:confirmDialog>   
 
                             </h:panelGrid>
                         </p:outputPanel>
