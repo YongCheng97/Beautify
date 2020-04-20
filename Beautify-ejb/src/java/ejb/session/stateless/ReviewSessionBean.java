@@ -202,14 +202,16 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
 
     @Override
-    public List<Review> retrieveProductReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException {
-        List<Review> retrievedReviews = new ArrayList<>(); 
-        List<Review> reviews = retrieveAllReviews(); 
-        
+    public List<Review> retrieveProductReviewsByServiceProviderId(Long serviceProviderId) {
+        List<Review> retrievedReviews = new ArrayList<>();
+        List<Review> reviews = retrieveAllReviews();
+
         for (Review review : reviews) {
             Long providerId = review.getPurchasedLineItem().getProduct().getServiceProvider().getServiceProviderId();
-            if (providerId == serviceProviderId) {
-                retrievedReviews.add(review); 
+            if (providerId != null) {
+                if (providerId == serviceProviderId) {
+                    retrievedReviews.add(review);
+                }
             }
         }
         return retrievedReviews;

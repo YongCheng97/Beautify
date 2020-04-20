@@ -38,8 +38,15 @@
                             <h:outputText style="font-weight: bold" value="Service Name: "/>
                             <h:outputText value="#{service.serviceName}" />
 
-                            <h:outputText style="font-weight: bold" value ="Price:" />
-                            <h:outputText value="$#{service.price}" />
+                            <h:panelGroup rendered="#{sessionScope.service.getServiceName() == false}"> 
+                                <h:outputText style="font-weight: bold" value ="Price:" />
+                                <h:outputText value="$#{service.price}" />
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{sessionScope.service.getServiceName() == true}"> 
+                                <h:outputText style="font-weight: bold" value ="Price:" />
+                                <h:outputText value="$#{service.price}" /> 
+                            </h:panelGroup>
 
                             <h:outputText style="font-weight: bold" value="Description: " />
                             <h:outputText value ="#{service.description}" />

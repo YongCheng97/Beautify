@@ -45,29 +45,28 @@ public class Service implements Serializable {
     @Size(max = 128)
     private String description;
     private File photo;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private ServiceProvider serviceProvider;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Category category;
-    
+
     @ManyToMany
     private List<Tag> tags;
-    
+
     @OneToMany
     private List<Promotion> promotions;
-    
+
     @OneToMany(mappedBy = "service")
     private List<Booking> bookings;
-    
+
     @ManyToMany
     private List<Customer> favouritedCustomers;
-    
-    public Service()
-    {
+
+    public Service() {
         this.tags = new ArrayList<>();
         this.promotions = new ArrayList<>();
         this.bookings = new ArrayList<>();
@@ -80,7 +79,7 @@ public class Service implements Serializable {
         this.description = description;
         this.photo = photo;
     }
-    
+
     public Long getServiceId() {
         return serviceId;
     }
@@ -169,31 +168,46 @@ public class Service implements Serializable {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
-    
+
     public void addTag(Tag tag) {
         if (tag != null) {
             if (!this.tags.contains(tag)) {
                 this.tags.add(tag);
-                
+
                 if (!tag.getServices().contains(this)) {
-                    tag.getServices().add(this); 
+                    tag.getServices().add(this);
                 }
-                      
+
             }
         }
     }
-    
+
     public void removeTag(Tag tag) {
         if (tag != null) {
             if (this.tags.contains(tag)) {
-                this.tags.remove(tag); 
+                this.tags.remove(tag);
                 if (tag.getServices().contains(this)) {
-                    tag.getServices().remove(this); 
+                    tag.getServices().remove(this);
                 }
             }
         }
     }
-        
+
+    public void addPromotion(Promotion promotion) {
+        if (promotion != null) {
+            if (!this.promotions.contains(promotion)) {
+                this.promotions.add(promotion);
+            }
+        }
+    }
+
+    public void removePromotion(Promotion promotion) {
+        if (promotion != null) {
+            if (this.promotions.contains(promotion)) {
+                this.promotions.remove(promotion);
+            }
+        }
+    }
 
     public List<Promotion> getPromotions() {
         return promotions;
@@ -219,5 +233,4 @@ public class Service implements Serializable {
         this.favouritedCustomers = favouritedCustomers;
     }
 
-    
 }

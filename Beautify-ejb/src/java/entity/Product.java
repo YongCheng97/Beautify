@@ -234,8 +234,23 @@ public class Product implements Serializable {
             }
         }
     }
+    
+    public void addPromotion(Promotion promotion) {
+        if (promotion != null) {
+            if (!this.promotions.contains(promotion)) {
+                this.promotions.add(promotion); 
+            }
+        }
+    }
+    
+    public void removePromotion(Promotion promotion) {
+        if (promotion != null) {
+            if (this.promotions.contains(promotion)) {
+                this.promotions.remove(promotion);
+            }
+        }
+    }
         
-
     public List<Customer> getFavouritedCustomers() {
         return favouritedCustomers;
     }

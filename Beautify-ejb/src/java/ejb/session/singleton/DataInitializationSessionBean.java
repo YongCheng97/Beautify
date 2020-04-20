@@ -9,6 +9,7 @@ import ejb.session.stateless.BookingSessionBeanLocal;
 import ejb.session.stateless.CategorySessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.ProductSessionBeanLocal;
+import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
@@ -17,6 +18,7 @@ import entity.Booking;
 import entity.Category;
 import entity.Customer;
 import entity.Product;
+import entity.Promotion;
 import entity.Review;
 import entity.Service;
 import entity.ServiceProvider;
@@ -48,6 +50,7 @@ import util.exception.CustomerExistException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.ProductExistException;
+import util.exception.PromotionNameExistException;
 import util.exception.ReviewExistException;
 import util.exception.ServiceExistException;
 import util.exception.ServiceProviderExistException;
@@ -59,6 +62,9 @@ import util.exception.UnknownPersistenceException;
 @Startup
 
 public class DataInitializationSessionBean {
+
+    @EJB(name = "PromotionSessionBeanLocal")
+    private PromotionSessionBeanLocal promotionSessionBeanLocal;
 
     @EJB(name = "TagsSessionBeanLocal")
     private TagsSessionBeanLocal tagsSessionBeanLocal;
@@ -138,17 +144,17 @@ public class DataInitializationSessionBean {
             Tag tag2 = tagsSessionBeanLocal.createNewTagEntity(new Tag("Popular"));
             Tag tag3 = tagsSessionBeanLocal.createNewTagEntity(new Tag("Discount"));
 
-            List<Long> tagIdsNew = new ArrayList<>(); 
-            tagIdsNew.add(tag1.getTagId()); 
-            
-            List<Long> tagIdsPopular = new ArrayList<>(); 
-            tagIdsPopular.add(tag2.getTagId()); 
-            
-            List<Long> tagIdsDiscount = new ArrayList<>(); 
-            tagIdsDiscount.add(tag3.getTagId()); 
-            
-            List<Long> tagIdsEmpty = new ArrayList<>(); 
-            
+            List<Long> tagIdsNew = new ArrayList<>();
+            tagIdsNew.add(tag1.getTagId());
+
+            List<Long> tagIdsPopular = new ArrayList<>();
+            tagIdsPopular.add(tag2.getTagId());
+
+            List<Long> tagIdsDiscount = new ArrayList<>();
+            tagIdsDiscount.add(tag3.getTagId());
+
+            List<Long> tagIdsEmpty = new ArrayList<>();
+
             // products 
             Product redPolish = productSessionBeanLocal.createNewProduct(new Product("PROD001", "Red Nail Polish", new BigDecimal("20.00"), "Red nail polish is historically bold, daring, and adventurous", null),
                     categoryNailPolish.getCategoryId(), provider1.getServiceProviderId(), tagIdsNew);
@@ -175,14 +181,23 @@ public class DataInitializationSessionBean {
 
             Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf1.parse("03/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), manicure.getServiceId());
             Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Approved", "remarks", sdf1.parse("20/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), haircut.getServiceId());
+            Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("03/04/2020 12:00"), "Approved", "remarks", sdf1.parse("15/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), facial.getServiceId());
 
             // service reviews
             Review review1 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Very good service", null), customer1.getCustomerId(), manicure.getServiceId());
-            Review review2 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Excellent hair cut!", null), customer2.getCustomerId(), haircut.getServiceId()); 
+            Review review2 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Excellent hair cut!", null), customer1.getCustomerId(), haircut.getServiceId());
+
+            // promotion
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yy");
+
+            Promotion promotion1 = promotionSessionBeanLocal.createNewPromotion(new Promotion("10OFF", "10% off", new BigDecimal("00.90"), sdf2.parse("01/04/2020"), sdf2.parse("30/4/2020")));
+            Promotion promotion2 = promotionSessionBeanLocal.createNewPromotion(new Promotion("30OFF", "30% off", new BigDecimal("00.70"), sdf2.parse("10/04/2020"), sdf2.parse("19/5/2020")));
+            redPolish.addPromotion(promotion1);
+            facial.addPromotion(promotion2);
 
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException
-                | CreateNewTagException ex) {
+                | CreateNewTagException | PromotionNameExistException ex) {
             ex.printStackTrace();
         }
     }

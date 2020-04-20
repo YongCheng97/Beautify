@@ -1,9 +1,11 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.ProductSessionBeanLocal;
+import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
 import entity.Product;
+import entity.Promotion;
 import entity.Service;
 import entity.ServiceProvider;
 import java.io.IOException;
@@ -23,6 +25,9 @@ import util.exception.ServiceProviderNotFoundException;
 public class ViewServiceProviderListingsManagedBean implements Serializable {
 
     @EJB
+    private PromotionSessionBeanLocal promotionSessionBean;
+
+    @EJB
     private ServiceProviderSessionBeanLocal serviceProviderSessionBean;
 
     @EJB
@@ -35,6 +40,8 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
     private List<Service> serviceEntities;
     private ServiceProvider providerToView;
 
+    private List<Promotion> promotions;
+
     public ViewServiceProviderListingsManagedBean() {
     }
 
@@ -46,6 +53,32 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
 
         serviceEntities = getProviderToView().getServices();
         setServiceEntities(serviceEntities);
+
+        // promotions
+        promotions = promotionSessionBean.retrieveAllPromotions();
+        for (Promotion promotion : promotions) {
+            for (Service service : serviceEntities) {
+                List<Promotion> servicePromotions = service.getPromotions();
+                for (Promotion spromotion : servicePromotions) {
+                    if (spromotion.equals(promotion)) {
+                        System.out.print("***************** Service promotion" + service.getServiceName());
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(service.getServiceName(), true);
+                    }
+                }
+            }
+        }
+
+        for (Promotion promotion : promotions) {
+            for (Product product : productEntities) {
+                List<Promotion> productPromotions = product.getPromotions();
+                for (Promotion ppromotion : productPromotions) {
+                    if (ppromotion.equals(promotion)) {
+                        System.out.print("***************** Product promotion");
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(product.getName(), true);
+                    }
+                }
+            }
+        }
     }
 
     public void clickLink(ActionEvent event) throws IOException {
