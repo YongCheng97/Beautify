@@ -1,23 +1,32 @@
 package jsf.managedbean;
 
+import ejb.session.stateless.CategorySessionBeanLocal;
 import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.TagsSessionBeanLocal;
+import entity.Category;
 import entity.Product;
 import entity.Tag;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import util.exception.CategoryNotFoundException;
 
 @Named(value = "filterProductsByTagsManagedBean")
 @ViewScoped
 public class FilterProductsByTagsManagedBean implements Serializable {
 
+    @EJB
+    private CategorySessionBeanLocal categorySessionBean;
     @EJB
     private ProductSessionBeanLocal productSessionBean;
     @EJB
@@ -27,6 +36,8 @@ public class FilterProductsByTagsManagedBean implements Serializable {
     private List<Long> selectedTagIds;
     private List<SelectItem> selectItems;
     private List<Product> products;
+    private Long categoryId;
+    private Category category;
 
     public FilterProductsByTagsManagedBean() {
         condition = "OR";
@@ -34,6 +45,12 @@ public class FilterProductsByTagsManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
+        categoryId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("categoryId"));
+        try {
+            category = categorySessionBean.retrieveCategoryByCategoryId(categoryId);
+        } catch (CategoryNotFoundException ex) {
+            Logger.getLogger(FilterProductsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         List<Tag> tagEntities = tagsSessionBean.retrieveAllTags();
         selectItems = new ArrayList<>();
 
@@ -51,10 +68,30 @@ public class FilterProductsByTagsManagedBean implements Serializable {
 
     public void filterProduct() {
         if (selectedTagIds != null && selectedTagIds.size() > 0) {
-            products = productSessionBean.filterProductsByTags(selectedTagIds, condition);
+            products = productSessionBean.filterProductsByTags(selectedTagIds, condition, categoryId);
         } else {
-            products = productSessionBean.retrieveAllProducts();
+            products = productSessionBean.retrieveAllProductsFromCategory(categoryId);
         }
+    }
+
+    public void goToFilterProductByName(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByName.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterProductByMinPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByMinPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterProductByMaxPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByMaxPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterProductByTags(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByTags.xhtml?categoryId=" + categoryId);
+    }
+
+    public void viewAllProducts(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/listingsOfAProductCategory.xhtml?categoryId=" + categoryId);
     }
 
     /**
@@ -111,6 +148,34 @@ public class FilterProductsByTagsManagedBean implements Serializable {
      */
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    /**
+     * @return the categoryId
+     */
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    /**
+     * @param categoryId the categoryId to set
+     */
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    /**
+     * @return the category
+     */
+    public Category getCategory() {
+        return category;
+    }
+
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
 }

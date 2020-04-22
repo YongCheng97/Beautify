@@ -75,6 +75,10 @@ public class CategoryManagementManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByMaxPrice.xhtml?categoryId=" + categoryId);
     }
 
+    public void goToFilterServiceByTags(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByTags.xhtml?categoryId=" + categoryId);
+    }
+
     public void clickLink(ActionEvent event) throws IOException {
         Long productIdToView = (Long) event.getComponent().getAttributes().get("productId");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("productIdToView", productIdToView);

@@ -24,7 +24,7 @@ public interface ServiceSessionBeanLocal {
 
     public List<Service> filterServicesByCategory(Long categoryId) throws CategoryNotFoundException;
 
-    public List<Service> filterServicesByTags(List<Long> tagIds, String condition);
+    public List<Service> filterServicesByTags(List<Long> tagIds, String condition, Long categoryId);
 
     public List<Service> retrieveAllServicesFromCategory(Long categoryId);
 

@@ -15,10 +15,11 @@
                     <h:form>
                         <p:menu>
                             <p:submenu label="Filter" icon="fa fa-filter">
-                                <p:menuitem value="Filter By Name" icon="fa fa-search" actionListener="#{filterProductsByNameManagedBean.goToFilterProductByName}"/>
-                                <p:menuitem value="Filter By Min Price" icon="fa fa-search" actionListener="#{filterProductsByNameManagedBean.goToFilterProductByMinPrice}"/>
-                                <p:menuitem value="Filter By Max Price" icon="fa fa-search" actionListener="#{filterProductsByNameManagedBean.goToFilterProductByMaxPrice}"/>
-                                <p:menuitem value="View All Products" icon="fa fa-list" actionListener="#{filterProductsByNameManagedBean.viewAllProducts}"/>
+                                <p:menuitem value="Filter By Name" icon="fa fa-search" actionListener="#{filterProductsByTagsManagedBean.goToFilterProductByName}"/>
+                                <p:menuitem value="Filter By Min Price" icon="fa fa-search" actionListener="#{filterProductsByTagsManagedBean.goToFilterProductByMinPrice}"/>
+                                <p:menuitem value="Filter By Max Price" icon="fa fa-search" actionListener="#{filterProductsByTagsManagedBean.goToFilterProductByMaxPrice}"/>
+                                <p:menuitem value="Filter By Tags" icon="fa fa-search" actionListener="#{filterProductsByTagsManagedBean.goToFilterProductByTags}"/>
+                                <p:menuitem value="View All Products" icon="fa fa-list" actionListener="#{filterProductsByTagsManagedBean.viewAllProducts}"/>
                             </p:submenu>
                         </p:menu>
                     </h:form>
@@ -27,26 +28,31 @@
 
                     <h:form id="formMain">
 
-                        <br />
-                        <p:outputLabel for="selCondition" value="Condition: " style="font-weight: bold;" />
-                        <p:selectOneMenu id="selCondition" value="#{filterProductsByTagsManagedBean.condition}">
+                        <h3 style="margin-left: 600px"> Filter By Tags </h3>
+                        <div style="display: inline-block; margin-left: 550px">
+                            <div style="position: absolute;
+                                 width: 50px;">
+                                <p:outputLabel for="selCondition" value="Condition: " style="font-weight: bold;" />
+                                <p:selectOneMenu id="selCondition" value="#{filterProductsByTagsManagedBean.condition}">
 
-                            <f:selectItem itemValue="OR" itemLabel="OR" itemDescription="OR" />
-                            <f:selectItem itemValue="AND" itemLabel="AND" itemDescription="AND" />
+                                    <f:selectItem itemValue="OR" itemLabel="OR" itemDescription="OR" />
+                                    <f:selectItem itemValue="AND" itemLabel="AND" itemDescription="AND" />
 
-                            <p:ajax process="@form" update="formMain:dataTableMain" listener="#{filterProductsByTagsManagedBean.filterProduct}" />
+                                    <p:ajax process="@form" update="formMain:dataGridMain" listener="#{filterProductsByTagsManagedBean.filterProduct}" />
 
-                        </p:selectOneMenu>
-
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                        <p:outputLabel for="selTags" value="Tags: " style="font-weight: bold;" />
-                        <p:selectManyMenu id="selTags" value="#{filterProductsByTagsManagedBean.selectedTagIds}" showCheckbox="true">
-                            <f:selectItems value="#{filterProductsByTagsManagedBean.selectItems}" />
-
-                            <p:ajax process="@form" update="formMain:dataTableMain" listener="#{filterProductsByTagsManagedBean.filterProduct}" />
-
-                        </p:selectManyMenu>    
+                                </p:selectOneMenu>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div style="margin-left: 100px; margin-top: -32px">
+                                <p:outputLabel for="selTags" value="Tags: " style="font-weight: bold;" /> 
+                                <p:selectManyMenu id="selTags" value="#{filterProductsByTagsManagedBean.selectedTagIds}" showCheckbox="true">
+                                    <f:selectItems value="#{filterProductsByTagsManagedBean.selectItems}" />
+                                    <p:ajax process="@form" update="formMain:dataGridMain" listener="#{filterProductsByTagsManagedBean.filterProduct}" />
+                                </p:selectManyMenu>  
+                            </div>
+                            <br />
+                        </div>
                         <br />
 
                         <p:dataGrid widgetVar="dataGridMain" var="product" value="#{filterProductsByTagsManagedBean.products}" columns="3" layout="grid"

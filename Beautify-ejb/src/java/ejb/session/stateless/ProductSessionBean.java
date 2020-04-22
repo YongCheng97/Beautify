@@ -83,14 +83,14 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                 serviceProvider.getProducts().add(newProduct);
 
                 em.persist(newProduct);
-                
+
                 if (tagIds != null && (!tagIds.isEmpty())) {
-                    for (Long tagId:tagIds) {
-                        Tag tag = tagsSessionBeanLocal.retrieveTagByTagId(tagId); 
-                        newProduct.addTag(tag); 
+                    for (Long tagId : tagIds) {
+                        Tag tag = tagsSessionBeanLocal.retrieveTagByTagId(tagId);
+                        newProduct.addTag(tag);
                     }
                 }
-                
+
                 em.flush();
 
                 return newProduct;
@@ -230,7 +230,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     }
 
     @Override
-    public List<Product> filterProductsByTags(List<Long> tagIds, String condition) {
+    public List<Product> filterProductsByTags(List<Long> tagIds, String condition, Long categoryId) {
         List<Product> products = new ArrayList<>();
 
         if (tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR"))) {
@@ -264,19 +264,26 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                 Query query = em.createQuery(jpql);
                 products = query.getResultList();
             }
+            List<Product> newProducts = new ArrayList<>();
 
             for (Product product : products) {
+                if (product.getCategory().getCategoryId() == categoryId) {
+                    newProducts.add(product);
+                }
+            }
+
+            for (Product product : newProducts) {
                 product.getCategory();
                 product.getTags().size();
             }
 
-            Collections.sort(products, new Comparator<Product>() {
+            Collections.sort(newProducts, new Comparator<Product>() {
                 public int compare(Product pe1, Product pe2) {
                     return pe1.getSkuCode().compareTo(pe2.getSkuCode());
                 }
             });
 
-            return products;
+            return newProducts;
         }
     }
 

@@ -85,14 +85,14 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
                 serviceProvider.getServices().add(newService);
 
                 em.persist(newService);
-                
+
                 if (tagIds != null && (!tagIds.isEmpty())) {
-                    for (Long tagId:tagIds) {
-                        Tag tag = tagsSessionBeanLocal.retrieveTagByTagId(tagId); 
-                        newService.addTag(tag); 
+                    for (Long tagId : tagIds) {
+                        Tag tag = tagsSessionBeanLocal.retrieveTagByTagId(tagId);
+                        newService.addTag(tag);
                     }
                 }
-                
+
                 em.flush();
 
                 return newService;
@@ -276,7 +276,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
     }
 
     @Override
-    public List<Service> filterServicesByTags(List<Long> tagIds, String condition) {
+    public List<Service> filterServicesByTags(List<Long> tagIds, String condition, Long categoryId) {
         List<Service> services = new ArrayList<>();
 
         if (tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR"))) {
@@ -310,19 +310,27 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
                 Query query = em.createQuery(jpql);
                 services = query.getResultList();
             }
+            
+            List<Service> newServices = new ArrayList<>();
 
             for (Service service : services) {
+                if (service.getCategory().getCategoryId() == categoryId) {
+                    newServices.add(service);
+                }
+            }
+
+            for (Service service : newServices) {
                 service.getCategory();
                 service.getTags().size();
             }
 
-            Collections.sort(services, new Comparator<Service>() {
+            Collections.sort(newServices, new Comparator<Service>() {
                 public int compare(Service se1, Service se2) {
                     return se1.getServiceName().compareTo(se1.getServiceName());
                 }
             });
 
-            return services;
+            return newServices;
         }
     }
 
