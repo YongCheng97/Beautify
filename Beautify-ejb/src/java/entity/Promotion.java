@@ -24,7 +24,7 @@ public class Promotion implements Serializable {
     private Long promotionId;
     @Column(nullable = false, unique = true, length = 7)
     @NotNull
-    @Size(min = 7, max = 7)
+    @Size(min = 5, max = 10)
     private String promoCode;
     @Column(nullable = false, length = 64)
     @NotNull

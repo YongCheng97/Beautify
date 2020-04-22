@@ -3,6 +3,7 @@ package jsf.managedbean;
 import ejb.session.stateless.BookingSessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Booking;
+import entity.CreditCard;
 import entity.Customer;
 import entity.Product;
 import entity.Service;
@@ -46,6 +47,9 @@ public class CustomerManagementManagedBean implements Serializable {
     private String newPassword;
     private String confirmPassword;
     
+    //to get credit card
+    private List<CreditCard> creditCards;
+    
     //to get bookings
     private List<Booking> upcomingBookings;
     private List<Booking> completedBookings;
@@ -83,6 +87,8 @@ public class CustomerManagementManagedBean implements Serializable {
             
             favouriteServices = currentCustomer.getFavouriteServices();
             favouriteProducts = currentCustomer.getFavouriteProducts();
+            
+            creditCards = currentCustomer.getCreditCards();
         }
     }
 
@@ -218,5 +224,13 @@ public class CustomerManagementManagedBean implements Serializable {
 
     public void setFavouriteProducts(List<Product> favouriteProducts) {
         this.favouriteProducts = favouriteProducts;
+    }
+
+    public List<CreditCard> getCreditCards() {
+        return creditCards;
+    }
+
+    public void setCreditCards(List<CreditCard> creditCards) {
+        this.creditCards = creditCards;
     }
 }

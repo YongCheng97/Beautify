@@ -9,6 +9,7 @@ import ejb.session.stateless.ReviewSessionBeanLocal;
 import entity.Review;
 import entity.ServiceProvider;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -44,8 +45,8 @@ public class ViewServiceProviderReviewsManagedBean implements Serializable {
         try {
             setProviderIdToView(getProviderToView().getServiceProviderId());
             this.serviceReviews = reviewSessionBeanLocal.retrieveServiceReviewsByServiceProviderId(getProviderIdToView());
-            System.out.println("********** serviceReviews: " + serviceReviews.size());
-                    
+            System.out.println("********** serviceReviews: " + providerIdToView + serviceReviews.size());
+
             setProductReviews(reviewSessionBeanLocal.retrieveProductReviewsByServiceProviderId(getProviderIdToView()));
         } catch (ServiceProviderNotFoundException ex) {
             ex.printStackTrace();

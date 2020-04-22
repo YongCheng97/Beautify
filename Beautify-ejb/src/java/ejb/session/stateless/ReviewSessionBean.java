@@ -202,14 +202,16 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
 
     @Override
-    public List<Review> retrieveProductReviewsByServiceProviderId(Long serviceProviderId) throws ServiceProviderNotFoundException {
-        List<Review> retrievedReviews = new ArrayList<>(); 
-        List<Review> reviews = retrieveAllReviews(); 
-        
+    public List<Review> retrieveProductReviewsByServiceProviderId(Long serviceProviderId) {
+        List<Review> retrievedReviews = new ArrayList<>();
+        List<Review> reviews = retrieveAllReviews();
+
         for (Review review : reviews) {
             Long providerId = review.getPurchasedLineItem().getProduct().getServiceProvider().getServiceProviderId();
-            if (providerId == serviceProviderId) {
-                retrievedReviews.add(review); 
+            if (providerId != null) {
+                if (providerId == serviceProviderId) {
+                    retrievedReviews.add(review);
+                }
             }
         }
         return retrievedReviews;
@@ -239,6 +241,12 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
         Review reviewToRemove = retrieveReviewByReviewId(reviewId);
         Customer customer = reviewToRemove.getCustomer();
         customer.getReviews().remove(reviewToRemove);
+        
+        Booking booking = reviewToRemove.getBooking();
+        booking.setReview(null);
+        
+        PurchasedLineItem purchasedLineItem = reviewToRemove.getPurchasedLineItem();
+        purchasedLineItem.setReview(null);
 
         em.remove(reviewToRemove);
     }

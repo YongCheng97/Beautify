@@ -10,7 +10,7 @@
 
     <ui:define name="content"> 
         <ez:menubar/>
-        <p:tabMenu activeIndex="#{param.i}">
+        <p:tabMenu activeIndex="2">
             <p:menuitem value="Profile" outcome="/customerOperations/serviceProviderProfile" icon="fa fa-user">
                 <f:param name="i" value="0" />
             </p:menuitem>
@@ -54,14 +54,14 @@
 
                                 <br></br>
 
-                                <h:outputText value="Product Purchased:" />
-                                <h:outputText value="#{productReview.purchasedLineItem.product.name}" style="font-weight: bold"/>
+                                <h:outputText value="Product Purchased:" style="font-weight: bold"/>
+                                <h:outputText value="#{productReview.purchasedLineItem.product.name}"/>
 
-                                <h:outputText value="Rating:" />
+                                <h:outputText value="Rating:" style="font-weight: bold"/>
                                 <p:rating value="#{productReview.rating}" readonly="true" />
 
-                                <h:outputText value="Description:" />
-                                <h:outputText value="#{productReview.description}" style="font-weight: bold"/>
+                                <h:outputText value="Description:" style="font-weight: bold"/>
+                                <h:outputText value="#{productReview.description}"/>
 
                             </h:panelGrid>
                         </p:outputPanel>
