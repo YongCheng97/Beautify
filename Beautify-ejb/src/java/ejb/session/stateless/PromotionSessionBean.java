@@ -1,6 +1,10 @@
 package ejb.session.stateless;
 
+import entity.Product;
 import entity.Promotion;
+import entity.Service;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Local;
@@ -31,11 +35,9 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
-    
+
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
-    
 
     public PromotionSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -43,8 +45,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public Promotion createNewPromotion(Promotion newPromotion) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException
-    {
+    public Promotion createNewPromotion(Promotion newPromotion) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
         try {
             Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(newPromotion);
 
@@ -56,120 +57,137 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
             } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
             }
-        }
-        catch(PersistenceException ex)
-        {
-            if(ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException"))
-            {
-                if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
-                {
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
                     throw new PromotionNameExistException();
-                }
-                else
-                {
+                } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            }
-            else
-            {
+            } else {
                 throw new UnknownPersistenceException(ex.getMessage());
             }
         }
     }
-    
+
     @Override
-    public List<Promotion> retrieveAllPromotions()
-    {
+    public List<Promotion> retrieveAllPromotions() {
         Query query = em.createQuery("SELECT p FROM Promotion p");
-        
+
         return query.getResultList();
     }
-    
+
     @Override
-    public Promotion retrievePromotionByPromotionId(Long promotionId) throws PromotionNotFoundException
-    {
+    public Promotion retrievePromotionByPromotionId(Long promotionId) throws PromotionNotFoundException {
         Promotion promotion = em.find(Promotion.class, promotionId);
-        
-        if(promotion != null)
-        {
+
+        if (promotion != null) {
             return promotion;
-        }
-        else
-        {
+        } else {
             throw new PromotionNotFoundException("Promotion ID " + promotionId + " does not exist!");
         }
     }
-    
+
     @Override
-    public Promotion retrievePromotionByName(String name) throws PromotionNotFoundException
-    {
+    public Promotion retrievePromotionByName(String name) throws PromotionNotFoundException {
         Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.name = :inName");
         query.setParameter("inName", name);
-        
-        try
-        {
-            return (Promotion)query.getSingleResult();
-        }
-        catch(NoResultException | NonUniqueResultException ex)
-        {
+
+        try {
+            return (Promotion) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new PromotionNotFoundException("Promotion name " + name + " does not exist!");
         }
     }
-    
+
     @Override
-    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException
-    {
-        if(promotion != null && promotion.getPromotionId()!= null)
-        {
-            Set<ConstraintViolation<Promotion>>constraintViolations = validator.validate(promotion);
-        
-            if(constraintViolations.isEmpty())
-            {
+    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException {
+        if (promotion != null && promotion.getPromotionId() != null) {
+            Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(promotion);
+
+            if (constraintViolations.isEmpty()) {
                 Promotion promotionToUpdate = retrievePromotionByPromotionId(promotion.getPromotionId());
 
-                if(promotionToUpdate.getPromoCode().equals(promotion.getPromoCode()))
-                {
+                if (promotionToUpdate.getPromoCode().equals(promotion.getPromoCode())) {
                     promotionToUpdate.setDiscountRate(promotion.getDiscountRate());
                     promotionToUpdate.setStartDate(promotion.getStartDate());
                     promotionToUpdate.setEndDate(promotion.getEndDate());
                     promotionToUpdate.setName(promotion.getName());
-                    
-                }
-                else
-                {
+
+                } else {
                     throw new UpdatePromotionException("Promo Code of promotion record to be updated does not match the existing record");
                 }
-            }
-            else
-            {
+            } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
             }
-        }
-        else
-        {
+        } else {
             throw new PromotionNotFoundException("Promotion ID not provided for promotion to be updated");
         }
     }
-    
+
     @Override
-    public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException
-    {
+    public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException {
         Promotion promotionToRemove = retrievePromotionByPromotionId(promotionId);
-        
+
         em.remove(promotionToRemove);
     }
-    
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Promotion>>constraintViolations)
-    {
+
+    @Override
+    public void updateServiceDiscountPrice(Service service) {
+        List<Promotion> promotions = service.getPromotions();
+        if (promotions.isEmpty()) {
+            service.setDiscountPrice(null);
+        } else {
+            Date date = new Date();
+            BigDecimal discountPrice = new BigDecimal(0);
+            Boolean update = false;
+
+            for (Promotion promotion : promotions) {
+                if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
+                    discountPrice = service.getPrice().multiply(promotion.getDiscountRate());
+                    service.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
+                    update = true;
+                }
+            }
+
+            if (!update) {
+                service.setDiscountPrice(null);
+            }
+        }
+    }
+
+    @Override
+    public void updateProductDiscountPrice(Product product) {
+        List<Promotion> promotions = product.getPromotions();
+        if (promotions.isEmpty()) {
+            product.setDiscountPrice(null);
+        } else {
+            Date date = new Date();
+            BigDecimal discountPrice = new BigDecimal(0);
+            Boolean update = false;
+
+            for (Promotion promotion : promotions) {
+                if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
+                    discountPrice = product.getPrice().multiply(promotion.getDiscountRate());
+                    product.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
+                    update = true;
+                }
+            }
+
+            if (!update) { // no current working promo 
+                product.setDiscountPrice(null);
+            }
+        }
+    }
+
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Promotion>> constraintViolations) {
         String msg = "Input data validation error!:";
-            
-        for(ConstraintViolation constraintViolation:constraintViolations)
-        {
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
             msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
         }
-        
+
         return msg;
     }
-    
-    
+
 }

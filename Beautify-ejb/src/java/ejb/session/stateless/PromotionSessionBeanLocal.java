@@ -5,7 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.Product;
 import entity.Promotion;
+import entity.Service;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.DeletePromotionException;
@@ -33,5 +35,9 @@ public interface PromotionSessionBeanLocal {
     public void updatePromotion(Promotion promotion) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException;
 
     public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException;
-    
+
+    public void updateProductDiscountPrice(Product product);
+
+    public void updateServiceDiscountPrice(Service service);
+
 }

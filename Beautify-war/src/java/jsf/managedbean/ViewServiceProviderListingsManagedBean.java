@@ -55,44 +55,21 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
         setServiceEntities(serviceEntities);
 
         // promotions
-        promotions = promotionSessionBean.retrieveAllPromotions();
-        for (Promotion promotion : promotions) {
-            for (Service service : serviceEntities) {
-                List<Promotion> servicePromotions = service.getPromotions();
-                for (Promotion spromotion : servicePromotions) {
-                    if (spromotion.equals(promotion)) {
-                        Date date = new Date();
-                        BigDecimal discountPrice = new BigDecimal(0);
-
-                        if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
-                            discountPrice = service.getPrice().multiply(promotion.getDiscountRate());
-                            service.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
-
-                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(service.getServiceName(), true);
-                            break;
-                        }
-                    }
-                }
+        for (Service service : serviceEntities) {
+            promotionSessionBean.updateServiceDiscountPrice(service);
+            if (service.getDiscountPrice() == null) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(service.getServiceName(), false);
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(service.getServiceName(), true);
             }
         }
 
-        for (Promotion promotion : promotions) {
-            for (Product product : productEntities) {
-                List<Promotion> productPromotions = product.getPromotions();
-                for (Promotion ppromotion : productPromotions) {
-                    if (ppromotion.equals(promotion)) {
-                        Date date = new Date();
-                        BigDecimal discountPrice = new BigDecimal(0);
-
-                        if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
-                            discountPrice = product.getPrice().multiply(promotion.getDiscountRate());
-                            product.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
-
-                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(product.getName(), true);
-                            break;
-                        }
-                    }
-                }
+        for (Product product : productEntities) {
+            promotionSessionBean.updateProductDiscountPrice(product);
+            if (product.getDiscountPrice() == null) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(product.getName(), false);
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(product.getName(), true);
             }
         }
     }
