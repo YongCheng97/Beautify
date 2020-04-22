@@ -11,7 +11,7 @@
     <ui:define name="content">
         <ez:menubar/>
 
-        <p:tabMenu activeIndex="#{param.i}">
+        <p:tabMenu activeIndex="1">
             <p:menuitem value="Profile" outcome="customerProfile.xhtml" icon="fa fa-user">
                 <f:param name="i" value="0" />
             </p:menuitem>
@@ -76,8 +76,12 @@
 
 <!--                            <p:commandButton actionListener="#{customerManagementManagedBean.doUpdateCustomer}" update="formUpdateCustomer" oncomplete="PF('dialogUpdateCustomer').show()" value="Update Profile" icon="fa fa-pencil" title="Update">
 </p:commandButton>-->
-                            
-                            <p:commandButton actionListener="#{leaveReviewManagedBean.doLeaveReview}" update="formLeaveReview" oncomplete="PF('dialogLeaveReview').show()" value="Leave Review" icon="fa fa-thumbs-o-up" title="Leave Review">
+
+                            <p:commandButton actionListener="#{leaveReviewManagedBean.doLeaveReview}" update="bookingInfo formLeaveReview" oncomplete="PF('dialogLeaveReview').show()" value="Leave Review" icon="fa fa-thumbs-o-up" title="Leave Review" rendered="#{booking.review == null}">
+                                <f:attribute name="bookingToReview" value="#{booking}" />
+                            </p:commandButton>
+
+                            <p:commandButton actionListener="#{leaveReviewManagedBean.doViewReview}" update=" bookingInfo formViewReview" oncomplete="PF('dialogViewReview').show()" value="View Review" icon="fa fa-thumbs-o-up" title="View Review" rendered="#{booking.review != null}">
                                 <f:attribute name="bookingToReview" value="#{booking}" />
                             </p:commandButton>
 
@@ -91,6 +95,93 @@
 
         </h:body>
 
+        <h:form id="formViewReview">
+
+            <p:dialog id="dialogViewReview" widgetVar="dialogViewReview" header="View Review" closable="true">
+
+                <p:messages id="messagesViewReview" redisplay="false" />
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <h:outputText value="Rating:" />
+                    <p:rating value="#{leaveReviewManagedBean.review.rating}" readonly="true"/>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Description: " />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="#{leaveReviewManagedBean.review.description}"/>
+                        </p:column>
+                    </p:row>
+
+                    <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
+
+                    <p:row>
+                        <p:column colspan="2" style="text-align:center">
+                            <p:commandButton update="@form bookingInfo formUpdateReview" oncomplete="PF('dialogUpdateReview').show()" value="Update Review" title="Update Review"/>                 
+                        </p:column>
+                    </p:row>
+                    <p:row>                        
+                        <p:column colspan="2" style="text-align:center">
+                            <p:commandButton value="Delete Review" update="bookingInfo" actionListener="#{leaveReviewManagedBean.deleteReview}" oncomplete="PF('dialogViewReview').show();" >
+                                <p:confirm header="Delete" message="Are you sure?" icon="fa fa-exclamation-triangle" />
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times" />
+                        </p:confirmDialog>   
+                    </p:row>
+
+                </h:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+        
+        <h:form id="formUpdateReview">
+
+            <p:dialog id="dialogUpdateReview" widgetVar="dialogUpdateReview" header="Update Review" closable="true">
+
+                <p:messages id="messagesUpdateReview" redisplay="false" />
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <h:outputText value="Rating:" />
+                    <p:rating value="#{leaveReviewManagedBean.review.rating}" />
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="description" value="Description: " />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:inputText id="description" value="#{leaveReviewManagedBean.review.description}" placeholder="How was the service?" required="false" style="height:100px;width:500px"/>
+                        </p:column>
+                        <p:column>
+                            <p:message for="description" />
+                        </p:column>
+                    </p:row>
+
+                    <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
+
+                    <p:row>
+                        <p:column colspan="2" style="text-align:center">
+                            <p:commandButton value="Update Review" update="@form bookingInfo formViewReview" actionListener="#{leaveReviewManagedBean.updateReview}" oncomplete="PF('dialogUpdateReview').show();" />
+                        </p:column>
+                    </p:row>
+
+                </h:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+
         <h:form id="formLeaveReview">
 
             <p:dialog id="dialogLeaveReview" widgetVar="dialogLeaveReview" header="Leave Review" closable="true">
@@ -101,7 +192,7 @@
 
                     <h:outputText value="Rating:" />
                     <p:rating value="#{leaveReviewManagedBean.review.rating}" />
-                    
+
                     <p:row>
                         <p:column>
                             <p:outputLabel for="description" value="Description: " />

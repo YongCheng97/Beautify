@@ -42,6 +42,10 @@ public class Product implements Serializable {
     @Size(max = 128)
     private String description;
     private String photo;
+    @Column(precision = 11, scale = 2)
+    @DecimalMin("0.00")
+    @Digits(integer = 9, fraction = 2)
+    private BigDecimal discountPrice;
 
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
@@ -50,32 +54,32 @@ public class Product implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private ServiceProvider serviceProvider;
-    
+
     @ManyToMany
     private List<Customer> favouritedCustomers;
-    
+
     @ManyToMany
     private List<Tag> tags;
-    
+
     @OneToMany
     private List<Promotion> promotions;
 
     public Product() {
         this.price = new BigDecimal("0.00");
-        
+
         this.tags = new ArrayList<>();
         this.favouritedCustomers = new ArrayList<>();
         this.promotions = new ArrayList<>();
     }
 
-    public Product(String skuCode, String name, BigDecimal price, String description, String photo) {
-
+    public Product(String skuCode, String name, BigDecimal price, String description, String photo, BigDecimal discountPrice) {
         this();
         this.skuCode = skuCode;
         this.name = name;
         this.price = price;
         this.description = description;
         this.photo = photo;
+        this.discountPrice = discountPrice;
     }
 
     public Long getProductId() {
@@ -210,39 +214,39 @@ public class Product implements Serializable {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
-    
+
     public void addTag(Tag tag) {
         if (tag != null) {
             if (!this.tags.contains(tag)) {
                 this.tags.add(tag);
-                
+
                 if (!tag.getProducts().contains(this)) {
-                    tag.getProducts().add(this); 
+                    tag.getProducts().add(this);
                 }
-                      
+
             }
         }
     }
-    
+
     public void removeTag(Tag tag) {
         if (tag != null) {
             if (this.tags.contains(tag)) {
-                this.tags.remove(tag); 
+                this.tags.remove(tag);
                 if (tag.getProducts().contains(this)) {
-                    tag.getProducts().remove(this); 
+                    tag.getProducts().remove(this);
                 }
             }
         }
     }
-    
+
     public void addPromotion(Promotion promotion) {
         if (promotion != null) {
             if (!this.promotions.contains(promotion)) {
-                this.promotions.add(promotion); 
+                this.promotions.add(promotion);
             }
         }
     }
-    
+
     public void removePromotion(Promotion promotion) {
         if (promotion != null) {
             if (this.promotions.contains(promotion)) {
@@ -250,7 +254,7 @@ public class Product implements Serializable {
             }
         }
     }
-        
+
     public List<Customer> getFavouritedCustomers() {
         return favouritedCustomers;
     }
@@ -265,6 +269,14 @@ public class Product implements Serializable {
 
     public void setPromotions(List<Promotion> promotions) {
         this.promotions = promotions;
+    }
+
+    public BigDecimal getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public void setDiscountPrice(BigDecimal discountPrice) {
+        this.discountPrice = discountPrice;
     }
 
 }

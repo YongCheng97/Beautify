@@ -10,15 +10,15 @@ import entity.Service;
 import entity.ServiceProvider;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import util.exception.ServiceProviderNotFoundException;
 
 @Named(value = "listingsManagedBean")
 @ViewScoped
@@ -61,8 +61,16 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
                 List<Promotion> servicePromotions = service.getPromotions();
                 for (Promotion spromotion : servicePromotions) {
                     if (spromotion.equals(promotion)) {
-                        System.out.print("***************** Service promotion" + service.getServiceName());
-                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(service.getServiceName(), true);
+                        Date date = new Date();
+                        BigDecimal discountPrice = new BigDecimal(0);
+
+                        if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
+                            discountPrice = service.getPrice().multiply(promotion.getDiscountRate());
+                            service.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
+
+                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(service.getServiceName(), true);
+                            break;
+                        }
                     }
                 }
             }
@@ -73,8 +81,16 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
                 List<Promotion> productPromotions = product.getPromotions();
                 for (Promotion ppromotion : productPromotions) {
                     if (ppromotion.equals(promotion)) {
-                        System.out.print("***************** Product promotion");
-                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(product.getName(), true);
+                        Date date = new Date();
+                        BigDecimal discountPrice = new BigDecimal(0);
+
+                        if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
+                            discountPrice = product.getPrice().multiply(promotion.getDiscountRate());
+                            product.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
+
+                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(product.getName(), true);
+                            break;
+                        }
                     }
                 }
             }

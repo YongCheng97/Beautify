@@ -38,15 +38,18 @@
                             <h:outputText style="font-weight: bold" value="Service Name: "/>
                             <h:outputText value="#{service.serviceName}" />
 
-                            <h:panelGroup rendered="#{sessionScope.service.getServiceName() == false}"> 
-                                <h:outputText style="font-weight: bold" value ="Price:" />
-                                <h:outputText value="$#{service.price}" />
-                            </h:panelGroup>
+                            <h:outputText style="font-weight: bold" value ="Price:" />
 
-                            <h:panelGroup rendered="#{sessionScope.service.getServiceName() == true}"> 
-                                <h:outputText style="font-weight: bold" value ="Price:" />
-                                <h:outputText value="$#{service.price}" /> 
-                            </h:panelGroup>
+                            <!-- <h:panelGroup rendered="#{sessionScope.service.getServiceName() == false}"> 
+                                <h:outputText value="$#{service.price}" />
+                            </h:panelGroup> --> 
+
+                            <!-- <h:panelGroup rendered="#{sessionScope.service.getServiceName() == true}"> -->
+                                <div class="table">
+                                    <th><h:outputText value="$#{service.price}" style="text-decoration: line-through;"/></th>
+                                    <th><h:outputText value="$#{service.discountPrice}"  style="color: red"/> </th>
+                                </div>
+                            <!-- </h:panelGroup> --> 
 
                             <h:outputText style="font-weight: bold" value="Description: " />
                             <h:outputText value ="#{service.description}" />
