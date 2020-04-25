@@ -2,10 +2,13 @@ package jsf.managedbean;
 
 import ejb.session.stateless.ProductSessionBeanLocal;
 import entity.Product;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 
@@ -40,4 +43,9 @@ public class ViewAllProductsManagedBean implements Serializable{
         this.products = products;
     }
     
+    public void viewProduct(ActionEvent event) throws IOException {
+        Long productIdToView = (Long) event.getComponent().getAttributes().get("productId");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("productIdToView", productIdToView);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml");
+    }
 }

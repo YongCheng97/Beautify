@@ -45,7 +45,7 @@ public class viewProductDetailsManagedBean implements Serializable
             productToView = productSessionBeanLocal.retrieveProductByProdId(productIdToView);
             productImages = new ArrayList<String>();
             
-            for (int i=1; i<=5; i++) {
+            for (int i=1; i<=3; i++) {
                 productImages.add(productToView.getName() + i + ".jpg");
             }
         }

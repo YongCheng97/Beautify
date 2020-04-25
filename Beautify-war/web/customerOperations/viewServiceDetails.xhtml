@@ -9,39 +9,36 @@
 
     <ui:define name="content">
         <ez:menubar/>
-        <!--        <ez:Breadcrumb pageName="viewProductDetails" />-->
         <div>
-            <h3>View Product Details</h3>
-            <br/> 
+            <h3>View Service Details</h3>
+            <br/>
+            
             <h:body>
                 <p:layout style="min-width: 500px;min-height:425px">
 
                     <p:layoutUnit position="west" size="520">
 
-                        <p:galleria value="#{viewProductDetailsManagedBean.productImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
+                        <p:galleria value="#{viewServiceDetailsManagedBean.serviceImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
                             <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
                         </p:galleria>
                     </p:layoutUnit>
 
                     <p:layoutUnit position="center">
-                        <h2>Product Details</h2>
+                        <h2>Service Details</h2>
                         <p:panelGrid columns="2">
-                            <h:outputLabel value="Seller Name:"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}"/>
+                            <h:outputLabel value="Service Provider Name:"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}"/>
+
+                            <h:outputLabel value="Service Name:"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
+
+                            <h:outputLabel value="Service Desription:"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.description}"/>
+
+                            <h:outputLabel value="Service Price:"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.price}"/>
                             
-                            <h:outputLabel value="Product SKU code:"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.skuCode}"/>
-
-                            <h:outputLabel value="Product Name:"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.name}"/>
-
-                            <h:outputLabel value="Product Desription:"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.description}"/>
-
-                            <h:outputLabel value="Product Price:"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.price}"/>
-                            
-                            <h:outputLabel value="Product Tags"/>
+                            <h:outputLabel value="Service Tags"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.tags}"/>
 
 
@@ -49,9 +46,8 @@
                     </p:layoutUnit>
                 </p:layout>
             </h:body>
+            
         </div>
-
     </ui:define>
-
 </ui:composition>
 

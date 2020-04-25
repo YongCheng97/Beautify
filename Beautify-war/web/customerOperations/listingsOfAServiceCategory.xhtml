@@ -46,8 +46,9 @@
                                     <h:outputText value="#{service.description}" />
                                     <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
                                 </h:panelGrid>
-                                <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                                <p:commandLink actionListener="#{categoryManagementManagedBean.viewService}" style="text-decoration:none;color:blue;">
                                     <h:outputText value = "Click here for more information!"/>
+                                    <f:attribute name="serviceId" value="#{service.serviceId}" />
                                 </p:commandLink>
                             </p:panel>
 

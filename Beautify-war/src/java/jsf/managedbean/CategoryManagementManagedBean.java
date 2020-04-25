@@ -79,10 +79,16 @@ public class CategoryManagementManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByTags.xhtml?categoryId=" + categoryId);
     }
 
-    public void clickLink(ActionEvent event) throws IOException {
+    public void viewProduct(ActionEvent event) throws IOException {
         Long productIdToView = (Long) event.getComponent().getAttributes().get("productId");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("productIdToView", productIdToView);
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml");
+    }
+    
+    public void viewService(ActionEvent event) throws IOException {
+        Long serviceIdToView = (Long) event.getComponent().getAttributes().get("serviceId");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("serviceIdToView", serviceIdToView);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewServiceDetails.xhtml");
     }
 
     //use requestParameterMap
