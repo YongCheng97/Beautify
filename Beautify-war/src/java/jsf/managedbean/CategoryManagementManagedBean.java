@@ -47,16 +47,40 @@ public class CategoryManagementManagedBean implements Serializable {
         }
     }
 
-    public void goToFilterProduct(ActionEvent event) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProducts.xhtml?categoryId=" + categoryId);
+    public void goToFilterProductByName(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByName.xhtml?categoryId=" + categoryId);
     }
 
-    public void goToFilterService(ActionEvent event) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServices.xhtml?categoryId=" + categoryId);
+    public void goToFilterProductByMinPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByMinPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterProductByMaxPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByMaxPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterProductByTags(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByTags.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterServiceByName(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByName.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterServiceByMinPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByMinPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterServiceByMaxPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByMaxPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterServiceByTags(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByTags.xhtml?categoryId=" + categoryId);
     }
 
     public void clickLink(ActionEvent event) throws IOException {
-        Long productIdToView = (Long)event.getComponent().getAttributes().get("productId");
+        Long productIdToView = (Long) event.getComponent().getAttributes().get("productId");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("productIdToView", productIdToView);
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml");
     }

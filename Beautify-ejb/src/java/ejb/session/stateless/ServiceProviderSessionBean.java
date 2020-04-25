@@ -100,6 +100,18 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
     }
 
     @Override
+    public ServiceProvider retrieveServiceProviderByEmail(String email) throws ServiceProviderNotFoundException{
+        Query query = em.createQuery("SELECT s FROM ServiceProvider s WHERE s.email = :inEmail");
+        query.setParameter("inEmail", email);
+
+        try {
+            return (ServiceProvider) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new ServiceProviderNotFoundException("Service Provider email " + email + " does not exist!");
+        }
+    }
+
+    @Override
     public ServiceProvider serviceProviderLogin(String username, String password) throws InvalidLoginCredentialException {
         try {
             ServiceProvider serviceProvider = retrieveServiceProviderByName(username);
@@ -234,7 +246,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
                 Query query1 = em.createQuery(jpql1);
                 List<ServiceProvider> result = query1.getResultList();
                 for (ServiceProvider sp : result) {
-                    providers.add(sp); 
+                    providers.add(sp);
                 }
             }
 

@@ -18,9 +18,9 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import util.exception.CategoryNotFoundException;
 
-@Named(value = "filterServicesManagedBean")
+@Named(value = "filterServicesByMaxPriceManagedBean")
 @ViewScoped
-public class FilterServicesManagedBean implements Serializable{
+public class FilterServicesByMaxPriceManagedBean implements Serializable {
 
     @EJB
     private ServiceSessionBeanLocal serviceSessionBean;
@@ -28,16 +28,12 @@ public class FilterServicesManagedBean implements Serializable{
     @EJB
     private CategorySessionBeanLocal categorySessionBean;
 
-    private String searchString;
     private Long categoryId;
-    private String minPrice;
     private String maxPrice;
     private List<Service> services;
     private Category category;
 
-    public FilterServicesManagedBean() {
-        searchString = "";
-        minPrice = "";
+    public FilterServicesByMaxPriceManagedBean() {
         maxPrice = "";
     }
 
@@ -49,41 +45,38 @@ public class FilterServicesManagedBean implements Serializable{
         try {
             category = categorySessionBean.retrieveCategoryByCategoryId(categoryId);
         } catch (CategoryNotFoundException ex) {
-            Logger.getLogger(FilterProductsManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FilterProductsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         services = (serviceSessionBean.retrieveAllServicesFromCategory(categoryId));
     }
 
     public void searchService() {
-        if ((searchString == "" || searchString.trim().length() == 0) && (minPrice == "" || minPrice.trim().length() == 0) && (maxPrice == "" || maxPrice.trim().length() == 0)) {
+        if (maxPrice == "" || maxPrice.trim().length() == 0) {
             services = (serviceSessionBean.retrieveAllServicesFromCategory(categoryId));
-        } else if ((searchString != "" || searchString.trim().length() != 0) && (minPrice == "" || minPrice.trim().length() == 0) && (maxPrice == "" || maxPrice.trim().length() == 0)) {
-            services = (serviceSessionBean.filterServicesByName(searchString, categoryId));
-        } else if ((minPrice != "" || minPrice.trim().length() != 0) && (searchString == "" || searchString.trim().length() == 0) && (maxPrice == "" || maxPrice.trim().length() == 0)) {
-            BigDecimal minPriceBigDecimal = new BigDecimal(minPrice);
-            services = serviceSessionBean.filterServicesByMinimumPrice(minPriceBigDecimal, categoryId);
-        } else if ((minPrice == "" || minPrice.trim().length() == 0) && (searchString == "" || searchString.trim().length() == 0) && (maxPrice != "" || maxPrice.trim().length() != 0)) {
+        } else {
             BigDecimal maxPriceBigDecimal = new BigDecimal(maxPrice);
             services = serviceSessionBean.filterServicesByMaximumPrice(maxPriceBigDecimal, categoryId);
         }
     }
 
-    public void clickLink(ActionEvent event) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml?categoryId=" + categoryId);
+    public void goToFilterServiceByName(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByName.xhtml?categoryId=" + categoryId);
     }
 
-    /**
-     * @return the searchString
-     */
-    public String getSearchString() {
-        return searchString;
+    public void goToFilterServiceByMinPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByMinPrice.xhtml?categoryId=" + categoryId);
     }
 
-    /**
-     * @param searchString the searchString to set
-     */
-    public void setSearchString(String searchString) {
-        this.searchString = searchString;
+    public void goToFilterServiceByMaxPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByMaxPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterServiceByTags(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/services/filterServicesByTags.xhtml?categoryId=" + categoryId);
+    }
+
+    public void viewAllServices(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/listingsOfAServiceCategory.xhtml?categoryId=" + categoryId);
     }
 
     /**
@@ -98,20 +91,6 @@ public class FilterServicesManagedBean implements Serializable{
      */
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
-    }
-
-    /**
-     * @return the minPrice
-     */
-    public String getMinPrice() {
-        return minPrice;
-    }
-
-    /**
-     * @param minPrice the minPrice to set
-     */
-    public void setMinPrice(String minPrice) {
-        this.minPrice = minPrice;
     }
 
     /**

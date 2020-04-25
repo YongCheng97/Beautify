@@ -25,15 +25,60 @@
                             <h:outputText value="#{category.name}"/>
                         </f:facet>
 
-                        <h:outputText value="Type:" />
-                        <h:outputText value="#{category.type}" />
 
-                        <h:outputText value="Description" />
-                        <h:outputText value="#{category.description}" />
-                    </p:panelGrid>
-                    <p:graphicImage library="images" name="Facial.jpg" height="120" width="150" alt ="" />
+                <p:carousel value="#{viewAllProductsManagedBean.products}" headerText="Browse by Products" var="product" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
+                    <!--                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{product.name}"/>
+                                            </f:facet>
+                    
+                                            <h:outputText value="Price: $" />
+                                            <h:outputText value="#{product.price}" />
+                    
+                                            <h:outputText value="Description: " />
+                                            <h:outputText value="#{product.description}" />
+                    
+                                            <p:graphicImage library="images" name="#{product.name}.jpg" height="120" width="150" alt ="" />
+                                        </p:panelGrid>-->
+                    <p:panel header="#{product.name}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+                            <h:outputText value= "Price: $#{product.price}" style="text-align:center"/>
+                            <h:outputText value="Description: #{product.description}" style="text-align:center"/>
+                            <p:graphicImage library="images" name ="#{product.name}.jpg" height="120" width="170" alt ="" />
+                        </h:panelGrid>
+                        <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                            <h:outputText value = "Click here for more information!"/>
+                            <f:attribute name="productId" value="#{product.productId}" />
+                        </p:commandLink>
+                    </p:panel>
                 </p:carousel>
-
+                <br/>
+                <p:carousel value="#{viewAllServicesManagedBean.services}" headerText="Browse by Services" var="service" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
+                    <!--                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{product.name}"/>
+                                            </f:facet>
+                    
+                                            <h:outputText value="Price: $" />
+                                            <h:outputText value="#{product.price}" />
+                    
+                                            <h:outputText value="Description: " />
+                                            <h:outputText value="#{product.description}" />
+                    
+                                            <p:graphicImage library="images" name="#{product.name}.jpg" height="120" width="150" alt ="" />
+                                        </p:panelGrid>-->
+                    <p:panel header="#{service.serviceName}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+                            <h:outputText value= "Price: $#{service.price}" style="text-align:center"/>
+                            <h:outputText value="Description: #{service.description}" style="text-align:center"/>
+                            <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
+                        </h:panelGrid>
+                        <p:commandLink actionListener="#{categoryManagementManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                            <h:outputText value = "Click here for more information!"/>
+                            <f:attribute name="productId" value="#{product.productId}" />
+                        </p:commandLink>
+                    </p:panel>
+                </p:carousel>
             </article>
         </h:panelGroup>
 

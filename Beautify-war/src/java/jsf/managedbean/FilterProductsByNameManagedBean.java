@@ -18,9 +18,9 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import util.exception.CategoryNotFoundException;
 
-@Named(value = "filterProductsManagedBean")
+@Named(value = "filterProductsByNameManagedBean")
 @ViewScoped
-public class FilterProductsManagedBean implements Serializable {
+public class FilterProductsByNameManagedBean implements Serializable {
 
     @EJB
     private CategorySessionBeanLocal categorySessionBean;
@@ -35,7 +35,7 @@ public class FilterProductsManagedBean implements Serializable {
     private List<Product> products;
     private Category category;
 
-    public FilterProductsManagedBean() {
+    public FilterProductsByNameManagedBean() {
         searchString = "";
         minPrice = "";
         maxPrice = "";
@@ -49,7 +49,7 @@ public class FilterProductsManagedBean implements Serializable {
         try {
             category = categorySessionBean.retrieveCategoryByCategoryId(categoryId);
         } catch (CategoryNotFoundException ex) {
-            Logger.getLogger(FilterProductsManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FilterProductsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         products = (productSessionBean.retrieveAllProductsFromCategory(categoryId));
     }
@@ -70,6 +70,26 @@ public class FilterProductsManagedBean implements Serializable {
             products = productSessionBean.filterProductsByMaximumPrice(maxPriceBigDecimal, categoryId);
             System.out.println("Test4");
         }
+    }
+
+    public void goToFilterProductByName(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByName.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterProductByMinPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByMinPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterProductByMaxPrice(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByMaxPrice.xhtml?categoryId=" + categoryId);
+    }
+
+    public void goToFilterProductByTags(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/products/filterProductsByTags.xhtml?categoryId=" + categoryId);
+    }
+
+    public void viewAllProducts(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/listingsOfAProductCategory.xhtml?categoryId=" + categoryId);
     }
 
     public void clickLink(Long productId) throws IOException {
