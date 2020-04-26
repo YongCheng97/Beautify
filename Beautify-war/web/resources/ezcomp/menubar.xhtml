@@ -130,6 +130,46 @@ and open the template in the editor.
                 </p:growl>
             </p:dialog>
         </h:form>
+        
+        <h:form id="cartForm">
+            
+            <p:dialog id="dialogCart" widgetVar="dialogCart" height="200px" width="800px" header="Shopping Cart" closable="true" closeOnEscape="true" resizable="false">
+                
+                <p:dataTable id ="cartList" var="product" selectionMode="single">
+                    <f:facet name="header">
+                        Shopping Cart Details
+                    </f:facet>
+                    
+<!--                    <p:ajax event="rowSelect" listener="" update="@form"/>
+                    <p:ajax event="rowUnselect" listener="" update="@form"/>-->
+                    <p:column style="text-align: left" headerText="Product Name">
+                        <h:outputText value="?"/>
+                    </p:column>
+                    <p:column style="text-align: left" headerText="Price per Product">
+                        <h:outputText value="?"/>
+                    </p:column>
+
+                    <p:column style="text-align: left" headerText="Amount">
+                        <h:outputText value="?"/>
+                    </p:column>
+
+
+                    <p:column style="text-align: center">
+                        <p:commandButton id="remove" value="Remove" onclick="PF('removeDialog').show()" update="@form" icon="fa fa-remove"/>
+                    </p:column> 
+                    
+                    
+                    <f:facet name="footer">
+                        <p:commandButton id="checkout" value="Checkout" actionListener="#{customerManagementManagedBean.directToCheckout}" icon="fa fa-shopping-cart"/> 
+                    </f:facet>
+                    
+                </p:dataTable>
+            </p:dialog>
+            
+            <p:dialog header="Remove product" widgetVar="removeDialog" height="50px" resizable="false">
+                <p:commandButton id="confirmRemove" value="Confirm" oncomplete="PF('removeDialog').hide()" update="@form"/>
+            </p:dialog>
+        </h:form>
 
         <h:panelGroup >
             <h:form>  
@@ -138,6 +178,7 @@ and open the template in the editor.
                 <p:menubar rendered="#{sessionScope.isLogin == true}" model="#{menuBean.model}">
                     <f:facet name="options">
                         <p:commandButton value = "#{customerManagementManagedBean.currentCustomer.firstName} #{customerManagementManagedBean.currentCustomer.lastName}" actionListener="#{loginManagedBean.directToCustProfile}" icon="fa fa-user" style="margin:1px 10px 1px 1px;" />
+                        <p:commandButton value = "Shopping Cart" onclick = "PF('dialogCart').show()" style="margin:1px 10px 1px 1px;" icon = "fa fa-shopping-cart"/>
                         <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" style="margin:1px 10px 1px 1px;"/>
                     </f:facet>
                 </p:menubar>
