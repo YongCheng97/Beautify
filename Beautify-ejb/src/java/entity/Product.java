@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -41,7 +42,10 @@ public class Product implements Serializable {
     @Column(length = 128)
     @Size(max = 128)
     private String description;
-    private String photo;
+    @Column(nullable = false)
+    @NotNull
+    @Min(0)
+    private Integer quantityOnHand;
     @Column(precision = 11, scale = 2)
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2)
@@ -66,19 +70,19 @@ public class Product implements Serializable {
 
     public Product() {
         this.price = new BigDecimal("0.00");
-
+        this.quantityOnHand = 0;
         this.tags = new ArrayList<>();
         this.favouritedCustomers = new ArrayList<>();
         this.promotions = new ArrayList<>();
     }
 
-    public Product(String skuCode, String name, BigDecimal price, String description, String photo, BigDecimal discountPrice) {
+    public Product(String skuCode, String name, BigDecimal price, String description, Integer quantityOnHand, BigDecimal discountPrice) {
         this();
         this.skuCode = skuCode;
         this.name = name;
         this.price = price;
         this.description = description;
-        this.photo = photo;
+        this.quantityOnHand = quantityOnHand;
         this.discountPrice = discountPrice;
     }
 
@@ -139,24 +143,10 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    /**
-     * @return the category
-     */
     public Category getCategory() {
         return category;
     }
 
-    /**
-     * @param category the category to set
-     */
     public void setCategory(Category category) {
         if (this.category != null) {
             if (this.category.getProducts().contains(this)) {
@@ -173,44 +163,26 @@ public class Product implements Serializable {
         }
     }
 
-    /**
-     * @return the serviceProvider
-     */
     public ServiceProvider getServiceProvider() {
         return serviceProvider;
     }
 
-    /**
-     * @param serviceProvider the serviceProvider to set
-     */
     public void setServiceProvider(ServiceProvider serviceProvider) {
         this.serviceProvider = serviceProvider;
     }
 
-    /**
-     * @return the skuCode
-     */
     public String getSkuCode() {
         return skuCode;
     }
 
-    /**
-     * @param skuCode the skuCode to set
-     */
     public void setSkuCode(String skuCode) {
         this.skuCode = skuCode;
     }
 
-    /**
-     * @return the tags
-     */
     public List<Tag> getTags() {
         return tags;
     }
 
-    /**
-     * @param tags the tags to set
-     */
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
@@ -277,6 +249,14 @@ public class Product implements Serializable {
 
     public void setDiscountPrice(BigDecimal discountPrice) {
         this.discountPrice = discountPrice;
+    }
+
+    public Integer getQuantityOnHand() {
+        return quantityOnHand;
+    }
+
+    public void setQuantityOnHand(Integer quantityOnHand) {
+        this.quantityOnHand = quantityOnHand;
     }
 
 }

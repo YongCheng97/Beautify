@@ -42,8 +42,14 @@
                             <h:outputLabel value="Product Price:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.price}"/>
                             
-                            <h:outputLabel value="Product Tags" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.tags}"/>
+                            <h:outputLabel value="Product Quantity:" style="font-weight: bolder"/>
+                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.quantityOnHand}"/>
+                            
+                            <h:outputLabel value="Product Tag(s):" style="font-weight: bolder"/>
+<!--                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.tags}"/>-->
+                            <p:dataList value="#{viewProductDetailsManagedBean.productToView.tags}" var="tag" type="unordered">
+                                #{tag.name}
+                            </p:dataList>
 
                         </p:panelGrid>
                         <br/>
