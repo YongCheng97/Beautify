@@ -46,15 +46,18 @@
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.quantityOnHand}"/>
                             
                             <h:outputLabel value="Product Tag(s):" style="font-weight: bolder"/>
-<!--                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.tags}"/>-->
                             <p:dataList value="#{viewProductDetailsManagedBean.productToView.tags}" var="tag" type="unordered">
                                 #{tag.name}
                             </p:dataList>
 
                         </p:panelGrid>
                         <br/>
+                        <p:panelGrid columns="3" >
+                            <p:outputLabel for="amountToAdd" value="Amount to add to cart:" style="font-weight: bolder"/>
+                            <p:spinner id="amountToAdd" value="#{shoppingCartManagedBean.amountToCart}" />
+                            <p:commandButton value="Add to Shopping Cart" actionListener="#{shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}"/>
+                        </p:panelGrid>
                         
-                        <p:commandButton value="Add to Shopping Cart" />
                     </p:layoutUnit>
                 </p:layout>
             </h:body>
