@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <ez:menubar/>
+        <div>
+            <h:body>
+                <p:layout style="min-width: 500px;min-height:425px">
+
+                    <p:layoutUnit position="west" size="520">
+
+                        <p:galleria value="#{viewServiceDetailsManagedBean.serviceImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
+                            <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
+                        </p:galleria>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+                        <f:facet name="header">
+                            Service Details
+                        </f:facet>
+                        <p:panelGrid columns="2">
+                            <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}"/>
+
+                            <h:outputLabel value="Service Name:" style="font-weight: bolder"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
+
+                            <h:outputLabel value="Service Desription:" style="font-weight: bolder"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.description}"/>
+
+                            <h:outputLabel value="Service Price:" style="font-weight: bolder"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.price}"/>
+                            
+                            <h:outputLabel value="Service Tags" style="font-weight: bolder"/>
+                            <p:dataList value="#{viewServiceDetailsManagedBean.serviceToView.tags}" var="tag" type="unordered">
+                                #{tag.name}
+                            </p:dataList>
+
+                        </p:panelGrid>
+                    </p:layoutUnit>
+                </p:layout>
+            </h:body>
+            
+        </div>
+    </ui:define>
+</ui:composition>
+

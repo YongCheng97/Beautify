@@ -8,19 +8,11 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <ez:menubar/>
+        <ez:menubar id="menubar"/>
         <!--        <ez:Breadcrumb pageName="viewProductDetails" />-->
         <div>
-            <h3>View Product Details</h3>
-
-            <br/>
-
-            #{viewProductDetailsManagedBean.foo()}
-            <h:messages errorClass="errorTextsWithBullet" fatalClass="errorTextsWithBullet" infoClass="infoTextsWithBullet" globalOnly="true" />
-            <br/>
-
-            <br/>  
             <h:body>
+
                 <p:layout style="min-width: 500px;min-height:425px">
 
                     <p:layoutUnit position="west" size="520">
@@ -31,28 +23,43 @@
                     </p:layoutUnit>
 
                     <p:layoutUnit position="center">
-                        <h2>Product Details</h2>
-                        <p:panelGrid columns="2">
-                            <h:outputLabel value="Seller Name:"/>
+                        <f:facet name="header">
+                            Product Details
+                        </f:facet>
+                        <p:panelGrid columns="2" >
+                            <h:outputLabel value="Seller Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}"/>
-                            
-                            <h:outputLabel value="Product SKU code:"/>
+
+                            <h:outputLabel value="Product SKU code:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.skuCode}"/>
 
-                            <h:outputLabel value="Product Name:"/>
+                            <h:outputLabel value="Product Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.name}"/>
 
-                            <h:outputLabel value="Product Desription:"/>
+                            <h:outputLabel value="Product Desription:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.description}"/>
 
-                            <h:outputLabel value="Product Price:"/>
+                            <h:outputLabel value="Product Price:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.price}"/>
-                            
-                            <h:outputLabel value="Product Tags"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.tags}"/>
 
+                            <h:outputLabel value="Product Quantity:" style="font-weight: bolder"/>
+                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.quantityOnHand}"/>
+
+                            <h:outputLabel value="Product Tag(s):" style="font-weight: bolder"/>
+                            <p:dataList value="#{viewProductDetailsManagedBean.productToView.tags}" var="tag" type="unordered">
+                                #{tag.name}
+                            </p:dataList>
 
                         </p:panelGrid>
+                        <br/>
+                        <p:panelGrid columns="3" >
+                            <h:form>
+                                <p:outputLabel for="amountToAdd" value="Amount to add to cart:" style="font-weight: bolder"/>
+                                <p:spinner id="amountToAdd" min="0" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
+                                <p:commandButton value="Add to Shopping Cart" actionListener="#{viewProductDetailsManagedBean.shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}" update="menubar:cartForm"/>
+                            </h:form>
+                        </p:panelGrid>
+
                     </p:layoutUnit>
                 </p:layout>
             </h:body>

@@ -165,19 +165,19 @@ public class DataInitializationSessionBean {
             List<Long> tagIdsEmpty = new ArrayList<>();
 
             // products 
-            Product redPolish = productSessionBeanLocal.createNewProduct(new Product("PROD001", "Red Nail Polish", new BigDecimal("20.00"), "Red nail polish is historically bold, daring, and adventurous", null, null),
+            Product redPolish = productSessionBeanLocal.createNewProduct(new Product("PROD001", "Red Nail Polish", new BigDecimal("20.00"), "Red nail polish is historically bold, daring, and adventurous", 100, null),
                     categoryNailPolish.getCategoryId(), provider1.getServiceProviderId(), tagIdsNew);
-            Product yellowPolish = productSessionBeanLocal.createNewProduct(new Product("PROD002", "Yellow Nail Polish", new BigDecimal("20.00"), "Bright and cheery yellow nail polish", null, null),
+            Product yellowPolish = productSessionBeanLocal.createNewProduct(new Product("PROD002", "Yellow Nail Polish", new BigDecimal("20.00"), "Bright and cheery yellow nail polish", 100, null),
                     categoryNailPolish.getCategoryId(), provider1.getServiceProviderId(), tagIdsNew);
 
-            Product shampoo = productSessionBeanLocal.createNewProduct(new Product("PROD003", "Shampoo", new BigDecimal("18.00"), "Cleanse your scalp and leave your hair healthy and smooth", null, null),
+            Product shampoo = productSessionBeanLocal.createNewProduct(new Product("PROD003", "Shampoo", new BigDecimal("18.00"), "Cleanse your scalp and leave your hair healthy and smooth", 100, null),
                     categoryHairProducts.getCategoryId(), provider2.getServiceProviderId(), tagIdsEmpty);
-            Product hairTreatment = productSessionBeanLocal.createNewProduct(new Product("PROD004", "Hair Treatment", new BigDecimal("18.00"), "Transform your dry and damaged hair", null, null),
+            Product hairTreatment = productSessionBeanLocal.createNewProduct(new Product("PROD004", "Hair Treatment", new BigDecimal("18.00"), "Transform your dry and damaged hair", 100, null),
                     categoryHairProducts.getCategoryId(), provider2.getServiceProviderId(), tagIdsDiscount);
 
-            Product lipstick = productSessionBeanLocal.createNewProduct(new Product("PROD005", "Lipstick", new BigDecimal("13.00"), "Hydrating lipstick that adds colour to your lips", null, null),
+            Product lipstick = productSessionBeanLocal.createNewProduct(new Product("PROD005", "Lipstick", new BigDecimal("13.00"), "Hydrating lipstick that adds colour to your lips", 100, null),
                     categoryMakeup.getCategoryId(), provider3.getServiceProviderId(), tagIdsDiscount);
-            Product facewash = productSessionBeanLocal.createNewProduct(new Product("PROD006", "Facewash", new BigDecimal("15.00"), "Facewash that revitalises and cleanses your skin", null, null),
+            Product facewash = productSessionBeanLocal.createNewProduct(new Product("PROD006", "Facewash", new BigDecimal("15.00"), "Facewash that revitalises and cleanses your skin", 100, null),
                     categoryFaceCare.getCategoryId(), provider3.getServiceProviderId(), tagIdsPopular);
 
             // services 

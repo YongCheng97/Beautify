@@ -287,6 +287,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         }
     }
 
+    @Override
     public Product retrieveProductByProdId(Long productId) throws ProductNotFoundException {
         Product product = em.find(Product.class, productId);
 
@@ -354,7 +355,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                      */
                     productToUpdate.setDescription(productEntity.getDescription());
                     productToUpdate.setName(productEntity.getName());
-                    productToUpdate.setPhoto(productEntity.getPhoto());
+                    productToUpdate.setQuantityOnHand(productEntity.getQuantityOnHand());
                     productToUpdate.setPrice(productEntity.getPrice());
                     // Removed in v5.0
                     // productEntityToUpdate.setCategory(productEntity.getCategory());
