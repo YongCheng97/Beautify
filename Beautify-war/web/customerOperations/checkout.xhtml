@@ -12,6 +12,70 @@
 
         <ez:menubar/>
 
+        <h2>Checkout</h2>
+
+        <div>
+            <div style="float: left; width: 70%">
+                <h:form id="form">
+
+                    <p:dataTable var="item" value="#{shoppingCartManagedBean.items}">
+                        <f:facet name="header">Shopping Cart</f:facet>
+
+                        <p:column headerText="Product" style="width: 20%; text-align: center">
+                            <p:graphicImage library="images" name ="#{item.product.name}.jpg" height="120" width="140" alt="photo"/> 
+                        </p:column>
+
+                        <p:column headerText="Product Description" style="width: 40%">
+                            <h4> <h:outputText value="#{item.product.name}" /> </h4>
+                            <h:outputText value="$#{item.product.price}" /> 
+                        </p:column>
+
+                        <p:column headerText="Qty" style="width: 10%; text-align: center">
+                            <h:outputText value="#{item.quantity}" />
+                        </p:column>
+
+                        <p:column headerText="Sub-Total ($)" style="width: 20%; text-align: center">
+                            <h:outputText value="$#{item.product.price * item.quantity}" />
+                        </p:column>
+
+                        <p:column style="width: 20%; text-align: center">
+                            <p:commandButton id="remove" value="Remove" action="#{shoppingCartManagedBean.removeFromCart(item.product)}" update="@form" oncomplete="PF('dialogCart').show()" icon="fa fa-remove"/>
+                        </p:column> 
+                    </p:dataTable>
+
+                </h:form>
+
+            </div>
+
+            <br></br>
+
+            <div style="float: right; width: 30%; text-align: center" >
+
+                <h2>Total Amount: </h2>
+                <h3><u> $#{shoppingCartManagedBean.totalAmount()} </u></h3>
+
+                <br></br>
+
+                <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+                    <p:commandButton style="align-self: center" value = "Pay" onclick="PF('dialogLogin').show()" icon="fa fa-dollar"/>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+                    <p:outputLabel value="Select Credit Card:  " />
+                    <p:selectOneMenu value="#{checkoutSessionBean.creditCards}" style="width:150px">
+                        <f:selectItem itemLabel="Credit Card" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{checkoutSessionBean.creditCards}" />
+                    </p:selectOneMenu>
+                    <br></br><br></br>
+                    <p:commandButton style="align-self: center" value = "Pay" onclick="PF('dialogPay').show()" icon="fa fa-dollar"/>
+                </h:panelGroup>
+
+                <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" closable="true" closeOnEscape="true"> 
+                    <h2> Your order has been confirmed! </h2>
+                    <p> $#{shoppingCartManagedBean.totalAmount()} has been charged to </p>
+                </p:dialog>
+            </div>
+        </div>
 
     </ui:define>
 </ui:composition>

@@ -45,17 +45,18 @@
                             </h:panelGroup> --> 
 
                             <!-- <h:panelGroup rendered="#{sessionScope.service.getServiceName() == true}"> -->
-                                <div class="table">
-                                    <th><h:outputText value="$#{service.price}" style="text-decoration: line-through;"/></th>
-                                    <th><h:outputText value="$#{service.discountPrice}"  style="color: red"/> </th>
-                                </div>
+                            <div class="table">
+                                <th><h:outputText value="$#{service.price}" style="text-decoration: line-through;"/></th>
+                                <th><h:outputText value="$#{service.discountPrice}"  style="color: red"/> </th>
+                            </div>
                             <!-- </h:panelGroup> --> 
 
                             <h:outputText style="font-weight: bold" value="Description: " />
                             <h:outputText value ="#{service.description}" />
 
-                            <p:commandLink actionListener="#{listingsManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                            <p:commandLink actionListener="#{listingsManagedBean.viewService}" style="text-decoration:none;color:blue;">
                                 <h:outputText value = "Click here for more information!"/>
+                                <f:attribute name="serviceId" value="#{service.serviceId}" />
                             </p:commandLink>
 
                         </p:panelGrid>
@@ -81,8 +82,9 @@
                             <h:outputText style="font-weight: bold;" value="Description:" />
                             <h:outputText value="#{product.description}" />
 
-                            <p:commandLink actionListener="#{listingsManagedBean.clickLink}" style="text-decoration:none;color:blue;">
+                            <p:commandLink actionListener="#{listingsManagedBean.viewProduct}" style="text-decoration:none;color:blue;">
                                 <h:outputText value = "Click here for more information!"/>
+                                <f:attribute name="productId" value="#{product.productId}" />
                             </p:commandLink>
 
                         </p:panelGrid>
