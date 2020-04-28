@@ -8,11 +8,11 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <ez:menubar/>
+        <ez:menubar id="menubar"/>
         <!--        <ez:Breadcrumb pageName="viewProductDetails" />-->
         <div>
             <h:body>
-                
+
                 <p:layout style="min-width: 500px;min-height:425px">
 
                     <p:layoutUnit position="west" size="520">
@@ -24,12 +24,12 @@
 
                     <p:layoutUnit position="center">
                         <f:facet name="header">
-                        Product Details
+                            Product Details
                         </f:facet>
                         <p:panelGrid columns="2" >
                             <h:outputLabel value="Seller Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}"/>
-                            
+
                             <h:outputLabel value="Product SKU code:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.skuCode}"/>
 
@@ -41,10 +41,10 @@
 
                             <h:outputLabel value="Product Price:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.price}"/>
-                            
+
                             <h:outputLabel value="Product Quantity:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.quantityOnHand}"/>
-                            
+
                             <h:outputLabel value="Product Tag(s):" style="font-weight: bolder"/>
                             <p:dataList value="#{viewProductDetailsManagedBean.productToView.tags}" var="tag" type="unordered">
                                 #{tag.name}
@@ -53,11 +53,13 @@
                         </p:panelGrid>
                         <br/>
                         <p:panelGrid columns="3" >
-                            <p:outputLabel for="amountToAdd" value="Amount to add to cart:" style="font-weight: bolder"/>
-                            <p:spinner id="amountToAdd" value="#{shoppingCartManagedBean.amountToCart}" />
-                            <p:commandButton value="Add to Shopping Cart" actionListener="#{shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}"/>
+                            <h:form>
+                                <p:outputLabel for="amountToAdd" value="Amount to add to cart:" style="font-weight: bolder"/>
+                                <p:spinner id="amountToAdd" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
+                                <p:commandButton value="Add to Shopping Cart" actionListener="#{viewProductDetailsManagedBean.shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}" update="menubar:cartForm"/>
+                            </h:form>
                         </p:panelGrid>
-                        
+
                     </p:layoutUnit>
                 </p:layout>
             </h:body>

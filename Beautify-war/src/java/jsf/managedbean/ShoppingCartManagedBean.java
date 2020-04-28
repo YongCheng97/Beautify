@@ -19,6 +19,7 @@ public class ShoppingCartManagedBean implements Serializable {
 
     public ShoppingCartManagedBean() {
         this.items = new ArrayList<Item>();
+        this.amountToCart = 0;
     }
 
     public void addToCart(Product product) {
@@ -26,7 +27,7 @@ public class ShoppingCartManagedBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
 
         int index = this.existsInCart(product);
-
+        System.out.println("test: " + this.amountToCart);
         if (this.amountToCart == 0) {
             msg = "Choose at least 1";
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
@@ -38,7 +39,7 @@ public class ShoppingCartManagedBean implements Serializable {
                 this.items.add(new Item(product, this.amountToCart));
                 msg = "Added to the cart";
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
-                
+
             } else {
                 int quantity = this.items.get(index).getQuantity() + this.amountToCart;
                 this.items.get(index).setQuantity(quantity);
@@ -49,7 +50,7 @@ public class ShoppingCartManagedBean implements Serializable {
         }
     }
 
-public int existsInCart(Product product) {
+    public int existsInCart(Product product) {
         for (int i = 0; i < this.items.size(); i++) {
             if (this.items.get(i).getProduct().getProductId() == product.getProductId()) {
                 return i;

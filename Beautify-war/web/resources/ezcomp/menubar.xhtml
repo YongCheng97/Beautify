@@ -18,19 +18,37 @@ and open the template in the editor.
 
     <cc:implementation>
 
+        <p:growl>
+            <p:autoUpdate />
+        </p:growl>
+
         <h:panelGroup rendered="#{sessionScope.isLogin != true}">
             <h:form>  
                 <p:growl id="messages"/>
                 <p:menubar model="#{menuBean.model}">
                     <f:facet name="options">
                         <p:commandButton value = "Login" onclick="PF('dialogLogin').show()" style="margin:1px 10px 1px 1px;" icon="fa fa-envelope"/>
+                        <p:commandButton value = "Shopping Cart" onclick = "PF('dialogCart').show()" style="margin:1px 10px 1px 1px;" icon = "fa fa-shopping-cart"/>
                         <p:commandButton value = "Register" onclick="PF('dialogRegister').show()" style="margin:1px 10px 1px 1px;" icon="fa fa-user-plus"/>
                     </f:facet>
                 </p:menubar>
             </h:form>
         </h:panelGroup>
+        
+        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+            <h:form>  
+                <p:growl id="messages"/>
+                <p:menubar model="#{menuBean.model}">
+                    <f:facet name="options">
+                        <p:commandButton value = "#{customerManagementManagedBean.currentCustomer.firstName} #{customerManagementManagedBean.currentCustomer.lastName}" actionListener="#{loginManagedBean.directToCustProfile}" icon="fa fa-user" style="margin:1px 10px 1px 1px;" />
+                        <p:commandButton value = "Shopping Cart" onclick = "PF('dialogCart').show()" style="margin:1px 10px 1px 1px;" icon = "fa fa-shopping-cart"/>
+                        <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" style="margin:1px 10px 1px 1px;"/>
+                    </f:facet>
+                </p:menubar>
+            </h:form>
+        </h:panelGroup>
 
-        <h:form id="loginForm">
+        <h:form id="loginForm" rendered="#{sessionScope.isLogin != true}">
 
             <p:dialog id="dialogLogin" widgetVar="dialogLogin" header="Login" closable="true" height="120" closeOnEscape="true">
                 <p:outputLabel for="username" value="Username" />&nbsp;
@@ -55,7 +73,7 @@ and open the template in the editor.
             </p:dialog>
         </h:form>
 
-        <h:form id ="formCreateNewCustomer">
+        <h:form id ="formCreateNewCustomer" rendered="#{sessionScope.isLogin != true}">
 
             <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register As New User" closable ="true" closeOnEscape="true">
                 <p:messages id="messagesCreateNewCustomer" redisplay="false" />
@@ -130,18 +148,18 @@ and open the template in the editor.
                 </p:growl>
             </p:dialog>
         </h:form>
-        
+
         <h:form id="cartForm">
-            
+
             <p:dialog id="dialogCart" widgetVar="dialogCart" height="200px" width="800px" header="Shopping Cart" closable="true" closeOnEscape="true" resizable="false">
-                
-                <p:dataTable id ="cartList" var="item" value="#{shoppingCartManagedBean.items}" selectionMode="single">
+
+                <p:dataTable id ="cartList" var="item" value="#{shoppingCartManagedBean.items}">
                     <f:facet name="header">
                         Shopping Cart Details
                     </f:facet>
-                    
-<!--                    <p:ajax event="rowSelect" listener="" update="@form"/>
-                    <p:ajax event="rowUnselect" listener="" update="@form"/>-->
+
+                    <!--                    <p:ajax event="rowSelect" listener="" update="@form"/>
+                                        <p:ajax event="rowUnselect" listener="" update="@form"/>-->
                     <p:column style="text-align: left" headerText="Product Name">
                         <h:outputText value="#{item.product.name}"/>
                     </p:column>
@@ -160,32 +178,20 @@ and open the template in the editor.
                     <p:column style="text-align: center">
                         <p:commandButton id="remove" value="Remove" onclick="PF('removeDialog').show()" update="@form" icon="fa fa-remove"/>
                     </p:column> 
-                    
-                    
+
+
                     <f:facet name="footer">
                         <p:commandButton id="checkout" value="Checkout" actionListener="#{customerManagementManagedBean.directToCheckout}" icon="fa fa-shopping-cart"/> 
                     </f:facet>
-                    
+
                 </p:dataTable>
             </p:dialog>
-            
+
             <p:dialog header="Remove product" widgetVar="removeDialog" height="50px" resizable="false">
                 <p:commandButton id="confirmRemove" value="Confirm" oncomplete="PF('removeDialog').hide()" update="@form"/>
             </p:dialog>
         </h:form>
 
-        <h:panelGroup >
-            <h:form>  
-                <p:growl id="messages"/>
-
-                <p:menubar rendered="#{sessionScope.isLogin == true}" model="#{menuBean.model}">
-                    <f:facet name="options">
-                        <p:commandButton value = "#{customerManagementManagedBean.currentCustomer.firstName} #{customerManagementManagedBean.currentCustomer.lastName}" actionListener="#{loginManagedBean.directToCustProfile}" icon="fa fa-user" style="margin:1px 10px 1px 1px;" />
-                        <p:commandButton value = "Shopping Cart" onclick = "PF('dialogCart').show()" style="margin:1px 10px 1px 1px;" icon = "fa fa-shopping-cart"/>
-                        <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" style="margin:1px 10px 1px 1px;"/>
-                    </f:facet>
-                </p:menubar>
-            </h:form>
-        </h:panelGroup>
+        
     </cc:implementation>
 </html>

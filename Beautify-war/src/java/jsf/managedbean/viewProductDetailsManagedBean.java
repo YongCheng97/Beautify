@@ -18,6 +18,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import util.exception.ProductNotFoundException;
 
 
@@ -28,6 +30,9 @@ public class viewProductDetailsManagedBean implements Serializable
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
+    
+    @Inject
+    private ShoppingCartManagedBean shoppingCartManagedBean;
 
     private Long productIdToView;
     private Product productToView;
@@ -39,7 +44,9 @@ public class viewProductDetailsManagedBean implements Serializable
     @PostConstruct
     public void postConstruct()
     {
-        productIdToView = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("productIdToView");
+        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        
+        productIdToView = (Long)session.getAttribute("productIdToView");
         try
         {            
             productToView = productSessionBeanLocal.retrieveProductByProdId(productIdToView);
@@ -73,5 +80,19 @@ public class viewProductDetailsManagedBean implements Serializable
 
     public void setProductToView(Product productToView) {
         this.productToView = productToView;
+    }
+
+    /**
+     * @return the shoppingCartManagedBean
+     */
+    public ShoppingCartManagedBean getShoppingCartManagedBean() {
+        return shoppingCartManagedBean;
+    }
+
+    /**
+     * @param shoppingCartManagedBean the shoppingCartManagedBean to set
+     */
+    public void setShoppingCartManagedBean(ShoppingCartManagedBean shoppingCartManagedBean) {
+        this.shoppingCartManagedBean = shoppingCartManagedBean;
     }
 }
