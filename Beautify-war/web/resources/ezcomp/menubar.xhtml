@@ -34,7 +34,7 @@ and open the template in the editor.
                 </p:menubar>
             </h:form>
         </h:panelGroup>
-        
+
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
             <h:form>  
                 <p:growl id="messages"/>
@@ -151,15 +151,13 @@ and open the template in the editor.
 
         <h:form id="cartForm">
 
-            <p:dialog id="dialogCart" widgetVar="dialogCart" height="200px" width="800px" header="Shopping Cart" closable="true" closeOnEscape="true" resizable="false">
+            <p:dialog id="dialogCart" widgetVar="dialogCart" fitViewport="true" width="800px" header="Shopping Cart" closable="true" closeOnEscape="true">
 
                 <p:dataTable id ="cartList" var="item" value="#{shoppingCartManagedBean.items}">
                     <f:facet name="header">
                         Shopping Cart Details
                     </f:facet>
 
-                    <!--                    <p:ajax event="rowSelect" listener="" update="@form"/>
-                                        <p:ajax event="rowUnselect" listener="" update="@form"/>-->
                     <p:column style="text-align: left" headerText="Product Name">
                         <h:outputText value="#{item.product.name}"/>
                     </p:column>
@@ -167,31 +165,37 @@ and open the template in the editor.
                         <h:outputText value="#{item.product.description}"/>
                     </p:column>
                     <p:column style="text-align: left" headerText="Price per Product">
-                        <h:outputText value="#{item.product.price}"/>
+                        <h:outputText value="$ #{item.product.price}"/>
                     </p:column>
 
-                    <p:column style="text-align: left" headerText="Amount">
+                    <p:column style="text-align: left" headerText="Quantity">
                         <h:outputText value="#{item.quantity}"/>
+                    </p:column>
+
+                    <p:column style="text-align: left" headerText="Sub-total">
+                        <h:outputText value="$ #{item.product.price * item.quantity}"/>
                     </p:column>
 
 
                     <p:column style="text-align: center">
-                        <p:commandButton id="remove" value="Remove" onclick="PF('removeDialog').show()" update="@form" icon="fa fa-remove"/>
+                        <p:commandButton id="remove" value="Remove" action="#{shoppingCartManagedBean.removeFromCart(item.product)}" update="@form" oncomplete="PF('dialogCart').show()" icon="fa fa-remove"/>
                     </p:column> 
 
 
-                    <f:facet name="footer">
-                        <p:commandButton id="checkout" value="Checkout" actionListener="#{customerManagementManagedBean.directToCheckout}" icon="fa fa-shopping-cart"/> 
-                    </f:facet>
 
                 </p:dataTable>
-            </p:dialog>
+                <p:panel >
+                    <f:facet name="header">
+                        Total: $ #{shoppingCartManagedBean.totalAmount()}
+                    </f:facet>
+                </p:panel>
 
-            <p:dialog header="Remove product" widgetVar="removeDialog" height="50px" resizable="false">
-                <p:commandButton id="confirmRemove" value="Confirm" oncomplete="PF('removeDialog').hide()" update="@form"/>
+                <f:facet name="footer">
+                    <p:commandButton style="align-self: center" id="checkout" value="Checkout" actionListener="#{customerManagementManagedBean.directToCheckout}" icon="fa fa-shopping-cart"/> 
+                </f:facet>
             </p:dialog>
         </h:form>
 
-        
+
     </cc:implementation>
 </html>

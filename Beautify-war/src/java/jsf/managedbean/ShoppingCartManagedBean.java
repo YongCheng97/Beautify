@@ -16,14 +16,17 @@ public class ShoppingCartManagedBean implements Serializable {
 
     private List<Item> items;
     private int amountToCart;
-
+    
+    //FacesContext context = FacesContext.getCurrentInstance();
+    String msg = null;
+    
     public ShoppingCartManagedBean() {
         this.items = new ArrayList<Item>();
         this.amountToCart = 0;
     }
 
     public void addToCart(Product product) {
-        String msg = null;
+        //String msg = null;
         FacesContext context = FacesContext.getCurrentInstance();
 
         int index = this.existsInCart(product);
@@ -48,6 +51,24 @@ public class ShoppingCartManagedBean implements Serializable {
             }
             this.amountToCart = 0;
         }
+    }
+    
+    public double totalAmount() {
+        double total = 0;
+        for(Item item : this.items) {
+            total += item.getProduct().getPrice().doubleValue() * item.getQuantity();
+        }
+        return total;
+    }
+    
+    public void removeFromCart(Product product)  {
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        int index = this.existsInCart(product);
+        this.items.remove(index);
+        msg = "Remove from cart";
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
     }
 
     public int existsInCart(Product product) {

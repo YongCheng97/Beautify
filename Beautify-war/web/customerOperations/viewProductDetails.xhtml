@@ -55,7 +55,7 @@
                         <p:panelGrid columns="3" >
                             <h:form>
                                 <p:outputLabel for="amountToAdd" value="Amount to add to cart:" style="font-weight: bolder"/>
-                                <p:spinner id="amountToAdd" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
+                                <p:spinner id="amountToAdd" min="0" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
                                 <p:commandButton value="Add to Shopping Cart" actionListener="#{viewProductDetailsManagedBean.shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}" update="menubar:cartForm"/>
                             </h:form>
                         </p:panelGrid>

@@ -82,15 +82,15 @@ public class CategoryManagementManagedBean implements Serializable {
 
     public void viewProduct(ActionEvent event) throws IOException {
         Long productIdToView = (Long) event.getComponent().getAttributes().get("productId");
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        session.setAttribute("productIdToView", productIdToView);
+        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productIdToView", productIdToView);
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml");
     }
     
     public void viewService(ActionEvent event) throws IOException {
         Long serviceIdToView = (Long) event.getComponent().getAttributes().get("serviceId");
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        session.setAttribute("serviceIdToView", serviceIdToView);
+        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("serviceIdToView", serviceIdToView);
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewServiceDetails.xhtml");
     }
 
