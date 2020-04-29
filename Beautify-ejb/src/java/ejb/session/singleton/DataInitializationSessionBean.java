@@ -11,6 +11,8 @@ import ejb.session.stateless.CreditCardSessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.PromotionSessionBeanLocal;
+import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
+import ejb.session.stateless.PurchasedSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
@@ -21,6 +23,8 @@ import entity.CreditCard;
 import entity.Customer;
 import entity.Product;
 import entity.Promotion;
+import entity.Purchased;
+import entity.PurchasedLineItem;
 import entity.Review;
 import entity.Service;
 import entity.ServiceProvider;
@@ -31,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -43,10 +48,11 @@ import javax.persistence.PersistenceContext;
 import util.exception.BookingExistException;
 import util.exception.CreateNewBookingException;
 import util.enumeration.CategoryTypeEnum;
-import util.enumeration.CreditCardTypeEnum;
 import util.exception.CreateNewCategoryException;
 import util.exception.CreateNewCreditCardException;
 import util.exception.CreateNewProductException;
+import util.exception.CreateNewPurchaseException;
+import util.exception.CreateNewPurchasedLineItemException;
 import util.exception.CreateNewReviewException;
 import util.exception.CreateNewServiceException;
 import util.exception.CreateNewTagException;
@@ -56,6 +62,8 @@ import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.ProductExistException;
 import util.exception.PromotionNameExistException;
+import util.exception.PurchasedExistException;
+import util.exception.PurchasedLineItemExistException;
 import util.exception.ReviewExistException;
 import util.exception.ServiceExistException;
 import util.exception.ServiceProviderExistException;
@@ -67,6 +75,12 @@ import util.exception.UnknownPersistenceException;
 @Startup
 
 public class DataInitializationSessionBean {
+
+    @EJB(name = "PurchasedSessionBeanLocal")
+    private PurchasedSessionBeanLocal purchasedSessionBean;
+
+    @EJB(name = "PurchasedLineItemSessionBeanLocal")
+    private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBean;
 
     @EJB(name = "PromotionSessionBeanLocal")
     private PromotionSessionBeanLocal promotionSessionBeanLocal;
@@ -100,9 +114,10 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
+    
+    
 
     private CategoryTypeEnum type;
-    private CreditCardTypeEnum creditCardTypeEnum;
 
     public DataInitializationSessionBean() {
     }
@@ -191,7 +206,7 @@ public class DataInitializationSessionBean {
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yy HH:mm");
 
             Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf1.parse("03/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), manicure.getServiceId());
-            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Approved", "remarks", sdf1.parse("20/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), haircut.getServiceId());
+            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Completed", "remarks", sdf1.parse("20/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), haircut.getServiceId());
             Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("03/04/2020 12:00"), "Approved", "remarks", sdf1.parse("15/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), facial.getServiceId());
 
             // service reviews
@@ -207,14 +222,38 @@ public class DataInitializationSessionBean {
             facial.addPromotion(promotion2);
 
             // credit cards
-            CreditCard creditCard1 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard(creditCardTypeEnum.VISA, "Bob Lim", "4024007176761897", "02/23"), customer1.getCustomerId());
-            CreditCard creditCard2 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard(creditCardTypeEnum.MasterCard, "Bob Lim", "5381253539232416", "06/23"), customer1.getCustomerId());
-            CreditCard creditCard3 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard(creditCardTypeEnum.VISA, "The Nail Lounge", "4929954364297059", "06/24"), provider1.getServiceProviderId());
-            CreditCard creditCard4 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard(creditCardTypeEnum.MasterCard, "The Nail Lounge", "5288773275293797", "01/22"), provider1.getServiceProviderId());
+            CreditCard creditCard1 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard("VISA", "Bob Lim", "4024007176761897", "02/23"), customer1.getCustomerId());
+            CreditCard creditCard2 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard("MasterCard", "Bob Lim", "5381253539232416", "06/23"), customer1.getCustomerId());
+            CreditCard creditCard3 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard("VISA", "The Nail Lounge", "4929954364297059", "06/24"), provider1.getServiceProviderId());
+            CreditCard creditCard4 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard("MasterCard", "The Nail Lounge", "5288773275293797", "01/22"), provider1.getServiceProviderId());
 
+            //purchased line items
+            PurchasedLineItem purchasedLineItem1 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(1, "Shipped", new BigDecimal("20.00")), redPolish.getProductId());
+            PurchasedLineItem purchasedLineItem2 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(2, "Shipped", new BigDecimal("20.00")), yellowPolish.getProductId());
+            PurchasedLineItem purchasedLineItem3 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(1, "Order Confirmed", new BigDecimal("18.00")), shampoo.getProductId());
+            PurchasedLineItem purchasedLineItem4 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(2, "Product Received", new BigDecimal("13.00")), lipstick.getProductId());
+            
+            //purchased
+            Purchased purchased1 = purchasedSessionBean.createNewPurchased(new Purchased(sdf2.parse("20/04/2020"), new BigDecimal("60.00"), "address"), customer1.getCustomerId(), Arrays.asList(purchasedLineItem1.getPurchasedLineItemId(), purchasedLineItem2.getPurchasedLineItemId()), creditCard1.getCreditCardId());
+            Purchased purchased2 = purchasedSessionBean.createNewPurchased(new Purchased(sdf2.parse("21/04/2020"), new BigDecimal("44.00"), "address"), customer1.getCustomerId(), Arrays.asList(purchasedLineItem3.getPurchasedLineItemId(), purchasedLineItem4.getPurchasedLineItemId()), creditCard2.getCreditCardId());
+       
+            //favourite products
+            customer1.getFavouriteProducts().add(redPolish);
+            customer1.getFavouriteProducts().add(shampoo);
+            customer1.getFavouriteProducts().add(lipstick);
+            redPolish.getFavouritedCustomers().add(customer1);
+            shampoo.getFavouritedCustomers().add(customer1);
+            lipstick.getFavouritedCustomers().add(customer1);
+            
+            //favourite services
+            customer1.getFavouriteServices().add(manicure);
+            customer1.getFavouriteServices().add(haircut);
+            manicure.getFavouritedCustomers().add(customer1);
+            haircut.getFavouritedCustomers().add(customer1);
+            
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException
-                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException ex) {
+                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException | CreateNewPurchaseException | CreateNewPurchasedLineItemException | PurchasedExistException | PurchasedLineItemExistException ex) {
             ex.printStackTrace();
         }
     }

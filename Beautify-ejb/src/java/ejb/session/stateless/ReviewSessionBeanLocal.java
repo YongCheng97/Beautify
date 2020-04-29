@@ -15,7 +15,7 @@ public interface ReviewSessionBeanLocal {
 
     public Review createNewServiceReview(Review newReview, Long customerId, Long bookingId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException;
 
-    public Review createNewProductReview(Review newReview, Long customerId, Long bookingId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException;
+    public Review createNewProductReview(Review newReview, Long customerId, Long purchasedLineItemId) throws ReviewExistException, UnknownPersistenceException, InputDataValidationException, CreateNewReviewException;
 
     public List<Review> retrieveAllReviews();
 

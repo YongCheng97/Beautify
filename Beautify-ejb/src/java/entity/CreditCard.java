@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,7 +15,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import util.enumeration.CreditCardTypeEnum;
 
 @Entity
 public class CreditCard implements Serializable {
@@ -26,9 +23,10 @@ public class CreditCard implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long creditCardId;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
-    private CreditCardTypeEnum type;
+    @Column(nullable = false, length = 10)
+    @NotNull
+    @Size(max = 10)
+    private String type;
     @Column(nullable = false, length = 32)
     @NotNull
     @Size(max = 32)
@@ -56,7 +54,7 @@ public class CreditCard implements Serializable {
     public CreditCard() {
     }
 
-    public CreditCard(CreditCardTypeEnum type, String cardName, String cardNumber, String expiryDate) {
+    public CreditCard(String type, String cardName, String cardNumber, String expiryDate) {
         this.type = type;
         this.cardName = cardName;
         this.cardNumber = cardNumber;
@@ -96,11 +94,11 @@ public class CreditCard implements Serializable {
         return "entity.CreditCard[ id=" + creditCardId + " ]";
     }
 
-    public CreditCardTypeEnum getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(CreditCardTypeEnum type) {
+    public void setType(String type) {
         this.type = type;
     }
 
