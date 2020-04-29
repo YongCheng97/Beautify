@@ -23,6 +23,8 @@ public interface CreditCardSessionBeanLocal {
 
     public void deleteCreditCard(Long creditCardId) throws CreditCardNotFoundException;
 
+    public CreditCard retrieveCreditCardByLastFourNum(String creditCardNum);
+
     public List<CreditCard> retrieveAllCreditCardsByServiceProviderId(Long serviceProviderId);
 
     public List<CreditCard> retrieveAllCreditCardsByCustomerId(Long customerId);
@@ -32,5 +34,5 @@ public interface CreditCardSessionBeanLocal {
     public CreditCard createNewCreditCardEntityForServiceProvider(CreditCard newCreditCard, Long serviceProviderId) throws InputDataValidationException, CreateNewCreditCardException, CreditCardExistsException, UnknownPersistenceException;
 
     public CreditCard createNewCreditCardEntityForCustomer(CreditCard newCreditCard, Long customerId) throws InputDataValidationException, CreateNewCreditCardException, CreditCardExistsException, UnknownPersistenceException;
-    
+
 }

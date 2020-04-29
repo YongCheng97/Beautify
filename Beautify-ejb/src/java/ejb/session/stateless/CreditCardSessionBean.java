@@ -157,6 +157,16 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
         return creditCards;
     }
     
+    @Override 
+    public CreditCard retrieveCreditCardByLastFourNum(String creditCardNum)
+    {
+        Query query = em.createQuery("SELECT c FROM CreditCard c WHERE c.cardNumber LIKE CONCAT('%', :inCardNumber)"); 
+        query.setParameter("inCardNumber", creditCardNum.substring(12, 16)); 
+        CreditCard cc = (CreditCard) query.getSingleResult(); 
+        
+        return cc;  
+    }
+    
     @Override
     public void deleteCreditCard(Long creditCardId) throws CreditCardNotFoundException {
         CreditCard creditCardToRemove = retrieveCreditCardByCreditCardId(creditCardId);

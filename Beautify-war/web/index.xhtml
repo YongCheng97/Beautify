@@ -15,9 +15,8 @@
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <article>
                 <h3>Welcome To Beautify!</h3>
-                <p:button value = "Test Customer Profile" outcome="/customerOperations/customerProfile"/>
                 <p:button value = "View All Service Providers" outcome="/customerOperations/viewAllServiceProviders"/>
-
+                
                 <p:carousel value="#{viewAllCategoriesManagedBean.categories}" headerText="Browse by Categories" var="category" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
                     <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                         <f:facet name="header">
@@ -25,6 +24,7 @@
                         </f:facet>
                     </p:panelGrid>
                 </p:carousel>
+                <br/>
                 <p:carousel value="#{viewAllProductsManagedBean.products}" headerText="Browse by Products" var="product" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
                     <!--                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                                             <f:facet name="header">
@@ -86,8 +86,7 @@
                 <h3>Welcome To Beautify!</h3>
                 <p:button value = "View Own Profile" outcome="/customerOperations/customerProfile"/>
                 <p:button value = "View All Service Providers" outcome="/customerOperations/viewAllServiceProviders"/>
-                <p:button value = "Checkout Test" outcome="/customerOperations/checkout"/>
-                
+
                 <p:carousel value="#{viewAllCategoriesManagedBean.categories}" headerText="Categories" var="category" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
                     <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                         <f:facet name="header">

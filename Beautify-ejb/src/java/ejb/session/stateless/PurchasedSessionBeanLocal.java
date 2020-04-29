@@ -26,7 +26,7 @@ public interface PurchasedSessionBeanLocal {
 
     public Purchased retrievePurchasedByPurchasedId(Long purchasedId) throws PurchasedNotFoundException;
 
-    public Purchased createNewPurchased(Purchased newPurchased, Long customerId, List<Long> purchasedLineItemIds) throws UnknownPersistenceException, InputDataValidationException, CustomerNotFoundException, CreateNewPurchaseException, PurchasedExistException;
+    public Purchased createNewPurchased(Purchased newPurchased, Long customerId, List<Long> purchasedLineItemIds, Long creditCardId) throws UnknownPersistenceException, InputDataValidationException, CustomerNotFoundException, CreateNewPurchaseException, PurchasedExistException;
 
     
 }

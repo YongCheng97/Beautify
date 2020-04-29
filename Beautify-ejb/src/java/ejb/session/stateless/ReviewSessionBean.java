@@ -207,10 +207,13 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
         List<Review> reviews = retrieveAllReviews();
 
         for (Review review : reviews) {
-            Long providerId = review.getPurchasedLineItem().getProduct().getServiceProvider().getServiceProviderId();
-            if (providerId != null) {
-                if (providerId == serviceProviderId) {
-                    retrievedReviews.add(review);
+            PurchasedLineItem lineItem = review.getPurchasedLineItem();
+            if (lineItem != null) {
+                Long providerId = lineItem.getProduct().getServiceProvider().getServiceProviderId();
+                if (providerId != null) {
+                    if (providerId == serviceProviderId) {
+                        retrievedReviews.add(review);
+                    }
                 }
             }
         }
@@ -241,10 +244,10 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
         Review reviewToRemove = retrieveReviewByReviewId(reviewId);
         Customer customer = reviewToRemove.getCustomer();
         customer.getReviews().remove(reviewToRemove);
-        
+
         Booking booking = reviewToRemove.getBooking();
         booking.setReview(null);
-        
+
         PurchasedLineItem purchasedLineItem = reviewToRemove.getPurchasedLineItem();
         purchasedLineItem.setReview(null);
 

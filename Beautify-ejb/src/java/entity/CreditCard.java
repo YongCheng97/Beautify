@@ -2,6 +2,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -47,6 +49,9 @@ public class CreditCard implements Serializable {
     @ManyToOne (optional = true)
     @JoinColumn (nullable = true)
     private ServiceProvider serviceProvider;
+    
+    @OneToMany(mappedBy = "creditCard")
+    private List<Purchased> purchaseds; 
 
     public CreditCard() {
     }
@@ -149,6 +154,14 @@ public class CreditCard implements Serializable {
      */
     public void setServiceProvider(ServiceProvider serviceProvider) {
         this.serviceProvider = serviceProvider;
+    }
+
+    public List<Purchased> getPurchaseds() {
+        return purchaseds;
+    }
+
+    public void setPurchaseds(List<Purchased> purchaseds) {
+        this.purchaseds = purchaseds;
     }
     
 }
