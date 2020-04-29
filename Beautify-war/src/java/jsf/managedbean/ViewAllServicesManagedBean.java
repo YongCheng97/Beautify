@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpSession;
 
 @Named(value = "viewAllServicesManagedBean")
 @ViewScoped
@@ -45,7 +46,8 @@ public class ViewAllServicesManagedBean implements Serializable{
     
     public void viewService(ActionEvent event) throws IOException {
         Long serviceIdToView = (Long) event.getComponent().getAttributes().get("serviceId");
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("serviceIdToView", serviceIdToView);
+        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        session.setAttribute("serviceIdToView", serviceIdToView);
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewServiceDetails.xhtml");
     }
 }

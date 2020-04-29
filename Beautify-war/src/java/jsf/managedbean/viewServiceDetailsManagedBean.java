@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpSession;
 import util.exception.ServiceNotFoundException;
 
 
@@ -31,7 +32,9 @@ public class viewServiceDetailsManagedBean implements Serializable {
     @PostConstruct
     public void postConstruct()
     {
-        serviceIdToView = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("serviceIdToView");
+        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        
+        serviceIdToView = (Long)session.getAttribute("serviceIdToView");
         try
         {            
             serviceToView = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceIdToView);

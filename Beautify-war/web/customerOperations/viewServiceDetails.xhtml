@@ -10,9 +10,6 @@
     <ui:define name="content">
         <ez:menubar/>
         <div>
-            <h3>View Service Details</h3>
-            <br/>
-            
             <h:body>
                 <p:layout style="min-width: 500px;min-height:425px">
 
@@ -24,23 +21,26 @@
                     </p:layoutUnit>
 
                     <p:layoutUnit position="center">
-                        <h2>Service Details</h2>
+                        <f:facet name="header">
+                            Service Details
+                        </f:facet>
                         <p:panelGrid columns="2">
-                            <h:outputLabel value="Service Provider Name:"/>
+                            <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}"/>
 
-                            <h:outputLabel value="Service Name:"/>
+                            <h:outputLabel value="Service Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
 
-                            <h:outputLabel value="Service Desription:"/>
+                            <h:outputLabel value="Service Desription:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.description}"/>
 
-                            <h:outputLabel value="Service Price:"/>
+                            <h:outputLabel value="Service Price:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.price}"/>
                             
-                            <h:outputLabel value="Service Tags"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.tags}"/>
-
+                            <h:outputLabel value="Service Tags" style="font-weight: bolder"/>
+                            <p:dataList value="#{viewServiceDetailsManagedBean.serviceToView.tags}" var="tag" type="unordered">
+                                #{tag.name}
+                            </p:dataList>
 
                         </p:panelGrid>
                     </p:layoutUnit>
