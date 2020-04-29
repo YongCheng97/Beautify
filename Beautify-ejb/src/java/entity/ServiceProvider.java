@@ -43,13 +43,11 @@ public class ServiceProvider implements Serializable {
     @Size(max = 32)
     private String address;
     @Column(nullable = false)
-    @Temporal(TemporalType.TIME)
     @NotNull
-    private Date openingHours;
+    private Date[] openingHours;
     @Column(nullable = false)
-    @Temporal(TemporalType.TIME)
     @NotNull
-    private Date closingHours;
+    private Date[] closingHours;
     private File certification;
     private boolean isApproved;
 
@@ -68,12 +66,14 @@ public class ServiceProvider implements Serializable {
     public ServiceProvider() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
 
+        openingHours = new Date[7];
+        closingHours = new Date[7];
         creditCards = new ArrayList<>();
         products = new ArrayList<>();
         services = new ArrayList<>();
     }
 
-    public ServiceProvider(String name, String email, String password, String address, Date openingHours, Date closingHours, File certification, boolean isApproved) {
+    public ServiceProvider(String name, String email, String password, String address, Date[] openingHours, Date[] closingHours, File certification, boolean isApproved) {
 
         this();
 
@@ -157,11 +157,11 @@ public class ServiceProvider implements Serializable {
         this.address = address;
     }
 
-    public Date getOpeningHours() {
+    public Date[] getOpeningHours() {
         return openingHours;
     }
 
-    public void setOpeningHours(Date openingHours) {
+    public void setOpeningHours(Date[] openingHours) {
         this.openingHours = openingHours;
     }
 
@@ -230,14 +230,14 @@ public class ServiceProvider implements Serializable {
     /**
      * @return the closingHours
      */
-    public Date getClosingHours() {
+    public Date[] getClosingHours() {
         return closingHours;
     }
 
     /**
      * @param closingHours the closingHours to set
      */
-    public void setClosingHours(Date closingHours) {
+    public void setClosingHours(Date[] closingHours) {
         this.closingHours = closingHours;
     }
 

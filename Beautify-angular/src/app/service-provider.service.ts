@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import { ServiceProvider } from './service-provider';
+
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -21,6 +23,16 @@ export class ServiceProviderService {
     return this.httpClient.get<any>(this.baseUrl + "/serviceProviderLogin?username=" + username + "&password=" + password).pipe (
       catchError(this.handleError)
     )
+  }
+
+  createNewServiceProvider(newServiceProvider: ServiceProvider): Observable<any> {
+	let createServiceProviderReq = {
+		"serviceProvider" : newServiceProvider,
+	}
+
+	return this.httpClient.put<any>(this.baseUrl, createServiceProviderReq, httpOptions).pipe (
+		catchError(this.handleError)
+	);
   }
 
 	private handleError(error: HttpErrorResponse)

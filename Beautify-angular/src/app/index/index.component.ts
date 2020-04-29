@@ -56,4 +56,9 @@ export class IndexComponent implements OnInit {
       }
     );
   }
+
+  goToSignUpPage() {
+    this.router.navigate(["/sign-up"])
+  }
+
 }

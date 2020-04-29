@@ -5,6 +5,7 @@ import entity.Service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -58,6 +59,9 @@ public class viewServiceDetailsManagedBean implements Serializable {
     {        
     }
 
+    public TimeZone getTimeZone() {
+        return TimeZone.getDefault();
+    }
     
     public Service getServiceToView() {
         return serviceToView;

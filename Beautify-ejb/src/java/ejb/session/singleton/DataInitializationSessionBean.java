@@ -155,13 +155,15 @@ public class DataInitializationSessionBean {
             Category categoryMakeup = categorySessionBeanLocal.createNewCategoryEntity(new Category("Makeup", "Makeup Products", type.PRODUCT), categoryFace.getCategoryId());
 
             // service providers 
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date[] openingHours = {sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"),sdf.parse("09:00"), sdf.parse("09:00"),sdf.parse("09:00")};
+            Date[] closingHours = {sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00")};
             ServiceProvider provider1 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Nail Lounge", "thenaillounge@gmail.com", "password", "123 Hougang Road",
-                    sdf.parse("09:00:00"), sdf.parse("17:00:00"), null, true)));
+                    openingHours, closingHours, null, true)));
             ServiceProvider provider2 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Beautiful Hair Salon", "thebeautifulhairsalon@gmail.com", "password", "3 Yishun Drive",
-                    sdf.parse("09:00:00"), sdf.parse("17:00:00"), null, true)));
+                    openingHours, closingHours, null, true)));
             ServiceProvider provider3 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Makeup Place", "themakeupplace@gmail.com", "password", "56 Serangoon Way",
-                    sdf.parse("09:00:00"), sdf.parse("17:00:00"), null, true)));
+                    openingHours, closingHours, null, true)));
 
             // tags
             Tag tag1 = tagsSessionBeanLocal.createNewTagEntity(new Tag("New"));

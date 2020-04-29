@@ -28,6 +28,16 @@
                             <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}"/>
 
+                            <h:outputLabel value="Service Provider Opening Hours" style="font-weight: bolder"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.openingHours}">
+                                <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
+                            </h:outputText>
+
+                            <h:outputLabel value="Service Provider Closing Hours" style="font-weight: bolder"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.closingHours}">
+                                <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
+                            </h:outputText>
+
                             <h:outputLabel value="Service Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
 
@@ -36,17 +46,27 @@
 
                             <h:outputLabel value="Service Price:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.price}"/>
-                            
+
                             <h:outputLabel value="Service Tags" style="font-weight: bolder"/>
                             <p:dataList value="#{viewServiceDetailsManagedBean.serviceToView.tags}" var="tag" type="unordered">
                                 #{tag.name}
                             </p:dataList>
 
                         </p:panelGrid>
+
+                        <br/>
+                        <h:form>
+                            <p:commandButton value="Book service" onclick="PF('dialogBooking').show()" icon="fa fa-calendar"/>
+                        </h:form>
                     </p:layoutUnit>
                 </p:layout>
             </h:body>
-            
+
+            <h:form id="formBooking">
+                <p:dialog id="dialogBooking" widgetVar="dialogBooking" header="Book Service" closable="true">
+
+                </p:dialog>
+            </h:form>
         </div>
     </ui:define>
 </ui:composition>
