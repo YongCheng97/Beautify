@@ -4,12 +4,12 @@ export class ServiceProvider {
     email: string;
     password: string;
     address: string;
-    openingHours: Date;
-    closingHours: Date;
+    openingHours: Array<Date> = [];
+    closingHours: Array<Date> = [];
     certification: File;
     isApproved: boolean;
 
-    constructor(serviceProviderId?: number, name?: string, email?: string, password?: string, address?: string, openingHours?: Date, closingHours?: Date, certification?: File, isApproved?: boolean) {
+    constructor(serviceProviderId?: number, name?: string, email?: string, password?: string, address?: string, openingHours?: Array<Date>, closingHours?: Array<Date>, certification?: File, isApproved?: boolean) {
         this.serviceProviderId = serviceProviderId;
         this.name = name;
         this.email = email;

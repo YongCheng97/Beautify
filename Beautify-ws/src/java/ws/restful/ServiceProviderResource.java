@@ -17,7 +17,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.ServiceProviderExistException;
+import util.exception.UnknownPersistenceException;
+import ws.datamodel.CreateServiceProviderReq;
+import ws.datamodel.CreateServiceProviderRsp;
 import ws.datamodel.ErrorRsp;
 import ws.datamodel.ServiceProviderLoginRsp;
 
@@ -61,15 +66,27 @@ public class ServiceProviderResource {
         }
     }
 
-    /**
-     * PUT method for updating or creating an instance of
-     * ServiceProviderResource
-     *
-     * @param content representation for the resource
-     */
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void putXml(String content) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createServiceProvider(CreateServiceProviderReq createServiceProviderReq) {
+        if (createServiceProviderReq != null) {
+            try {
+                Long serviceProviderId = serviceProviderSessionBean.createNewServiceProvider(createServiceProviderReq.getServiceProvider());
+                CreateServiceProviderRsp createServiceProviderRsp = new CreateServiceProviderRsp(serviceProviderId);
+
+                return Response.status(Response.Status.OK).entity(createServiceProviderRsp).build();
+            } catch (ServiceProviderExistException ex) {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+            } catch (Exception ex) {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+            }
+        } else {
+            ErrorRsp errorRsp = new ErrorRsp("Invalid create new service provider request");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
+        }
     }
 
     private ServiceProviderSessionBeanLocal lookupServiceProviderSessionBeanLocal() {

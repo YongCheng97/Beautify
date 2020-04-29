@@ -12,15 +12,19 @@
 <body>
     <div class="container">
         <div class="col-md-6 mx-auto text-center">
-            <div class="header-title">
-                <h1 class="wv-heading--title">
-                    Sign up now — it’s free!
-                </h1>
-                <h2 class="wv-heading--subtitle">
+            <div style="clear:both;">&nbsp;</div>
+            <h1 class="wv-heading--title">
+                Sign up now — it’s free!
+            </h1>
+            <!-- <h2 class="wv-heading--subtitle">
                     Lorem ipsum dolor sit amet! Neque porro quisquam est qui do dolor amet, adipisci velit...
-                </h2>
-            </div>
+                </h2> -->
+
         </div>
+        <div *ngIf="resultError == true" style="text-align: center; color: red;">
+            {{message}}
+        </div>
+        <br />
         <div class="row">
             <div class="col-md-4 mx-auto">
                 <div class="myform form ">
@@ -28,43 +32,180 @@
                         <div class="form-group">
                             <input type="text" name="name" #name="ngModel" class="form-control my-input" id="name"
                                 placeholder="Name" [(ngModel)]="newServiceProvider.name" required="true">
+                            <div *ngIf="name.invalid && (name.dirty || name.touched || submitted)" class="errorText">
+                                <div *ngIf="name.errors.required" style="color: red;">
+                                    Name is required.
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <input type="email" name="email" class="form-control my-input" id="email"
                                 placeholder="Email" #email="ngModel" [(ngModel)]="newServiceProvider.email"
                                 required="true">
+                            <div *ngIf="email.invalid && (email.dirty || email.touched || submitted)" class="errorText">
+                                <div *ngIf="email.errors.required" style="color: red;">
+                                    Email is required.
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <input type="password" name="password" id="password" class="form-control my-input"
                                 placeholder="Password" #password="ngModel" [(ngModel)]="newServiceProvider.password"
                                 required="true">
+                            <div *ngIf="password.invalid && (password.dirty || password.touched || submitted)"
+                                class="errorText">
+                                <div *ngIf="password.errors.required" style="color: red;">
+                                    Password is required.
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <input type="text" name="address" id="address" class="form-control my-input"
                                 placeholder="Address" #address="ngModel" [(ngModel)]="newServiceProvider.address"
                                 required="true">
+                            <div *ngIf="address.invalid && (address.dirty || address.touched || submitted)"
+                                class="errorText">
+                                <div *ngIf="address.errors.required" style="color: red;">
+                                    Address is required.
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="sr-only">Monday</label> &nbsp;
-                            <mat-form-field>
-                                <input placeholder="Opening Hours" aria-label="24hr format" [ngxTimepicker]="fullTime"
-                                    [format]="24" readonly>
-                                <ngx-material-timepicker #fullTime></ngx-material-timepicker> &nbsp;
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input placeholder="Closing Hours" aria-label="24hr format" [ngxTimepicker]="fullTime"
-                                    [format]="24" readonly>
-                                <ngx-material-timepicker #fullTime></ngx-material-timepicker>
-                            </mat-form-field>
+                        <div class="form-group" style="text-align:center">
+                            <div style="float:left;">
+                                <output type="text"
+                                    style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Monday</output>
+                            </div>
+                            <div style="float:left; margin-left: 53px">
+                                <input id="mondayOpeningHours" placeholder="Opening Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="mondayOpeningHr" [format]="24" class="form-control my-input"
+                                    name="mondayOpeningHrs" #mondayOpeningHrs="ngModel" [(ngModel)]="mondayOpeningHour">
+                                <ngx-material-timepicker #mondayOpeningHr></ngx-material-timepicker>
+                                <input id="mondayClosingHours" placeholder="Closing Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="mondayClosingHr" [format]="24" class="form-control my-input"
+                                    style="margin-top: 20px;" name="mondayClosingHrs" #mondayClosingHrs="ngModel"
+                                    [(ngModel)]="mondayClosingHour">
+                                <ngx-material-timepicker #mondayClosingHr></ngx-material-timepicker>
+                            </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <input type="text" pattern="([0-1]{1}[0-9]{1}|20|21|22|23):[0-5]{1}[0-9]{1}" name="openingHours" id="openingHours" class="form-control my-input"  #openingHours="ngModel"
-                                [(ngModel)]="newServiceProvider.openingHours" required="true">
+                        <div style="clear:both;">&nbsp;</div>
+                        <div class="form-group" style="text-align:center">
+                            <div style="float:left;">
+                                <output type="text"
+                                    style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Tuesday</output>
+                            </div>
+                            <div style="float:left; margin-left: 50px">
+                                <input placeholder="Opening Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="tuesdayOpeningHr" [format]="24" class="form-control my-input"
+                                    name="tuesdayOpeningHrs" #tuesdayOpeningHrs="ngModel"
+                                    [(ngModel)]="tuesdayOpeningHour">
+                                <ngx-material-timepicker #tuesdayOpeningHr></ngx-material-timepicker>
+
+                                <input placeholder="Closing Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="tuesdayClosingHr" [format]="24" class="form-control my-input"
+                                    style="margin-top: 10px;" name="tuesdayClosingHrs" #tuesdayClosingHrs="ngModel"
+                                    [(ngModel)]="tuesdayClosingHour">
+                                <ngx-material-timepicker #tuesdayClosingHr></ngx-material-timepicker>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input type="time" name="closingHours" id="closingHours" class="form-control my-input" #closingHours="ngModel"
-                                [(ngModel)]="newServiceProvider.closingHours" required="true">
-                        </div> -->
+                        <div style="clear:both;">&nbsp;</div>
+                        <div class="form-group" style="text-align:center">
+                            <div style="float:left;">
+                                <output type="text"
+                                    style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Wednesday</output>
+                            </div>
+                            <div style="float:left; margin-left: 25px">
+                                <input placeholder="Opening Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="wednesdayOpeningHr" [format]="24" class="form-control my-input"
+                                    name="wednesdayOpeningHrs" #wednesdayOpeningHrs="ngModel"
+                                    [(ngModel)]="wednesdayOpeningHour">
+                                <ngx-material-timepicker #wednesdayOpeningHr></ngx-material-timepicker>
+
+                                <input placeholder="Closing Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="wednesdayClosingHr" [format]="24" class="form-control my-input"
+                                    style="margin-top: 10px;" name="wednesdayClosingHrs" #wednesdayClosingHrs="ngModel"
+                                    [(ngModel)]="wednesdayClosingHour">
+                                <ngx-material-timepicker #wednesdayClosingHr></ngx-material-timepicker>
+                            </div>
+                        </div>
+                        <div style="clear:both;">&nbsp;</div>
+                        <div class="form-group" style="text-align:center">
+                            <div style="float:left;">
+                                <output type="text"
+                                    style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Thursday</output>
+                            </div>
+                            <div style="float:left; margin-left: 43px">
+                                <input placeholder="Opening Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="thursdayOpeningHr" [format]="24" class="form-control my-input"
+                                    name="thursdayOpeningHrs" #thursdayOpeningHrs="ngModel"
+                                    [(ngModel)]="thursdayOpeningHour">
+                                <ngx-material-timepicker #thursdayOpeningHr></ngx-material-timepicker>
+
+                                <input placeholder="Closing Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="thursdayClosingHr" [format]="24" class="form-control my-input"
+                                    style="margin-top: 10px;" name="thursdayClosingHrs" #thursdayClosingHrs="ngModel"
+                                    [(ngModel)]="thursdayClosingHour">
+                                <ngx-material-timepicker #thursdayClosingHr></ngx-material-timepicker>
+                            </div>
+                        </div>
+                        <div style="clear:both;">&nbsp;</div>
+                        <div class="form-group" style="text-align:center">
+                            <div style="float:left;">
+                                <output type="text"
+                                    style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Friday</output>
+                            </div>
+                            <div style="float:left; margin-left: 67px">
+                                <input placeholder="Opening Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="fridayOpeningHr" [format]="24" class="form-control my-input"
+                                    name="fridayOpeningHrs" #fridayOpeningHrs="ngModel" [(ngModel)]="fridayOpeningHour">
+                                <ngx-material-timepicker #fridayOpeningHr></ngx-material-timepicker>
+
+                                <input placeholder="Closing Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="fridayClosingHr" [format]="24" class="form-control my-input"
+                                    style="margin-top: 10px;" name="fridayClosingHrs" #fridayClosingHrs="ngModel"
+                                    [(ngModel)]="fridayClosingHour">
+                                <ngx-material-timepicker #fridayClosingHr></ngx-material-timepicker>
+                            </div>
+                        </div>
+                        <div style="clear:both;">&nbsp;</div>
+                        <div class="form-group" style="text-align:center">
+                            <div style="float:left;">
+                                <output type="text"
+                                    style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Saturday</output>
+                            </div>
+                            <div style="float:left; margin-left: 43px">
+                                <input placeholder="Opening Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="saturdayOpeningHr" [format]="24" class="form-control my-input"
+                                    name="saturdayOpeningHrs" #saturdayOpeningHrs="ngModel"
+                                    [(ngModel)]="saturdayOpeningHour">
+                                <ngx-material-timepicker #saturdayOpeningHr></ngx-material-timepicker>
+
+                                <input placeholder="Closing Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="saturdayClosingHr" [format]="24" class="form-control my-input"
+                                    style="margin-top: 10px;" name="saturdayClosingHrs" #saturdayClosingHrs="ngModel"
+                                    [(ngModel)]="saturdayClosingHour">
+                                <ngx-material-timepicker #saturdayClosingHr></ngx-material-timepicker>
+                            </div>
+                        </div>
+                        <div style="clear:both;">&nbsp;</div>
+                        <div class="form-group" style="text-align:center">
+                            <div style="float:left;">
+                                <output type="text"
+                                    style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Sunday</output>
+                            </div>
+                            <div style="float:left; margin-left: 55px">
+                                <input placeholder="Opening Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="sundayOpeningHr" [format]="24" class="form-control my-input"
+                                    name="sundayOpeningHrs" #sundayOpeningHrs="ngModel" [(ngModel)]="sundayOpeningHour">
+                                <ngx-material-timepicker #sundayOpeningHr></ngx-material-timepicker>
+
+                                <input placeholder="Closing Hours" aria-label="24hr format"
+                                    [ngxTimepicker]="sundayClosingHr" [format]="24" class="form-control my-input"
+                                    style="margin-top: 10px;" name="sundayClosingHrs" #sundayClosingHrs="ngModel"
+                                    [(ngModel)]="sundayClosingHour">
+                                <ngx-material-timepicker #sundayClosingHr></ngx-material-timepicker>
+                            </div>
+                        </div>
+                        <div style="clear:both;">&nbsp;</div>
                         <!-- <div class="form-group">
                             <input type="file" name="certification" id="certification" style="text-align: center;" #certification="ngModel"
                                [(ngModel)]="newServiceProvider.certification" required="true">
