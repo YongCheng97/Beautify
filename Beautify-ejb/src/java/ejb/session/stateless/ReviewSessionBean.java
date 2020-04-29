@@ -242,11 +242,15 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
         Customer customer = reviewToRemove.getCustomer();
         customer.getReviews().remove(reviewToRemove);
         
-        Booking booking = reviewToRemove.getBooking();
-        booking.setReview(null);
+        if (reviewToRemove.getBooking() != null){
+            Booking booking = reviewToRemove.getBooking();
+            booking.setReview(null);
+        }
         
-        PurchasedLineItem purchasedLineItem = reviewToRemove.getPurchasedLineItem();
-        purchasedLineItem.setReview(null);
+        if (reviewToRemove.getPurchasedLineItem() != null){
+            PurchasedLineItem purchasedLineItem = reviewToRemove.getPurchasedLineItem();
+            purchasedLineItem.setReview(null);
+        }
 
         em.remove(reviewToRemove);
     }

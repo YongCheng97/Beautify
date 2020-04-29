@@ -40,14 +40,14 @@
 
                             <h:outputText style="font-weight: bold" value ="Price:" />
 
-                            <!-- <h:panelGroup rendered="#{sessionScope.service.getServiceName() == false}"> 
-                                <h:outputText value="$#{service.price}" />
-                            </h:panelGroup> --> 
+<!--                             <h:panelGroup rendered="#{sessionScope.service.getServiceName() == false}"> 
+-->                                <h:outputText value="$#{service.price}" rendered="#{sessionScope.service.getServiceName() == false}"/><!--
+                            </h:panelGroup>  -->
 
                             <!-- <h:panelGroup rendered="#{sessionScope.service.getServiceName() == true}"> -->
                             <div class="table">
-                                <th><h:outputText value="$#{service.price}" style="text-decoration: line-through;"/></th>
-                                <th><h:outputText value="$#{service.discountPrice}"  style="color: red"/> </th>
+                                <th><h:outputText value="$#{service.price}" style="text-decoration: line-through;" rendered="#{sessionScope.service.getServiceName() == true}"/></th>
+                                <th><h:outputText value="$#{service.discountPrice}"  style="color: red" rendered="#{sessionScope.service.getServiceName() == true}"/> </th>
                             </div>
                             <!-- </h:panelGroup> --> 
 

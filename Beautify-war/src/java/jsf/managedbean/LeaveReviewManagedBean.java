@@ -107,8 +107,10 @@ public class LeaveReviewManagedBean implements Serializable {
 
     //booking and purchasedlineitem
     public void deleteReview(ActionEvent event) {
+        
         try {
             Long reviewId = review.getReviewId();
+            System.out.println(reviewId);
             reviewSessionBeanLocal.deleteReview(reviewId);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review deleted successfully", null));
         } catch (ReviewNotFoundException ex) {

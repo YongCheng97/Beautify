@@ -53,6 +53,9 @@
 
                         <h:panelGrid columns="2" cellpadding="5" style="width:100%; text-align:left">
 
+                            <h:outputText value="Service Name:"  style="font-weight: bold"/>
+                            <h:outputText value="#{booking.service.serviceName}"/>
+                            
                             <h:outputText value="Date of Appointment:"  style="font-weight: bold"/>
                             <h:outputText value="#{booking.dateOfAppointment}"/>
 
@@ -68,12 +71,13 @@
                             <h:outputText value="Status:" style="font-weight: bold"/>
                             <h:outputText value="#{booking.status}"/>
 
-                            <!--link the the individual service page-->
-                            <!--                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
-                                                                <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
-                                                                <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
-                                                            </p:commandLink>-->
                         </h:panelGrid>
+
+                        <p:commandLink actionListener="#{customerManagementManagedBean.viewService}" style="text-decoration:none;color:blue;">
+                            <h:outputText value = "Click here for more information!"/>
+                            <f:attribute name="serviceId" value="#{booking.service.serviceId}" />
+                        </p:commandLink>
+
                     </p:panel>
 
                 </p:dataGrid>

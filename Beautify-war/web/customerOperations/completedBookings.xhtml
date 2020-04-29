@@ -53,6 +53,9 @@
 
                         <h:panelGrid columns="2" cellpadding="5" style="width:100%; text-align:left">
 
+                            <h:outputText value="Service Name:"  style="font-weight: bold"/>
+                            <h:outputText value="#{booking.service.serviceName}"/>
+
                             <h:outputText value="Date of Appointment:"  style="font-weight: bold"/>
                             <h:outputText value="#{booking.dateOfAppointment}"/>
 
@@ -68,24 +71,25 @@
                             <h:outputText value="Status:" style="font-weight: bold"/>
                             <h:outputText value="#{booking.status}"/>
 
-                            <!--link the the individual service page-->
-                            <!--                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
-                                                                <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
-                                                                <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
-                                                            </p:commandLink>-->
-
-<!--                            <p:commandButton actionListener="#{customerManagementManagedBean.doUpdateCustomer}" update="formUpdateCustomer" oncomplete="PF('dialogUpdateCustomer').show()" value="Update Profile" icon="fa fa-pencil" title="Update">
-</p:commandButton>-->
-
-                            <p:commandButton actionListener="#{leaveReviewManagedBean.doLeaveReview}" update="bookingInfo formLeaveReview" oncomplete="PF('dialogLeaveReview').show()" value="Leave Review" icon="fa fa-thumbs-o-up" title="Leave Review" rendered="#{booking.review == null}">
-                                <f:attribute name="bookingToReview" value="#{booking}" />
-                            </p:commandButton>
-
-                            <p:commandButton actionListener="#{leaveReviewManagedBean.doViewReview}" update=" bookingInfo formViewReview" oncomplete="PF('dialogViewReview').show()" value="View Review" icon="fa fa-thumbs-o-up" title="View Review" rendered="#{booking.review != null}">
-                                <f:attribute name="bookingToReview" value="#{booking}" />
-                            </p:commandButton>
-
                         </h:panelGrid>
+
+                        <p:commandLink actionListener="#{customerManagementManagedBean.viewService}" style="text-decoration:none;color:blue;">
+                            <h:outputText value = "Click here for more information!"/>
+                            <f:attribute name="serviceId" value="#{booking.service.serviceId}" />
+                        </p:commandLink>
+
+                        <br></br>
+                        <br></br>
+
+                        <p:commandButton actionListener="#{leaveReviewManagedBean.doLeaveReview}" update="bookingInfo formLeaveReview" oncomplete="PF('dialogLeaveReview').show()" value="Leave Review" icon="fa fa-thumbs-o-up" title="Leave Review" rendered="#{booking.review == null}">
+                            <f:attribute name="bookingToReview" value="#{booking}" />
+                        </p:commandButton>
+
+                        <p:commandButton actionListener="#{leaveReviewManagedBean.doViewReview}" update=" bookingInfo formViewReview" oncomplete="PF('dialogViewReview').show()" value="View Review" icon="fa fa-thumbs-o-up" title="View Review" rendered="#{booking.review != null}">
+                            <f:attribute name="bookingToReview" value="#{booking}" />
+                        </p:commandButton>
+
+
 
                     </p:panel>
 
@@ -142,7 +146,7 @@
             </p:dialog>
 
         </h:form>
-        
+
         <h:form id="formUpdateReview">
 
             <p:dialog id="dialogUpdateReview" widgetVar="dialogUpdateReview" header="Update Review" closable="true">
@@ -161,7 +165,7 @@
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:inputText id="description" value="#{leaveReviewManagedBean.review.description}" placeholder="How was the service?" required="false" style="height:100px;width:500px"/>
+                            <p:inputTextarea id="description" value="#{leaveReviewManagedBean.review.description}" placeholder="How was the service?" required="false" style="height:100px;width:500px"/>
                         </p:column>
                         <p:column>
                             <p:message for="description" />
@@ -200,7 +204,7 @@
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:inputText id="description" value="#{leaveReviewManagedBean.review.description}" placeholder="How was the service?" required="false" style="height:100px;width:500px"/>
+                            <p:inputTextarea id="description" value="#{leaveReviewManagedBean.review.description}" placeholder="How was the service?" required="false" style="height:100px;width:500px"/>
                         </p:column>
                         <p:column>
                             <p:message for="description" />

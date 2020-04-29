@@ -161,11 +161,15 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
     public void deleteCreditCard(Long creditCardId) throws CreditCardNotFoundException {
         CreditCard creditCardToRemove = retrieveCreditCardByCreditCardId(creditCardId);
         
-        Customer customer = creditCardToRemove.getCustomer();
-        customer.getCreditCards().remove(creditCardToRemove);
+        if (creditCardToRemove.getCustomer() != null){
+            Customer customer = creditCardToRemove.getCustomer();
+            customer.getCreditCards().remove(creditCardToRemove);
+        }
         
-        ServiceProvider serviceProvider = creditCardToRemove.getServiceProvider();
-        serviceProvider.getCreditCards().remove(creditCardToRemove);
+        if (creditCardToRemove.getServiceProvider() != null){
+            ServiceProvider serviceProvider = creditCardToRemove.getServiceProvider();
+            serviceProvider.getCreditCards().remove(creditCardToRemove);
+        }
 
         em.remove(creditCardToRemove);
     }

@@ -62,7 +62,9 @@
                     <p:dataList var="purchasedLineItem" value="#{purchasedManagedBean.selectedPurchasedLineItems}" type="unordered" itemType="none"
                                 paginator="true" rows="5" rowsPerPageTemplate="5,10,20" pageLinks="5"
                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
-                        <h:panelGrid columns="2" style="border-bottom: 1px solid #A8A8A8; padding: 25px; width:95%">
+                        <h:panelGrid columns="3" style="border-bottom: 1px solid #A8A8A8; padding: 25px; width:95%">
+
+                            <p:graphicImage library="images" name ="#{purchasedLineItem.product.name}.jpg" height="120" width="170" alt ="" />
 
                             <p:outputPanel>
                                 <h:panelGrid columns="2" cellpadding="5">
@@ -79,6 +81,11 @@
                                     <h:outputText value="#{purchasedLineItem.status}" />
 
                                 </h:panelGrid>
+
+                                <p:commandLink actionListener="#{customerManagementManagedBean.viewProduct}" style="text-decoration:none;color:blue;">
+                                    <h:outputText value = "Click here for more information!"/>
+                                    <f:attribute name="productId" value="#{purchasedLineItem.product.productId}" />
+                                </p:commandLink>
                             </p:outputPanel>
 
                             <p:commandButton actionListener="#{purchasedManagedBean.updatePurchasedLineItemStatus}" update="@form" value="Product Received" icon="fa fa-check-circle-o" title="Product Received" rendered="#{purchasedLineItem.status=='Shipped'}">
@@ -176,7 +183,7 @@
                         <p:row>
                             <p:column colspan="2" style="text-align:center">
                                 <p:commandButton value="Update Review" update="@form purchasedLineItems formViewReview viewPurchaseds" actionListener="#{leaveReviewManagedBean.updateReview}" oncomplete="PF('dialogUpdateReview').show();" />
-                                </p:column>
+                            </p:column>
                         </p:row>
 
                     </h:panelGrid>
@@ -223,7 +230,7 @@
                 </p:dialog>
 
             </h:form>
-            
+
         </h:body>
 
     </ui:define>

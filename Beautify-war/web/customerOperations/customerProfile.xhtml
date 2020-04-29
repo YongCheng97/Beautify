@@ -33,7 +33,14 @@
             <h:form id="profileInfo">
                 <p:layout style="min-width:400px;min-height:300px;">
                     <p:layoutUnit position="west" resizable="false" size="200">
-                        Photo
+                        <p:graphicImage library="images" name="Customer#{customerManagementManagedBean.currentCustomer.customerId}.jpg" height="150" width="190" alt ="" />
+
+                        <h:form>  
+                            <p:fileUpload fileUploadListener="#{customerManagementManagedBean.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                                          update="messages @form" sizeLimit="100000" fileLimit="100" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+                            <p:growl id="messages" showDetail="true" />     
+                        </h:form>
 
                     </p:layoutUnit>
 
@@ -122,8 +129,8 @@
                 <h:panelGrid columns="2" cellpadding="5">
 
                     <h:outputText value="Type:" style="font-weight: bold" />
-                    
-                    <p:selectOneMenu id="creditCardToAdd" value="##{creditCardManagedBean.creditCardToAdd.type}" style="width:125px">
+
+                    <p:selectOneMenu id="creditCardType" value="#{creditCardManagedBean.creditCardToAdd.type}" style="width:125px">
                         <f:selectItem itemLabel="Select One" itemValue="" />
                         <f:selectItem itemLabel="VISA" itemValue="VISA" />
                         <f:selectItem itemLabel="MasterCard" itemValue="MasterCard" />
@@ -153,43 +160,22 @@
 
                 <p:messages id="messagesChangePassword" redisplay="false" />
 
-                <p:panelGrid>
+                <h:panelGrid columns="2" cellpadding="5">
 
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel for="oldPassword" value="Old Password"/>
-                        </p:column>
-                        <p:column>
-                            <h:inputSecret id="oldPassword" value="#{customerManagementManagedBean.oldPassword}"/>
-                        </p:column>
-                        <p:column>
-                            <p:message for="oldPassword" />
-                        </p:column>
-                    </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel for="newPassword" value="New Password"/>
-                        </p:column>
-                        <p:column>
-                            <h:inputSecret id="newPassword" value="#{customerManagementManagedBean.newPassword}"/>
-                        </p:column>
-                        <p:column>
-                            <p:message for="newPassword" />
-                        </p:column>
-                    </p:row>
+                    <p:outputLabel for="oldPassword" value="Old Password"/>
 
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel for="confirmPassword" value="Confirm new password" />
-                        </p:column>
-                        <p:column>
-                            <h:inputSecret id="confirmPassword" value="#{customerManagementManagedBean.confirmPassword}"/>
-                        </p:column>
-                        <p:column>
-                            <p:message for="confirmPassword" />
-                        </p:column>
-                    </p:row>
+                    <p:password id="oldPassword" value="#{customerManagementManagedBean.oldPassword}"/>
+
+                    <p:outputLabel for="newPassword" value="New Password"/>
+
+                    <p:password id="newPassword" value="#{customerManagementManagedBean.newPassword}"/>
+
+                    <p:outputLabel for="confirmPassword" value="Confirm new password" />
+
+                    <p:password id="confirmPassword" value="#{customerManagementManagedBean.confirmPassword}"/>
+
+                    <p:outputLabel></p:outputLabel>
 
                     <p:row>
                         <p:column colspan="3">
@@ -197,7 +183,7 @@
                         </p:column>
                     </p:row>
 
-                </p:panelGrid>
+                </h:panelGrid>
 
             </p:dialog>
 
@@ -210,63 +196,41 @@
 
                 <p:messages id="messagesUpdateCustomer" redisplay="false" />
 
-                <p:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="firstName" value="First Name: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="firstName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.firstName}" placeholder="First Name" required="true" requiredMessage="First Name is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="firstName" />
-                        </p:column>
-                    </p:row>
+                    <p:outputLabel for="firstName" value="First Name: " />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="lastName" value="Last Name: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="lastName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.lastName}" placeholder="Last Name" required="true" requiredMessage="Last Name is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="lastName" />
-                        </p:column>
-                    </p:row>
+                    <p:inputText id="firstName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.firstName}" placeholder="First Name" required="true" requiredMessage="First Name is required" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="email" value="Email: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="email" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.email}" placeholder="abc@example.com" required="true" requiredMessage="Email is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="email" />
-                        </p:column>
-                    </p:row>
+                    <p:message for="firstName" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="contactNumber" value="Contact Number: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="contactNumber" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.contactNum}" placeholder="81234567" required="true" requiredMessage="Contact Number is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="contactNumber" />
-                        </p:column>
-                    </p:row>      
+                    <p:outputLabel for="lastName" value="Last Name: " />
 
+                    <p:inputText id="lastName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.lastName}" placeholder="Last Name" required="true" requiredMessage="Last Name is required" />
+
+                    <p:message for="lastName" />
+
+                    <p:outputLabel for="email" value="Email: " />
+
+                    <p:inputText id="email" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.email}" placeholder="abc@example.com" required="true" requiredMessage="Email is required" />
+
+                    <p:message for="email" />
+
+                    <p:outputLabel for="contactNumber" value="Contact Number: " />
+
+                    <p:inputText id="contactNumber" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.contactNum}" placeholder="81234567" required="true" requiredMessage="Contact Number is required" />
+
+                    <p:message for="contactNumber" />
+
+                    <h:outputLabel></h:outputLabel>
+                    
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton value="Confirm Update" update="@form profileInfo" actionListener="#{customerManagementManagedBean.updateCustomer}" oncomplete="PF('dialogUpdateCustomer').show();" />
                         </p:column>
                     </p:row>
 
-                </p:panelGrid>
+                </h:panelGrid>
 
             </p:dialog>
 
