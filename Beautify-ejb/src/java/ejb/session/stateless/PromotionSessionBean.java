@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -89,6 +91,19 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
+    public Promotion retrievePromotionByPromoCode(String promoCode) throws PromotionNotFoundException {
+
+        Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.promoCode = :inPromoCode");
+        query.setParameter("inPromoCode", promoCode);
+
+        try {
+            return (Promotion) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new PromotionNotFoundException("Promotion name " + promoCode + " does not exist!");
+        }
+    }
+
+    @Override
     public Promotion retrievePromotionByName(String name) throws PromotionNotFoundException {
         Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.name = :inName");
         query.setParameter("inName", name);
@@ -139,7 +154,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
             service.setDiscountPrice(null);
         } else {
             Date date = new Date();
-            BigDecimal discountPrice = new BigDecimal(0);
+            BigDecimal discountPrice = new BigDecimal("0.00");
             Boolean update = false;
 
             for (Promotion promotion : promotions) {
@@ -163,7 +178,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
             product.setDiscountPrice(null);
         } else {
             Date date = new Date();
-            BigDecimal discountPrice = new BigDecimal(0);
+            BigDecimal discountPrice = new BigDecimal("0.00");
             Boolean update = false;
 
             for (Promotion promotion : promotions) {
@@ -178,6 +193,26 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
                 product.setDiscountPrice(null);
             }
         }
+    }
+    
+    @Override
+    public Boolean checkPromoCode(String promoCode) {
+        Boolean valid = false;
+
+        try {
+            Promotion promotion = retrievePromotionByPromoCode(promoCode);
+
+            Date date = new Date();
+
+            if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
+                valid = true; 
+            }
+
+        } catch (PromotionNotFoundException ex) {
+            Logger.getLogger(PromotionSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return valid;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Promotion>> constraintViolations) {

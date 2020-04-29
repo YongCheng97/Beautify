@@ -1,12 +1,14 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.CreditCardSessionBeanLocal;
+import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
 import ejb.session.stateless.PurchasedSessionBeanLocal;
 import entity.CreditCard;
 import entity.Customer;
 import entity.Item;
 import entity.Product;
+import entity.Promotion;
 import entity.Purchased;
 import entity.PurchasedLineItem;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import util.exception.CreateNewPurchaseException;
 import util.exception.CreateNewPurchasedLineItemException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.PromotionNotFoundException;
 import util.exception.PurchasedExistException;
 import util.exception.PurchasedLineItemExistException;
 import util.exception.UnknownPersistenceException;
@@ -35,6 +38,9 @@ import util.exception.UnknownPersistenceException;
 @Named(value = "shoppingCartManagedBean")
 @SessionScoped
 public class ShoppingCartManagedBean implements Serializable {
+
+    @EJB
+    private PromotionSessionBeanLocal promotionSessionBeanLocal;
 
     @EJB
     private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
@@ -50,9 +56,11 @@ public class ShoppingCartManagedBean implements Serializable {
     private Customer currentCustomer;
     private List<String> creditCards;
     private String creditCardNum;
+    private String promoCode;
 
     private List<Item> items;
     private int amountToCart;
+    private BigDecimal totalAmount;
 
     //FacesContext context = FacesContext.getCurrentInstance();
     String msg = null;
@@ -99,9 +107,13 @@ public class ShoppingCartManagedBean implements Serializable {
 
     public BigDecimal totalAmount() {
         BigDecimal total = new BigDecimal("0.00");
+
         for (Item item : this.items) {
             total = total.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
         }
+
+        setTotalAmount(total);
+
         return total;
     }
 
@@ -172,11 +184,22 @@ public class ShoppingCartManagedBean implements Serializable {
 
             try {
                 for (Item item : this.getItems()) {
-                    PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-                    lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+                    promotionSessionBeanLocal.updateProductDiscountPrice(item.getProduct());
 
-                    totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    if (item.getProduct().getDiscountPrice() != null) { // there is ongoing promotion
+                        PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                        lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+
+                        totalPrice = totalPrice.add(item.getProduct().getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    } else { // original price
+                        PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                        lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+
+                        totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    }
                 }
+
+                setTotalAmount(totalPrice);
 
                 Purchased purchased = new Purchased(date, totalPrice, order.getAddress());
                 CreditCard cc = creditCardSessionBeanLocal.retrieveCreditCardByLastFourNum(creditCardNum);
@@ -187,6 +210,35 @@ public class ShoppingCartManagedBean implements Serializable {
                     | PurchasedExistException | CreateNewPurchaseException ex) {
                 Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    public void checkPromoCode(ActionEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        try {
+            Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
+
+            Boolean exists = false;
+
+            for (Item item : items) {
+                List<Promotion> itemPromotions = item.getProduct().getPromotions();
+                if (itemPromotions.contains(promotion)) {
+                    exists = true;
+                }
+            }
+
+            Boolean valid = promotionSessionBeanLocal.checkPromoCode(promoCode);
+
+            if (valid && exists) {
+                msg = "Promo Code Applied!";
+            } else {
+                msg = "Invalid Promo Code!";
+            }
+
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+        } catch (PromotionNotFoundException ex) {
+            Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -248,6 +300,22 @@ public class ShoppingCartManagedBean implements Serializable {
 
     public void setCreditCardNum(String creditCardNum) {
         this.creditCardNum = creditCardNum;
+    }
+
+    public String getPromoCode() {
+        return promoCode;
+    }
+
+    public void setPromoCode(String promoCode) {
+        this.promoCode = promoCode;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
 }

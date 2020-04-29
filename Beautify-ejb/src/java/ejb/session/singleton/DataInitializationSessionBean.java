@@ -201,7 +201,7 @@ public class DataInitializationSessionBean {
             // promotion
             SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yy");
 
-            Promotion promotion1 = promotionSessionBeanLocal.createNewPromotion(new Promotion("10OFF", "10% off", new BigDecimal("00.90"), sdf2.parse("01/04/2020"), sdf2.parse("30/4/2020")));
+            Promotion promotion1 = promotionSessionBeanLocal.createNewPromotion(new Promotion("10OFF", "10% off", new BigDecimal("00.90"), sdf2.parse("01/04/2020"), sdf2.parse("30/5/2020")));
             Promotion promotion2 = promotionSessionBeanLocal.createNewPromotion(new Promotion("30OFF", "30% off", new BigDecimal("00.70"), sdf2.parse("10/04/2020"), sdf2.parse("19/5/2020")));
             redPolish.addPromotion(promotion1);
             facial.addPromotion(promotion2);
