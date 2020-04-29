@@ -44,7 +44,7 @@ public class Purchased implements Serializable {
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2)
     private BigDecimal totalPrice;
-    
+      
     @OneToMany
     private List<PurchasedLineItem> purchasedLineItems;
     

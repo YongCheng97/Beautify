@@ -1,12 +1,231 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
 
+    <ui:define name="content">
+        <ez:menubar/>
+
+        <p:tabMenu activeIndex="3">
+            <p:menuitem value="Profile" outcome="customerProfile.xhtml" icon="fa fa-user">
+                <f:param name="i" value="0" />
+            </p:menuitem>
+            <p:menuitem value="Bookings" outcome="upcomingBookings.xhtml" icon="fa fa-calendar">
+                <f:param name="i" value="1" />
+            </p:menuitem>
+            <p:menuitem value="Favourites" outcome="favouriteServices.xhtml" icon="fa fa-star">
+                <f:param name="i" value="2" />
+            </p:menuitem>
+            <p:menuitem value="Products Purchased" outcome="customerProductsPurchased.xhtml" icon="fa fa-shopping-cart">
+                <f:param name="i" value="3" />
+            </p:menuitem>
+
+        </p:tabMenu>
+
+        <h:body style="margin: 0; height:100%">
+
+            <h:form id="viewPurchaseds">
+                <p:dataList var="purchased" value="#{purchasedManagedBean.purchaseds}" type="unordered" itemType="none"
+                            paginator="true" rows="5" rowsPerPageTemplate="5,10,20" pageLinks="5"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    <h:panelGrid columns="2" style="border-bottom: 1px solid #A8A8A8; padding: 25px; width:95%">
+
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="5" >
+                                <h:outputText value="Order Id:" style="font-weight: bold"/>
+                                <h:outputText value="#{purchased.purchasedId}" />
+
+                                <h:outputText value="Date Of Purchase:" style="font-weight: bold" />
+                                <h:outputText value="#{purchased.dateOfPurchase}"/>
+
+                                <h:outputText value="Total Price:" style="font-weight: bold"/>
+                                <h:outputText value="$#{purchased.totalPrice}" />
+
+                            </h:panelGrid>
+                        </p:outputPanel>
+
+                        <p:commandButton actionListener="#{purchasedManagedBean.doGetPurchasedDetails}" update="purchasedLineItems" oncomplete="PF('dialogViewPurchasedLineItems').show()" icon="fa fa-list" value="View Details" title="View Detail">
+                            <f:attribute name="selectedPurchased" value="#{purchased}" />    
+                        </p:commandButton>       
+                    </h:panelGrid>
+
+                </p:dataList>
+            </h:form>
+
+            <h:form id="purchasedLineItems">
+                <p:dialog header="Order Details" widgetVar="dialogViewPurchasedLineItems" closable="true" height="400px" width="800px" resizable="false">
+                    <p:dataList var="purchasedLineItem" value="#{purchasedManagedBean.selectedPurchasedLineItems}" type="unordered" itemType="none"
+                                paginator="true" rows="5" rowsPerPageTemplate="5,10,20" pageLinks="5"
+                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                        <h:panelGrid columns="2" style="border-bottom: 1px solid #A8A8A8; padding: 25px; width:95%">
+
+                            <p:outputPanel>
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <h:outputText value="Product Name:" style="font-weight: bold"/>
+                                    <h:outputText value="#{purchasedLineItem.product.name}" />
+
+                                    <h:outputText value="Quantity:" style="font-weight: bold"/>
+                                    <h:outputText value="#{purchasedLineItem.quantity}" />
+
+                                    <h:outputText value="Price Per Unit:" style="font-weight: bold"/>
+                                    <h:outputText value="$#{purchasedLineItem.price}" />
+
+                                    <h:outputText value="Status:" style="font-weight: bold"/>
+                                    <h:outputText value="#{purchasedLineItem.status}" />
+
+                                </h:panelGrid>
+                            </p:outputPanel>
+
+                            <p:commandButton actionListener="#{purchasedManagedBean.updatePurchasedLineItemStatus}" update="@form" value="Product Received" icon="fa fa-check-circle-o" title="Product Received" rendered="#{purchasedLineItem.status=='Shipped'}">
+                                <f:attribute name="purchasedLineItemToUpdate" value="#{purchasedLineItem}" />
+                            </p:commandButton>
+
+                            <p:commandButton actionListener="#{leaveReviewManagedBean.doLeaveProductReview}" update="@form formLeaveReview" oncomplete="PF('dialogLeaveReview').show()" value="Leave Review" icon="fa fa-thumbs-o-up" title="Leave Review" rendered="#{purchasedLineItem.status=='Product Received' and purchasedLineItem.review == null}">
+                                <f:attribute name="purchasedLineItemToReview" value="#{purchasedLineItem}" />
+                            </p:commandButton>
+
+                            <p:commandButton actionListener="#{leaveReviewManagedBean.doViewProductReview}" update="@form formViewReview" oncomplete="PF('dialogViewReview').show()" value="View Review" icon="fa fa-thumbs-o-up" title="View Review" rendered="#{purchasedLineItem.review != null}">
+                                <f:attribute name="purchasedLineItemToReview" value="#{purchasedLineItem}" />
+                            </p:commandButton>
+
+                        </h:panelGrid>
+                    </p:dataList>
+                </p:dialog>
+            </h:form>
+
+            <h:form id="formViewReview">
+
+                <p:dialog id="dialogViewReview" widgetVar="dialogViewReview" header="View Review" closable="true">
+
+                    <p:messages id="messagesViewReview" redisplay="false" />
+
+                    <h:panelGrid columns="2" cellpadding="5">
+
+                        <h:outputText value="Rating:" />
+                        <p:rating value="#{leaveReviewManagedBean.review.rating}" readonly="true"/>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Description: " />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="#{leaveReviewManagedBean.review.description}"/>
+                            </p:column>
+                        </p:row>
+
+                        <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
+
+                        <p:row>
+                            <p:column colspan="2" style="text-align:center">
+                                <p:commandButton update="@form purchasedLineItems formUpdateReview viewPurchaseds" oncomplete="PF('dialogUpdateReview').show()" value="Update Review" title="Update Review"/>                 
+                            </p:column>
+                        </p:row>
+                        <p:row>                        
+                            <p:column colspan="2" style="text-align:center">
+                                <p:commandButton value="Delete Review" update="purchasedLineItems" actionListener="#{leaveReviewManagedBean.deleteReview}" oncomplete="PF('dialogViewReview').show();" >
+                                    <p:confirm header="Delete" message="Are you sure?" icon="fa fa-exclamation-triangle" />
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times" />
+                            </p:confirmDialog>   
+                        </p:row>
+
+                    </h:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+
+            <h:form id="formUpdateReview">
+
+                <p:dialog id="dialogUpdateReview" widgetVar="dialogUpdateReview" header="Update Review" closable="true">
+
+                    <p:messages id="messagesUpdateReview" redisplay="false" />
+
+                    <h:panelGrid columns="2" cellpadding="5">
+
+                        <h:outputText value="Rating:" />
+                        <p:rating value="#{leaveReviewManagedBean.review.rating}" />
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="description" value="Description: " />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:inputText id="description" value="#{leaveReviewManagedBean.review.description}" placeholder="How was the product?" required="false" style="height:100px;width:500px"/>
+                            </p:column>
+                            <p:column>
+                                <p:message for="description" />
+                            </p:column>
+                        </p:row>
+
+                        <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
+
+                        <p:row>
+                            <p:column colspan="2" style="text-align:center">
+                                <p:commandButton value="Update Review" update="@form purchasedLineItems formViewReview viewPurchaseds" actionListener="#{leaveReviewManagedBean.updateReview}" oncomplete="PF('dialogUpdateReview').show();" />
+                                </p:column>
+                        </p:row>
+
+                    </h:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+
+            <h:form id="formLeaveReview">
+
+                <p:dialog id="dialogLeaveReview" widgetVar="dialogLeaveReview" header="Leave Review" closable="true">
+
+                    <p:messages id="messagesLeaveReview" redisplay="false" />
+
+                    <h:panelGrid columns="2" cellpadding="5">
+
+                        <h:outputText value="Rating:" />
+                        <p:rating value="#{leaveReviewManagedBean.review.rating}" />
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="description" value="Description: " />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:inputText id="description" value="#{leaveReviewManagedBean.review.description}" placeholder="How was the product?" required="false" style="height:100px;width:500px"/>
+                            </p:column>
+                            <p:column>
+                                <p:message for="description" />
+                            </p:column>
+                        </p:row>
+
+                        <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
+
+                        <p:row>
+                            <p:column colspan="2" style="text-align:center">
+                                <p:commandButton value="Submit Review" update="@form purchasedLineItems viewPurchaseds" actionListener="#{leaveReviewManagedBean.leaveProductReview}" oncomplete="PF('dialogLeaveReview').show();" />
+                            </p:column>
+                        </p:row>
+
+                    </h:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+            
+        </h:body>
+
+    </ui:define>
+
+</ui:composition>

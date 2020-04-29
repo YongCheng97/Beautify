@@ -34,7 +34,7 @@
                 <p:layout style="min-width:400px;min-height:300px;">
                     <p:layoutUnit position="west" resizable="false" size="200">
                         Photo
-                        
+
                     </p:layoutUnit>
 
                     <p:layoutUnit position="center">
@@ -59,42 +59,42 @@
                         <span style="display:inline-block; width: 200;"></span>
                         <p:commandButton actionListener="#{customerManagementManagedBean.changePassword}" update="formChangePassword" oncomplete="PF('dialogChangePassword').show()" value="Change Password" icon="fa fa-pencil" title="Change Password">
                         </p:commandButton>
-                        
+
                     </p:layoutUnit> 
                 </p:layout>
             </h:form>
         </h:body>
-        
+
         <h:form id="formViewCreditCards">
-            
-            <p:dialog id="dialogViewCreditCards" widgetVar="dialogViewCreditCards" header="View Credit Cards" closable="true">
-                
+
+            <p:dialog id="dialogViewCreditCards" widgetVar="dialogViewCreditCards" header="View Credit Cards" closable="true" width="300" height="300">
+
                 <p:messages id="messagesViewCreditCards" redisplay="false" />
-                
+
                 <p:dataScroller value="#{customerManagementManagedBean.creditCards}" var="creditCard" chunkSize="10">
-                    
-                    <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+
+                    <h:panelGrid columns="2" style="width:100%">
 
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
 
-                                <h:outputText value="Type:" />
-                                <h:outputText value="#{creditCard.type}" style="font-weight: bold" />
+                                <h:outputText value="Type:" style="font-weight: bold" />
+                                <h:outputText value="#{creditCard.type}"/>
 
-                                <h:outputText value="Card Name:" />
-                                <h:outputText value="#{creditCard.cardName}" style="font-weight: bold"/>
+                                <h:outputText value="Card Name:" style="font-weight: bold"/>
+                                <h:outputText value="#{creditCard.cardName}"/>
 
-                                <h:outputText value="Card Number:" />
-                                <h:outputText value="#{creditCard.cardNumber}" style="font-weight: bold"/>
-                                
-                                <h:outputText value="Expiry Date:" />
-                                <h:outputText value="#{creditCard.expiryDate}" style="font-weight: bold"/>
-                                
+                                <h:outputText value="Card Number:" style="font-weight: bold"/>
+                                <h:outputText value="#{creditCard.cardNumber}" />
+
+                                <h:outputText value="Expiry Date:" style="font-weight: bold"/>
+                                <h:outputText value="#{creditCard.expiryDate}" />
+
                                 <p:commandButton actionListener="#{creditCardManagedBean.doDeleteCreditCard}" update="formViewCreditCards" value="Delete" icon="fa fa-minus-circle" title="Delete">
                                     <f:attribute name="creditCardToDelete" value="#{creditCard}" />
                                     <p:confirm header="Delete" message="Are you sure?" icon="fa fa-exclamation-triangle" />
                                 </p:commandButton>
-                                
+
                                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
                                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times" />
@@ -104,9 +104,47 @@
                         </p:outputPanel>
                     </h:panelGrid>
                 </p:dataScroller>
-            
+
+                <br></br>
+
+                <p:commandButton actionListener="#{creditCardManagedBean.doAddCreditCard}" update="formAddCreditCard formViewCreditCards profileInfo"  oncomplete="PF('dialogAddCreditCard').show()" value="Add Credit Card" icon="fa fa-plus-circle" title="Add"/>
+
             </p:dialog>
-        
+
+        </h:form>
+
+        <h:form id="formAddCreditCard">
+
+            <p:dialog id="dialogAddCreditCard" widgetVar="dialogAddCreditCard" header="Add Credit Card" closable="true">
+
+                <p:messages id="messagesAddCreditCard" redisplay="false" />
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <h:outputText value="Type:" style="font-weight: bold" />
+                    
+                    <p:selectOneMenu id="creditCardToAdd" value="##{creditCardManagedBean.creditCardToAdd.type}" style="width:125px">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItem itemLabel="VISA" itemValue="VISA" />
+                        <f:selectItem itemLabel="MasterCard" itemValue="MasterCard" />
+                        <f:selectItem itemLabel="AMEX" itemValue="AMEX" />
+                    </p:selectOneMenu>
+
+                    <h:outputText value="Card Name:" style="font-weight: bold" />
+                    <h:inputText value="#{creditCardManagedBean.creditCardToAdd.cardName}"/>
+
+                    <h:outputText value="Card Number:" style="font-weight: bold" />
+                    <h:inputText value="#{creditCardManagedBean.creditCardToAdd.cardNumber}"/>
+
+                    <h:outputText value="Expiry Date:" style="font-weight: bold" />
+                    <h:inputText value="#{creditCardManagedBean.creditCardToAdd.expiryDate}"/>
+
+                    <p:commandButton actionListener="#{creditCardManagedBean.addCreditCard}" update="formAddCreditCard formViewCreditCards profileInfo" value="Add" icon="fa fa-plus-circle" title="Add"/>
+
+                </h:panelGrid>
+
+            </p:dialog>
+
         </h:form>
 
         <h:form id="formChangePassword">
@@ -233,8 +271,8 @@
             </p:dialog>
 
         </h:form>
-        
-        
+
+
 
     </ui:define>
 

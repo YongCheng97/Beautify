@@ -11,6 +11,8 @@ import ejb.session.stateless.CreditCardSessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.PromotionSessionBeanLocal;
+import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
+import ejb.session.stateless.PurchasedSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
@@ -21,6 +23,8 @@ import entity.CreditCard;
 import entity.Customer;
 import entity.Product;
 import entity.Promotion;
+import entity.Purchased;
+import entity.PurchasedLineItem;
 import entity.Review;
 import entity.Service;
 import entity.ServiceProvider;
@@ -31,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -47,6 +52,8 @@ import util.enumeration.CreditCardTypeEnum;
 import util.exception.CreateNewCategoryException;
 import util.exception.CreateNewCreditCardException;
 import util.exception.CreateNewProductException;
+import util.exception.CreateNewPurchaseException;
+import util.exception.CreateNewPurchasedLineItemException;
 import util.exception.CreateNewReviewException;
 import util.exception.CreateNewServiceException;
 import util.exception.CreateNewTagException;
@@ -56,6 +63,8 @@ import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.ProductExistException;
 import util.exception.PromotionNameExistException;
+import util.exception.PurchasedExistException;
+import util.exception.PurchasedLineItemExistException;
 import util.exception.ReviewExistException;
 import util.exception.ServiceExistException;
 import util.exception.ServiceProviderExistException;
@@ -67,6 +76,12 @@ import util.exception.UnknownPersistenceException;
 @Startup
 
 public class DataInitializationSessionBean {
+
+    @EJB(name = "PurchasedSessionBeanLocal")
+    private PurchasedSessionBeanLocal purchasedSessionBean;
+
+    @EJB(name = "PurchasedLineItemSessionBeanLocal")
+    private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBean;
 
     @EJB(name = "PromotionSessionBeanLocal")
     private PromotionSessionBeanLocal promotionSessionBeanLocal;
@@ -100,6 +115,8 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
+    
+    
 
     private CategoryTypeEnum type;
     private CreditCardTypeEnum creditCardTypeEnum;
@@ -210,9 +227,19 @@ public class DataInitializationSessionBean {
             CreditCard creditCard3 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard(creditCardTypeEnum.VISA, "The Nail Lounge", "4929954364297059", "06/24"), provider1.getServiceProviderId());
             CreditCard creditCard4 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard(creditCardTypeEnum.MasterCard, "The Nail Lounge", "5288773275293797", "01/22"), provider1.getServiceProviderId());
 
+            //purchased line items
+            PurchasedLineItem purchasedLineItem1 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(1, "Shipped", new BigDecimal("20.00")), redPolish.getProductId());
+            PurchasedLineItem purchasedLineItem2 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(2, "Shipped", new BigDecimal("20.00")), yellowPolish.getProductId());
+            PurchasedLineItem purchasedLineItem3 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(1, "Order Confirmed", new BigDecimal("18.00")), shampoo.getProductId());
+            PurchasedLineItem purchasedLineItem4 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(2, "Product Received", new BigDecimal("13.00")), lipstick.getProductId());
+            
+            //purchased
+            Purchased purchased1 = purchasedSessionBean.createNewPurchased(new Purchased(sdf2.parse("20/04/2020"), new BigDecimal("60.00")), customer1.getCustomerId(), Arrays.asList(purchasedLineItem1.getPurchasedLineItemId(), purchasedLineItem2.getPurchasedLineItemId()));
+            Purchased purchased2 = purchasedSessionBean.createNewPurchased(new Purchased(sdf2.parse("21/04/2020"), new BigDecimal("44.00")), customer1.getCustomerId(), Arrays.asList(purchasedLineItem3.getPurchasedLineItemId(), purchasedLineItem4.getPurchasedLineItemId()));
+       
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException
-                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException ex) {
+                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException | CreateNewPurchaseException | CreateNewPurchasedLineItemException | PurchasedExistException | PurchasedLineItemExistException ex) {
             ex.printStackTrace();
         }
     }
