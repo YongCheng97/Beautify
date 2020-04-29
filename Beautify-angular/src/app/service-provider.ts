@@ -4,8 +4,8 @@ export class ServiceProvider {
     email: string;
     password: string;
     address: string;
-    openingHours: Array<Date>;
-    closingHours: Array<Date>;
+    openingHours: Array<Date> = [];
+    closingHours: Array<Date> = [];
     certification: File;
     isApproved: boolean;
 

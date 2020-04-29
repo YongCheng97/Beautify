@@ -18,7 +18,6 @@ import { CalendarModule } from 'primeng/calendar';
 
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
-
 @NgModule({
   declarations: [
     AppComponent,
