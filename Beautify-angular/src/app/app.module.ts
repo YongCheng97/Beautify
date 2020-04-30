@@ -10,6 +10,9 @@ import { AppComponent } from './app.component';
 import { IndexComponent } from './index/index.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { FooterComponent } from './footer/footer.component'; 
+import { MainMenuComponent } from './main-menu/main-menu.component'; 
+import { HeaderComponent } from './header/header.component'; 
 
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -24,6 +27,9 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
     IndexComponent,
     MainPageComponent,
     SignUpComponent,
+    FooterComponent,
+    MainMenuComponent,
+    HeaderComponent, 
   ],
   imports: [
     BrowserModule,
