@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.CreditCard;
 import entity.Customer;
+import entity.Purchased;
 import entity.ServiceProvider;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
-    
+
     @EJB
     private ServiceProviderSessionBeanLocal serviceProviderSessionBeanLocal;
 
@@ -51,7 +52,7 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public CreditCard createNewCreditCardEntityForCustomer(CreditCard newCreditCard, Long customerId) throws InputDataValidationException, CreateNewCreditCardException, CreditCardExistsException, UnknownPersistenceException {
         Set<ConstraintViolation<CreditCard>> constraintViolations = validator.validate(newCreditCard);
@@ -61,9 +62,9 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
                 if (customerId == null) {
                     throw new CreateNewCreditCardException("A new credit card must be associated with a customer");
                 }
-                
+
                 Customer customer = customerSessionBeanLocal.retrieveCustomerByCustId(customerId);
-                
+
                 newCreditCard.setCustomer(customer);
                 customer.getCreditCards().add(newCreditCard);
 
@@ -81,14 +82,14 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException ex) { 
+            } catch (CustomerNotFoundException ex) {
                 throw new CreateNewCreditCardException("An error has occured while creating the new credit card: " + ex.getMessage());
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     @Override
     public CreditCard createNewCreditCardEntityForServiceProvider(CreditCard newCreditCard, Long serviceProviderId) throws InputDataValidationException, CreateNewCreditCardException, CreditCardExistsException, UnknownPersistenceException {
         Set<ConstraintViolation<CreditCard>> constraintViolations = validator.validate(newCreditCard);
@@ -98,9 +99,9 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
                 if (serviceProviderId == null) {
                     throw new CreateNewCreditCardException("A new credit card must be associated with a customer");
                 }
-                
+
                 ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderId);
-                
+
                 newCreditCard.setServiceProvider(serviceProvider);
                 serviceProvider.getCreditCards().add(newCreditCard);
 
@@ -118,14 +119,14 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (ServiceProviderNotFoundException ex) { 
+            } catch (ServiceProviderNotFoundException ex) {
                 throw new CreateNewCreditCardException("An error has occured while creating the new credit card: " + ex.getMessage());
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     @Override
     public CreditCard retrieveCreditCardByCreditCardId(Long creditCardId) throws CreditCardNotFoundException {
         CreditCard creditCard = em.find(CreditCard.class, creditCardId);
@@ -136,54 +137,54 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
             throw new CreditCardNotFoundException("Credit Card ID " + creditCardId + " does not exist!");
         }
     }
-    
+
     @Override
-    public List<CreditCard> retrieveAllCreditCardsByCustomerId(Long customerId)
-    {
+    public List<CreditCard> retrieveAllCreditCardsByCustomerId(Long customerId) {
         Query query = em.createQuery("SELECT c FROM CreditCard c WHERE c.customer.customerId = :inCustomerId");
         query.setParameter("inCustomerId", customerId);
         List<CreditCard> creditCards = query.getResultList();
-        
+
         return creditCards;
     }
-    
+
     @Override
-    public List<CreditCard> retrieveAllCreditCardsByServiceProviderId(Long serviceProviderId)
-    {
+    public List<CreditCard> retrieveAllCreditCardsByServiceProviderId(Long serviceProviderId) {
         Query query = em.createQuery("SELECT c FROM CreditCard c WHERE c.serviceProvider.serviceProviderId = :inServiceProviderId");
         query.setParameter("inServiceProviderId", serviceProviderId);
         List<CreditCard> creditCards = query.getResultList();
-        
+
         return creditCards;
     }
-    
-    @Override 
-    public CreditCard retrieveCreditCardByLastFourNum(String creditCardNum)
-    {
-        Query query = em.createQuery("SELECT c FROM CreditCard c WHERE c.cardNumber LIKE CONCAT('%', :inCardNumber)"); 
-        query.setParameter("inCardNumber", creditCardNum.substring(12, 16)); 
-        CreditCard cc = (CreditCard) query.getSingleResult(); 
-        
-        return cc;  
+
+    @Override
+    public CreditCard retrieveCreditCardByLastFourNum(String creditCardNum) {
+        Query query = em.createQuery("SELECT c FROM CreditCard c WHERE c.cardNumber LIKE CONCAT('%', :inCardNumber)");
+        query.setParameter("inCardNumber", creditCardNum.substring(12, 16));
+        CreditCard cc = (CreditCard) query.getSingleResult();
+
+        return cc;
     }
-    
+
     @Override
     public void deleteCreditCard(Long creditCardId) throws CreditCardNotFoundException {
         CreditCard creditCardToRemove = retrieveCreditCardByCreditCardId(creditCardId);
-        
-        if (creditCardToRemove.getCustomer() != null){
+
+        if (creditCardToRemove.getCustomer() != null) {
             Customer customer = creditCardToRemove.getCustomer();
             customer.getCreditCards().remove(creditCardToRemove);
+            for (Purchased purchased : creditCardToRemove.getPurchaseds()) {
+                purchased.setCreditCard(null);
+            }
         }
-        
-        if (creditCardToRemove.getServiceProvider() != null){
+
+        if (creditCardToRemove.getServiceProvider() != null) {
             ServiceProvider serviceProvider = creditCardToRemove.getServiceProvider();
             serviceProvider.getCreditCards().remove(creditCardToRemove);
         }
 
         em.remove(creditCardToRemove);
     }
-    
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<CreditCard>> constraintViolations) {
         String msg = "Input data validation error!:";
 
