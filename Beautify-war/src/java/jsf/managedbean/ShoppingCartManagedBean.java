@@ -199,7 +199,7 @@ public class ShoppingCartManagedBean implements Serializable {
                     }
                 }
 
-                setTotalAmount(totalPrice);
+                //setTotalAmount(totalPrice);
 
                 Purchased purchased = new Purchased(date, totalPrice, order.getAddress());
                 CreditCard cc = creditCardSessionBeanLocal.retrieveCreditCardByLastFourNum(creditCardNum);
@@ -237,6 +237,43 @@ public class ShoppingCartManagedBean implements Serializable {
             }
 
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+        } catch (PromotionNotFoundException ex) {
+            Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updateTotalAmount() {
+        try {
+            Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
+
+            Boolean exists = false;
+
+            for (Item item : items) {
+                List<Promotion> itemPromotions = item.getProduct().getPromotions();
+                if (itemPromotions.contains(promotion)) {
+                    exists = true;
+                }
+            }
+
+            Boolean valid = promotionSessionBeanLocal.checkPromoCode(promoCode);
+
+            if (valid && exists) {
+                
+                BigDecimal totalPrice = new BigDecimal("0.00"); 
+                
+                for (Item item : this.getItems()) {
+                    promotionSessionBeanLocal.updateProductDiscountPrice(item.getProduct());
+
+                    if (item.getProduct().getDiscountPrice() != null) { // there is ongoing promotion
+                        totalPrice = totalPrice.add(item.getProduct().getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    } else { // original price
+                        totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    }
+                }
+
+                System.out.println("this works"); 
+                setTotalAmount(totalPrice);
+            }
         } catch (PromotionNotFoundException ex) {
             Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }

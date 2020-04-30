@@ -51,10 +51,10 @@
 
                 <div style="float: right; width: 30%; text-align: center" >
 
-                    <h:panelGroup id="amount">
+                    <!-- <h:panelGroup id="amount"> --> 
                         <h2>Total Amount: </h2>
                         <h3><u> $#{shoppingCartManagedBean.totalAmount} </u></h3>
-                    </h:panelGroup>
+                    <!-- </h:panelGroup> --> 
 
                     <br></br>
 
@@ -79,6 +79,7 @@
                         <p:outputLabel value="Enter Promo code: " />
                         <p:inputText id ="promoCode" value ="#{shoppingCartManagedBean.promoCode}" required="false" />&nbsp;
                         <p:commandButton value="Enter" actionListener="#{shoppingCartManagedBean.checkPromoCode}" > 
+                            <p:ajax event="click" process="@this form:promoCode" listener="#{shoppingCartManagedBean.updateTotalAmount}" />
                         </p:commandButton>
 
                         <br></br><br></br>
