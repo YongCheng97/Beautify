@@ -8,6 +8,8 @@ package jsf.managedbean;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import entity.ServiceProvider;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -43,10 +45,40 @@ public class ViewServiceProviderProfileManagedBean implements Serializable {
 
         this.openingHours = providerToView.getOpeningHours();
         this.closingHours = providerToView.getClosingHours();
+        List<String> open = new ArrayList<>();
+        List<String> close = new ArrayList<>();
+
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
+
+        for (int i = 0; i < openingHours.length; i++) {
+            if (openingHours[i] == null) {
+                open.add("null");
+            } else {
+                String time = localDateFormat.format(openingHours[i]);
+                open.add(time);
+            }
+        }
+        for (int i = 0; i < closingHours.length; i++) {
+            if (closingHours[i] == null) {
+                close.add("null");
+            } else {
+                String time = localDateFormat.format(closingHours[i]);
+                close.add(time);
+            }
+        }
 
         List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-        setDaysOfWeek(days);
+        List< String> storeHours = new ArrayList<>();
 
+        for (int i = 0; i < openingHours.length; i++) {
+            if (open.get(i).equals("null")) {
+                storeHours.add(days.get(i) + ": Closed");
+            } else {
+                storeHours.add(days.get(i) + ": " + open.get(i) + " to " + close.get(i));
+            }
+        }
+
+        setDaysOfWeek(storeHours);
     }
 
     public ServiceProvider getProviderToView() {
@@ -84,7 +116,5 @@ public class ViewServiceProviderProfileManagedBean implements Serializable {
     public void setDaysOfWeek(List<String> daysOfWeek) {
         this.daysOfWeek = daysOfWeek;
     }
-
-
 
 }

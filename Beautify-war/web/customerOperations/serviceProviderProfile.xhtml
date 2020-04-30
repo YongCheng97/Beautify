@@ -40,38 +40,13 @@
                         <h:outputText value="#{viewServiceProviderProfileManagedBean.providerToView.address}"/>
                         <br/><br/>
 
-                        <h:outputText style="font-weight: bold;" value="Store Hours: "/><br />
-
-                        <div style="float: left; width: 35%">
+                        <div style="float: left; width: 20%">
                             <p:dataTable var="day" value ="#{viewServiceProviderProfileManagedBean.daysOfWeek}" >
-                                <p:column headerText ="Day" style="width:11%" >
+                                <p:column headerText ="Store Hours" >
                                     <h:outputText value="#{day}" />
                                 </p:column>
-                                <p:column headerText ="Opening Hours" style="width:15%" >
-                                    <h:outputText />
-                                </p:column>
-                                <p:column headerText ="Closing Hours" style="width:15%" >
-                                    <h:outputText />
-                                </p:column>
                             </p:dataTable>
                         </div>
-
-                        <div style="float: center; width: 10%">
-                            <p:dataTable var="open" value ="#{viewServiceProviderProfileManagedBean.openingHours}" >
-                                <h:outputText value="#{open}">
-                                    <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewServiceProviderProfileManagedBean.timeZone}"/>
-                                </h:outputText><br /> <br />
-                            </p:dataTable>
-                        </div>
-
-
-
-                        <p:dataTable var="close" value ="#{viewServiceProviderProfileManagedBean.closingHours}" >
-                            <h:outputText value="#{close}">
-                                <f:convertDateTime type="time" dateStyle="full" timeZone="#{viewServiceProviderProfileManagedBean.timeZone}"/>
-                            </h:outputText><br /> <br />
-                        </p:dataTable>
-
 
                     </p:layoutUnit> 
                 </p:layout>
