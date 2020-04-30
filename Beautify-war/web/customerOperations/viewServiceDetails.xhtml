@@ -26,8 +26,9 @@
                         </f:facet>
                         <p:panelGrid columns="2" >
                             <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}"/>
-
+                            
+                            <p:commandLink actionListener="#{viewServiceDetailsManagedBean.viewServiceProvider(viewServiceDetailsManagedBean.serviceToView.serviceProvider.serviceProviderId)}" value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
+                            
                             <!--                            <h:outputLabel value="Service Provider Opening Hours" style="font-weight: bolder"/>
                                                         <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.openingHours}">
                                                             <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
@@ -71,6 +72,7 @@
                         <h:panelGrid columns="2" cellpadding="5" style="width:100%; text-align: left">
                             <p:outputLabel value="Service Name:" style="font-weight: bold"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
+                            
 
                             <p:outputLabel value="Service Price:" style="font-weight: bold"/>
                             <h:outputText value="$#{viewServiceDetailsManagedBean.serviceToView.price}"/>

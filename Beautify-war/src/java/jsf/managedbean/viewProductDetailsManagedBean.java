@@ -6,11 +6,15 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.ProductSessionBeanLocal;
+import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import entity.Product;
+import entity.ServiceProvider;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -21,6 +25,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import util.exception.ProductNotFoundException;
+import util.exception.ServiceProviderNotFoundException;
 
 
 @Named(value = "viewProductDetailsManagedBean")
@@ -30,6 +35,9 @@ public class viewProductDetailsManagedBean implements Serializable
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
+    
+    @EJB
+    private ServiceProviderSessionBeanLocal serviceProviderSessionBean;
     
     @Inject
     private ShoppingCartManagedBean shoppingCartManagedBean;
@@ -68,6 +76,16 @@ public class viewProductDetailsManagedBean implements Serializable
     
     public void foo()
     {        
+    }
+    
+    public void viewServiceProvider(Long serviceProviderId) throws IOException {
+        try {
+            ServiceProvider serviceProvider = serviceProviderSessionBean.retrieveServiceProviderById(serviceProviderId);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("serviceProvider", serviceProvider);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/serviceProviderProfile.xhtml");
+        } catch (ServiceProviderNotFoundException ex) {
+            Logger.getLogger(viewAllServiceProvidersManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public List<String> getProductImages() {
