@@ -52,27 +52,28 @@ export class SignUpComponent implements OnInit {
   createNewAccount(createServiceProviderForm: NgForm) {
     this.submitted = true;
 
-    console.log(typeof this.mondayOpeningHour);
+    var newVariable = moment(this.mondayOpeningHour, "HH:mm").toDate();
+
+    console.log(typeof (moment(this.mondayOpeningHour, "HH:mm").toDate()));
+
     this.newServiceProvider.openingHours = [];
     this.newServiceProvider.closingHours = [];
 
-    this.newServiceProvider.openingHours.push(new Date(this.mondayOpeningHour));
-    this.newServiceProvider.openingHours.push(new Date(this.tuesdayOpeningHour));
-    this.newServiceProvider.openingHours.push(new Date(this.wednesdayOpeningHour));
-    this.newServiceProvider.openingHours.push(new Date(this.thursdayOpeningHour));
-    this.newServiceProvider.openingHours.push(new Date(this.fridayOpeningHour));
-    this.newServiceProvider.openingHours.push(new Date(this.saturdayOpeningHour));
-    this.newServiceProvider.openingHours.push(new Date(this.sundayOpeningHour));
+    this.newServiceProvider.openingHours.push(moment(this.mondayOpeningHour, "HH:mm").toDate());
+    this.newServiceProvider.openingHours.push(moment(this.tuesdayOpeningHour, "HH:mm").toDate());
+    this.newServiceProvider.openingHours.push(moment(this.wednesdayOpeningHour, "HH:mm").toDate());
+    this.newServiceProvider.openingHours.push(moment(this.thursdayOpeningHour, "HH:mm").toDate());
+    this.newServiceProvider.openingHours.push(moment(this.fridayOpeningHour, "HH:mm").toDate());
+    this.newServiceProvider.openingHours.push(moment(this.saturdayOpeningHour, "HH:mm").toDate());
+    this.newServiceProvider.openingHours.push(moment(this.sundayOpeningHour, "HH:mm").toDate());
 
-    this.newServiceProvider.closingHours.push(new Date(this.mondayClosingHour));
-    this.newServiceProvider.closingHours.push(new Date(this.tuesdayClosingHour));
-    this.newServiceProvider.closingHours.push(new Date(this.wednesdayClosingHour));
-    this.newServiceProvider.closingHours.push(new Date(this.thursdayClosingHour));
-    this.newServiceProvider.closingHours.push(new Date(this.fridayClosingHour));
-    this.newServiceProvider.closingHours.push(new Date(this.saturdayClosingHour));
-    this.newServiceProvider.closingHours.push(new Date(this.sundayClosingHour));
-
-   
+    this.newServiceProvider.closingHours.push(moment(this.mondayClosingHour, "HH:mm").toDate());
+    this.newServiceProvider.closingHours.push(moment(this.tuesdayClosingHour, "HH:mm").toDate());
+    this.newServiceProvider.closingHours.push(moment(this.wednesdayClosingHour, "HH:mm").toDate());
+    this.newServiceProvider.closingHours.push(moment(this.thursdayClosingHour, "HH:mm").toDate());
+    this.newServiceProvider.closingHours.push(moment(this.fridayClosingHour, "HH:mm").toDate());
+    this.newServiceProvider.closingHours.push(moment(this.saturdayClosingHour, "HH:mm").toDate());
+    this.newServiceProvider.closingHours.push(moment(this.sundayClosingHour, "HH:mm").toDate());
 
     //  if (createServiceProviderForm.valid) {
     this.serviceProviderService.createNewServiceProvider(this.newServiceProvider).subscribe(
