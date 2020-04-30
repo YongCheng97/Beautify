@@ -77,6 +77,21 @@
                             <h:outputText value = "Click here for more information!"/>
                             <f:attribute name="serviceId" value="#{booking.service.serviceId}" />
                         </p:commandLink>
+                        
+                        <br></br>
+                        <br></br>
+                        
+                        <p:column colspan="2" style="text-align:center">
+                            <p:commandButton value="Delete Booking" update="bookingInfo" actionListener="#{bookingManagedBean.doDeleteBooking}" >
+                                <f:attribute name="bookingToDelete" value="#{booking}" />
+                                <p:confirm header="Delete" message="Are you sure?" icon="fa fa-exclamation-triangle" />
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times" />
+                        </p:confirmDialog>
 
                     </p:panel>
 

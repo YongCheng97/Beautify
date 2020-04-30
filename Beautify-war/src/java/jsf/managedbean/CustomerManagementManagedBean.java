@@ -134,9 +134,8 @@ public class CustomerManagementManagedBean implements Serializable {
             String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + currentCustomer.getSalt()));
             if (passwordHash.equals(currentCustomer.getPassword())) {
                 if (newPassword.equals(confirmPassword)) {
-                    Customer changePWCustomer = currentCustomer;
-                    changePWCustomer.setPassword(newPassword);
-                    customerSessionBeanLocal.updateCustomerDetails(changePWCustomer);
+                    
+                    customerSessionBeanLocal.updateCustomerPassword(currentCustomer.getCustomerId(), newPassword);
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Password changed successfully", null));
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New password does not match", null));
