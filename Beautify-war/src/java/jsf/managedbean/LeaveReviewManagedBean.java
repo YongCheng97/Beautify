@@ -8,6 +8,7 @@ package jsf.managedbean;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import entity.Booking;
 import entity.Customer;
+import entity.PurchasedLineItem;
 import entity.Review;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -40,6 +41,8 @@ public class LeaveReviewManagedBean implements Serializable {
     private Booking bookingToReview;
     private Review review;
 
+    private PurchasedLineItem purchasedLineItemToReview;
+
     public LeaveReviewManagedBean() {
     }
 
@@ -48,16 +51,35 @@ public class LeaveReviewManagedBean implements Serializable {
         currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
     }
 
+    //booking
     public void doLeaveReview(ActionEvent event) {
         bookingToReview = (Booking) event.getComponent().getAttributes().get("bookingToReview");
+
         review = new Review();
+
+    }
+    
+    //booking
+    public void doLeaveProductReview(ActionEvent event) {
+        purchasedLineItemToReview = (PurchasedLineItem) event.getComponent().getAttributes().get("purchasedLineItemToReview");
+
+        review = new Review();
+
     }
 
+    //booking
     public void doViewReview(ActionEvent event) {
         bookingToReview = (Booking) event.getComponent().getAttributes().get("bookingToReview");
         review = bookingToReview.getReview();
     }
 
+    //purchasedlineitem
+    public void doViewProductReview(ActionEvent event) {
+        purchasedLineItemToReview = (PurchasedLineItem) event.getComponent().getAttributes().get("purchasedLineItemToReview");
+        review = purchasedLineItemToReview.getReview();
+    }
+
+    //booking
     public void leaveReview(ActionEvent event) {
         Long currentCustomerId = currentCustomer.getCustomerId();
         Long bookingToReviewId = bookingToReview.getBookingId();
@@ -65,30 +87,48 @@ public class LeaveReviewManagedBean implements Serializable {
             Review reviewId = reviewSessionBeanLocal.createNewServiceReview(review, currentCustomerId, bookingToReviewId);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review posted successfully", null));
         } catch (ReviewExistException | UnknownPersistenceException | InputDataValidationException | CreateNewReviewException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while leaving review: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
-    
+
+    //booking and purchasedlineitem
     public void updateReview(ActionEvent event) {
-       try {
+        try {
             reviewSessionBeanLocal.updateReview(review);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review updated successfully", null));
         } catch (ReviewNotFoundException | UpdateReviewException | InputDataValidationException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting product: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating review: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
-    
+
+    //booking and purchasedlineitem
     public void deleteReview(ActionEvent event) {
+        
         try {
             Long reviewId = review.getReviewId();
+            System.out.println(reviewId);
             reviewSessionBeanLocal.deleteReview(reviewId);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review deleted successfully", null));
         } catch (ReviewNotFoundException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting product: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting review: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
+    }
+
+    //purchasedlineitem
+    public void leaveProductReview(ActionEvent event) {
+        Long currentCustomerId = currentCustomer.getCustomerId();
+        Long purchasedLineItemToReviewId = purchasedLineItemToReview.getPurchasedLineItemId();
+        try {
+            Review reviewId = reviewSessionBeanLocal.createNewProductReview(review, currentCustomerId, purchasedLineItemToReviewId);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review posted successfully", null));
+        } catch (ReviewExistException | UnknownPersistenceException | InputDataValidationException | CreateNewReviewException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while leaving review: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }

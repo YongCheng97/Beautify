@@ -14,9 +14,10 @@
 
         <h2>Checkout</h2>
 
-        <div>
-            <div style="float: left; width: 70%">
-                <h:form id="form">
+        <h:form id="form">
+            <div>
+                <div style="float: left; width: 70%">
+
 
                     <p:dataTable var="item" value="#{shoppingCartManagedBean.items}">
                         <f:facet name="header">Shopping Cart</f:facet>
@@ -39,43 +40,65 @@
                         </p:column>
 
                         <p:column style="width: 20%; text-align: center">
-                            <p:commandButton id="remove" value="Remove" action="#{shoppingCartManagedBean.removeFromCart(item.product)}" update="@form" oncomplete="PF('dialogCart').show()" icon="fa fa-remove"/>
+                            <p:commandButton id="remove" value="Remove" action="#{shoppingCartManagedBean.removeFromCart(item.product)}" update="@form" icon="fa fa-remove"/>
                         </p:column> 
                     </p:dataTable>
 
-                </h:form>
 
-            </div>
-
-            <br></br>
-
-            <div style="float: right; width: 30%; text-align: center" >
-
-                <h2>Total Amount: </h2>
-                <h3><u> $#{shoppingCartManagedBean.totalAmount()} </u></h3>
+                </div>
 
                 <br></br>
 
-                <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-                    <p:commandButton style="align-self: center" value = "Pay" onclick="PF('dialogLogin').show()" icon="fa fa-dollar"/>
-                </h:panelGroup>
+                <div style="float: right; width: 30%; text-align: center" >
 
-                <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-                    <p:outputLabel value="Select Credit Card:  " />
-                    <p:selectOneMenu value="#{checkoutSessionBean.creditCards}" style="width:150px">
-                        <f:selectItem itemLabel="Credit Card" itemValue="" noSelectionOption="true" />
-                        <f:selectItems value="#{checkoutSessionBean.creditCards}" />
-                    </p:selectOneMenu>
-                    <br></br><br></br>
-                    <p:commandButton style="align-self: center" value = "Pay" onclick="PF('dialogPay').show()" icon="fa fa-dollar"/>
-                </h:panelGroup>
+                    <!-- <h:panelGroup id="amount"> --> 
+                        <h2>Total Amount: </h2>
+                        <h3><u> $#{shoppingCartManagedBean.totalAmount} </u></h3>
+                    <!-- </h:panelGroup> --> 
 
-                <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" closable="true" closeOnEscape="true"> 
-                    <h2> Your order has been confirmed! </h2>
-                    <p> $#{shoppingCartManagedBean.totalAmount()} has been charged to </p>
-                </p:dialog>
+                    <br></br>
+
+                    <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+                        <p:commandButton style="align-self: center" value = "Pay" onclick="PF('dialogLogin').show()" icon="fa fa-dollar"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+                        <p:outputLabel value="Select Credit Card:  " />
+                        <p:selectOneMenu value="#{shoppingCartManagedBean.creditCardNum}" style="width:150px" required="true" requiredMessage="Credit Card is required">
+                            <f:selectItem itemLabel="Credit Card" noSelectionOption="false" />
+                            <f:selectItems value="#{shoppingCartManagedBean.creditCards}" />
+                        </p:selectOneMenu>
+
+                        <br></br><br></br>
+
+                        <p:outputLabel value="Enter Delivery Address: " />
+                        <p:inputText id ="address" value ="#{shoppingCartManagedBean.order.address}" required="true" requiredMessage="Address is required" />
+
+                        <br></br><br></br>
+
+                        <p:outputLabel value="Enter Promo code: " />
+                        <p:inputText id ="promoCode" value ="#{shoppingCartManagedBean.promoCode}" required="false" />&nbsp;
+                        <p:commandButton value="Enter" actionListener="#{shoppingCartManagedBean.checkPromoCode}" > 
+                            <p:ajax event="click" process="@this form:promoCode" listener="#{shoppingCartManagedBean.updateTotalAmount}" />
+                        </p:commandButton>
+
+                        <br></br><br></br>
+
+                        <p:commandButton style="align-self: center" value = "Pay" actionListener="#{shoppingCartManagedBean.createNewOrder}" onclick="PF('dialogPay').show()" icon="fa fa-dollar"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{sessionScope.haveItems == true}"> 
+                        <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" closable="true" closeOnEscape="true"> 
+                            <h2> Your order has been confirmed! </h2>
+                            <p> $#{shoppingCartManagedBean.totalAmount} has been charged to your account.</p>
+                            <p:commandButton value="Close" actionListener="#{shoppingCartManagedBean.removeAllItems}" />&nbsp;
+                        </p:dialog>
+                    </h:panelGroup>
+
+                </div>
             </div>
-        </div>
+
+        </h:form>
 
     </ui:define>
 </ui:composition>

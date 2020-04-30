@@ -33,8 +33,15 @@
             <h:form id="profileInfo">
                 <p:layout style="min-width:400px;min-height:300px;">
                     <p:layoutUnit position="west" resizable="false" size="200">
-                        Photo
-                        
+                        <p:graphicImage library="images" name="Customer#{customerManagementManagedBean.currentCustomer.customerId}.jpg" height="150" width="190" alt ="" />
+
+                        <h:form>  
+                            <p:fileUpload fileUploadListener="#{customerManagementManagedBean.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                                          update="messages @form" sizeLimit="100000" fileLimit="100" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+                            <p:growl id="messages" showDetail="true" />     
+                        </h:form>
+
                     </p:layoutUnit>
 
                     <p:layoutUnit position="center">
@@ -59,42 +66,42 @@
                         <span style="display:inline-block; width: 200;"></span>
                         <p:commandButton actionListener="#{customerManagementManagedBean.changePassword}" update="formChangePassword" oncomplete="PF('dialogChangePassword').show()" value="Change Password" icon="fa fa-pencil" title="Change Password">
                         </p:commandButton>
-                        
+
                     </p:layoutUnit> 
                 </p:layout>
             </h:form>
         </h:body>
-        
+
         <h:form id="formViewCreditCards">
-            
-            <p:dialog id="dialogViewCreditCards" widgetVar="dialogViewCreditCards" header="View Credit Cards" closable="true">
-                
+
+            <p:dialog id="dialogViewCreditCards" widgetVar="dialogViewCreditCards" header="View Credit Cards" closable="true" width="300" height="300">
+
                 <p:messages id="messagesViewCreditCards" redisplay="false" />
-                
+
                 <p:dataScroller value="#{customerManagementManagedBean.creditCards}" var="creditCard" chunkSize="10">
-                    
-                    <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+
+                    <h:panelGrid columns="2" style="width:100%">
 
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
 
-                                <h:outputText value="Type:" />
-                                <h:outputText value="#{creditCard.type}" style="font-weight: bold" />
+                                <h:outputText value="Type:" style="font-weight: bold" />
+                                <h:outputText value="#{creditCard.type}"/>
 
-                                <h:outputText value="Card Name:" />
-                                <h:outputText value="#{creditCard.cardName}" style="font-weight: bold"/>
+                                <h:outputText value="Card Name:" style="font-weight: bold"/>
+                                <h:outputText value="#{creditCard.cardName}"/>
 
-                                <h:outputText value="Card Number:" />
-                                <h:outputText value="#{creditCard.cardNumber}" style="font-weight: bold"/>
-                                
-                                <h:outputText value="Expiry Date:" />
-                                <h:outputText value="#{creditCard.expiryDate}" style="font-weight: bold"/>
-                                
+                                <h:outputText value="Card Number:" style="font-weight: bold"/>
+                                <h:outputText value="#{creditCard.cardNumber}" />
+
+                                <h:outputText value="Expiry Date:" style="font-weight: bold"/>
+                                <h:outputText value="#{creditCard.expiryDate}" />
+
                                 <p:commandButton actionListener="#{creditCardManagedBean.doDeleteCreditCard}" update="formViewCreditCards" value="Delete" icon="fa fa-minus-circle" title="Delete">
                                     <f:attribute name="creditCardToDelete" value="#{creditCard}" />
                                     <p:confirm header="Delete" message="Are you sure?" icon="fa fa-exclamation-triangle" />
                                 </p:commandButton>
-                                
+
                                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
                                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times" />
@@ -104,9 +111,47 @@
                         </p:outputPanel>
                     </h:panelGrid>
                 </p:dataScroller>
-            
+
+                <br></br>
+
+                <p:commandButton actionListener="#{creditCardManagedBean.doAddCreditCard}" update="formAddCreditCard formViewCreditCards profileInfo"  oncomplete="PF('dialogAddCreditCard').show()" value="Add Credit Card" icon="fa fa-plus-circle" title="Add"/>
+
             </p:dialog>
-        
+
+        </h:form>
+
+        <h:form id="formAddCreditCard">
+
+            <p:dialog id="dialogAddCreditCard" widgetVar="dialogAddCreditCard" header="Add Credit Card" closable="true">
+
+                <p:messages id="messagesAddCreditCard" redisplay="false" />
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <h:outputText value="Type:" style="font-weight: bold" />
+
+                    <p:selectOneMenu id="creditCardType" value="#{creditCardManagedBean.creditCardToAdd.type}" style="width:125px">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItem itemLabel="VISA" itemValue="VISA" />
+                        <f:selectItem itemLabel="MasterCard" itemValue="MasterCard" />
+                        <f:selectItem itemLabel="AMEX" itemValue="AMEX" />
+                    </p:selectOneMenu>
+
+                    <h:outputText value="Card Name:" style="font-weight: bold" />
+                    <h:inputText value="#{creditCardManagedBean.creditCardToAdd.cardName}"/>
+
+                    <h:outputText value="Card Number:" style="font-weight: bold" />
+                    <h:inputText value="#{creditCardManagedBean.creditCardToAdd.cardNumber}"/>
+
+                    <h:outputText value="Expiry Date:" style="font-weight: bold" />
+                    <h:inputText value="#{creditCardManagedBean.creditCardToAdd.expiryDate}"/>
+
+                    <p:commandButton actionListener="#{creditCardManagedBean.addCreditCard}" update="formAddCreditCard formViewCreditCards profileInfo" value="Add" icon="fa fa-plus-circle" title="Add"/>
+
+                </h:panelGrid>
+
+            </p:dialog>
+
         </h:form>
 
         <h:form id="formChangePassword">
@@ -115,43 +160,22 @@
 
                 <p:messages id="messagesChangePassword" redisplay="false" />
 
-                <p:panelGrid>
+                <h:panelGrid columns="2" cellpadding="5">
 
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel for="oldPassword" value="Old Password"/>
-                        </p:column>
-                        <p:column>
-                            <h:inputSecret id="oldPassword" value="#{customerManagementManagedBean.oldPassword}"/>
-                        </p:column>
-                        <p:column>
-                            <p:message for="oldPassword" />
-                        </p:column>
-                    </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel for="newPassword" value="New Password"/>
-                        </p:column>
-                        <p:column>
-                            <h:inputSecret id="newPassword" value="#{customerManagementManagedBean.newPassword}"/>
-                        </p:column>
-                        <p:column>
-                            <p:message for="newPassword" />
-                        </p:column>
-                    </p:row>
+                    <p:outputLabel for="oldPassword" value="Old Password"/>
 
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel for="confirmPassword" value="Confirm new password" />
-                        </p:column>
-                        <p:column>
-                            <h:inputSecret id="confirmPassword" value="#{customerManagementManagedBean.confirmPassword}"/>
-                        </p:column>
-                        <p:column>
-                            <p:message for="confirmPassword" />
-                        </p:column>
-                    </p:row>
+                    <p:password id="oldPassword" value="#{customerManagementManagedBean.oldPassword}"/>
+
+                    <p:outputLabel for="newPassword" value="New Password"/>
+
+                    <p:password id="newPassword" value="#{customerManagementManagedBean.newPassword}"/>
+
+                    <p:outputLabel for="confirmPassword" value="Confirm new password" />
+
+                    <p:password id="confirmPassword" value="#{customerManagementManagedBean.confirmPassword}"/>
+
+                    <p:outputLabel></p:outputLabel>
 
                     <p:row>
                         <p:column colspan="3">
@@ -159,7 +183,7 @@
                         </p:column>
                     </p:row>
 
-                </p:panelGrid>
+                </h:panelGrid>
 
             </p:dialog>
 
@@ -172,69 +196,47 @@
 
                 <p:messages id="messagesUpdateCustomer" redisplay="false" />
 
-                <p:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="firstName" value="First Name: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="firstName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.firstName}" placeholder="First Name" required="true" requiredMessage="First Name is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="firstName" />
-                        </p:column>
-                    </p:row>
+                    <p:outputLabel for="firstName" value="First Name: " />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="lastName" value="Last Name: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="lastName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.lastName}" placeholder="Last Name" required="true" requiredMessage="Last Name is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="lastName" />
-                        </p:column>
-                    </p:row>
+                    <p:inputText id="firstName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.firstName}" placeholder="First Name" required="true" requiredMessage="First Name is required" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="email" value="Email: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="email" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.email}" placeholder="abc@example.com" required="true" requiredMessage="Email is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="email" />
-                        </p:column>
-                    </p:row>
+                    <p:message for="firstName" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="contactNumber" value="Contact Number: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="contactNumber" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.contactNum}" placeholder="81234567" required="true" requiredMessage="Contact Number is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="contactNumber" />
-                        </p:column>
-                    </p:row>      
+                    <p:outputLabel for="lastName" value="Last Name: " />
 
+                    <p:inputText id="lastName" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.lastName}" placeholder="Last Name" required="true" requiredMessage="Last Name is required" />
+
+                    <p:message for="lastName" />
+
+                    <p:outputLabel for="email" value="Email: " />
+
+                    <p:inputText id="email" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.email}" placeholder="abc@example.com" required="true" requiredMessage="Email is required" />
+
+                    <p:message for="email" />
+
+                    <p:outputLabel for="contactNumber" value="Contact Number: " />
+
+                    <p:inputText id="contactNumber" value="#{customerManagementManagedBean.selectedCustomerEntityToUpdate.contactNum}" placeholder="81234567" required="true" requiredMessage="Contact Number is required" />
+
+                    <p:message for="contactNumber" />
+
+                    <h:outputLabel></h:outputLabel>
+                    
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton value="Confirm Update" update="@form profileInfo" actionListener="#{customerManagementManagedBean.updateCustomer}" oncomplete="PF('dialogUpdateCustomer').show();" />
                         </p:column>
                     </p:row>
 
-                </p:panelGrid>
+                </h:panelGrid>
 
             </p:dialog>
 
         </h:form>
-        
-        
+
+
 
     </ui:define>
 

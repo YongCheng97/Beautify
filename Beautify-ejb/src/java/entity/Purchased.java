@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -44,6 +45,10 @@ public class Purchased implements Serializable {
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2)
     private BigDecimal totalPrice;
+    @Column(nullable = false, length = 32)
+    @NotNull
+    @Size(max = 32)
+    private String address;
     
     @OneToMany
     private List<PurchasedLineItem> purchasedLineItems;
@@ -52,15 +57,20 @@ public class Purchased implements Serializable {
     @JoinColumn(nullable = false)
     private Customer customer;
     
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private CreditCard creditCard; 
+    
     public Purchased() {
         purchasedLineItems = new ArrayList<>();
     }
     
-    public Purchased(Date dateOfPurchase, BigDecimal totalPrice) {
+    public Purchased(Date dateOfPurchase, BigDecimal totalPrice, String address) {
         this();
         
         this.dateOfPurchase = dateOfPurchase;
         this.totalPrice = totalPrice;
+        this.address = address; 
     }
 
     public Long getPurchasedId() {
@@ -126,6 +136,22 @@ public class Purchased implements Serializable {
 
     public void setDateOfPurchase(Date dateOfPurchase) {
         this.dateOfPurchase = dateOfPurchase;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.CreditCard;
 import entity.Customer;
 import entity.Purchased;
 import entity.PurchasedLineItem;
@@ -21,6 +22,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CreateNewPurchaseException;
+import util.exception.CreditCardNotFoundException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.PurchasedExistException;
@@ -34,6 +36,9 @@ import util.exception.UnknownPersistenceException;
  */
 @Stateless
 public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
+
+    @EJB
+    private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
 
     @EJB
     private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
@@ -53,7 +58,7 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
     }
     
     @Override
-    public Purchased createNewPurchased(Purchased newPurchased, Long customerId, List<Long> purchasedLineItemIds) throws UnknownPersistenceException, InputDataValidationException, CustomerNotFoundException, CreateNewPurchaseException, PurchasedExistException {
+    public Purchased createNewPurchased(Purchased newPurchased, Long customerId, List<Long> purchasedLineItemIds, Long creditCardId) throws UnknownPersistenceException, InputDataValidationException, CustomerNotFoundException, CreateNewPurchaseException, PurchasedExistException {
         Set<ConstraintViolation<Purchased>> constraintViolations = validator.validate(newPurchased);
 
         if (constraintViolations.isEmpty()) {
@@ -74,6 +79,11 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
                 }
                 
                 newPurchased.setPurchasedLineItems(purchasedLineItems);
+                
+                CreditCard creditCard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(creditCardId); 
+                
+                newPurchased.setCreditCard(creditCard);
+                creditCard.getPurchaseds().add(newPurchased); 
                
                 em.persist(newPurchased);
                 em.flush();
@@ -89,7 +99,7 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException | PurchasedLineItemNotFoundException ex) { 
+            } catch (CustomerNotFoundException | PurchasedLineItemNotFoundException | CreditCardNotFoundException ex) { 
                 throw new CreateNewPurchaseException("An error has occured while creating the new purchased: " + ex.getMessage());
             }
         } else {

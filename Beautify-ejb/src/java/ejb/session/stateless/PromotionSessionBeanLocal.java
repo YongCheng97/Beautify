@@ -30,6 +30,8 @@ public interface PromotionSessionBeanLocal {
 
     public Promotion retrievePromotionByPromotionId(Long promotionId) throws PromotionNotFoundException;
 
+    public Promotion retrievePromotionByPromoCode(String promoCode) throws PromotionNotFoundException;
+
     public Promotion retrievePromotionByName(String name) throws PromotionNotFoundException;
 
     public void updatePromotion(Promotion promotion) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException;
@@ -39,5 +41,7 @@ public interface PromotionSessionBeanLocal {
     public void updateProductDiscountPrice(Product product);
 
     public void updateServiceDiscountPrice(Service service);
+
+    public Boolean checkPromoCode(String promoCode);
 
 }

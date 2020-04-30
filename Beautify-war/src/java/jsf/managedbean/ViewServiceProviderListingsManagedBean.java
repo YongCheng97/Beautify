@@ -54,7 +54,7 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
         setServiceEntities(serviceEntities);
 
         // promotions
-        for (Service service : serviceEntities) {
+        /*for (Service service : serviceEntities) {
             promotionSessionBean.updateServiceDiscountPrice(service);
             if (service.getDiscountPrice() == null) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(service.getServiceName(), false);
@@ -70,7 +70,7 @@ public class ViewServiceProviderListingsManagedBean implements Serializable {
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(product.getName(), true);
             }
-        }
+        } */
     }
 
     public void viewProduct(ActionEvent event) throws IOException {
