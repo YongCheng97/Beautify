@@ -121,8 +121,6 @@
                         </p:column>
                     </p:row>
 
-                    <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
-
                     <p:row>
                         <p:column colspan="2" style="text-align:center">
                             <p:commandButton update="@form bookingInfo formUpdateReview" oncomplete="PF('dialogUpdateReview').show()" value="Update Review" title="Update Review"/>                 
@@ -130,7 +128,7 @@
                     </p:row>
                     <p:row>                        
                         <p:column colspan="2" style="text-align:center">
-                            <p:commandButton value="Delete Review" update="bookingInfo" actionListener="#{leaveReviewManagedBean.deleteReview}" oncomplete="PF('dialogViewReview').show();" >
+                            <p:commandButton value="Delete Review" update="bookingInfo formViewReview" actionListener="#{leaveReviewManagedBean.deleteBookingReview}" oncomplete="PF('dialogViewReview').show();" >
                                 <p:confirm header="Delete" message="Are you sure?" icon="fa fa-exclamation-triangle" />
                             </p:commandButton>
                         </p:column>
@@ -172,11 +170,9 @@
                         </p:column>
                     </p:row>
 
-                    <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
-
                     <p:row>
                         <p:column colspan="2" style="text-align:center">
-                            <p:commandButton value="Update Review" update="@form bookingInfo formViewReview" actionListener="#{leaveReviewManagedBean.updateReview}" oncomplete="PF('dialogUpdateReview').show();" />
+                            <p:commandButton value="Update Review" update="@form bookingInfo formViewReview" actionListener="#{leaveReviewManagedBean.updateBookingReview}" oncomplete="PF('dialogUpdateReview').show();" />
                         </p:column>
                     </p:row>
 
@@ -210,8 +206,6 @@
                             <p:message for="description" />
                         </p:column>
                     </p:row>
-
-                    <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
 
                     <p:row>
                         <p:column colspan="2" style="text-align:center">

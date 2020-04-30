@@ -92,12 +92,12 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public Customer customerLogin(String username, String password) throws InvalidLoginCredentialException{
+    public Customer customerLogin(String username, String password) throws InvalidLoginCredentialException {
         Customer customer = retrieveCustomerByCustomerUser(username);
         String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + customer.getSalt()));
         if (customer.getPassword().equals(passwordHash)) {
             customer.getCreditCards().size();
-            
+
             return customer;
         } else {
             throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
@@ -117,7 +117,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
                     customerToUpdate.setEmail(customer.getEmail());
                     customerToUpdate.setFirstName(customer.getFirstName());
                     customerToUpdate.setLastName(customer.getLastName());
-                    customerToUpdate.setPassword(customer.getPassword());
                     customerToUpdate.setUsername(customer.getUsername());
                 } else {
                     throw new UpdateCustomerException("Username of customer record to be updated does not match the existing record");
@@ -125,6 +124,23 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
             }
+        } else {
+            throw new CustomerNotFoundException("Customer ID not provided for customer to be updated");
+        }
+    }
+
+    @Override
+    public void updateCustomerPassword(Long customerId, String password) throws CustomerNotFoundException, UpdateCustomerException, InputDataValidationException {
+        if (customerId != null) {
+
+            Customer customerToUpdate = retrieveCustomerByCustId(customerId);
+
+            if (customerToUpdate.getUsername().equals(customerToUpdate.getUsername())) {
+                customerToUpdate.setPassword(password);
+            } else {
+                throw new UpdateCustomerException("Username of customer record to be updated does not match the existing record");
+            }
+
         } else {
             throw new CustomerNotFoundException("Customer ID not provided for customer to be updated");
         }

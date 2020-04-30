@@ -56,7 +56,7 @@ public class PurchasedManagedBean implements Serializable {
         selectedPurchased = (Purchased) event.getComponent().getAttributes().get("selectedPurchased");
         selectedPurchasedLineItems = selectedPurchased.getPurchasedLineItems();
     }
-
+    
     public void updatePurchasedLineItemStatus(ActionEvent event) {
         try {
             PurchasedLineItem selectedPurchasedLineItem = (PurchasedLineItem) event.getComponent().getAttributes().get("purchasedLineItemToUpdate");
@@ -92,6 +92,14 @@ public class PurchasedManagedBean implements Serializable {
 
     public void setSelectedPurchasedLineItems(List<PurchasedLineItem> selectedPurchasedLineItems) {
         this.selectedPurchasedLineItems = selectedPurchasedLineItems;
+    }
+
+    public Purchased getSelectedPurchased() {
+        return selectedPurchased;
+    }
+
+    public void setSelectedPurchased(Purchased selectedPurchased) {
+        this.selectedPurchased = selectedPurchased;
     }
 
 }
