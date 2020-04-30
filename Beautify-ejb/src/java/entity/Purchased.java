@@ -58,7 +58,7 @@ public class Purchased implements Serializable {
     private Customer customer;
     
     @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = true)
     private CreditCard creditCard; 
     
     public Purchased() {

@@ -14,8 +14,8 @@
             <h:body>
 
                 <p:layout style="min-width: 500px;min-height:425px">
-
-                    <p:layoutUnit position="west" size="520">
+                    
+                    <p:layoutUnit position="west" size="520" >
 
                         <p:galleria value="#{viewProductDetailsManagedBean.productImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
                             <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
@@ -28,8 +28,8 @@
                         </f:facet>
                         <p:panelGrid columns="2" >
                             <h:outputLabel value="Seller Name:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}"/>
-
+                            <p:commandLink actionListener="#{viewProductDetailsManagedBean.viewServiceProvider(viewProductDetailsManagedBean.productToView.serviceProvider.serviceProviderId)}" value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
+                            
                             <h:outputLabel value="Product SKU code:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.skuCode}"/>
 
@@ -52,13 +52,13 @@
 
                         </p:panelGrid>
                         <br/>
-                        <p:panelGrid columns="3" >
+                        <h:panelGrid columns="3" >
                             <h:form>
                                 <p:outputLabel for="amountToAdd" value="Amount to add to cart:" style="font-weight: bolder"/>
                                 <p:spinner id="amountToAdd" min="0" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
                                 <p:commandButton value="Add to Shopping Cart" actionListener="#{viewProductDetailsManagedBean.shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}" update="menubar:cartForm"/>
                             </h:form>
-                        </p:panelGrid>
+                        </h:panelGrid>
 
                     </p:layoutUnit>
                 </p:layout>

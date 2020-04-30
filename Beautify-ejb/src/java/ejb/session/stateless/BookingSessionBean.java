@@ -25,7 +25,6 @@ import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.ServiceNotFoundException;
 
-
 import util.exception.UnknownPersistenceException;
 
 @Stateless
@@ -34,21 +33,21 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
-    
+
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
-    
+
     @EJB
     private ServiceSessionBeanLocal serviceSessionBeanLocal;
-    
+
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
+
     public BookingSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public Booking createNewBooking(Booking newBooking, Long customerId, Long serviceId) throws BookingExistException, UnknownPersistenceException, InputDataValidationException, CreateNewBookingException, CustomerNotFoundException {
         Set<ConstraintViolation<Booking>> constraintViolations = validator.validate(newBooking);
@@ -58,20 +57,20 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 if (customerId == null) {
                     throw new CreateNewBookingException("A new booking must be associated with a customer");
                 }
-                
+
                 Customer customer = customerSessionBeanLocal.retrieveCustomerByCustId(customerId);
-                
+
                 newBooking.setCustomer(customer);
                 customer.getBookings().add(newBooking);
-                
+
                 if (serviceId == null) {
                     throw new CreateNewBookingException("A new booking must be associated with a service");
                 }
-                
+
                 Service service = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceId);
                 newBooking.setService(service);
                 service.getBookings().add(newBooking);
-               
+
                 em.persist(newBooking);
                 em.flush();
 
@@ -86,7 +85,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException | ServiceNotFoundException ex) { 
+            } catch (CustomerNotFoundException | ServiceNotFoundException ex) {
                 throw new CreateNewBookingException("An error has occured while creating the new review: " + ex.getMessage());
             }
         } else {
@@ -95,20 +94,18 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     }
 
     @Override
-    public List<Booking> retrieveAllBookings() 
-    {
+    public List<Booking> retrieveAllBookings() {
         Query query = em.createQuery("SELECT b FROM Booking b");
         List<Booking> bookings = query.getResultList();
-        
-        for (Booking booking:bookings)
-        {
+
+        for (Booking booking : bookings) {
             booking.getCustomer();
             booking.getService();
         }
-        
+
         return bookings;
     }
-    
+
     @Override
     public Booking retrieveBookingByBookingId(Long bookingId) throws BookingNotFoundException {
         Booking booking = em.find(Booking.class, bookingId);
@@ -116,23 +113,33 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         if (booking != null) {
             booking.getCustomer();
             booking.getService();
-            
+
             return booking;
         } else {
             throw new BookingNotFoundException("Booking ID " + bookingId + " does not exist!");
         }
     }
-    
+
     @Override
-    public List<Booking> retrieveAllBookingsByCustomerId(Long customerId)
-    {
+    public List<Booking> retrieveAllBookingsByCustomerId(Long customerId) {
         Query query = em.createQuery("SELECT b FROM Booking b WHERE b.customer.customerId = :inCustomerId ORDER BY b.dateOfAppointment DESC, b.startTime ASC");
         query.setParameter("inCustomerId", customerId);
         List<Booking> bookings = query.getResultList();
-        
+
         return bookings;
     }
-    
+
+    @Override
+    public void deleteBooking(Long bookingId) {
+        Booking bookingToDelete = em.find(Booking.class, bookingId);
+        bookingToDelete.getCustomer().getBookings().remove(bookingToDelete);
+        bookingToDelete.getService().getBookings().remove(bookingToDelete);
+        if (bookingToDelete.getReview() != null) {
+            bookingToDelete.getReview().setBooking(null);
+        }
+        em.remove(bookingToDelete);
+    }
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Booking>> constraintViolations) {
         String msg = "Input data validation error!:";
 

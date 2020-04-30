@@ -49,7 +49,7 @@
                             </h:panelGrid>
                         </p:outputPanel>
 
-                        <p:commandButton actionListener="#{purchasedManagedBean.doGetPurchasedDetails}" update="purchasedLineItems" oncomplete="PF('dialogViewPurchasedLineItems').show()" icon="fa fa-list" value="View Details" title="View Detail">
+                        <p:commandButton actionListener="#{purchasedManagedBean.doGetPurchasedDetails}" update="viewPurchaseds purchasedLineItems" oncomplete="PF('dialogViewPurchasedLineItems').show()" icon="fa fa-list" value="View Details" title="View Detail">
                             <f:attribute name="selectedPurchased" value="#{purchased}" />    
                         </p:commandButton>       
                     </h:panelGrid>
@@ -88,15 +88,15 @@
                                 </p:commandLink>
                             </p:outputPanel>
 
-                            <p:commandButton actionListener="#{purchasedManagedBean.updatePurchasedLineItemStatus}" update="@form" value="Product Received" icon="fa fa-check-circle-o" title="Product Received" rendered="#{purchasedLineItem.status=='Shipped'}">
+                            <p:commandButton actionListener="#{purchasedManagedBean.updatePurchasedLineItemStatus}" update="@form viewPurchaseds" value="Product Received" icon="fa fa-check-circle-o" title="Product Received" rendered="#{purchasedLineItem.status=='Shipped'}">
                                 <f:attribute name="purchasedLineItemToUpdate" value="#{purchasedLineItem}" />
                             </p:commandButton>
 
-                            <p:commandButton actionListener="#{leaveReviewManagedBean.doLeaveProductReview}" update="@form formLeaveReview" oncomplete="PF('dialogLeaveReview').show()" value="Leave Review" icon="fa fa-thumbs-o-up" title="Leave Review" rendered="#{purchasedLineItem.status=='Product Received' and purchasedLineItem.review == null}">
+                            <p:commandButton actionListener="#{leaveReviewManagedBean.doLeaveProductReview}" update="@form viewPurchaseds formLeaveReview" oncomplete="PF('dialogLeaveReview').show()" value="Leave Review" icon="fa fa-thumbs-o-up" title="Leave Review" rendered="#{purchasedLineItem.status=='Product Received' and purchasedLineItem.review == null}">
                                 <f:attribute name="purchasedLineItemToReview" value="#{purchasedLineItem}" />
                             </p:commandButton>
 
-                            <p:commandButton actionListener="#{leaveReviewManagedBean.doViewProductReview}" update="@form formViewReview" oncomplete="PF('dialogViewReview').show()" value="View Review" icon="fa fa-thumbs-o-up" title="View Review" rendered="#{purchasedLineItem.review != null}">
+                            <p:commandButton actionListener="#{leaveReviewManagedBean.doViewProductReview}" update="@form viewPurchaseds formViewReview" oncomplete="PF('dialogViewReview').show()" value="View Review" icon="fa fa-thumbs-o-up" title="View Review" rendered="#{purchasedLineItem.status=='Product Received' and purchasedLineItem.review != null}">
                                 <f:attribute name="purchasedLineItemToReview" value="#{purchasedLineItem}" />
                             </p:commandButton>
 
@@ -127,8 +127,6 @@
                             </p:column>
                         </p:row>
 
-                        <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
-
                         <p:row>
                             <p:column colspan="2" style="text-align:center">
                                 <p:commandButton update="@form purchasedLineItems formUpdateReview viewPurchaseds" oncomplete="PF('dialogUpdateReview').show()" value="Update Review" title="Update Review"/>                 
@@ -136,7 +134,7 @@
                         </p:row>
                         <p:row>                        
                             <p:column colspan="2" style="text-align:center">
-                                <p:commandButton value="Delete Review" update="purchasedLineItems" actionListener="#{leaveReviewManagedBean.deleteReview}" oncomplete="PF('dialogViewReview').show();" >
+                                <p:commandButton value="Delete Review" update="purchasedLineItems" actionListener="#{leaveReviewManagedBean.deleteProductReview}" oncomplete="PF('dialogViewReview').show();" >
                                     <p:confirm header="Delete" message="Are you sure?" icon="fa fa-exclamation-triangle" />
                                 </p:commandButton>
                             </p:column>
@@ -178,11 +176,9 @@
                             </p:column>
                         </p:row>
 
-                        <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
-
                         <p:row>
                             <p:column colspan="2" style="text-align:center">
-                                <p:commandButton value="Update Review" update="@form purchasedLineItems formViewReview viewPurchaseds" actionListener="#{leaveReviewManagedBean.updateReview}" oncomplete="PF('dialogUpdateReview').show();" />
+                                <p:commandButton value="Update Review" update="@form purchasedLineItems formViewReview viewPurchaseds" actionListener="#{leaveReviewManagedBean.updateProductReview}" oncomplete="PF('dialogUpdateReview').show();" />
                             </p:column>
                         </p:row>
 
@@ -216,8 +212,6 @@
                                 <p:message for="description" />
                             </p:column>
                         </p:row>
-
-                        <!--                    NEED TO INCLUDE INSERT PHOTO HERE-->
 
                         <p:row>
                             <p:column colspan="2" style="text-align:center">
