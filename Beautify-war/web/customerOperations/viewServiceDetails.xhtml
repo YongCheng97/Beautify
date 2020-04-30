@@ -24,19 +24,19 @@
                         <f:facet name="header">
                             Service Details
                         </f:facet>
-                        <p:panelGrid columns="2">
+                        <p:panelGrid columns="2" >
                             <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}"/>
 
-                            <h:outputLabel value="Service Provider Opening Hours" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.openingHours}">
-                                <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
-                            </h:outputText>
-
-                            <h:outputLabel value="Service Provider Closing Hours" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.closingHours}">
-                                <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
-                            </h:outputText>
+                            <!--                            <h:outputLabel value="Service Provider Opening Hours" style="font-weight: bolder"/>
+                                                        <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.openingHours}">
+                                                            <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
+                                                        </h:outputText>
+                            
+                                                        <h:outputLabel value="Service Provider Closing Hours" style="font-weight: bolder"/>
+                                                        <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.closingHours}">
+                                                            <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
+                                                        </h:outputText>-->
 
                             <h:outputLabel value="Service Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
@@ -63,8 +63,34 @@
             </h:body>
 
             <h:form id="formBooking">
-                <p:dialog id="dialogBooking" widgetVar="dialogBooking" header="Book Service" closable="true">
+                <p:dialog id="dialogBooking" fitViewport="true" widgetVar="dialogBooking" header="Service Booking Details" closable="true">
 
+                    <p:panel style="text-align:center">
+                        
+                        <p:graphicImage library="images" name="#{viewServiceDetailsManagedBean.serviceToView.serviceName}.jpg" height="150" width="250" alt="Service Photo"/>
+                        <h:panelGrid columns="2" cellpadding="5" style="width:100%; text-align: left">
+                            <p:outputLabel value="Service Name:" style="font-weight: bold"/>
+                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
+
+                            <p:outputLabel value="Service Price:" style="font-weight: bold"/>
+                            <h:outputText value="$#{viewServiceDetailsManagedBean.serviceToView.price}"/>
+
+                            <p:outputLabel for="bookingDate" value="Date Of Appointment:" style="font-weight: bolder"/>
+                            <p:calendar id="bookingDate" value="#{serviceBookingManagedBean.bookingDate}" required="true" requiredMessage="Date of appointment is required" showOn="button" pattern="MM/dd/yyyy"/>
+
+                            <p:outputLabel for="startTime" value="Start Time:" style="font-weight: bolder"/>
+                            <p:inputText id="startTime" value="" required="true" requiredMessage="Start time is required"/>
+
+                            <p:outputLabel for="endTime" value="End Time:" style="font-weight: bolder"/>
+                            <p:inputText id="endTime" value="" required="true" requiredMessage="End Time is required"/>
+
+                            <p:outputLabel for="location" value="Location:" style="font-weight: bolder"/>
+                            <p:inputText id="location" value="#{serviceBookingManagedBean.address}" required="true" requiredMessage="Location is required"/>
+
+
+                        </h:panelGrid>
+                        <p:commandButton value="Book" icon="fa fa-calendar"/>
+                    </p:panel>
                 </p:dialog>
             </h:form>
         </div>
