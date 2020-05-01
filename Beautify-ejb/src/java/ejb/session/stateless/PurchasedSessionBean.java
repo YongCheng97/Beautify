@@ -17,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -117,6 +118,15 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
         } else {
             throw new PurchasedNotFoundException("Purchased ID " + purchasedId + " does not exist!");
         }
+    }
+    
+    @Override
+    public List<Purchased> retrieveAllPurchasedByCustomerId(Long customerId) {
+        Query query = em.createQuery("SELECT p FROM Purchased p WHERE p.customer.customerId = :inCustomerId ORDER BY p.dateOfPurchase DESC");
+        query.setParameter("inCustomerId", customerId);
+        List<Purchased> purchaseds = query.getResultList();
+
+        return purchaseds;
     }
     
     @Override

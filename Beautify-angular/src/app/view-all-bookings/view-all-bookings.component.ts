@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import * as moment from 'moment';
 
 import { SessionService } from '../session.service';
 import { BookingService } from '../booking.service';
@@ -46,6 +47,13 @@ export class ViewAllBookingsComponent implements OnInit
 		this.bookingService.getBookings().subscribe(
 			response => {
 				this.bookings = response.bookings;
+				/* for (let booking of this.bookings) {
+					booking.dateOfAppointment = booking.dateOfAppointment.substring(0,10);
+					booking.dateOfBooking = booking.dateOfBooking.substring(0,10);
+					
+					var localTime = moment.utc(booking.startTime).local().format();
+					booking.startTime = localTime;
+				} */
 			},
 			error => {
 				console.log('********** ViewAllBookingsComponent.ts: ' + error);
@@ -91,6 +99,11 @@ export class ViewAllBookingsComponent implements OnInit
 				}
 			);
 		}
+	}
+	
+	parseDate(d: Date)
+	{		
+		return d.toString().replace('[UTC]', '');
 	}
 	
 }

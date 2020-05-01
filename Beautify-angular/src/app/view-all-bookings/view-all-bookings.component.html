@@ -29,9 +29,9 @@
 					<td>{{booking.bookingId}}</td>
 					<td>{{booking.service.serviceName}}</td>				
 					<td>{{booking.customer.firstName}}</td>
-					<td>{{booking.dateOfAppointment}}</td>
-					<td>{{booking.startTime}}</td>
-					<td>{{booking.endTime}}</td>
+					<td>{{parseDate(booking.dateOfAppointment) | date:'EEE, MMM d, yyyy'}}</td>
+					<td>{{parseDate(booking.startTime) | date:'HH:mm:ss'}}</td>
+					<td>{{parseDate(booking.endTime) | date:'HH:mm:ss'}}</td>
 					<td>{{booking.status}}</td>
 					<td><p-button label="View" (onClick)="showDialog(booking)"></p-button></td>
 					<td><p-button label="Update" (onClick)="showStatusDialog(booking)"></p-button></td>
@@ -55,19 +55,19 @@
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Booking</div>
-				<div class="ui-g-6">{{bookingToView.dateOfBooking}}</div>
+				<div class="ui-g-6">{{parseDate(bookingToView.dateOfBooking) | date:'EEE, MMM d, yyyy'}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Appointment</div>
-				<div class="ui-g-6">{{bookingToView.dateOfAppointment}}</div>
+				<div class="ui-g-6">{{parseDate(bookingToView.dateOfAppointment) | date:'EEE, MMM d, yyyy'}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Start Time</div>
-				<div class="ui-g-6">{{bookingToView.startTime}}</div>
+				<div class="ui-g-6">{{parseDate(bookingToView.startTime) | date:'HH:mm:ss'}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">End Time</div>
-				<div class="ui-g-6">{{bookingToView.endTime}}</div>
+				<div class="ui-g-6">{{parseDate(bookingToView.endTime) | date:'HH:mm:ss'}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Remarks</div>

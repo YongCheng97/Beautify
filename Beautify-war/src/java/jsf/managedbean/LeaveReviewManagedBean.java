@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.BookingSessionBeanLocal;
 import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
+import ejb.session.stateless.PurchasedSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import entity.Booking;
 import entity.Customer;
@@ -46,6 +47,9 @@ public class LeaveReviewManagedBean implements Serializable {
     @EJB
     private BookingSessionBeanLocal bookingSessionBeanLocal;
     
+    @EJB
+    private PurchasedSessionBeanLocal purchasedSessionBeanLocal;
+        
     @EJB
     private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
     
@@ -168,13 +172,8 @@ public class LeaveReviewManagedBean implements Serializable {
         Long purchasedLineItemToReviewId = purchasedLineItemToReview.getPurchasedLineItemId();
         try {
             Review reviewId = reviewSessionBeanLocal.createNewProductReview(review, currentCustomerId, purchasedLineItemToReviewId);
-            purchasedLineItemToReview = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemToReviewId);
-            for (Purchased purchased:currentCustomer.getPurchaseds()){
-                for (PurchasedLineItem purchasedLineItem:purchased.getPurchasedLineItems()){
-                    purchasedLineItem.getReview();
-                }
-            }
-            purchasedManagedBean.setPurchaseds(currentCustomer.getPurchaseds());
+            
+            purchasedManagedBean.setPurchaseds(purchasedSessionBeanLocal.retrieveAllPurchasedByCustomerId(currentCustomerId));
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review posted successfully", null));
         } catch (ReviewExistException | UnknownPersistenceException | InputDataValidationException | CreateNewReviewException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while leaving review: " + ex.getMessage(), null));
@@ -204,6 +203,7 @@ public class LeaveReviewManagedBean implements Serializable {
             System.out.println(reviewId);
             reviewSessionBeanLocal.deleteReview(reviewId);
 
+            purchasedManagedBean.setPurchaseds(purchasedSessionBeanLocal.retrieveAllPurchasedByCustomerId(currentCustomer.getCustomerId()));
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review deleted successfully", null));
         } catch (ReviewNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting review: " + ex.getMessage(), null));

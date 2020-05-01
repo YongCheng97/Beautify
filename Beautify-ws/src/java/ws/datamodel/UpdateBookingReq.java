@@ -7,7 +7,8 @@ public class UpdateBookingReq
 {
     private String username;
     private String password;
-    private Booking booking;
+    private Long bookingId;
+    private String status;
 
     
     
@@ -17,11 +18,12 @@ public class UpdateBookingReq
 
     
     
-    public UpdateBookingReq(String username, String password, Booking booking) 
+    public UpdateBookingReq(String username, String password, Long bookingId) 
     {
         this.username = username;
         this.password = password;
-        this.booking = booking;
+        this.bookingId = bookingId;
+        this.status = status;
     }
 
     public String getUsername() {
@@ -40,12 +42,20 @@ public class UpdateBookingReq
         this.password = password;
     }
 
-    public Booking getBooking() {
-        return booking;
+    public Long getBookingId() {
+        return bookingId;
     }
 
-    public void setBooking(Booking booking) {
-        this.booking = booking;
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
     }
-    
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }

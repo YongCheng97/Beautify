@@ -47,6 +47,7 @@ export class BookingService
 		(
 			catchError(this.handleError)
 		);
+				
 	}	
 	
 	
@@ -55,9 +56,9 @@ export class BookingService
 		let updateBookingReq = {
 			"username": this.sessionService.getUsername(),
 			"password": this.sessionService.getPassword(),
-			"booking": bookingToUpdate,
+			"bookingId": bookingToUpdate.bookingId,
+			"status": bookingToUpdate.status,
 		};
-		
 		return this.httpClient.post<any>(this.baseUrl, updateBookingReq, httpOptions).pipe
 		(
 			catchError(this.handleError)

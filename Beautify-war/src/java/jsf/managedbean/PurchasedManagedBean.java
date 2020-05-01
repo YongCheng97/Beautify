@@ -34,6 +34,9 @@ public class PurchasedManagedBean implements Serializable {
 
     @EJB
     private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
+    
+    @EJB
+    private PurchasedSessionBeanLocal purchasedSessionBeanLocal;
 
     private Customer currentCustomer;
 
@@ -48,7 +51,7 @@ public class PurchasedManagedBean implements Serializable {
         currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
 
         if (currentCustomer != null) {
-            purchaseds = currentCustomer.getPurchaseds();
+            purchaseds = purchasedSessionBeanLocal.retrieveAllPurchasedByCustomerId(currentCustomer.getCustomerId());
         }
     }
 
