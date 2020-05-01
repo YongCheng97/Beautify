@@ -18,6 +18,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
+import { MegaMenuModule } from 'primeng/megamenu';
 
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
@@ -43,6 +44,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
     CalendarModule,
     NgxMaterialTimepickerModule,
     MatFormFieldModule,
+    MegaMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
