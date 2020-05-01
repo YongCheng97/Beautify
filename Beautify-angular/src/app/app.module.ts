@@ -55,7 +55,7 @@ import { ViewAllProductsComponent } from './view-all-products/view-all-products.
     CalendarModule,
     NgxMaterialTimepickerModule,
     MatFormFieldModule,
-	DropdownModule
+	DropdownModule,
     MegaMenuModule,
   ],
   providers: [DatePipe],
