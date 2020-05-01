@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {DatePipe} from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,10 +19,12 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
 
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { ViewAllReviewsComponent } from './view-all-reviews/view-all-reviews.component';
 import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.component';
+import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-items/view-all-purchased-line-items.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,7 @@ import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.
     HeaderComponent,
     ViewAllReviewsComponent, 
     ViewAllBookingsComponent, 
+	ViewAllPurchasedLineItemsComponent, 
   ],
   imports: [
     BrowserModule,
@@ -47,8 +51,9 @@ import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.
     CalendarModule,
     NgxMaterialTimepickerModule,
     MatFormFieldModule,
+	DropdownModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.PurchasedLineItem;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.CreateNewPurchasedLineItemException;
 import util.exception.InputDataValidationException;
@@ -27,5 +28,7 @@ public interface PurchasedLineItemSessionBeanLocal {
     public PurchasedLineItem updatePurchasedLineItem(PurchasedLineItem purchasedLineItem) throws InputDataValidationException, PurchasedLineItemNotFoundException;
 
     public void deletePurchasedLineItem(Long purchasedLineItemId);
+
+    public List<PurchasedLineItem> retrieveAllPurchasedLineItemByServiceProviderId(Long serviceProviderId) throws PurchasedLineItemNotFoundException;
     
 }
