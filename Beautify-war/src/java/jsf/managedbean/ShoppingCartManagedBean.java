@@ -69,6 +69,7 @@ public class ShoppingCartManagedBean implements Serializable {
         this.items = new ArrayList<>();
         this.amountToCart = 0;
         order = new Purchased();
+        promoCode = null;
     }
 
     @PostConstruct
@@ -126,6 +127,14 @@ public class ShoppingCartManagedBean implements Serializable {
         msg = "Remove from cart";
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
 
+        BigDecimal total = new BigDecimal("0.00");
+
+        for (Item item : this.items) {
+            total = total.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+        }
+
+        setTotalAmount(total);
+
         if (items.isEmpty()) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("haveItems", false);
         }
@@ -180,18 +189,36 @@ public class ShoppingCartManagedBean implements Serializable {
             List<Long> lineItemsIds = new ArrayList<>();
 
             BigDecimal totalPrice = new BigDecimal("0.00");
+            BigDecimal promoPrice = new BigDecimal("0.00");
             Date date = new Date();
 
             try {
-                for (Item item : this.getItems()) {
-                    promotionSessionBeanLocal.updateProductDiscountPrice(item.getProduct());
+                if (promoCode != null && !promoCode.isEmpty()) {
+                    Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
+                    for (Item item : items) {
+                        List<Promotion> itemPromotions = item.getProduct().getPromotions();
+                        if (itemPromotions.contains(promotion)) {
+                            if (promotionSessionBeanLocal.checkPromoCode(promoCode) == true) {
+                                promoPrice = (item.getProduct().getPrice().multiply(promotion.getDiscountRate())).setScale(2, BigDecimal.ROUND_HALF_UP);
 
-                    if (item.getProduct().getDiscountPrice() != null) { // there is ongoing promotion
-                        PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-                        lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+                                PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", promoPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
+                                lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+                                totalPrice = totalPrice.add(promoPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
+                            } else {
+                                PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                                lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+                                
+                                totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                            }
+                        } else {
+                            PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                            lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
 
-                        totalPrice = totalPrice.add(item.getProduct().getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-                    } else { // original price
+                            totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                        }
+                    }
+                } else {
+                    for (Item item : this.getItems()) {
                         PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
                         lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
 
@@ -199,7 +226,7 @@ public class ShoppingCartManagedBean implements Serializable {
                     }
                 }
 
-                //setTotalAmount(totalPrice);
+                setTotalAmount(totalPrice);
 
                 Purchased purchased = new Purchased(date, totalPrice, order.getAddress());
                 CreditCard cc = creditCardSessionBeanLocal.retrieveCreditCardByLastFourNum(creditCardNum);
@@ -207,7 +234,7 @@ public class ShoppingCartManagedBean implements Serializable {
                 setOrder(purchasedSessionBeanLocal.createNewPurchased(purchased, currentCustomer.getCustomerId(), lineItemsIds, cc.getCreditCardId()));
 
             } catch (UnknownPersistenceException | CreateNewPurchasedLineItemException | PurchasedLineItemExistException | InputDataValidationException | CustomerNotFoundException
-                    | PurchasedExistException | CreateNewPurchaseException ex) {
+                    | PurchasedExistException | CreateNewPurchaseException | PromotionNotFoundException ex) {
                 Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -221,59 +248,38 @@ public class ShoppingCartManagedBean implements Serializable {
 
             Boolean exists = false;
 
-            for (Item item : items) {
+            for (Item item : items) { // there is an item in cart w that promotion 
                 List<Promotion> itemPromotions = item.getProduct().getPromotions();
                 if (itemPromotions.contains(promotion)) {
                     exists = true;
                 }
             }
 
-            Boolean valid = promotionSessionBeanLocal.checkPromoCode(promoCode);
+            Boolean valid = promotionSessionBeanLocal.checkPromoCode(promoCode); // promo is valid for this date
 
             if (valid && exists) {
                 msg = "Promo Code Applied!";
+
+                BigDecimal totalPrice = new BigDecimal("0.00");
+                BigDecimal promoPrice = new BigDecimal("0.00");
+
+                for (Item item : items) { // promo item
+                    List<Promotion> itemPromotions = item.getProduct().getPromotions();
+                    if (itemPromotions.contains(promotion)) {
+                        promoPrice = (item.getProduct().getPrice().multiply(promotion.getDiscountRate())).setScale(2, BigDecimal.ROUND_HALF_UP);
+                        totalPrice = totalPrice.add(promoPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
+                    } else {
+                        totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    }
+                }
+
+                setTotalAmount(totalPrice);
+
             } else {
                 msg = "Invalid Promo Code!";
             }
 
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
-        } catch (PromotionNotFoundException ex) {
-            Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void updateTotalAmount() {
-        try {
-            Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
-
-            Boolean exists = false;
-
-            for (Item item : items) {
-                List<Promotion> itemPromotions = item.getProduct().getPromotions();
-                if (itemPromotions.contains(promotion)) {
-                    exists = true;
-                }
-            }
-
-            Boolean valid = promotionSessionBeanLocal.checkPromoCode(promoCode);
-
-            if (valid && exists) {
-                
-                BigDecimal totalPrice = new BigDecimal("0.00"); 
-                
-                for (Item item : this.getItems()) {
-                    promotionSessionBeanLocal.updateProductDiscountPrice(item.getProduct());
-
-                    if (item.getProduct().getDiscountPrice() != null) { // there is ongoing promotion
-                        totalPrice = totalPrice.add(item.getProduct().getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-                    } else { // original price
-                        totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-                    }
-                }
-
-                System.out.println("this works"); 
-                setTotalAmount(totalPrice);
-            }
         } catch (PromotionNotFoundException ex) {
             Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }

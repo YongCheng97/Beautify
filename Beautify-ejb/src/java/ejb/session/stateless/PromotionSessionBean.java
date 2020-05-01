@@ -99,7 +99,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         try {
             return (Promotion) query.getSingleResult();
         } catch (NoResultException | NonUniqueResultException ex) {
-            throw new PromotionNotFoundException("Promotion name " + promoCode + " does not exist!");
+            throw new PromotionNotFoundException("Promotion Code " + promoCode + " does not exist!");
         }
     }
 
@@ -147,7 +147,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         em.remove(promotionToRemove);
     }
 
-    @Override
+    /*@Override
     public void updateServiceDiscountPrice(Service service) {
         List<Promotion> promotions = service.getPromotions();
         if (promotions.isEmpty()) {
@@ -193,7 +193,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
                 product.setDiscountPrice(null);
             }
         }
-    }
+    } */
     
     @Override
     public Boolean checkPromoCode(String promoCode) {

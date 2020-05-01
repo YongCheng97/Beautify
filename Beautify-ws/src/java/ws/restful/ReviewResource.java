@@ -157,6 +157,9 @@ public class ReviewResource {
                     review.getPurchasedLineItem().getProduct().getFavouritedCustomers().clear();
                     review.getPurchasedLineItem().getProduct().getTags().clear();
                     review.getPurchasedLineItem().getProduct().getPromotions().clear();
+                    review.getPurchasedLineItem().getPurchased().setCreditCard(null);
+                    review.getPurchasedLineItem().getPurchased().setCustomer(null);
+                    review.getPurchasedLineItem().getPurchased().getPurchasedLineItems().clear(); 
                 }
 
                 review.getCustomer().getBookings().clear();
