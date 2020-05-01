@@ -1,10 +1,88 @@
 <app-header></app-header>
 
-<app-main-menu></app-main-menu>		
+<app-main-menu></app-main-menu>
 
 <section id="content" class="content">
 
-    <h3>Welcome!</h3>
+    <h1>Welcome To Beautify, {{serviceProvider.name}}!</h1>
+
+    <h2> Profile </h2>
+
+    <p>
+        <b> Name: </b> {{serviceProvider.name}}
+        <p-button (onClick)="showNameDialog(serviceProvider)" label="Update"></p-button>
+    </p>
+
+    <p>
+        <b> Email: </b> {{serviceProvider.email}}
+        <p-button (onClick)="showEmailDialog(serviceProvider)" label="Update"></p-button>
+    </p>
+
+    <p>
+        <b> Address: </b> {{serviceProvider.address}}
+        <p-button (onClick)="showAddressDialog(serviceProvider)" label="Update"></p-button>
+    </p>
+
+    <p>
+        <b> Store Hours: </b>
+        <p-button (onClick)="showDialog(serviceProvider)" label="Update"></p-button>
+    </p>
+
+    <p>
+        <b> Certification: </b>
+        <p-button label="Upload"></p-button>
+    </p>
+
+    <p>
+        <b> Approval Status: </b> {{approvalStatus}}
+    </p>
+
+    <p-dialog *ngIf="displayName" header="Update Name" modal="true" [(visible)]="displayName" [style]="{width: '50vw'}">
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Current Name: </div>
+            <div class="ui-g-6"><input placeholder="{{serviceProvider.name}}" type="text" pInputText /></div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">New Name: </div>
+            <div class="ui-g-6"><input type="text" pInputText /></div>
+        </div>
+        &nbsp;
+        <div style="text-align: center;">
+            <p-button label="Confirm" icon="pi pi-check"></p-button>
+        </div>
+    </p-dialog>
+
+    <p-dialog *ngIf="displayEmail" header="Update Email" modal="true" [(visible)]="displayEmail"
+        [style]="{width: '50vw'}">
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Current Email: </div>
+            <div class="ui-g-6"><input placeholder="{{serviceProvider.email}}" type="text" pInputText /></div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">New Email: </div>
+            <div class="ui-g-6"><input type="text" pInputText /></div>
+        </div>
+        &nbsp;
+        <div style="text-align: center;">
+            <p-button label="Confirm" icon="pi pi-check"></p-button>
+        </div>
+    </p-dialog>
+
+    <p-dialog *ngIf="displayAddress" header="Update Address" modal="true" [(visible)]="displayAddress"
+        [style]="{width: '50vw'}">
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Current Address: </div>
+            <div class="ui-g-6"><input placeholder="{{serviceProvider.address}}" type="text" pInputText /></div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">New Address: </div>
+            <div class="ui-g-6"><input type="text" pInputText /></div>
+        </div>
+        &nbsp;
+        <div style="text-align: center;">
+            <p-button label="Confirm" icon="pi pi-check"></p-button>
+        </div>
+    </p-dialog>
 
 </section>
 

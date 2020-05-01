@@ -41,6 +41,7 @@ export class IndexComponent implements OnInit {
         if (serviceProvider != null) {
           this.sessionService.setIsLogin(true);
           this.sessionService.setCurrentServiceProvider(serviceProvider);
+          sessionStorage.setItem('serviceProvider', JSON.stringify(serviceProvider));
           this.loginError = false;
 
           this.childEvent.emit();

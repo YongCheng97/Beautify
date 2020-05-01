@@ -20,6 +20,7 @@ import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { ViewAllReviewsComponent } from './view-all-reviews/view-all-reviews.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
     SignUpComponent,
     FooterComponent,
     MainMenuComponent,
-    HeaderComponent, 
+    HeaderComponent,
+    ViewAllReviewsComponent, 
   ],
   imports: [
     BrowserModule,
