@@ -39,12 +39,14 @@ public class Booking implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Date dateOfAppointment;
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NotNull
-    private Time startTime;
+    private Date startTime;
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NotNull
-    private Time endTime;
+    private Date endTime;
     
     @OneToOne(optional = true)
     @JoinColumn(nullable = true)
@@ -62,7 +64,7 @@ public class Booking implements Serializable {
         
     }
     
-    public Booking(Date dateOfBooking, String status, String remarks, Date dateOfAppointment, Time startTime, Time endTime) {
+    public Booking(Date dateOfBooking, String status, String remarks, Date dateOfAppointment, Date startTime, Date endTime) {
         this();
         
         this.dateOfBooking = dateOfBooking;
@@ -199,7 +201,7 @@ public class Booking implements Serializable {
         this.dateOfAppointment = dateOfAppointment;
     }
 
-    public Time getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
@@ -207,7 +209,7 @@ public class Booking implements Serializable {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
