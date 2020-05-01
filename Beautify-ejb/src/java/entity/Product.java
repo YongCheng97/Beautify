@@ -46,10 +46,6 @@ public class Product implements Serializable {
     @NotNull
     @Min(0)
     private Integer quantityOnHand;
-    @Column(precision = 11, scale = 2)
-    @DecimalMin("0.00")
-    @Digits(integer = 9, fraction = 2)
-    private BigDecimal discountPrice;
 
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
@@ -76,14 +72,13 @@ public class Product implements Serializable {
         this.promotions = new ArrayList<>();
     }
 
-    public Product(String skuCode, String name, BigDecimal price, String description, Integer quantityOnHand, BigDecimal discountPrice) {
+    public Product(String skuCode, String name, BigDecimal price, String description, Integer quantityOnHand) {
         this();
         this.skuCode = skuCode;
         this.name = name;
         this.price = price;
         this.description = description;
         this.quantityOnHand = quantityOnHand;
-        this.discountPrice = discountPrice;
     }
 
     public Long getProductId() {
@@ -241,14 +236,6 @@ public class Product implements Serializable {
 
     public void setPromotions(List<Promotion> promotions) {
         this.promotions = promotions;
-    }
-
-    public BigDecimal getDiscountPrice() {
-        return discountPrice;
-    }
-
-    public void setDiscountPrice(BigDecimal discountPrice) {
-        this.discountPrice = discountPrice;
     }
 
     public Integer getQuantityOnHand() {

@@ -29,6 +29,11 @@
     </p>
 
     <p>
+        <b> Credit Cards: </b>
+        <p-button label="Add"></p-button>
+    </p>
+
+    <p>
         <b> Certification: </b>
         <p-button label="Upload"></p-button>
     </p>
@@ -37,36 +42,41 @@
         <b> Approval Status: </b> {{approvalStatus}}
     </p>
 
-    <p-dialog *ngIf="displayName" header="Update Name" modal="true" [(visible)]="displayName" [style]="{width: '50vw'}">
-        <div class="ui-g">
-            <div class="ui-g-6" style="background-color: #f4f4f4;">Current Name: </div>
-            <div class="ui-g-6"><input placeholder="{{serviceProvider.name}}" type="text" pInputText /></div>
-        </div>
-        <div class="ui-g">
-            <div class="ui-g-6" style="background-color: #f4f4f4;">New Name: </div>
-            <div class="ui-g-6"><input type="text" pInputText /></div>
-        </div>
-        &nbsp;
-        <div style="text-align: center;">
-            <p-button label="Confirm" icon="pi pi-check"></p-button>
-        </div>
-    </p-dialog>
+    <form *ngIf="displayName" #updateNameForm="ngForm" (ngSubmit)="update(updateNameForm)">
+        <p-dialog *ngIf="displayName" header="Update Name" modal="true" [(visible)]="displayName"
+            [style]="{width: '50vw'}">
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Current Name: </div>
+                <div class="ui-g-6"><input placeholder="{{serviceProvider.name}}" type="text" pInputText /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">New Name: </div>
+                <div class="ui-g-6"><input type="text" pInputText /></div>
+            </div>
+            &nbsp;
+            <div style="text-align: center;">
+                <p-button label="Confirm" icon="pi pi-check"></p-button>
+            </div>
+        </p-dialog>
+    </form>
 
-    <p-dialog *ngIf="displayEmail" header="Update Email" modal="true" [(visible)]="displayEmail"
-        [style]="{width: '50vw'}">
-        <div class="ui-g">
-            <div class="ui-g-6" style="background-color: #f4f4f4;">Current Email: </div>
-            <div class="ui-g-6"><input placeholder="{{serviceProvider.email}}" type="text" pInputText /></div>
-        </div>
-        <div class="ui-g">
-            <div class="ui-g-6" style="background-color: #f4f4f4;">New Email: </div>
-            <div class="ui-g-6"><input type="text" pInputText /></div>
-        </div>
-        &nbsp;
-        <div style="text-align: center;">
-            <p-button label="Confirm" icon="pi pi-check"></p-button>
-        </div>
-    </p-dialog>
+    <form *ngIf="displayEmail" #updateEmailForm="ngForm" (ngSubmit)="update(updateEmailForm)">
+        <p-dialog *ngIf="displayEmail" header="Update Email" modal="true" [(visible)]="displayEmail"
+            [style]="{width: '50vw'}">
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Current Email: </div>
+                <div class="ui-g-6"><input placeholder="{{serviceProvider.email}}" type="text" pInputText /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">New Email: </div>
+                <div class="ui-g-6"><input type="text" pInputText /></div>
+            </div>
+            &nbsp;
+            <div style="text-align: center;">
+                <p-button label="Confirm" icon="pi pi-check"></p-button>
+            </div>
+        </p-dialog>
+    </form>
 
     <p-dialog *ngIf="displayAddress" header="Update Address" modal="true" [(visible)]="displayAddress"
         [style]="{width: '50vw'}">
