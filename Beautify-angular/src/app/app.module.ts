@@ -23,6 +23,8 @@ import { MegaMenuModule } from 'primeng/megamenu';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { ViewAllReviewsComponent } from './view-all-reviews/view-all-reviews.component';
 import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.component';
+import { ViewAllServicesComponent } from './view-all-services/view-all-services.component';
+import { ViewAllProductsComponent } from './view-all-products/view-all-products.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.
     MainMenuComponent,
     HeaderComponent,
     ViewAllReviewsComponent, 
-    ViewAllBookingsComponent, 
+    ViewAllBookingsComponent, ViewAllServicesComponent, ViewAllProductsComponent, 
   ],
   imports: [
     BrowserModule,
