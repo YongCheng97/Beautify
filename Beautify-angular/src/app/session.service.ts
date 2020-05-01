@@ -33,8 +33,8 @@ export class SessionService {
     return sessionStorage.username;
   }
 
-  setUsername(email: string): void {
-    sessionStorage.email = email;
+  setUsername(username: string): void {
+    sessionStorage.username = username;
   }
 
   getPassword(): string {
