@@ -26,7 +26,7 @@
     "bootstrap": "^4.4.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.0",
-    "moment": "^2.25.0",
+    "moment": "^2.24.0",
     "ngx-material-timepicker": "^5.5.1",
     "primeflex": "^1.0.0",
     "primeicons": "^2.0.0",

@@ -172,7 +172,7 @@ public class BookingResource {
                 ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.serviceProviderLogin(updateBookingReq.getUsername(), updateBookingReq.getPassword());
                 System.out.println("********** BookingResource.updateBooking(): Service Provider " + serviceProvider.getName()+ " login remotely via web service");
                 
-                bookingSessionBeanLocal.updateBookingStatus(updateBookingReq.getBooking());
+                bookingSessionBeanLocal.updateBookingStatus(updateBookingReq.getBookingId(), updateBookingReq.getStatus());
                 
                 return Response.status(Response.Status.OK).build();
             }

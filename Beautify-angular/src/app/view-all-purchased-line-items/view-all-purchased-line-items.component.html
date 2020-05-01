@@ -43,7 +43,7 @@
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Name</div>
-				<div class="ui-g-6">{{purchasedLineItem.purchased.customer.firstName}} {{purchasedLineItem.purchased.customer.lastName}}</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.purchased.customer.firstName}} {{purchasedLineItemToView.purchased.customer.lastName}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Product</div>
@@ -59,11 +59,11 @@
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Address</div>
-				<div class="ui-g-6">{{purchasedLineItem.purchased.address}}</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.purchased.address}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Purchase</div>
-				<div class="ui-g-6">{{purchasedLineItem.purchased.dateOfPurchase}}</div>
+				<div class="ui-g-6">{{parseDate(purchasedLineItemToView.purchased.dateOfPurchase) | date:'EEE, MMM d, yyyy'}}</div>
 			</div>
 		</p-dialog>
 		

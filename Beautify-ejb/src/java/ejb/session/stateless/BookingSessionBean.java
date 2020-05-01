@@ -151,15 +151,16 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     }
     
     @Override
-    public void updateBookingStatus(Booking booking) throws BookingNotFoundException, UpdateBookingException, InputDataValidationException {
-        if (booking.getBookingId()!= null && booking != null) {
+    public void updateBookingStatus(Long bookingId, String status) throws BookingNotFoundException, UpdateBookingException, InputDataValidationException {
+        if (bookingId!= null) {
+            Booking booking = retrieveBookingByBookingId(bookingId);
             Set<ConstraintViolation<Booking>> constraintViolations = validator.validate(booking);
 
             if (constraintViolations.isEmpty()) {
                 Booking bookingToUpdate = retrieveBookingByBookingId(booking.getBookingId());
 
                 if (bookingToUpdate.getCustomer().equals(bookingToUpdate.getCustomer())) {
-                    bookingToUpdate.setStatus(booking.getStatus());
+                    bookingToUpdate.setStatus(status);
                 } else {
                     throw new UpdateBookingException("Customer of booking record to be updated does not match the existing record");
                 }
