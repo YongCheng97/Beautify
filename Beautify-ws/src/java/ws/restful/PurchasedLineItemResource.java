@@ -6,8 +6,10 @@
 package ws.restful;
 
 import ejb.session.stateless.BookingSessionBeanLocal;
+import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import entity.Booking;
+import entity.PurchasedLineItem;
 import entity.ServiceProvider;
 import java.util.List;
 import javax.ws.rs.core.Context;
@@ -23,16 +25,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import util.exception.BookingNotFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.PurchasedLineItemNotFoundException;
 import util.exception.UpdateBookingException;
 import util.exception.UpdateProductException;
 import ws.datamodel.ErrorRsp;
 import ws.datamodel.RetrieveAllBookingsRsp;
+import ws.datamodel.RetrieveAllPurchasedLineItemsRsp;
 import ws.datamodel.RetrieveBookingRsp;
+import ws.datamodel.RetrievePurchasedLineItemRsp;
 import ws.datamodel.UpdateBookingReq;
+import ws.datamodel.UpdatePurchasedLineItemReq;
 
 
-@Path("Booking")
-public class BookingResource {
+@Path("PurchasedLineItem")
+public class PurchasedLineItemResource {
 
     @Context
     private UriInfo context;
@@ -40,55 +46,50 @@ public class BookingResource {
     private final SessionBeanLookup sessionBeanLookup;
     
     private final ServiceProviderSessionBeanLocal serviceProviderSessionBeanLocal;
-    private final BookingSessionBeanLocal bookingSessionBeanLocal;
+    private final PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
     
     
-    public BookingResource() {
+    public PurchasedLineItemResource() {
         
         sessionBeanLookup = new SessionBeanLookup();
         
         serviceProviderSessionBeanLocal = sessionBeanLookup.lookupServiceProviderSessionBeanLocal();
-        bookingSessionBeanLocal = sessionBeanLookup.lookupBookingSessionBeanLocal();
+        purchasedLineItemSessionBeanLocal = sessionBeanLookup.lookupPurchasedLineItemSessionBeanLocal();
         
     }
 
-    @Path("retrieveAllBookings")
+    @Path("retrieveAllPurchasedLineItems")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveAllBookings(@QueryParam("username") String username, 
-                                        @QueryParam("password") String password)
+    public Response retrieveAllPurchasedLineItems(@QueryParam("username") String username, 
+                                                    @QueryParam("password") String password)
     {
         try
         {
             ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.serviceProviderLogin(username, password);
-            System.out.println("********** BookingResource.retrieveAllBookings(): Service Provider " + serviceProvider.getName()+ " login remotely via web service");
+            System.out.println("********** PurchasedLineItemResource.retrieveAllPurchasedLineItems(): Service Provider " + serviceProvider.getName()+ " login remotely via web service");
 
-            List<Booking> bookings = bookingSessionBeanLocal.retrieveAllBookingsByServiceProviderId(serviceProvider.getServiceProviderId());
+            List<PurchasedLineItem> purchasedLineItems = purchasedLineItemSessionBeanLocal.retrieveAllPurchasedLineItemByServiceProviderId(serviceProvider.getServiceProviderId());
                                    
-            for(Booking booking:bookings)
+            for(PurchasedLineItem purchasedLineItem:purchasedLineItems)
             {
-                if(booking.getReview() != null){
-                    booking.getReview().setBooking(null);
-                    booking.getReview().setCustomer(null);
-                    booking.getReview().setPurchasedLineItem(null);
+                if(purchasedLineItem.getReview() != null){
+                    purchasedLineItem.getReview().setBooking(null);
+                    purchasedLineItem.getReview().setCustomer(null);
+                    purchasedLineItem.getReview().setPurchasedLineItem(null);
                 }
                 
-                booking.getCustomer().getBookings().clear();
-                booking.getCustomer().getCreditCards().clear();
-                booking.getCustomer().getFavouriteProducts().clear();
-                booking.getCustomer().getFavouriteServices().clear();
-                booking.getCustomer().getReviews().clear();
-                booking.getCustomer().getPurchaseds().clear();
+                purchasedLineItem.getProduct().setCategory(null);
+                purchasedLineItem.getProduct().setServiceProvider(null);
+                purchasedLineItem.getProduct().getFavouritedCustomers().clear();
+                purchasedLineItem.getProduct().getTags().clear();
+                purchasedLineItem.getProduct().getPromotions().clear();
                 
-                booking.getService().getBookings().clear();
-                booking.getService().setServiceProvider(null);
-                booking.getService().setCategory(null);
-                booking.getService().getTags().clear();
-                booking.getService().getPromotions().clear();
+                
             }
                 
-            return Response.status(Response.Status.OK).entity(new RetrieveAllBookingsRsp(bookings)).build();
+            return Response.status(Response.Status.OK).entity(new RetrieveAllPurchasedLineItemsRsp(purchasedLineItems)).build();
         }
         catch(InvalidLoginCredentialException ex)
         {
@@ -104,41 +105,34 @@ public class BookingResource {
         }
     }
 
-    @Path("retrieveBooking/{bookingId}")
+    @Path("retrievePurchasedLineItem/{purchasedLineItemId}")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveBooking(@QueryParam("username") String username, 
+    public Response retrievePurchasedLineItem(@QueryParam("username") String username, 
                                         @QueryParam("password") String password,
-                                        @PathParam("bookingId") Long bookingId)
+                                        @PathParam("purchasedLineItemId") Long purchasedLineItemId)
     {
         try
         {
             ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.serviceProviderLogin(username, password);
-            System.out.println("********** BookingResource.retrieveBooking(): Service Provider " + serviceProvider.getName() + " login remotely via web service");
+            System.out.println("********** PurchasedLineItemResource.retrievePurchasedLineItem(): Service Provider " + serviceProvider.getName() + " login remotely via web service");
 
-            Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
+            PurchasedLineItem purchasedLineItem = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemId);
                       
-            if(booking.getReview() != null){
-                booking.getReview().setBooking(null);
-                booking.getReview().setCustomer(null);
-                booking.getReview().setPurchasedLineItem(null);
+            if(purchasedLineItem.getReview() != null){
+                purchasedLineItem.getReview().setBooking(null);
+                purchasedLineItem.getReview().setCustomer(null);
+                purchasedLineItem.getReview().setPurchasedLineItem(null);
             }
 
-            booking.getCustomer().getBookings().clear();
-            booking.getCustomer().getCreditCards().clear();
-            booking.getCustomer().getFavouriteProducts().clear();
-            booking.getCustomer().getFavouriteServices().clear();
-            booking.getCustomer().getReviews().clear();
-            booking.getCustomer().getPurchaseds().clear();
-
-            booking.getService().getBookings().clear();
-            booking.getService().setServiceProvider(null);
-            booking.getService().setCategory(null);
-            booking.getService().getTags().clear();
-            booking.getService().getPromotions().clear();
+            purchasedLineItem.getProduct().setCategory(null);
+            purchasedLineItem.getProduct().setServiceProvider(null);
+            purchasedLineItem.getProduct().getFavouritedCustomers().clear();
+            purchasedLineItem.getProduct().getTags().clear();
+            purchasedLineItem.getProduct().getPromotions().clear();
             
-            return Response.status(Response.Status.OK).entity(new RetrieveBookingRsp(booking)).build();
+            return Response.status(Response.Status.OK).entity(new RetrievePurchasedLineItemRsp(purchasedLineItem)).build();
         }
         catch(InvalidLoginCredentialException ex)
         {
@@ -146,7 +140,7 @@ public class BookingResource {
             
             return Response.status(Response.Status.UNAUTHORIZED).entity(errorRsp).build();
         }
-        catch(BookingNotFoundException ex)
+        catch(PurchasedLineItemNotFoundException ex)
         {
             ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
             
@@ -163,16 +157,16 @@ public class BookingResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBooking(UpdateBookingReq updateBookingReq)
+    public Response updatePurchasedLineItem(UpdatePurchasedLineItemReq updatePurchasedLineItemReq)
     {
-        if(updateBookingReq != null)
+        if(updatePurchasedLineItemReq != null)
         {
             try
             {                
-                ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.serviceProviderLogin(updateBookingReq.getUsername(), updateBookingReq.getPassword());
-                System.out.println("********** BookingResource.updateBooking(): Service Provider " + serviceProvider.getName()+ " login remotely via web service");
+                ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.serviceProviderLogin(updatePurchasedLineItemReq.getUsername(), updatePurchasedLineItemReq.getPassword());
+                System.out.println("********** PurchasedLineItemResource.updatePurchasedLineItem(): Service Provider " + serviceProvider.getName()+ " login remotely via web service");
                 
-                bookingSessionBeanLocal.updateBookingStatus(updateBookingReq.getBooking());
+                purchasedLineItemSessionBeanLocal.updatePurchasedLineItem(updatePurchasedLineItemReq.getPurchasedLineItem());
                 
                 return Response.status(Response.Status.OK).build();
             }
@@ -182,7 +176,7 @@ public class BookingResource {
             
                 return Response.status(Response.Status.UNAUTHORIZED).entity(errorRsp).build();
             }
-            catch(UpdateBookingException ex)
+            catch(PurchasedLineItemNotFoundException ex)
             {
                 ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
                 
@@ -197,7 +191,7 @@ public class BookingResource {
         }
         else
         {
-            ErrorRsp errorRsp = new ErrorRsp("Invalid update booking request");
+            ErrorRsp errorRsp = new ErrorRsp("Invalid update purchased line item request");
             
             return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
         }

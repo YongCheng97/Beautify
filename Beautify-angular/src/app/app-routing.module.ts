@@ -5,6 +5,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.component';
 import { ViewAllReviewsComponent } from './view-all-reviews/view-all-reviews.component';
+import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-items/view-all-purchased-line-items.component';
 
 
 const routes: Routes = [
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'main-page', component: MainPageComponent},
   { path: 'sign-up', component: SignUpComponent},
   { path: 'view-all-bookings', component: ViewAllBookingsComponent},
-  { path: 'view-all-reviews', component: ViewAllReviewsComponent}
+  { path: 'view-all-reviews', component: ViewAllReviewsComponent},
+  { path: 'view-all-purchased-line-items', component: ViewAllPurchasedLineItemsComponent}
 ];
 
 @NgModule({

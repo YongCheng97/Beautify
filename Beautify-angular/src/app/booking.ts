@@ -12,7 +12,7 @@ export class Booking
 	remarks: string;
 	dateOfAppointment: Date;
 	startTime: Date;
-	endTime: Date;	
+	endTime: Date;
 	customer: Customer;
 	service: Service;
 	review: Review;

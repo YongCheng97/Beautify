@@ -70,6 +70,7 @@ public class ServiceProviderResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createServiceProvider(CreateServiceProviderReq createServiceProviderReq) {
+        
         if (createServiceProviderReq != null) {
             try {
                 Long serviceProviderId = serviceProviderSessionBean.createNewServiceProvider(createServiceProviderReq.getServiceProvider());
