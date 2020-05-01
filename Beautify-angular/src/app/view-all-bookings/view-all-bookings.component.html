@@ -1,0 +1,88 @@
+<app-header></app-header>
+		
+<app-main-menu></app-main-menu>		
+
+<section id="content" class="content">
+
+	<app-breadcrumb [pageName]="'viewAllBookings'"></app-breadcrumb>
+
+	<br/><br/>
+			
+	<p-panel header="All Bookings">
+	
+		<p-table [value]="bookings">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Booking ID</th>
+					<th>Service</th>
+					<th>Customer Name</th>
+					<th>Date Of Booking</th>
+					<th>Date Of Appointment</th>
+					<th>Start Time</th>
+					<th>End Time</th>
+					<th>Remarks</th>
+					<th>Status</th>
+					<th>View Details</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-booking>
+				<tr>
+					<td>{{booking.bookingId}}</td>
+					<td>{{booking.service.serviceName}}</td>				
+					<td>{{booking.customer.firstName}}</td>
+					<td>{{booking.dateOfBooking}}</td>
+					<td>{{booking.dateOfAppointment}}</td>
+					<td>{{booking.startTime}}</td>
+					<td>{{booking.endTime}}</td>
+					<td>{{booking.remarks}}</td>
+					<td>{{booking.status}}</td>
+					<td><p-button label="View" (onClick)="showDialog(booking)"></p-button></td>
+				</tr>
+			</ng-template>
+		</p-table>
+		
+		<p-dialog *ngIf="display" header="View Booking Details" modal="true" [(visible)]="display"  [style]="{width: '50vw'}">
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Booking ID</div>
+				<div class="ui-g-6">{{bookingToView.bookingId}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Service</div>
+				<div class="ui-g-6">{{bookingToView.service.serviceName}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Name</div>
+				<div class="ui-g-6">{{bookingToView.customer.firstName}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Booking</div>
+				<div class="ui-g-6">{{bookingToView.dateOfBooking}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Appointment</div>
+				<div class="ui-g-6">{{bookingToView.dateOfAppointment}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Start Time</div>
+				<div class="ui-g-6">{{bookingToView.startTime}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">End Time</div>
+				<div class="ui-g-6">{{bookingToView.endTime}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Remarks</div>
+				<div class="ui-g-6">{{bookingToView.remarks}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Status</div>
+				<div class="ui-g-6">{{bookingToView.status}}</div>
+			</div>
+		</p-dialog>
+	
+	</p-panel>
+</section>
+
+<!-- <app-sidebar></app-sidebar> -->
+
+<app-footer></app-footer>
