@@ -37,7 +37,7 @@ export class MainMenuComponent implements OnInit {
 				]
 			},
 			{
-				label: 'View Reviews', icon: 'pi pi-fw pi-thumbs-up',
+				label: 'View Reviews', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/view-all-reviews']
 			},
 			{
 				label: 'View Bookings', icon: 'pi pi-fw pi-calendar', routerLink: ['/view-all-bookings']
