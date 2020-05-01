@@ -25,7 +25,7 @@
 			<ng-template pTemplate="body" let-purchasedLineItem>
 				<tr>
 					<td>{{purchasedLineItem.purchasedLineItemId}}</td>
-					<td>need to connect to Purchased....</td>				
+					<td>{{purchasedLineItem.purchased.customer.firstName}}</td>				
 					<td>{{purchasedLineItem.product.name}}</td>
 					<td>{{purchasedLineItem.quantity}}</td>
 					<td>{{purchasedLineItem.status}}</td>
@@ -43,7 +43,7 @@
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Name</div>
-				<div class="ui-g-6">--</div>
+				<div class="ui-g-6">{{purchasedLineItem.purchased.customer.firstName}} {{purchasedLineItem.purchased.customer.lastName}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Product</div>
@@ -59,11 +59,11 @@
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Address</div>
-				<div class="ui-g-6">--</div>
+				<div class="ui-g-6">{{purchasedLineItem.purchased.address}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Purchase</div>
-				<div class="ui-g-6">--</div>
+				<div class="ui-g-6">{{purchasedLineItem.purchased.dateOfPurchase}}</div>
 			</div>
 		</p-dialog>
 		

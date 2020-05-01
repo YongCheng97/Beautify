@@ -75,6 +75,7 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
                 List<PurchasedLineItem> purchasedLineItems = new ArrayList<>();
                 
                 for (Long purchaseLineItemId:purchasedLineItemIds) {
+                    purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchaseLineItemId).setPurchased(newPurchased);
                     purchasedLineItems.add(purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchaseLineItemId));
                 }
                 

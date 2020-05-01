@@ -86,7 +86,14 @@ public class PurchasedLineItemResource {
                 purchasedLineItem.getProduct().getTags().clear();
                 purchasedLineItem.getProduct().getPromotions().clear();
                 
-                
+                purchasedLineItem.getPurchased().getPurchasedLineItems().clear();
+                purchasedLineItem.getPurchased().setCreditCard(null);
+                purchasedLineItem.getPurchased().getCustomer().getBookings().clear();
+                purchasedLineItem.getPurchased().getCustomer().getCreditCards().clear();
+                purchasedLineItem.getPurchased().getCustomer().getFavouriteProducts().clear();
+                purchasedLineItem.getPurchased().getCustomer().getFavouriteServices().clear();
+                purchasedLineItem.getPurchased().getCustomer().getReviews().clear();
+                purchasedLineItem.getPurchased().getCustomer().getPurchaseds().clear();
             }
                 
             return Response.status(Response.Status.OK).entity(new RetrieveAllPurchasedLineItemsRsp(purchasedLineItems)).build();
@@ -131,6 +138,15 @@ public class PurchasedLineItemResource {
             purchasedLineItem.getProduct().getFavouritedCustomers().clear();
             purchasedLineItem.getProduct().getTags().clear();
             purchasedLineItem.getProduct().getPromotions().clear();
+            
+            purchasedLineItem.getPurchased().getPurchasedLineItems().clear();
+            purchasedLineItem.getPurchased().setCreditCard(null);
+            purchasedLineItem.getPurchased().getCustomer().getBookings().clear();
+            purchasedLineItem.getPurchased().getCustomer().getCreditCards().clear();
+            purchasedLineItem.getPurchased().getCustomer().getFavouriteProducts().clear();
+            purchasedLineItem.getPurchased().getCustomer().getFavouriteServices().clear();
+            purchasedLineItem.getPurchased().getCustomer().getReviews().clear();
+            purchasedLineItem.getPurchased().getCustomer().getPurchaseds().clear();
             
             return Response.status(Response.Status.OK).entity(new RetrievePurchasedLineItemRsp(purchasedLineItem)).build();
         }

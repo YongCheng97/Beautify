@@ -51,6 +51,10 @@ public class PurchasedLineItem implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Product product;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = true)
+    private Purchased purchased;
 
     public PurchasedLineItem(){
     }
@@ -133,6 +137,14 @@ public class PurchasedLineItem implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Purchased getPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(Purchased purchased) {
+        this.purchased = purchased;
     }
     
 }
