@@ -28,8 +28,8 @@
                         </f:facet>
                         <p:panelGrid columns="2" >
                             <h:outputLabel value="Seller Name:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}"/>
-
+                            <p:commandLink actionListener="#{viewProductDetailsManagedBean.viewServiceProvider(viewProductDetailsManagedBean.productToView.serviceProvider.serviceProviderId)}" value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
+                            
                             <h:outputLabel value="Product SKU code:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewProductDetailsManagedBean.productToView.skuCode}"/>
 

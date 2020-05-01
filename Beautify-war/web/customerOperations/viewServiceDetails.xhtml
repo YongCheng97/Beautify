@@ -26,8 +26,9 @@
                         </f:facet>
                         <p:panelGrid columns="2" >
                             <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}"/>
-
+                            
+                            <p:commandLink actionListener="#{viewServiceDetailsManagedBean.viewServiceProvider(viewServiceDetailsManagedBean.serviceToView.serviceProvider.serviceProviderId)}" value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
+                            
                             <!--                            <h:outputLabel value="Service Provider Opening Hours" style="font-weight: bolder"/>
                                                         <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.openingHours}">
                                                             <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
@@ -71,25 +72,46 @@
                         <h:panelGrid columns="2" cellpadding="5" style="width:100%; text-align: left">
                             <p:outputLabel value="Service Name:" style="font-weight: bold"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
+                            
 
                             <p:outputLabel value="Service Price:" style="font-weight: bold"/>
                             <h:outputText value="$#{viewServiceDetailsManagedBean.serviceToView.price}"/>
 
                             <p:outputLabel for="bookingDate" value="Date Of Appointment:" style="font-weight: bolder"/>
-                            <p:calendar id="bookingDate" value="#{serviceBookingManagedBean.bookingDate}" required="true" requiredMessage="Date of appointment is required" showOn="button" pattern="MM/dd/yyyy"/>
+                            <p:calendar id="bookingDate" value="#{serviceBookingManagedBean.appointmentDate}" required="true" requiredMessage="Date of appointment is required" showOn="button" pattern="MM/dd/yyyy"/>
 
                             <p:outputLabel for="startTime" value="Start Time:" style="font-weight: bolder"/>
-                            <p:inputText id="startTime" value="" required="true" requiredMessage="Start time is required"/>
+                            <p:selectOneMenu effect="fade" id="startTime" value="#{serviceBookingManagedBean.startTime}" style="width: 100px" required="true" requiredMessage="Start time is required">
+                                <f:selectItem itemLabel="9 AM" itemValue="09:00"/>
+                                <f:selectItem itemLabel="10 AM" itemValue="10:00"/>
+                                <f:selectItem itemLabel="11 AM" itemValue="11:00"/>
+                                <f:selectItem itemLabel="12 PM" itemValue="12:00"/>
+                                <f:selectItem itemLabel="1 PM" itemValue="13:00"/>
+                                <f:selectItem itemLabel="2 PM" itemValue="14:00"/>
+                                <f:selectItem itemLabel="3 PM" itemValue="15:00"/>
+                                <f:selectItem itemLabel="4 PM" itemValue="16:00"/>
+                                <f:convertDateTime type="time" pattern="HH:mm"/>
+                            </p:selectOneMenu>
 
                             <p:outputLabel for="endTime" value="End Time:" style="font-weight: bolder"/>
-                            <p:inputText id="endTime" value="" required="true" requiredMessage="End Time is required"/>
-
+                            <p:selectOneMenu effect="fade" id="endTime" value="#{serviceBookingManagedBean.endTime}" style="width: 100px" required="true" requiredMessage="End time is required">
+                                <f:selectItem itemLabel="10 AM" itemValue="10:00"/>
+                                <f:selectItem itemLabel="11 AM" itemValue="11:00"/>
+                                <f:selectItem itemLabel="12 AM" itemValue="12:00"/>
+                                <f:selectItem itemLabel="1 PM" itemValue="13:00"/>
+                                <f:selectItem itemLabel="2 PM" itemValue="14:00"/>
+                                <f:selectItem itemLabel="3 PM" itemValue="15:00"/>
+                                <f:selectItem itemLabel="4 PM" itemValue="16:00"/>
+                                <f:selectItem itemLabel="5 PM" itemValue="17:00"/>
+                                <f:convertDateTime type="time" pattern="HH:mm"/>
+                            </p:selectOneMenu>
+                            
                             <p:outputLabel for="location" value="Location:" style="font-weight: bolder"/>
                             <p:inputText id="location" value="#{serviceBookingManagedBean.address}" required="true" requiredMessage="Location is required"/>
 
 
                         </h:panelGrid>
-                        <p:commandButton value="Book" icon="fa fa-calendar"/>
+                        <p:commandButton value="Book" actionListener="#{serviceBookingManagedBean.test}" icon="fa fa-calendar"/>
                     </p:panel>
                 </p:dialog>
             </h:form>

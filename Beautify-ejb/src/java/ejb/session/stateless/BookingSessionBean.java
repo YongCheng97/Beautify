@@ -26,6 +26,7 @@ import util.exception.InputDataValidationException;
 import util.exception.ServiceNotFoundException;
 
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateBookingException;
 
 @Stateless
 @Local(BookingSessionBeanLocal.class)
@@ -128,6 +129,15 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
         return bookings;
     }
+    
+    @Override
+    public List<Booking> retrieveAllBookingsByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT b FROM Booking b WHERE b.service.serviceProvider.serviceProviderId = :inServiceProviderId ORDER BY b.dateOfAppointment DESC, b.startTime ASC");
+        query.setParameter("inServiceProviderId", serviceProviderId);
+        List<Booking> bookings = query.getResultList();
+
+        return bookings;
+    }
 
     @Override
     public void deleteBooking(Long bookingId) {
@@ -138,6 +148,27 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
             bookingToDelete.getReview().setBooking(null);
         }
         em.remove(bookingToDelete);
+    }
+    
+    @Override
+    public void updateBookingStatus(Booking booking) throws BookingNotFoundException, UpdateBookingException, InputDataValidationException {
+        if (booking.getBookingId()!= null && booking != null) {
+            Set<ConstraintViolation<Booking>> constraintViolations = validator.validate(booking);
+
+            if (constraintViolations.isEmpty()) {
+                Booking bookingToUpdate = retrieveBookingByBookingId(booking.getBookingId());
+
+                if (bookingToUpdate.getCustomer().equals(bookingToUpdate.getCustomer())) {
+                    bookingToUpdate.setStatus(booking.getStatus());
+                } else {
+                    throw new UpdateBookingException("Customer of booking record to be updated does not match the existing record");
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new BookingNotFoundException("Booking ID not provided for booking to be updated");
+        }
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Booking>> constraintViolations) {

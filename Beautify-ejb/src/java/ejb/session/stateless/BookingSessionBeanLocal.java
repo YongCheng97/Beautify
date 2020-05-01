@@ -9,6 +9,7 @@ import util.exception.CreateNewBookingException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateBookingException;
 
 
 public interface BookingSessionBeanLocal {
@@ -22,5 +23,9 @@ public interface BookingSessionBeanLocal {
     public List<Booking> retrieveAllBookingsByCustomerId(Long customerId);
 
     public void deleteBooking(Long bookingId);
+
+    public List<Booking> retrieveAllBookingsByServiceProviderId(Long serviceProviderId);
+
+    public void updateBookingStatus(Booking booking) throws BookingNotFoundException, UpdateBookingException, InputDataValidationException;
     
 }

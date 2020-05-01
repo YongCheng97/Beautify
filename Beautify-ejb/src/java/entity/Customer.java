@@ -51,7 +51,6 @@ public class Customer implements Serializable {
     @NotNull
     @Min(8)
     private Long contactNum;
-//    private File profilePhoto;
 
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;
@@ -232,14 +231,6 @@ public class Customer implements Serializable {
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
     }
-
-//    public File getProfilePhoto() {
-//        return profilePhoto;
-//    }
-//
-//    public void setProfilePhoto(File profilePhoto) {
-//        this.profilePhoto = profilePhoto;
-//    }
 
     public List<Service> getFavouriteServices() {
         return favouriteServices;

@@ -1,19 +1,26 @@
 package jsf.managedbean;
 
+import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
 import entity.Service;
+import entity.ServiceProvider;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
 import util.exception.ServiceNotFoundException;
+import util.exception.ServiceProviderNotFoundException;
 
 
 @Named(value = "viewServiceDetailsManagedBean")
@@ -23,6 +30,9 @@ public class viewServiceDetailsManagedBean implements Serializable {
     @EJB(name = "ServiceSessionBeanLocal")
     private ServiceSessionBeanLocal serviceSessionBeanLocal;
 
+    @EJB
+    private ServiceProviderSessionBeanLocal serviceProviderSessionBean;
+    
     private Long serviceIdToView;
     private Service serviceToView;
     private List<String> serviceImages;
@@ -57,6 +67,16 @@ public class viewServiceDetailsManagedBean implements Serializable {
     
     public void foo()
     {        
+    }
+    
+    public void viewServiceProvider(Long serviceProviderId) throws IOException {
+        try {
+            ServiceProvider serviceProvider = serviceProviderSessionBean.retrieveServiceProviderById(serviceProviderId);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("serviceProvider", serviceProvider);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/serviceProviderProfile.xhtml");
+        } catch (ServiceProviderNotFoundException ex) {
+            Logger.getLogger(viewAllServiceProvidersManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public TimeZone getTimeZone() {

@@ -10,4 +10,5 @@ export class Review
         this.rating = rating; 
         this.description = description; 
     }
+
 }
