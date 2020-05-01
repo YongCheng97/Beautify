@@ -13,55 +13,66 @@
         <div>
             <h:body>
 
-                <p:layout style="min-width: 500px;min-height:425px">
-                    
-                    <p:layoutUnit position="west" size="520" >
+                <h:form id="viewProductDetails">
+                    <p:layout style="min-width: 500px;min-height:425px">
 
-                        <p:galleria value="#{viewProductDetailsManagedBean.productImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
-                            <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
-                        </p:galleria>
-                    </p:layoutUnit>
+                        <p:layoutUnit position="west" size="520" >
 
-                    <p:layoutUnit position="center">
-                        <f:facet name="header">
-                            Product Details
-                        </f:facet>
-                        <p:panelGrid columns="2" >
-                            <h:outputLabel value="Seller Name:" style="font-weight: bolder"/>
-                            <p:commandLink actionListener="#{viewProductDetailsManagedBean.viewServiceProvider(viewProductDetailsManagedBean.productToView.serviceProvider.serviceProviderId)}" value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
+                            <p:galleria value="#{viewProductDetailsManagedBean.productImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
+                                <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
+                            </p:galleria>
+                        </p:layoutUnit>
+
+                        <p:layoutUnit position="center">
+                            <f:facet name="header">
+                                Product Details
+                            </f:facet>
+                            <h:panelGrid columns="2" cellpadding="7">
+                                <h:outputLabel value="Seller Name:" style="font-weight: bolder"/>
+                                <p:commandLink actionListener="#{viewProductDetailsManagedBean.viewServiceProvider(viewProductDetailsManagedBean.productToView.serviceProvider.serviceProviderId)}" value="#{viewProductDetailsManagedBean.productToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
+
+                                <h:outputLabel value="Product SKU code:" style="font-weight: bolder"/>
+                                <h:outputText value="#{viewProductDetailsManagedBean.productToView.skuCode}"/>
+
+                                <h:outputLabel value="Product Name:" style="font-weight: bolder"/>
+                                <h:outputText value="#{viewProductDetailsManagedBean.productToView.name}"/>
+
+                                <h:outputLabel value="Product Desription:" style="font-weight: bolder"/>
+                                <h:outputText value="#{viewProductDetailsManagedBean.productToView.description}"/>
+
+                                <h:outputLabel value="Product Price:" style="font-weight: bolder"/>
+                                <h:outputText value="#{viewProductDetailsManagedBean.productToView.price}"/>
+
+                                <h:outputLabel value="Product Quantity:" style="font-weight: bolder"/>
+                                <h:outputText value="#{viewProductDetailsManagedBean.productToView.quantityOnHand}"/>
+
+                                <h:outputLabel value="Product Tag(s):" style="font-weight: bolder"/>
+                                <p:dataList value="#{viewProductDetailsManagedBean.productToView.tags}" var="tag" type="unordered">
+                                    #{tag.name}
+                                </p:dataList>
+
+                            </h:panelGrid>
+                            <br/>
+                            <h:panelGrid columns="3" >
+                                <h:form>
+                                    <p:outputLabel for="amountToAdd" value="Amount to add to cart:  " style="font-weight: bolder"/>
+                                    <p:spinner id="amountToAdd" min="0" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
+                                    <p:commandButton value="Add to Shopping Cart" actionListener="#{viewProductDetailsManagedBean.shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}" update="menubar:cartForm"/>
+                                </h:form>
+                            </h:panelGrid>
+
+                            <br></br>
+                            <p:commandButton actionListener="#{favouritesManagedBean.addFavouriteProduct}" update="@form" value="Favourite" icon="fa fa-star" title="Favourite" >
+                                <f:attribute name="productToFavourite" value="#{viewProductDetailsManagedBean.productToView}" />
+                            </p:commandButton>
                             
-                            <h:outputLabel value="Product SKU code:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.skuCode}"/>
+                            <p:commandButton actionListener="#{favouritesManagedBean.removeFavouriteProduct}" update="@form" value="Unfavourite" icon="fa fa-star-o" title="Unfavourite" >
+                                <f:attribute name="productToFavourite" value="#{viewProductDetailsManagedBean.productToView}" />
+                            </p:commandButton>
 
-                            <h:outputLabel value="Product Name:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.name}"/>
-
-                            <h:outputLabel value="Product Desription:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.description}"/>
-
-                            <h:outputLabel value="Product Price:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.price}"/>
-
-                            <h:outputLabel value="Product Quantity:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewProductDetailsManagedBean.productToView.quantityOnHand}"/>
-
-                            <h:outputLabel value="Product Tag(s):" style="font-weight: bolder"/>
-                            <p:dataList value="#{viewProductDetailsManagedBean.productToView.tags}" var="tag" type="unordered">
-                                #{tag.name}
-                            </p:dataList>
-
-                        </p:panelGrid>
-                        <br/>
-                        <h:panelGrid columns="3" >
-                            <h:form>
-                                <p:outputLabel for="amountToAdd" value="Amount to add to cart:" style="font-weight: bolder"/>
-                                <p:spinner id="amountToAdd" min="0" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
-                                <p:commandButton value="Add to Shopping Cart" actionListener="#{viewProductDetailsManagedBean.shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}" update="menubar:cartForm"/>
-                            </h:form>
-                        </h:panelGrid>
-                        
-                    </p:layoutUnit>
-                </p:layout>
+                        </p:layoutUnit>
+                    </p:layout>
+                </h:form>
             </h:body>
         </div>
 
