@@ -20,11 +20,14 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { MegaMenuModule } from 'primeng/megamenu';
 
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { ViewAllReviewsComponent } from './view-all-reviews/view-all-reviews.component';
 import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.component';
 import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-items/view-all-purchased-line-items.component';
+import { ViewAllServicesComponent } from './view-all-services/view-all-services.component';
+import { ViewAllProductsComponent } from './view-all-products/view-all-products.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,7 @@ import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-it
     ViewAllReviewsComponent, 
     ViewAllBookingsComponent, 
 	ViewAllPurchasedLineItemsComponent, 
+    ViewAllBookingsComponent, ViewAllServicesComponent, ViewAllProductsComponent, 
   ],
   imports: [
     BrowserModule,
@@ -52,6 +56,7 @@ import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-it
     NgxMaterialTimepickerModule,
     MatFormFieldModule,
 	DropdownModule
+    MegaMenuModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
