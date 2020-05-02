@@ -15,6 +15,7 @@
                 <tr>
                     <th>Review ID</th>
                     <th>Service Name</th>
+                    <th>Customer Name</th>
                     <th>Rating</th>
                     <th>View Details</th>
                 </tr>
@@ -23,6 +24,7 @@
                 <tr>
                     <td>{{review.reviewId}}</td>
                     <td>{{review.booking.service.serviceName}}</td>
+                    <td>{{review.booking.customer.firstName}}</td>
                     <!-- <td><p-rating [(ngModel)]="review.rating" stars="5" readonly="true" enabled="true" iconCancelClass="" ngDefaultControls></p-rating></td> -->
                     <td>{{review.rating}}</td>
                     <td style="text-align: center;">
@@ -41,6 +43,7 @@
                 <tr>
                     <th>Review ID</th>
                     <th>Product Name</th>
+                    <th>Customer Name</th>
                     <th>Rating</th>
                     <th>View Details</th>
                 </tr>
@@ -49,6 +52,7 @@
                 <tr>
                     <td>{{review.reviewId}}</td>
                     <td>{{review.purchasedLineItem.product.name}}</td>
+                    <td>{{review.customer.firstName}}</td>
                     <td>{{review.rating}}</td>
                     <td style="text-align: center;">
                         <p-button label="View" (onClick)="showProductDialog(review)"></p-button>

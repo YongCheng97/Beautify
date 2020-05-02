@@ -27,6 +27,7 @@ export class SessionService {
 
   setCurrentServiceProvider(currentServiceProvider: ServiceProvider): void {
     sessionStorage.currentServiceProvider = JSON.stringify(currentServiceProvider);
+    sessionStorage.currentServiceProvider.password = sessionStorage.password; 
   }
 
   getUsername(): string {

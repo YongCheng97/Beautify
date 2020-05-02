@@ -11,6 +11,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
@@ -25,6 +26,7 @@ import ws.datamodel.CreateServiceProviderReq;
 import ws.datamodel.CreateServiceProviderRsp;
 import ws.datamodel.ErrorRsp;
 import ws.datamodel.ServiceProviderLoginRsp;
+import ws.datamodel.UpdateServiceProviderReq;
 
 @Path("ServiceProvider")
 public class ServiceProviderResource {
@@ -47,8 +49,6 @@ public class ServiceProviderResource {
             ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(username, password);
             System.out.println("********** StaffResource.staffLogin(): Staff " + serviceProvider.getEmail() + " login remotely via web service");
 
-            serviceProvider.setPassword(null);
-            serviceProvider.setSalt(null);
             serviceProvider.getCreditCards().clear();
             serviceProvider.getProducts().clear();
             serviceProvider.getServices().clear();
@@ -70,7 +70,7 @@ public class ServiceProviderResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createServiceProvider(CreateServiceProviderReq createServiceProviderReq) {
-        
+
         if (createServiceProviderReq != null) {
             try {
                 Long serviceProviderId = serviceProviderSessionBean.createNewServiceProvider(createServiceProviderReq.getServiceProvider());
@@ -86,6 +86,43 @@ public class ServiceProviderResource {
             }
         } else {
             ErrorRsp errorRsp = new ErrorRsp("Invalid create new service provider request");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateServiceProvider(UpdateServiceProviderReq updateServiceProviderReq) 
+    {
+        if (updateServiceProviderReq != null) 
+        {
+            try 
+            {
+                ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(updateServiceProviderReq.getUsername(), updateServiceProviderReq.getPassword());
+                System.out.println("********** ServiceProviderResouce.updateServiceProvider(): Service Provider " + serviceProvider.getName() + " login remotely via web service");
+                
+                serviceProviderSessionBean.updateStaff(updateServiceProviderReq.getServiceProvider());
+                
+                return Response.status(Response.Status.OK).build();
+            }
+            catch(InvalidLoginCredentialException ex)
+            {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+            
+                return Response.status(Response.Status.UNAUTHORIZED).entity(errorRsp).build();
+            }
+            catch(Exception ex)
+            {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+            }
+        } 
+        else 
+        {
+            ErrorRsp errorRsp = new ErrorRsp("Invalid update purchased line item request");
+            
             return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
         }
     }
