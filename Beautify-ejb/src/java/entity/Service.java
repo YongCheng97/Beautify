@@ -45,10 +45,6 @@ public class Service implements Serializable {
     @Size(max = 128)
     private String description;
     private File photo;
-    @Column(precision = 11, scale = 2)
-    @DecimalMin("0.00")
-    @Digits(integer = 9, fraction = 2)
-    private BigDecimal discountPrice;
 
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
@@ -77,12 +73,11 @@ public class Service implements Serializable {
         this.favouritedCustomers = new ArrayList<>();
     }
 
-    public Service(String serviceName, BigDecimal price, String description, File photo, BigDecimal discountPrice) {
+    public Service(String serviceName, BigDecimal price, String description, File photo) {
         this.serviceName = serviceName;
         this.price = price;
         this.description = description;
         this.photo = photo;
-        this.discountPrice = discountPrice;
     }
 
     public Long getServiceId() {
@@ -238,12 +233,5 @@ public class Service implements Serializable {
         this.favouritedCustomers = favouritedCustomers;
     }
 
-    public BigDecimal getDiscountPrice() {
-        return discountPrice;
-    }
-
-    public void setDiscountPrice(BigDecimal discountPrice) {
-        this.discountPrice = discountPrice;
-    }
 
 }

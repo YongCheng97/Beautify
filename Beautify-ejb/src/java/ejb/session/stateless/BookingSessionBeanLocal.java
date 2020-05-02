@@ -26,6 +26,6 @@ public interface BookingSessionBeanLocal {
 
     public List<Booking> retrieveAllBookingsByServiceProviderId(Long serviceProviderId);
 
-    public void updateBookingStatus(Booking booking) throws BookingNotFoundException, UpdateBookingException, InputDataValidationException;
+    public void updateBookingStatus(Long bookingId, String status) throws BookingNotFoundException, UpdateBookingException, InputDataValidationException;
     
 }

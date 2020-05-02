@@ -38,9 +38,9 @@ public interface PromotionSessionBeanLocal {
 
     public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException;
 
-    public void updateProductDiscountPrice(Product product);
+    //public void updateProductDiscountPrice(Product product);
 
-    public void updateServiceDiscountPrice(Service service);
+    //public void updateServiceDiscountPrice(Service service);
 
     public Boolean checkPromoCode(String promoCode);
 

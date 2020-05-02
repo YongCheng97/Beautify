@@ -56,7 +56,7 @@ public class BookingResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveAllProducts(@QueryParam("username") String username, 
+    public Response retrieveAllBookings(@QueryParam("username") String username, 
                                         @QueryParam("password") String password)
     {
         try
@@ -119,9 +119,24 @@ public class BookingResource {
 
             Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
                       
-            booking.getReview().setBooking(null);
+            if(booking.getReview() != null){
+                booking.getReview().setBooking(null);
+                booking.getReview().setCustomer(null);
+                booking.getReview().setPurchasedLineItem(null);
+            }
+
             booking.getCustomer().getBookings().clear();
+            booking.getCustomer().getCreditCards().clear();
+            booking.getCustomer().getFavouriteProducts().clear();
+            booking.getCustomer().getFavouriteServices().clear();
+            booking.getCustomer().getReviews().clear();
+            booking.getCustomer().getPurchaseds().clear();
+
             booking.getService().getBookings().clear();
+            booking.getService().setServiceProvider(null);
+            booking.getService().setCategory(null);
+            booking.getService().getTags().clear();
+            booking.getService().getPromotions().clear();
             
             return Response.status(Response.Status.OK).entity(new RetrieveBookingRsp(booking)).build();
         }
@@ -148,16 +163,16 @@ public class BookingResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBooking(UpdateBookingReq updateProductReq)
+    public Response updateBooking(UpdateBookingReq updateBookingReq)
     {
-        if(updateProductReq != null)
+        if(updateBookingReq != null)
         {
             try
             {                
-                ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.serviceProviderLogin(updateProductReq.getUsername(), updateProductReq.getPassword());
-                System.out.println("********** BookingResource.updateBooking(): Staff " + serviceProvider.getName()+ " login remotely via web service");
+                ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.serviceProviderLogin(updateBookingReq.getUsername(), updateBookingReq.getPassword());
+                System.out.println("********** BookingResource.updateBooking(): Service Provider " + serviceProvider.getName()+ " login remotely via web service");
                 
-                bookingSessionBeanLocal.updateBookingStatus(updateProductReq.getBooking());
+                bookingSessionBeanLocal.updateBookingStatus(updateBookingReq.getBookingId(), updateBookingReq.getStatus());
                 
                 return Response.status(Response.Status.OK).build();
             }

@@ -2,12 +2,16 @@ package ejb.session.stateless;
 
 import entity.Product;
 import entity.PurchasedLineItem;
+import entity.ServiceProvider;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -85,7 +89,27 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
             throw new PurchasedLineItemNotFoundException("Purchased Line Item ID " + purchasedLineItemId + " does not exist!");
         }
     }
-    
+            
+    @Override
+    public List<PurchasedLineItem> retrieveAllPurchasedLineItemByServiceProviderId(Long serviceProviderId) throws PurchasedLineItemNotFoundException {
+        
+        Query query = em.createQuery("SELECT p FROM PurchasedLineItem p ORDER BY p.purchasedLineItemId DESC");
+        List<PurchasedLineItem> purchasedLineItems = query.getResultList();
+        
+        List<PurchasedLineItem> purchasedLineItemsSP = new ArrayList<>();
+                
+        for (PurchasedLineItem purchasedLineItem : purchasedLineItems) {
+            Product product = purchasedLineItem.getProduct();
+            Long sP = product.getServiceProvider().getServiceProviderId();
+            if (sP == serviceProviderId){
+                purchasedLineItemsSP.add(purchasedLineItem);
+            }
+        }
+
+        return purchasedLineItemsSP;
+        
+    }
+            
     @Override
     public PurchasedLineItem updatePurchasedLineItem(PurchasedLineItem purchasedLineItem) throws InputDataValidationException, PurchasedLineItemNotFoundException {
          if (purchasedLineItem != null && purchasedLineItem.getPurchasedLineItemId()!= null) {

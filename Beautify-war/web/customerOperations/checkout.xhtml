@@ -40,7 +40,7 @@
                         </p:column>
 
                         <p:column style="width: 20%; text-align: center">
-                            <p:commandButton id="remove" value="Remove" action="#{shoppingCartManagedBean.removeFromCart(item.product)}" update="@form" icon="fa fa-remove"/>
+                            <p:commandButton id="remove" value="Remove" action="#{shoppingCartManagedBean.removeFromCart(item.product)}" process="@this" update="@form" icon="fa fa-remove"/>
                         </p:column> 
                     </p:dataTable>
 
@@ -78,13 +78,11 @@
 
                         <p:outputLabel value="Enter Promo code: " />
                         <p:inputText id ="promoCode" value ="#{shoppingCartManagedBean.promoCode}" required="false" />&nbsp;
-                        <p:commandButton value="Enter" actionListener="#{shoppingCartManagedBean.checkPromoCode}" > 
-                            <p:ajax event="click" process="@this form:promoCode" listener="#{shoppingCartManagedBean.updateTotalAmount}" />
-                        </p:commandButton>
+                        <p:commandButton value="Enter" actionListener="#{shoppingCartManagedBean.checkPromoCode}" process="@form" update="@form" ></p:commandButton>
 
                         <br></br><br></br>
 
-                        <p:commandButton style="align-self: center" value = "Pay" actionListener="#{shoppingCartManagedBean.createNewOrder}" onclick="PF('dialogPay').show()" icon="fa fa-dollar"/>
+                        <p:commandButton style="align-self: center" value = "Pay" actionListener="#{shoppingCartManagedBean.createNewOrder}" oncomplete="PF('dialogPay').show()" icon="fa fa-dollar"/>
                     </h:panelGroup>
 
                     <h:panelGroup rendered="#{sessionScope.haveItems == true}"> 

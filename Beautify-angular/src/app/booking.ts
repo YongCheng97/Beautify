@@ -1,8 +1,7 @@
 import { Customer } from './customer';
 import { Service } from './service';
 import { Review } from './review';
-
-
+import * as moment from 'moment';
 
 export class Booking
 {
@@ -12,7 +11,7 @@ export class Booking
 	remarks: string;
 	dateOfAppointment: Date;
 	startTime: Date;
-	endTime: Date;	
+	endTime: Date;
 	customer: Customer;
 	service: Service;
 	review: Review;

@@ -33,11 +33,12 @@
             <h:form id="profileInfo">
                 <p:layout style="min-width:400px;min-height:300px;">
                     <p:layoutUnit position="west" resizable="false" size="200">
-                        <p:graphicImage library="images" name="Customer#{customerManagementManagedBean.currentCustomer.customerId}.jpg" height="150" width="190" alt ="" />
-
+                        <div update="profileInfo">
+                        <h:graphicImage value="/uploadedFiles/Customer#{customerManagementManagedBean.currentCustomer.customerId}.jpg" height="150" width="190" alt ="" />
+                        </div>
                         <h:form>  
                             <p:fileUpload fileUploadListener="#{customerManagementManagedBean.handleFileUpload}" mode="advanced" dragDropSupport="false"
-                                          update="messages @form" sizeLimit="100000" fileLimit="100" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                                          update="messages @form" sizeLimit="100000000" fileLimit="100" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 
                             <p:growl id="messages" showDetail="true" />     
                         </h:form>
@@ -81,7 +82,6 @@
                 <p:dataScroller value="#{customerManagementManagedBean.creditCards}" var="creditCard" chunkSize="10">
 
                     <h:panelGrid columns="2" style="width:100%">
-
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
 
@@ -223,7 +223,7 @@
                     <p:message for="contactNumber" />
 
                     <h:outputLabel></h:outputLabel>
-                    
+
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton value="Confirm Update" update="@form profileInfo" actionListener="#{customerManagementManagedBean.updateCustomer}" oncomplete="PF('dialogUpdateCustomer').show();" />

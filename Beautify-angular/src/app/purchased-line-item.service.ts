@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { SessionService } from './session.service';
-import { Booking } from './booking';
+import { PurchasedLineItem } from './purchased-line-item';
 
 
 
@@ -18,9 +18,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 
-export class BookingService 
+export class PurchasedLineItemService 
 {
-	baseUrl: string = "/api/Booking";
+	baseUrl: string = "/api/PurchasedLineItem";
 	
 	
 	
@@ -31,9 +31,9 @@ export class BookingService
 	
 	
 	
-	getBookings(): Observable<any>
+	getPurchasedLineItems(): Observable<any>
 	{				
-		return this.httpClient.get<any>(this.baseUrl + "/retrieveAllBookings?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+		return this.httpClient.get<any>(this.baseUrl + "/retrieveAllPurchasedLineItems?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
 		(
 			catchError(this.handleError)
 		);
@@ -41,25 +41,24 @@ export class BookingService
 	
 	
 	
-	getBookingByBookingId(bookingId: number): Observable<any>
+	getPurchasedLineItemByPurchasedLineItemId(purchasedLineItemId: number): Observable<any>
 	{
-		return this.httpClient.get<any>(this.baseUrl + "/retrieveBooking/" + bookingId + "?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+		return this.httpClient.get<any>(this.baseUrl + "/retrievePurchasedLineItem/" + purchasedLineItemId + "?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
 		(
 			catchError(this.handleError)
 		);
-				
 	}	
 	
 	
-	updateBooking(bookingToUpdate: Booking): Observable<any>
+	updatePurchasedLineItem(purchasedLineItemToUpdate: PurchasedLineItem): Observable<any>
 	{
-		let updateBookingReq = {
+		let updatePurchasedLineItemReq = {
 			"username": this.sessionService.getUsername(),
 			"password": this.sessionService.getPassword(),
-			"bookingId": bookingToUpdate.bookingId,
-			"status": bookingToUpdate.status,
+			"purchasedLineItem": purchasedLineItemToUpdate,
 		};
-		return this.httpClient.post<any>(this.baseUrl, updateBookingReq, httpOptions).pipe
+		
+		return this.httpClient.post<any>(this.baseUrl, updatePurchasedLineItemReq, httpOptions).pipe
 		(
 			catchError(this.handleError)
 		);

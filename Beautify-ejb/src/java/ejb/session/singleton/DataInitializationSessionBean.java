@@ -114,8 +114,6 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
-    
-    
 
     private CategoryTypeEnum type;
 
@@ -156,7 +154,7 @@ public class DataInitializationSessionBean {
 
             // service providers 
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            Date[] openingHours = {sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"),sdf.parse("09:00"), sdf.parse("09:00"),sdf.parse("09:00")};
+            Date[] openingHours = {sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00")};
             Date[] closingHours = {sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00")};
             ServiceProvider provider1 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Nail Lounge", "thenaillounge@gmail.com", "password", "123 Hougang Road",
                     openingHours, closingHours, null, true)));
@@ -182,44 +180,45 @@ public class DataInitializationSessionBean {
             List<Long> tagIdsEmpty = new ArrayList<>();
 
             // products 
-            Product redPolish = productSessionBeanLocal.createNewProduct(new Product("PROD001", "Red Nail Polish", new BigDecimal("20.00"), "Red nail polish is historically bold, daring, and adventurous", 100, null),
+            Product redPolish = productSessionBeanLocal.createNewProduct(new Product("PROD001", "Red Nail Polish", new BigDecimal("20.00"), "Red nail polish is historically bold, daring, and adventurous", 100),
                     categoryNailPolish.getCategoryId(), provider1.getServiceProviderId(), tagIdsNew);
-            Product yellowPolish = productSessionBeanLocal.createNewProduct(new Product("PROD002", "Yellow Nail Polish", new BigDecimal("20.00"), "Bright and cheery yellow nail polish", 100, null),
+            Product yellowPolish = productSessionBeanLocal.createNewProduct(new Product("PROD002", "Yellow Nail Polish", new BigDecimal("20.00"), "Bright and cheery yellow nail polish", 100),
                     categoryNailPolish.getCategoryId(), provider1.getServiceProviderId(), tagIdsNew);
 
-            Product shampoo = productSessionBeanLocal.createNewProduct(new Product("PROD003", "Shampoo", new BigDecimal("18.00"), "Cleanse your scalp and leave your hair healthy and smooth", 100, null),
+            Product shampoo = productSessionBeanLocal.createNewProduct(new Product("PROD003", "Shampoo", new BigDecimal("18.00"), "Cleanse your scalp and leave your hair healthy and smooth", 100),
                     categoryHairProducts.getCategoryId(), provider2.getServiceProviderId(), tagIdsEmpty);
-            Product hairTreatment = productSessionBeanLocal.createNewProduct(new Product("PROD004", "Hair Treatment", new BigDecimal("18.00"), "Transform your dry and damaged hair", 100, null),
+            Product hairTreatment = productSessionBeanLocal.createNewProduct(new Product("PROD004", "Hair Treatment", new BigDecimal("18.00"), "Transform your dry and damaged hair", 100),
                     categoryHairProducts.getCategoryId(), provider2.getServiceProviderId(), tagIdsDiscount);
 
-            Product lipstick = productSessionBeanLocal.createNewProduct(new Product("PROD005", "Lipstick", new BigDecimal("13.00"), "Hydrating lipstick that adds colour to your lips", 100, null),
+            Product lipstick = productSessionBeanLocal.createNewProduct(new Product("PROD005", "Lipstick", new BigDecimal("13.00"), "Hydrating lipstick that adds colour to your lips", 100),
                     categoryMakeup.getCategoryId(), provider3.getServiceProviderId(), tagIdsDiscount);
-            Product facewash = productSessionBeanLocal.createNewProduct(new Product("PROD006", "Facewash", new BigDecimal("15.00"), "Facewash that revitalises and cleanses your skin", 100, null),
+            Product facewash = productSessionBeanLocal.createNewProduct(new Product("PROD006", "Facewash", new BigDecimal("15.00"), "Facewash that revitalises and cleanses your skin", 100),
                     categoryFaceCare.getCategoryId(), provider3.getServiceProviderId(), tagIdsPopular);
 
             // services 
-            Service manicure = serviceSessionBeanLocal.createNewService(new Service("Gel Manicure", new BigDecimal("80.00"), "Gels last longer and feels stronger", null, null), provider1.getServiceProviderId(), categoryManicure.getCategoryId(), tagIdsEmpty);
-            Service haircut = serviceSessionBeanLocal.createNewService(new Service("Express Hair Cut", new BigDecimal("30.00"), "Express Hair Cut with no washing included", null, null), provider2.getServiceProviderId(), categoryHaircut.getCategoryId(), tagIdsEmpty);
-            Service facial = serviceSessionBeanLocal.createNewService(new Service("Facial", new BigDecimal("80.00"), "The best and most relaxing Facial Treatment", null, null), provider3.getServiceProviderId(), categoryFacial.getCategoryId(), tagIdsEmpty);
+            Service manicure = serviceSessionBeanLocal.createNewService(new Service("Gel Manicure", new BigDecimal("80.00"), "Gels last longer and feels stronger", null), provider1.getServiceProviderId(), categoryManicure.getCategoryId(), tagIdsEmpty);
+            Service haircut = serviceSessionBeanLocal.createNewService(new Service("Express Hair Cut", new BigDecimal("30.00"), "Express Hair Cut with no washing included", null), provider2.getServiceProviderId(), categoryHaircut.getCategoryId(), tagIdsEmpty);
+            Service facial = serviceSessionBeanLocal.createNewService(new Service("Facial", new BigDecimal("80.00"), "The best and most relaxing Facial Treatment", null), provider3.getServiceProviderId(), categoryFacial.getCategoryId(), tagIdsEmpty);
 
             // bookings 
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yy HH:mm");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yy");
 
-            Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf1.parse("03/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), manicure.getServiceId());
-            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Completed", "remarks", sdf1.parse("20/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), haircut.getServiceId());
-            Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("03/04/2020 12:00"), "Approved", "remarks", sdf1.parse("15/04/2020 00:00"), new Time(12, 0, 0), new Time(13, 0, 0)), customer1.getCustomerId(), facial.getServiceId());
+            Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf2.parse("03/04/2020"), sdf.parse("12:00"), sdf.parse("13:00")), customer1.getCustomerId(), manicure.getServiceId());
+            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Completed", "remarks", sdf2.parse("20/04/2020"), sdf.parse("12:00"), sdf.parse("13:00")), customer1.getCustomerId(), haircut.getServiceId());
+            Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("03/04/2020 12:00"), "Approved", "remarks", sdf2.parse("15/04/2020"), sdf.parse("12:00"), sdf.parse("13:00")), customer1.getCustomerId(), facial.getServiceId());
 
             // service reviews
             Review review1 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Very good service", null), customer1.getCustomerId(), manicure.getServiceId());
             Review review2 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Excellent hair cut!", null), customer1.getCustomerId(), haircut.getServiceId());
 
             // promotion
-            SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yy");
-
             Promotion promotion1 = promotionSessionBeanLocal.createNewPromotion(new Promotion("10OFF", "10% off", new BigDecimal("00.90"), sdf2.parse("01/04/2020"), sdf2.parse("30/5/2020")));
+            Promotion promotion3 = promotionSessionBeanLocal.createNewPromotion(new Promotion("20OFF", "20% off", new BigDecimal("00.80"), sdf2.parse("01/06/2020"), sdf2.parse("20/8/2020")));
             Promotion promotion2 = promotionSessionBeanLocal.createNewPromotion(new Promotion("30OFF", "30% off", new BigDecimal("00.70"), sdf2.parse("10/04/2020"), sdf2.parse("19/5/2020")));
             redPolish.addPromotion(promotion1);
             facial.addPromotion(promotion2);
+            redPolish.addPromotion(promotion3);
 
             // credit cards
             CreditCard creditCard1 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard("VISA", "Bob Lim", "4024007176761897", "02/23"), customer1.getCustomerId());
@@ -232,11 +231,11 @@ public class DataInitializationSessionBean {
             PurchasedLineItem purchasedLineItem2 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(2, "Shipped", new BigDecimal("20.00")), yellowPolish.getProductId());
             PurchasedLineItem purchasedLineItem3 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(1, "Order Confirmed", new BigDecimal("18.00")), shampoo.getProductId());
             PurchasedLineItem purchasedLineItem4 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(2, "Product Received", new BigDecimal("13.00")), lipstick.getProductId());
-            
+
             //purchased
             Purchased purchased1 = purchasedSessionBean.createNewPurchased(new Purchased(sdf2.parse("20/04/2020"), new BigDecimal("60.00"), "address"), customer1.getCustomerId(), Arrays.asList(purchasedLineItem1.getPurchasedLineItemId(), purchasedLineItem2.getPurchasedLineItemId()), creditCard1.getCreditCardId());
             Purchased purchased2 = purchasedSessionBean.createNewPurchased(new Purchased(sdf2.parse("21/04/2020"), new BigDecimal("44.00"), "address"), customer1.getCustomerId(), Arrays.asList(purchasedLineItem3.getPurchasedLineItemId(), purchasedLineItem4.getPurchasedLineItemId()), creditCard2.getCreditCardId());
-       
+
             //favourite products
             customer1.getFavouriteProducts().add(redPolish);
             customer1.getFavouriteProducts().add(shampoo);
@@ -244,13 +243,13 @@ public class DataInitializationSessionBean {
             redPolish.getFavouritedCustomers().add(customer1);
             shampoo.getFavouritedCustomers().add(customer1);
             lipstick.getFavouritedCustomers().add(customer1);
-            
+
             //favourite services
             customer1.getFavouriteServices().add(manicure);
             customer1.getFavouriteServices().add(haircut);
             manicure.getFavouritedCustomers().add(customer1);
             haircut.getFavouritedCustomers().add(customer1);
-            
+
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException
                 | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException | CreateNewPurchaseException | CreateNewPurchasedLineItemException | PurchasedExistException | PurchasedLineItemExistException ex) {
