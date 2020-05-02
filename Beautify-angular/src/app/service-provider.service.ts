@@ -46,6 +46,8 @@ export class ServiceProviderService {
 			"serviceProvider": providerToUpdate,
 		};
 
+
+
 		return this.httpClient.post<any>(this.baseUrl, updateProviderReq, httpOptions).pipe
 			(
 				catchError(this.handleError)
