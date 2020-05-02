@@ -52,6 +52,17 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <input type="text" name="username" #name="ngModel" class="form-control my-input"
+                                id="username" placeholder="Username" [(ngModel)]="newServiceProvider.username"
+                                required="true">
+                            <div *ngIf="username.invalid && (username.dirty || username.touched || submitted)"
+                                class="errorText">
+                                <div *ngIf="username.errors.required" style="color: red;">
+                                    Username is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <input type="password" name="password" id="password" class="form-control my-input"
                                 placeholder="Password" #password="ngModel" [(ngModel)]="newServiceProvider.password"
                                 required="true">

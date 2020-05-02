@@ -26,9 +26,9 @@ export class MainPageComponent implements OnInit {
 
   nameSubmitted: boolean;
   newName: string
-  emailSubmitted: boolean = false;
+  emailSubmitted: boolean;
   newEmail: string
-  addressSubmitted: boolean = false;
+  addressSubmitted: boolean; 
   newAddress: string
 
   resultSuccess: boolean;
@@ -38,6 +38,8 @@ export class MainPageComponent implements OnInit {
   constructor(public sessionService: SessionService,
     public serviceProviderService: ServiceProviderService) {
       this.nameSubmitted = false; 
+      this.emailSubmitted = false; 
+      this.addressSubmitted = false; 
       this.resultSuccess = false; 
       this.resultError = false; 
   }
@@ -58,8 +60,6 @@ export class MainPageComponent implements OnInit {
   showNameDialog(serviceProvider: ServiceProvider) {
     this.displayName = true;
     this.serviceProviderToUpdate = serviceProvider;
-
-    console.log(this.serviceProviderToUpdate.name); 
   }
 
   closeNameDialog() {
@@ -71,9 +71,17 @@ export class MainPageComponent implements OnInit {
     this.serviceProviderToUpdate = serviceProvider;
   }
 
+  closeEmailDialog() {
+    this.displayEmail = false; 
+  }
+
   showAddressDialog(serviceProvider: ServiceProvider) {
     this.displayAddress = true;
-    this.serviceProvider = serviceProvider;
+    this.serviceProviderToUpdate = serviceProvider;
+  }
+
+  closeAddressDialog() {
+    this.displayAddress = false; 
   }
 
   showHoursDialog(serviceProvider: ServiceProvider) {
@@ -82,8 +90,6 @@ export class MainPageComponent implements OnInit {
   }
 
   updateName(updateNameForm: NgForm) {
-
-    console.log("update name"); 
 
     this.nameSubmitted = true;
 
@@ -108,12 +114,9 @@ export class MainPageComponent implements OnInit {
   }
 
   updateEmail(updateEmailForm: NgForm) {
-    this.nameSubmitted = true;
+    this.emailSubmitted = true;
 
     if (updateEmailForm.valid) {
-
-
-      console.log("******** " + this.serviceProviderToUpdate.password);
       this.serviceProviderService.updateServiceProvider(this.serviceProviderToUpdate).subscribe(
         response => {
           this.resultSuccess = true;
@@ -135,9 +138,7 @@ export class MainPageComponent implements OnInit {
     this.addressSubmitted = true;
 
     if (updateAddressForm.valid) {
-      this.serviceProvider.address = this.newAddress;
-
-      this.serviceProviderService.updateServiceProvider(this.serviceProvider).subscribe(
+      this.serviceProviderService.updateServiceProvider(this.serviceProviderToUpdate).subscribe(
         response => {
           this.resultSuccess = true;
           this.resultError = true;
