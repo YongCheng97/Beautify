@@ -26,9 +26,9 @@
                         </f:facet>
                         <p:panelGrid columns="2" >
                             <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
-                            
+
                             <p:commandLink actionListener="#{viewServiceDetailsManagedBean.viewServiceProvider(viewServiceDetailsManagedBean.serviceToView.serviceProvider.serviceProviderId)}" value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
-                            
+
                             <!--                            <h:outputLabel value="Service Provider Opening Hours" style="font-weight: bolder"/>
                                                         <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.openingHours}">
                                                             <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
@@ -57,7 +57,7 @@
 
                         <br/>
                         <h:form>
-                            <p:commandButton value="Book service" onclick="PF('dialogBooking').show()" icon="fa fa-calendar"/>
+                            <p:commandButton value="Book service" update="@form formBooking" actionListener="#{serviceBookingManagedBean.directToCheckout}"  oncomplete="PF('dialogBooking').show()"  icon="fa fa-calendar"/>
                         </h:form>
                     </p:layoutUnit>
                 </p:layout>
@@ -67,18 +67,18 @@
                 <p:dialog id="dialogBooking" fitViewport="true" widgetVar="dialogBooking" header="Service Booking Details" closable="true">
 
                     <p:panel style="text-align:center">
-                        
+
                         <p:graphicImage library="images" name="#{viewServiceDetailsManagedBean.serviceToView.serviceName}.jpg" height="150" width="250" alt="Service Photo"/>
                         <h:panelGrid columns="2" cellpadding="5" style="width:100%; text-align: left">
                             <p:outputLabel value="Service Name:" style="font-weight: bold"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
-                            
+
 
                             <p:outputLabel value="Service Price:" style="font-weight: bold"/>
                             <h:outputText value="$#{viewServiceDetailsManagedBean.serviceToView.price}"/>
 
                             <p:outputLabel for="bookingDate" value="Date Of Appointment:" style="font-weight: bolder"/>
-                            <p:calendar id="bookingDate" value="#{serviceBookingManagedBean.appointmentDate}" required="true" requiredMessage="Date of appointment is required" showOn="button" pattern="MM/dd/yyyy"/>
+                            <p:calendar id="bookingDate" value="#{serviceBookingManagedBean.appointmentDate}" required="true" requiredMessage="Date of appointment is required" showOn="button" pattern="dd/MM/yyyy"/>
 
                             <p:outputLabel for="startTime" value="Start Time:" style="font-weight: bolder"/>
                             <p:selectOneMenu effect="fade" id="startTime" value="#{serviceBookingManagedBean.startTime}" style="width: 100px" required="true" requiredMessage="Start time is required">
@@ -90,7 +90,7 @@
                                 <f:selectItem itemLabel="2 PM" itemValue="14:00"/>
                                 <f:selectItem itemLabel="3 PM" itemValue="15:00"/>
                                 <f:selectItem itemLabel="4 PM" itemValue="16:00"/>
-                                <f:convertDateTime type="time" pattern="HH:mm"/>
+                                <f:convertDateTime type="time" pattern="HH:mm" timeZone="#{serviceBookingManagedBean.timeZone}"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel for="endTime" value="End Time:" style="font-weight: bolder"/>
@@ -103,15 +103,27 @@
                                 <f:selectItem itemLabel="3 PM" itemValue="15:00"/>
                                 <f:selectItem itemLabel="4 PM" itemValue="16:00"/>
                                 <f:selectItem itemLabel="5 PM" itemValue="17:00"/>
-                                <f:convertDateTime type="time" pattern="HH:mm"/>
+                                <f:convertDateTime type="time" pattern="HH:mm" timeZone="#{serviceBookingManagedBean.timeZone}"/>
                             </p:selectOneMenu>
-                            
-                            <p:outputLabel for="location" value="Location:" style="font-weight: bolder"/>
-                            <p:inputText id="location" value="#{serviceBookingManagedBean.address}" required="true" requiredMessage="Location is required"/>
 
+                            <p:outputLabel for="remarks" value="Remarks:" style="font-weight: bolder"/>
+                            <p:inputText id="remarks" value="#{serviceBookingManagedBean.remarks}" />
+                            
+                            <p:outputLabel value="Enter Promo code: " style="font-weight: bolder" />
+                            <p:inputText id ="promoCode" value ="#{serviceBookingManagedBean.promoCode}" required="false" />&nbsp;
+                            <p:commandButton value="Enter" actionListener="#{serviceBookingManagedBean.checkPromoCode}" process="@form" update="@form" oncomplete="PF('dialogBooking').show()"></p:commandButton>
+
+                            <p:outputLabel for="remarks" value="Final Price:" style="font-weight: bolder"/>
+                            <h:outputText value="$#{serviceBookingManagedBean.finalAmount}"/>
+                            
+                            <p:outputLabel value="Select Credit Card: " style="font-weight: bolder" />
+                            <p:selectOneMenu value="#{serviceBookingManagedBean.creditCardNum}" style="width:150px" required="true" requiredMessage="Credit Card is required">
+                                <f:selectItem itemLabel="Credit Card" noSelectionOption="false" />
+                                <f:selectItems value="#{serviceBookingManagedBean.creditCards}" />
+                            </p:selectOneMenu>
 
                         </h:panelGrid>
-                        <p:commandButton value="Book" actionListener="#{serviceBookingManagedBean.test}" icon="fa fa-calendar"/>
+                        <p:commandButton value="Book" actionListener="#{serviceBookingManagedBean.createNewBooking}" icon="fa fa-calendar"/>
                     </p:panel>
                 </p:dialog>
             </h:form>

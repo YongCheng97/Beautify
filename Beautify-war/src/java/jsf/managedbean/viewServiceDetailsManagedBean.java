@@ -18,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import util.exception.ServiceNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
@@ -32,6 +33,9 @@ public class viewServiceDetailsManagedBean implements Serializable {
 
     @EJB
     private ServiceProviderSessionBeanLocal serviceProviderSessionBean;
+    
+    @Inject
+    private ServiceBookingManagedBean serviceBookingManagedBean;
     
     private Long serviceIdToView;
     private Service serviceToView;
@@ -49,6 +53,7 @@ public class viewServiceDetailsManagedBean implements Serializable {
         try
         {            
             serviceToView = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceIdToView);
+            serviceBookingManagedBean.setCurrentService(serviceToView);
             serviceImages = new ArrayList<String>();
             
             for (int i=1; i<=3; i++) {

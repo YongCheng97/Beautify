@@ -1,8 +1,11 @@
 package ejb.session.stateless;
 
 import entity.Customer;
+import entity.Product;
+import entity.Service;
 import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,6 +20,8 @@ import util.exception.CustomerExistException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.ProductNotFoundException;
+import util.exception.ServiceNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateCustomerException;
 import util.security.CryptographicHelper;
@@ -28,6 +33,12 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
+    
+    @EJB
+    private ProductSessionBeanLocal productSessionBeanLocal;
+
+    @EJB
+    private ServiceSessionBeanLocal serviceSessionBeanLocal;
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
@@ -143,6 +154,58 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
         } else {
             throw new CustomerNotFoundException("Customer ID not provided for customer to be updated");
+        }
+    }
+    
+    @Override 
+    public void addFavouriteProduct(Long customerId, Long favouriteProductId) throws CustomerNotFoundException, ProductNotFoundException  {
+        if (customerId != null) {
+            
+            Customer customerToAddFav = retrieveCustomerByCustId(customerId);
+            
+            Product product = productSessionBeanLocal.retrieveProductByProdId(favouriteProductId);
+            
+            product.getFavouritedCustomers().add(customerToAddFav);
+            customerToAddFav.getFavouriteProducts().add(product);
+        }
+    }
+        
+    @Override 
+    public void addFavouriteService(Long customerId, Long serviceId) throws CustomerNotFoundException, ServiceNotFoundException  {
+        if (customerId != null) {
+            
+            Customer customerToAddFav = retrieveCustomerByCustId(customerId);
+            
+            Service service = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceId);
+            
+            service.getFavouritedCustomers().add(customerToAddFav);
+            customerToAddFav.getFavouriteServices().add(service);
+        }
+    }
+    
+    @Override 
+    public void removeFavouriteProduct(Long customerId, Long favouriteProductId) throws CustomerNotFoundException, ProductNotFoundException  {
+        if (customerId != null) {
+            
+            Customer customerToAddFav = retrieveCustomerByCustId(customerId);
+            
+            Product product = productSessionBeanLocal.retrieveProductByProdId(favouriteProductId);
+            
+            product.getFavouritedCustomers().remove(customerToAddFav);
+            customerToAddFav.getFavouriteProducts().remove(product);
+        }
+    }
+        
+    @Override 
+    public void removeFavouriteService(Long customerId, Long serviceId) throws CustomerNotFoundException, ServiceNotFoundException  {
+        if (customerId != null) {
+            
+            Customer customerToAddFav = retrieveCustomerByCustId(customerId);
+            
+            Service service = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceId);
+            
+            service.getFavouritedCustomers().remove(customerToAddFav);
+            customerToAddFav.getFavouriteServices().remove(service);
         }
     }
 

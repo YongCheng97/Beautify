@@ -27,7 +27,7 @@ export class ServiceProviderService {
   login(username: string, password: string): Observable<any> {
     return this.httpClient.get<any>(this.baseUrl + "/serviceProviderLogin?username=" + username + "&password=" + password).pipe (
       catchError(this.handleError)
-    )
+	)
   }
 
   createNewServiceProvider(newServiceProvider: ServiceProvider): Observable<any> {
@@ -60,11 +60,19 @@ export class ServiceProviderService {
 
 	updateServiceProvider(providerToUpdate: ServiceProvider): Observable<any> 
 	{
+		console.log(this.sessionService.getUsername());
+		console.log(providerToUpdate.name); 
+
 		let updateProviderReq = {
 			"username": this.sessionService.getUsername(), 
 			"password": this.sessionService.getPassword(), 
 			"serviceProvider": providerToUpdate, 
 		}; 
+
+		console.log(this.sessionService.getPassword()); 
+		console.log(providerToUpdate.password); 
+		this.sessionService.setCurrentServiceProvider(providerToUpdate);
+		sessionStorage.setItem('serviceProvider', JSON.stringify(providerToUpdate));
 
 		return this.httpClient.post<any>(this.baseUrl, updateProviderReq, httpOptions).pipe
 		(

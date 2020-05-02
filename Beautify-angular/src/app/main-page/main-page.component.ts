@@ -15,26 +15,31 @@ import { ServiceProvider } from '../service-provider';
 export class MainPageComponent implements OnInit {
 
   serviceProvider: ServiceProvider;
+  serviceProviderToUpdate: ServiceProvider; 
   approvalStatus = "";
 
   displayName: boolean = false;
   displayEmail: boolean = false;
   displayAddress: boolean = false;
+  displayHours: boolean = false;
+  days: string[]
 
-  nameSubmitted: boolean = false;
+  nameSubmitted: boolean;
   newName: string
   emailSubmitted: boolean = false;
   newEmail: string
   addressSubmitted: boolean = false;
   newAddress: string
 
-  resultSuccess: boolean = false;
-  resultError: boolean = false;
+  resultSuccess: boolean;
+  resultError: boolean;
   message: string;
 
   constructor(public sessionService: SessionService,
     public serviceProviderService: ServiceProviderService) {
-
+      this.nameSubmitted = false; 
+      this.resultSuccess = false; 
+      this.resultError = false; 
   }
 
   ngOnInit() {
@@ -46,16 +51,24 @@ export class MainPageComponent implements OnInit {
       this.approvalStatus = "Pending Approval";
     }
 
+    this.days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday', 'Sunday'];
+
   }
 
   showNameDialog(serviceProvider: ServiceProvider) {
     this.displayName = true;
-    this.serviceProvider = serviceProvider;
+    this.serviceProviderToUpdate = serviceProvider;
+
+    console.log(this.serviceProviderToUpdate.name); 
+  }
+
+  closeNameDialog() {
+    this.displayName = false; 
   }
 
   showEmailDialog(serviceProvider: ServiceProvider) {
     this.displayEmail = true;
-    this.serviceProvider = serviceProvider;
+    this.serviceProviderToUpdate = serviceProvider;
   }
 
   showAddressDialog(serviceProvider: ServiceProvider) {
@@ -63,24 +76,32 @@ export class MainPageComponent implements OnInit {
     this.serviceProvider = serviceProvider;
   }
 
+  showHoursDialog(serviceProvider: ServiceProvider) {
+    this.displayHours = true;
+    this.serviceProvider = serviceProvider;
+  }
+
   updateName(updateNameForm: NgForm) {
+
+    console.log("update name"); 
+
     this.nameSubmitted = true;
 
     if (updateNameForm.valid) {
-      this.serviceProvider.name = this.newName;
 
-      this.serviceProviderService.updateServiceProvider(this.serviceProvider).subscribe(
+      this.serviceProviderService.updateServiceProvider(this.serviceProviderToUpdate).subscribe(
         response => {
           this.resultSuccess = true;
           this.resultError = true;
           this.message = "Name updated successfully";
+
         },
         error => {
-          this.resultError = true; 
-          this.resultSuccess = false; 
-          this.message = "An error has occured while updating the name: " + error; 
+          this.resultError = true;
+          this.resultSuccess = false;
+          this.message = "An error has occured while updating the name: " + error;
 
-					console.log('********** MainPageComponent.ts: ' + error);
+          console.log('********** MainPageComponent.ts: ' + error);
         }
       )
     }
@@ -90,20 +111,21 @@ export class MainPageComponent implements OnInit {
     this.nameSubmitted = true;
 
     if (updateEmailForm.valid) {
-      this.serviceProvider.email = this.newEmail;
 
-      this.serviceProviderService.updateServiceProvider(this.serviceProvider).subscribe(
+
+      console.log("******** " + this.serviceProviderToUpdate.password);
+      this.serviceProviderService.updateServiceProvider(this.serviceProviderToUpdate).subscribe(
         response => {
           this.resultSuccess = true;
           this.resultError = true;
           this.message = "Name updated successfully";
         },
         error => {
-          this.resultError = true; 
-          this.resultSuccess = false; 
-          this.message = "An error has occured while updating the email: " + error; 
+          this.resultError = true;
+          this.resultSuccess = false;
+          this.message = "An error has occured while updating the email: " + error;
 
-					console.log('********** MainPageComponent.ts: ' + error);
+          console.log('********** MainPageComponent.ts: ' + error);
         }
       )
     }
@@ -122,11 +144,11 @@ export class MainPageComponent implements OnInit {
           this.message = "Name updated successfully";
         },
         error => {
-          this.resultError = true; 
-          this.resultSuccess = false; 
-          this.message = "An error has occured while updating the address: " + error; 
+          this.resultError = true;
+          this.resultSuccess = false;
+          this.message = "An error has occured while updating the address: " + error;
 
-					console.log('********** MainPageComponent.ts: ' + error);
+          console.log('********** MainPageComponent.ts: ' + error);
         }
       )
     }

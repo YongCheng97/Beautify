@@ -100,7 +100,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
     }
 
     @Override
-    public ServiceProvider retrieveServiceProviderByEmail(String email) throws ServiceProviderNotFoundException{
+    public ServiceProvider retrieveServiceProviderByEmail(String email) throws ServiceProviderNotFoundException {
         Query query = em.createQuery("SELECT s FROM ServiceProvider s WHERE s.email = :inEmail");
         query.setParameter("inEmail", email);
 
@@ -139,6 +139,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
                 ServiceProvider serviceProviderToUpdate = retrieveServiceProviderById(serviceProvider.getServiceProviderId());
 
                 if (serviceProviderToUpdate.getName().equals(serviceProvider.getName())) {
+                    serviceProviderToUpdate.setName(serviceProvider.getName());
                     serviceProviderToUpdate.setEmail(serviceProvider.getEmail());
                     serviceProviderToUpdate.setAddress(serviceProvider.getAddress());
                     serviceProviderToUpdate.setOpeningHours(serviceProvider.getOpeningHours());
