@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { SessionService } from '../session.service';
+import { ProductService } from '../product.service';
+import { Product } from '../product';
 
 @Component({
   selector: 'app-view-all-products',
@@ -7,9 +12,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewAllProductsComponent implements OnInit {
 
-  constructor() { }
+  products: Product[];
 
-  ngOnInit(): void {
+  constructor(private router: Router,
+    private activatedRoute: ActivatedRoute,
+    public sessionService: SessionService,
+    private productService: ProductService) { }
+
+  ngOnInit() {
+    this.productService.getProducts().subscribe(
+      response => {
+        this.products = response.products;
+      },
+      error => {
+        console.log('********** ViewAllProductsComponent.ts: ' + error);
+      }
+    );
   }
 
 }
