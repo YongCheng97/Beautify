@@ -152,7 +152,7 @@ public class ServiceBookingManagedBean implements Serializable {
                     Booking newBooking = new Booking(date, "Approved", this.remarks, this.appointmentDate, this.startTime, this.endTime,finalPrice);
                     CreditCard cc = creditCardSessionBeanLocal.retrieveCreditCardByLastFourNum(creditCardNum);
 
-                    booking = bookingSessionBeanLocal.createNewBooking(newBooking, currentCustomer.getCustomerId(), currentService.getServiceId());
+                    booking = bookingSessionBeanLocal.createNewBooking(newBooking, currentCustomer.getCustomerId(), currentService.getServiceId(), cc.getCreditCardId());
                     List<Booking> bookingList = bookingSessionBeanLocal.retrieveAllBookings();
                     setBookingListInDB(bookingList);
 
