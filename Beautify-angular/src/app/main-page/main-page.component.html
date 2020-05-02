@@ -124,28 +124,63 @@
 
     <p-dialog *ngIf="displayCC" header="View Credit Cards" modal="true" [(visible)]="displayCC"
         [style]="{width: '50vw'}">
-        <p-table>
+        <p-table [value]="creditCards">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Type</th>
-                    <th>Card Name</th>
-                    <th>Card Number</th>
-                    <th>Expiry Date</th>
-                    <th>Delete</th> 
+                    <th style="width:20%">Type</th>
+                    <th style="width:20%">Card Name</th>
+                    <th style="width:25%">Card Number</th>
+                    <th style="width:17%">Expiry Date</th>
+                    <th style="width:23%">Delete</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-days>
+            <ng-template pTemplate="body" let-creditCard>
                 <tr>
-
+                    <td>{{creditCard.type}}</td>
+                    <td>{{creditCard.cardName}}</td>
+                    <td>{{creditCard.cardNumber}}</td>
+                    <td>{{creditCard.expiryDate}}</td>
+                    <td style="text-align: center;"><button
+                            (click)="deleteCreditCard(creditCard.creditCardId)">Delete</button></td>
                 </tr>
             </ng-template>
         </p-table>
         &nbsp;
         <div style="text-align: center;">
-            <p-button type="submit" label="Add"></p-button>
+            <p-button (onClick)="showAddCCDialog(serviceProvider)" label="Add"></p-button>
         </div>
     </p-dialog>
 
+    <form *ngIf="displayAddCC" #addCCForm="ngForm" (ngSubmit)="addCC(addCCForm)">
+        <p-dialog *ngIf="displayAddCC" header="Add Credit Card" modal="true" [(visible)]="displayAddCC"
+            [style]="{width: '50vw'}">
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Type: </div>
+                <div class="ui-g-6">
+                    <select id="type" name="type" [(ngModel)]="ccType">
+                        <option value="" disabled selected> Select One</option>
+						<option *ngFor="let type of types" value="{{type}}">{{type}}</option>
+					</select>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Name: </div>
+                <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccName" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Number: </div>
+                <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccNum" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Expiry Date: </div>
+                <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccDate" /></div>
+            </div>
+            &nbsp;
+            <div style="text-align: center;">
+                <input (onClick)="closeAddCCDialog()" type="submit" value="Confirm" icon="pi pi-check" />
+            </div>
+        </p-dialog>
+    </form>
 
 </section>
 
