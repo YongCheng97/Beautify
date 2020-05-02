@@ -34,7 +34,7 @@
 
     <p>
         <b> Credit Cards: </b>
-        <p-button label="Add"></p-button>
+        <p-button (onClick)="showCCDialog(serviceProvider)" label="View"></p-button>
     </p>
 
     <p>
@@ -119,6 +119,30 @@
         &nbsp;
         <div style="text-align: center;">
             <p-button type="submit" label="Edit"></p-button>
+        </div>
+    </p-dialog>
+
+    <p-dialog *ngIf="displayCC" header="View Credit Cards" modal="true" [(visible)]="displayCC"
+        [style]="{width: '50vw'}">
+        <p-table>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Type</th>
+                    <th>Card Name</th>
+                    <th>Card Number</th>
+                    <th>Expiry Date</th>
+                    <th>Delete</th> 
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-days>
+                <tr>
+
+                </tr>
+            </ng-template>
+        </p-table>
+        &nbsp;
+        <div style="text-align: center;">
+            <p-button type="submit" label="Add"></p-button>
         </div>
     </p-dialog>
 
