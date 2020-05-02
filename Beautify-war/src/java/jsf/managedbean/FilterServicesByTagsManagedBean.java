@@ -94,6 +94,13 @@ public class FilterServicesByTagsManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/listingsOfAServiceCategory.xhtml?categoryId=" + categoryId);
     }
 
+    public void viewService(ActionEvent event) throws IOException {
+        Long serviceIdToView = (Long) event.getComponent().getAttributes().get("serviceId");
+        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("serviceIdToView", serviceIdToView);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewServiceDetails.xhtml");
+    }
+
     /**
      * @return the condition
      */

@@ -1,1 +1,35 @@
-<p>view-all-products works!</p>
+<app-header></app-header>
+
+<app-main-menu></app-main-menu>
+
+<section id="content" class="content">
+
+    <p-carousel [value]="products" [numVisible]="4" [numScroll]="3" [circular]="false"
+        [responsiveOptions]="responsiveOptions">
+        <p-header>
+            <h3>View All Products</h3>
+        </p-header>
+        <ng-template let-product pTemplate="item">
+            <div class="product-details">
+                <div class="p-grid p-nogutter">
+                    <!-- <div class="p-col-12">
+                    <img src="assets/showcase/images/demo/car/{{car.brand}}.png" />
+                </div> -->
+                    <div class="p-col-12 car-data">
+                        <div class="product-title">{{product.name}}</div>
+                        <div class="product-subtitle">${{product.price}} | Quantity:{{car.color}}</div>
+                        <div class="product-description">{{product.description}}</div>
+
+                        <div class="car-buttons">
+                            <button pButton type="button" class="ui-button-secondary" icon="pi pi-search"></button>
+                            <button pButton type="button" class="ui-button-secondary" icon="pi pi-star"></button>
+                            <button pButton type="button" class="ui-button-secondary" icon="pi pi-cog"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-carousel>
+</section>
+
+<app-footer></app-footer>

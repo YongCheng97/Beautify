@@ -52,6 +52,8 @@ export class SignUpComponent implements OnInit {
   createNewAccount(createServiceProviderForm: NgForm) {
     this.submitted = true;
 
+    //
+
     var newVariable = moment(this.mondayOpeningHour, "HH:mm").toDate();
 
     console.log(typeof (moment(this.mondayOpeningHour, "HH:mm").toDate()));
