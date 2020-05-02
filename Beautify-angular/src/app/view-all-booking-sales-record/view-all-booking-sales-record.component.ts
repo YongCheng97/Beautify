@@ -8,6 +8,8 @@ import { SessionService } from '../session.service';
 import { SalesRecordService } from '../sales-record.service';
 import { Booking } from '../booking';
 import { SalesRecord } from '../sales-record';
+import { FilterUtils } from 'primeng/utils';
+
 
 
 @Component({
@@ -19,6 +21,7 @@ import { SalesRecord } from '../sales-record';
 export class ViewAllBookingSalesRecordComponent implements OnInit
 {
 	salesRecords: SalesRecord[];
+	cols: any[];
 	display: boolean = false;
 	bookingToView: Booking;
 	
@@ -45,6 +48,14 @@ export class ViewAllBookingSalesRecordComponent implements OnInit
 				console.log('********** ViewAllBookingSalesRecordComponent.ts: ' + error);
 			}
 		);
+		
+		this.cols = [
+            { field: 'salesRecordId', header: 'Sales Record ID' },
+            { field: 'booking.bookingId', header: 'Booking ID' },
+            { field: 'dateOfPayment', header: 'Date Of Payment' },
+            { field: 'amount', header: 'Amount Earned' },
+			{ field: '', header: 'View Booking Details' }
+        ];
 		
 	}
 	

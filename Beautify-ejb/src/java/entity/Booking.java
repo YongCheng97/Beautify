@@ -68,6 +68,10 @@ public class Booking implements Serializable {
     @JoinColumn(nullable = false)
     private Service service;
     
+    @ManyToOne(optional=false)
+    @JoinColumn(nullable=true)
+    private CreditCard creditCard; 
+    
     public Booking() {
         
     }
@@ -232,5 +236,13 @@ public class Booking implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 }

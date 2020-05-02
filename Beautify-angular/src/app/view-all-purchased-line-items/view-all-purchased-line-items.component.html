@@ -8,16 +8,29 @@
 			
 	<p-panel header="All Order Items">
 	
-		<p-table [value]="purchasedLineItems">
+		<p-table #dt [value]="purchasedLineItems">
 			<ng-template pTemplate="header">
 				<tr>
-					<th>Order Item ID</th>
-					<th>Customer Name</th>
-					<th>Product</th>
-					<th>Quantity</th>
-					<th>Status</th>
-					<th>View Details</th>
-					<th>Update Status</th>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+						{{col.header}}
+						<p-sortIcon *ngSwitchCase="'purchasedLineItemId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'purchased.customer.firstName'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'product.name'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'quantity'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'status'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						
+					</th>
+				</tr>
+				
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field">
+						<input placeHolder="Search" *ngSwitchCase="'purchasedLineItemId'" pInputText size="8" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'purchased.customer.firstName'" pInputText size="8" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'product.name'" pInputText size="8" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'status'" pInputText size="8" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'quantity'" pInputText size="8" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+
+					</th>
 				</tr>
 			</ng-template>
 			<ng-template pTemplate="body" let-purchasedLineItem>
@@ -94,7 +107,5 @@
 		
 	</p-panel>
 </section>
-
-<app-sidebar></app-sidebar>
 
 <app-footer></app-footer>

@@ -78,70 +78,36 @@ and open the template in the editor.
             <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register As New User" closable ="true" closeOnEscape="true">
                 <p:messages id="messagesCreateNewCustomer" redisplay="false" />
 
-                <p:panelGrid>
+                <h:panelGrid columns="2" cellpadding="5">
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="firstName" value="First Name: " style="font-weight: bold;" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="firstName" value="#{customerManagementManagedBean.newCustomer.firstName}" required="true" requiredMessage="First Name is required" />
-                        </p:column>
-                    </p:row>
+                    <p:outputLabel for="firstName" value="First Name: " style="font-weight: bold;" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="lastName" value="Last Name: " style="font-weight: bold;" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="lastName" value="#{customerManagementManagedBean.newCustomer.lastName}" required="true" requiredMessage="Last Name is required" />
-                        </p:column>
-                    </p:row>
+                    <p:inputText id="firstName" value="#{customerManagementManagedBean.newCustomer.firstName}" required="true" requiredMessage="First Name is required" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="email" value="Email: " style="font-weight: bold;" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="email" value="#{customerManagementManagedBean.newCustomer.email}" required="true" requiredMessage="Email is required" />
-                        </p:column>
-                    </p:row>
+                    <p:outputLabel for="lastName" value="Last Name: " style="font-weight: bold;" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="contactNum" value="Contact Number: " style="font-weight: bold;" />
-                        </p:column>
-                        <p:column>                            
-                            <p:inputText id="contactNum" value="#{customerManagementManagedBean.newCustomer.contactNum}" required="true" requiredMessage="Contact Number is required" />
-                        </p:column>
-                    </p:row>
+                    <p:inputText id="lastName" value="#{customerManagementManagedBean.newCustomer.lastName}" required="true" requiredMessage="Last Name is required" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="username" value="Username: " style="font-weight: bold;" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="username" value="#{customerManagementManagedBean.newCustomer.username}" required="true" requiredMessage="Username is required" />
-                        </p:column>
-                    </p:row>
+                    <p:outputLabel for="email" value="Email: " style="font-weight: bold;" />
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="password" value="Password: " style="font-weight: bold;" />
-                        </p:column>
-                        <p:column>
-                            <p:password id="password" value="#{customerManagementManagedBean.newCustomer.password}" required="true" requiredMessage="Password is required" />
-                        </p:column>
-                    </p:row>
+                    <p:inputText id="email" value="#{customerManagementManagedBean.newCustomer.email}" required="true" requiredMessage="Email is required" />
 
-                    <p:row>
-                        <p:column colspan="3">
-                            <p:commandButton type="reset" value="Clear" icon="fa fa-undo"/>&nbsp;
-                            <p:commandButton  value="Create New Account" actionListener="#{customerManagementManagedBean.createNewCustomer}" icon="fa fa-sign-in"/>
-                        </p:column>
-                    </p:row>
+                    <p:outputLabel for="contactNum" value="Contact Number: " style="font-weight: bold;" />
 
-                </p:panelGrid>
+                    <p:inputText id="contactNum" value="#{customerManagementManagedBean.newCustomer.contactNum}" required="true" requiredMessage="Contact Number is required" />
+
+                    <p:outputLabel for="username" value="Username: " style="font-weight: bold;" />
+
+                    <p:inputText id="username" value="#{customerManagementManagedBean.newCustomer.username}" required="true" requiredMessage="Username is required" />
+
+                    <p:outputLabel for="password" value="Password: " style="font-weight: bold;" />
+
+                    <p:password id="password" value="#{customerManagementManagedBean.newCustomer.password}" required="true" requiredMessage="Password is required" />
+
+                        <p:commandButton type="reset" value="Clear" icon="fa fa-undo"/>
+                        <p:commandButton  value="Create New Account" actionListener="#{customerManagementManagedBean.createNewCustomer}" icon="fa fa-sign-in"/>
+
+                </h:panelGrid>
 
                 <p:growl>
                     <p:autoUpdate />

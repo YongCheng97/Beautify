@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -50,8 +51,13 @@ public class CreditCard implements Serializable {
     
     @OneToMany(mappedBy = "creditCard")
     private List<Purchased> purchaseds; 
+    
+    @OneToMany(mappedBy = "creditCard")
+    private List<Booking> bookings; 
 
     public CreditCard() {
+        this.purchaseds = new ArrayList<>(); 
+        this.bookings = new ArrayList<>(); 
     }
 
     public CreditCard(String type, String cardName, String cardNumber, String expiryDate) {
@@ -160,6 +166,14 @@ public class CreditCard implements Serializable {
 
     public void setPurchaseds(List<Purchased> purchaseds) {
         this.purchaseds = purchaseds;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
     
 }

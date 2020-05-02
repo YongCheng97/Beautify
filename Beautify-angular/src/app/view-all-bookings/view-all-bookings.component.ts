@@ -19,6 +19,7 @@ import { FilterUtils } from 'primeng/utils';
 export class ViewAllBookingsComponent implements OnInit
 {
 	bookings: Booking[];
+	cols: any[];
 	display: boolean = false;
 	displayStatus: boolean = false;
 	bookingToView: Booking;
@@ -58,17 +59,18 @@ export class ViewAllBookingsComponent implements OnInit
 		
 		this.statuses = ['Approved', 'Completed', 'Cancelled']; 
 		
-		FilterUtils['custom'] = (value, filter): boolean => {
-            if (filter === undefined || filter === null || filter.trim() === '') {
-                return true;
-            }
-    
-            if (value === undefined || value === null) {
-                return false;
-            }
-            
-            return parseInt(filter) > value;
-        }
+		this.cols = [
+            { field: 'bookingId', header: 'Booking ID' },
+            { field: 'service.serviceName', header: 'Service' },
+            { field: 'customer.firstName', header: 'Customer Name' },
+            { field: 'dateOfAppointment', header: 'Date Of Appointment' },
+			{ field: 'startTime', header: 'Start Time' },
+            { field: 'endTime', header: 'End Time' },
+            { field: 'status', header: 'Status' },
+            { field: '', header: 'View Details' },
+			{ field: '', header: 'Update Status' }
+        ];
+
 		
 	}
 	
@@ -108,6 +110,8 @@ export class ViewAllBookingsComponent implements OnInit
 				}
 			);
 		}
+		
+		this.displayStatus = false;
 	}
 	
 	parseDate(d: Date)

@@ -120,7 +120,7 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
-    
+
     @EJB(name = "SalesRecordSessionBeanLocal")
     private SalesRecordSessionBeanLocal salesRecordSessionBeanLocal;
 
@@ -212,13 +212,19 @@ public class DataInitializationSessionBean {
             Service haircut = serviceSessionBeanLocal.createNewService(new Service("Express Hair Cut", new BigDecimal("30.00"), "Express Hair Cut with no washing included", null), provider2.getServiceProviderId(), categoryHaircut.getCategoryId(), tagIdsEmpty);
             Service facial = serviceSessionBeanLocal.createNewService(new Service("Facial", new BigDecimal("80.00"), "The best and most relaxing Facial Treatment", null), provider3.getServiceProviderId(), categoryFacial.getCategoryId(), tagIdsEmpty);
 
+            // credit cards
+            CreditCard creditCard1 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard("VISA", "Bob Lim", "4024007176761897", "02/23"), customer1.getCustomerId());
+            CreditCard creditCard2 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard("MasterCard", "Bob Lim", "5381253539232416", "06/23"), customer1.getCustomerId());
+            CreditCard creditCard3 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard("VISA", "The Nail Lounge", "4929954364297059", "06/24"), provider1.getServiceProviderId());
+            CreditCard creditCard4 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard("MasterCard", "The Nail Lounge", "5288773275293797", "01/22"), provider1.getServiceProviderId());
+
             // bookings 
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yy HH:mm");
             SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yy");
 
-            Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf2.parse("03/04/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("80.00")), customer1.getCustomerId(), manicure.getServiceId());
-            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Completed", "remarks", sdf2.parse("20/04/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("30.00")), customer1.getCustomerId(), haircut.getServiceId());
-            Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("05/05/2020 12:00"), "Approved", "remarks", sdf2.parse("10/05/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("80.00")), customer1.getCustomerId(), facial.getServiceId());
+            Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf2.parse("03/04/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("80.00")), customer1.getCustomerId(), manicure.getServiceId(), creditCard1.getCreditCardId());
+            Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Completed", "remarks", sdf2.parse("20/04/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("30.00")), customer1.getCustomerId(), haircut.getServiceId(), creditCard1.getCreditCardId());
+            Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("05/05/2020 12:00"), "Approved", "remarks", sdf2.parse("10/05/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("80.00")), customer1.getCustomerId(), facial.getServiceId(), creditCard2.getCreditCardId());
 
             // service reviews
             Review review1 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Very good service", null), customer1.getCustomerId(), manicure.getServiceId());
@@ -231,12 +237,6 @@ public class DataInitializationSessionBean {
             redPolish.addPromotion(promotion1);
             facial.addPromotion(promotion2);
             redPolish.addPromotion(promotion3);
-
-            // credit cards
-            CreditCard creditCard1 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard("VISA", "Bob Lim", "4024007176761897", "02/23"), customer1.getCustomerId());
-            CreditCard creditCard2 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard("MasterCard", "Bob Lim", "5381253539232416", "06/23"), customer1.getCustomerId());
-            CreditCard creditCard3 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard("VISA", "The Nail Lounge", "4929954364297059", "06/24"), provider1.getServiceProviderId());
-            CreditCard creditCard4 = creditCardSessionBeanLocal.createNewCreditCardEntityForServiceProvider(new CreditCard("MasterCard", "The Nail Lounge", "5288773275293797", "01/22"), provider1.getServiceProviderId());
 
             //purchased line items
             PurchasedLineItem purchasedLineItem1 = purchasedLineItemSessionBean.createNewPurchasedLineItem(new PurchasedLineItem(1, "Shipped", new BigDecimal("20.00")), redPolish.getProductId());
@@ -261,21 +261,20 @@ public class DataInitializationSessionBean {
             customer1.getFavouriteServices().add(haircut);
             manicure.getFavouritedCustomers().add(customer1);
             haircut.getFavouritedCustomers().add(customer1);
-            
+
             //sales record
             SalesRecord salesRecord1 = salesRecordSessionBeanLocal.createNewSalesRecordBooking(new SalesRecord(new BigDecimal("80.00").multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("01/04/2020")), booking1.getBookingId());
             SalesRecord salesRecord2 = salesRecordSessionBeanLocal.createNewSalesRecordBooking(new SalesRecord(new BigDecimal("30.00").multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("02/04/2020")), booking2.getBookingId());
             SalesRecord salesRecord3 = salesRecordSessionBeanLocal.createNewSalesRecordPurchasedLineItem(new SalesRecord(new BigDecimal("13.00").multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("25/04/2020")), purchasedLineItem4.getPurchasedLineItemId());
-            
+
             //sales for us
             SalesForUs salesForUs1 = salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(new BigDecimal("80.00").multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("01/04/2020")), booking1.getBookingId());
             SalesForUs salesForUs2 = salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(new BigDecimal("30.00").multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("02/04/2020")), booking2.getBookingId());
             SalesForUs salesForUs3 = salesForUsSessionBeanLocal.createNewSalesForUsPurchasedLineItem(new SalesForUs(new BigDecimal("13.00").multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("25/04/2020")), purchasedLineItem4.getPurchasedLineItemId());
-            
-            
+
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException
-                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException | CreateNewPurchaseException | CreateNewPurchasedLineItemException | PurchasedExistException | PurchasedLineItemExistException 
+                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException | CreateNewPurchaseException | CreateNewPurchasedLineItemException | PurchasedExistException | PurchasedLineItemExistException
                 | CreateNewSalesRecordException | CreateNewSalesForUsException ex) {
             ex.printStackTrace();
         }
