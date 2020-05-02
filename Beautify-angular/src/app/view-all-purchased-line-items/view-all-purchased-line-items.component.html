@@ -30,7 +30,7 @@
 					<td>{{purchasedLineItem.quantity}}</td>
 					<td>{{purchasedLineItem.status}}</td>
 					<td><p-button label="View" (onClick)="showDialog(purchasedLineItem)"></p-button></td>
-					<td><p-button label="Update" (onClick)="showStatusDialog(purchasedLineItem)"></p-button></td>
+					<td><p-button *ngIf="purchasedLineItem.status=='Order Confirmed'" label="Update" (onClick)="showStatusDialog(purchasedLineItem)"></p-button></td>
 				</tr>
 			</ng-template>
 		</p-table>

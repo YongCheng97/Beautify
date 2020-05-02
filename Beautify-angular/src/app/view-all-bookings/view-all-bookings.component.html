@@ -34,7 +34,7 @@
 					<td>{{parseDate(booking.endTime) | date:'HH:mm:ss'}}</td>
 					<td>{{booking.status}}</td>
 					<td><p-button label="View" (onClick)="showDialog(booking)"></p-button></td>
-					<td><p-button *ngIf="booking.status!='Completed'" label="Update" (onClick)="showStatusDialog(booking)"></p-button></td>
+					<td><p-button *ngIf="booking.status=='Approved'" label="Update" (onClick)="showStatusDialog(booking)"></p-button></td>
 				</tr>
 			</ng-template>
 		</p-table>
