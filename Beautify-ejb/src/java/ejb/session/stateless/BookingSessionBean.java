@@ -175,17 +175,17 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                     bookingToUpdate.setStatus(status);
                     
                     if (status.equals("Completed")){
-                    BigDecimal salesRecordAmt = bookingToUpdate.getPrice().multiply(new BigDecimal(0.95));
-                    BigDecimal salesForUsAmt = bookingToUpdate.getPrice().multiply(new BigDecimal(0.05));
+                    BigDecimal salesRecordAmt = bookingToUpdate.getPrice().multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    BigDecimal salesForUsAmt = bookingToUpdate.getPrice().multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 
                     try {
-                        salesRecordSessionBeanLocal.createNewSalesRecord(new SalesRecord(salesRecordAmt,new Date()), bookingToUpdate.getBookingId(), null);
+                        salesRecordSessionBeanLocal.createNewSalesRecordBooking(new SalesRecord(salesRecordAmt,new Date()), bookingToUpdate.getBookingId());
                     } catch (CreateNewSalesRecordException ex) {
                         System.err.println("An error has occured while creating the new sales record: " + ex.getMessage());
                     }
                     
                     try {
-                        salesForUsSessionBeanLocal.createNewSalesForUs(new SalesForUs(salesForUsAmt,new Date()), bookingToUpdate.getBookingId(), null);
+                        salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(salesForUsAmt,new Date()), bookingToUpdate.getBookingId());
                     } catch (CreateNewSalesForUsException ex) {
                         System.err.println("An error has occured while creating the new sales for us: " + ex.getMessage());
                     }

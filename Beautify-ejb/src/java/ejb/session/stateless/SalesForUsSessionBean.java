@@ -40,47 +40,68 @@ public class SalesForUsSessionBean implements SalesForUsSessionBeanLocal {
     }
     
     @Override
-    public SalesForUs createNewSalesForUs(SalesForUs newSalesForUs, Long bookingId, Long purchasedLineItemId) throws CreateNewSalesForUsException
+    public SalesForUs createNewSalesForUsBooking(SalesForUs newSalesForUs, Long bookingId) throws CreateNewSalesForUsException
     {
-        if(newSalesForUs != null) {
-            try {
-                if (bookingId != null) {
-                    Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
-                    newSalesForUs.setBooking(booking);
+        if(newSalesForUs != null)
+        {
+           try {
+                if (bookingId == null) {
+                      throw new CreateNewSalesForUsException("A new sales for us must be associated with a booking");
+                } else {
+                  Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
+                  newSalesForUs.setBooking(booking);
                 }
-                
-                if (purchasedLineItemId != null) {
-                    PurchasedLineItem purchasedLineItem = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemId);
-                    newSalesForUs.setPurchasedLineItem(purchasedLineItem);
               
-                }
-                
                 em.persist(newSalesForUs);
                 em.flush();
+              
                 return newSalesForUs;
-            }
-            catch (PurchasedLineItemNotFoundException | BookingNotFoundException ex) {
+           }
+           catch (BookingNotFoundException ex) {
                 throw new CreateNewSalesForUsException(ex.getMessage());
            }
         }
         else 
         {
-            throw new CreateNewSalesForUsException("SalesForUs information not provided");
+            throw new CreateNewSalesForUsException("Sales Record information not provided");
+        }
+    }
+    
+    @Override
+    public SalesForUs createNewSalesForUsPurchasedLineItem(SalesForUs newSalesForUs, Long purchasedLineItemId) throws CreateNewSalesForUsException
+    {
+        if(newSalesForUs != null)
+        {
+           try {
+                if (purchasedLineItemId == null) {
+                      throw new CreateNewSalesForUsException("A new sales for us must be associated with a purchased item");
+                } else {
+                  PurchasedLineItem purchasedLineItem = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemId);
+                  newSalesForUs.setPurchasedLineItem(purchasedLineItem);
+                }
+              
+                em.persist(newSalesForUs);
+                em.flush();
+              
+                return newSalesForUs;
+           }
+           catch (PurchasedLineItemNotFoundException ex) {
+                throw new CreateNewSalesForUsException(ex.getMessage());
+           }
+        }
+        else 
+        {
+            throw new CreateNewSalesForUsException("Sales For Us information not provided");
         }
     }
     
     @Override
     public List<SalesForUs> retrieveAllSalesForUs()
     {
-       Query query = em.createQuery("SELECT sfu FROM SalesForUs sfu");
-       List<SalesForUs> salesForUslist = query.getResultList();
+        Query query = em.createQuery("SELECT sfu FROM SalesForUs sfu");
+        List<SalesForUs> salesForUslist = query.getResultList();
        
-       for (SalesForUs salesForUs : salesForUslist) {
-            salesForUs.getBooking();
-            salesForUs.getPurchasedLineItem();
-        }
-       
-       return salesForUslist;
+        return salesForUslist;
     }
     
     
@@ -91,8 +112,6 @@ public class SalesForUsSessionBean implements SalesForUsSessionBeanLocal {
         
         if(salesForUs != null)
         {
-            salesForUs.getBooking();
-            salesForUs.getPurchasedLineItem();
             
             return salesForUs;
         }

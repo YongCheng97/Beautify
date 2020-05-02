@@ -137,17 +137,17 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
                 purchasedLineItemToUpdate.setQuantity(purchasedLineItem.getQuantity());
                 purchasedLineItemToUpdate.setStatus(purchasedLineItem.getStatus());
                 if (purchasedLineItem.getStatus().equals("Product Received")){
-                    BigDecimal salesRecordAmt = purchasedLineItemToUpdate.getPrice().multiply(new BigDecimal(0.95));
-                    BigDecimal salesForUsAmt = purchasedLineItemToUpdate.getPrice().multiply(new BigDecimal(0.05));
+                    BigDecimal salesRecordAmt = purchasedLineItemToUpdate.getPrice().multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    BigDecimal salesForUsAmt = purchasedLineItemToUpdate.getPrice().multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 
                     try {
-                        salesRecordSessionBeanLocal.createNewSalesRecord(new SalesRecord(salesRecordAmt,new Date()), null, purchasedLineItem.getPurchasedLineItemId());
+                        salesRecordSessionBeanLocal.createNewSalesRecordPurchasedLineItem(new SalesRecord(salesRecordAmt,new Date()), purchasedLineItem.getPurchasedLineItemId());
                     } catch (CreateNewSalesRecordException ex) {
                         System.err.println("An error has occured while creating the new sales record: " + ex.getMessage());
                     }
                     
                     try {
-                        salesForUsSessionBeanLocal.createNewSalesForUs(new SalesForUs(salesForUsAmt,new Date()), null, purchasedLineItem.getPurchasedLineItemId());
+                        salesForUsSessionBeanLocal.createNewSalesForUsPurchasedLineItem(new SalesForUs(salesForUsAmt,new Date()), purchasedLineItem.getPurchasedLineItemId());
                     } catch (CreateNewSalesForUsException ex) {
                         System.err.println("An error has occured while creating the new sales for us: " + ex.getMessage());
                     }
