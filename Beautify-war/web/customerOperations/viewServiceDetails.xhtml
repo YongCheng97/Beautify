@@ -42,7 +42,7 @@
                             <h:outputLabel value="Service Name:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
 
-                            <h:outputLabel value="Service Desription:" style="font-weight: bolder"/>
+                            <h:outputLabel value="Service Description:" style="font-weight: bolder"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.description}"/>
 
                             <h:outputLabel value="Service Price:" style="font-weight: bolder"/>
@@ -56,9 +56,20 @@
                         </p:panelGrid>
 
                         <br/>
-                        <h:form>
-                            <p:commandButton value="Book service" update="@form formBooking" actionListener="#{serviceBookingManagedBean.directToCheckout}"  oncomplete="PF('dialogBooking').show()"  icon="fa fa-calendar"/>
-                        </h:form>
+
+                        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+                            <h:form>
+                                <p:commandButton value="Book service" onclick="PF('dialogLogin').show()"  icon="fa fa-calendar"/>
+                            </h:form>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+                            <h:form>
+                                <p:commandButton value="Book service" update="@form formBooking" actionListener="#{serviceBookingManagedBean.directToCheckout}"  oncomplete="PF('dialogBooking').show()"  icon="fa fa-calendar"/>
+                            </h:form>
+                        </h:panelGroup>
+
+
                     </p:layoutUnit>
                 </p:layout>
             </h:body>
@@ -108,14 +119,14 @@
 
                             <p:outputLabel for="remarks" value="Remarks:" style="font-weight: bolder"/>
                             <p:inputText id="remarks" value="#{serviceBookingManagedBean.remarks}" />
-                            
+
                             <p:outputLabel value="Enter Promo code: " style="font-weight: bolder" />
                             <p:inputText id ="promoCode" value ="#{serviceBookingManagedBean.promoCode}" required="false" />&nbsp;
                             <p:commandButton value="Enter" actionListener="#{serviceBookingManagedBean.checkPromoCode}" process="@form" update="@form" oncomplete="PF('dialogBooking').show()"></p:commandButton>
 
                             <p:outputLabel for="remarks" value="Final Price:" style="font-weight: bolder"/>
                             <h:outputText value="$#{serviceBookingManagedBean.finalAmount}"/>
-                            
+
                             <p:outputLabel value="Select Credit Card: " style="font-weight: bolder" />
                             <p:selectOneMenu value="#{serviceBookingManagedBean.creditCardNum}" style="width:150px" required="true" requiredMessage="Credit Card is required">
                                 <f:selectItem itemLabel="Credit Card" noSelectionOption="false" />
@@ -123,10 +134,25 @@
                             </p:selectOneMenu>
 
                         </h:panelGrid>
-                        <p:commandButton value="Book" actionListener="#{serviceBookingManagedBean.createNewBooking}" icon="fa fa-calendar"/>
+                        <p:commandButton value="Book" actionListener="#{serviceBookingManagedBean.createNewBooking}" oncomplete="PF('dialogBooked').show()" icon="fa fa-calendar"/>
                     </p:panel>
                 </p:dialog>
+
+
+
+                <p:dialog id="dialogBooked" widgetVar="dialogBooked" fitViewport="true" header="Service Booking Confirmation" closable="true" closeOnEscape="true"> 
+                    <h:panelGroup>
+                        <h2> Your booking has been confirmed! </h2>
+                        <p> $#{serviceBookingManagedBean.finalAmount} has been charged to your account.</p>
+                        <p:commandButton value="Close" actionListener="#{serviceBookingManagedBean.bookingComplete}"/>&nbsp;
+                    </h:panelGroup>
+
+                </p:dialog>
+
+
+
             </h:form>
+
         </div>
     </ui:define>
 </ui:composition>
