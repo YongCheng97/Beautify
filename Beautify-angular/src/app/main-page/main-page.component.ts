@@ -23,6 +23,7 @@ export class MainPageComponent implements OnInit {
   displayAddress: boolean = false;
   displayHours: boolean = false;
   days: string[]
+  displayCC: boolean = false; 
 
   nameSubmitted: boolean;
   newName: string
@@ -86,6 +87,11 @@ export class MainPageComponent implements OnInit {
 
   showHoursDialog(serviceProvider: ServiceProvider) {
     this.displayHours = true;
+    this.serviceProvider = serviceProvider;
+  }
+
+  showCCDialog(serviceProvider: ServiceProvider) {
+    this.displayCC = true;
     this.serviceProvider = serviceProvider;
   }
 

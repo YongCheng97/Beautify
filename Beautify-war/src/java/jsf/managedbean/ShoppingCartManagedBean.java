@@ -1,6 +1,7 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.CreditCardSessionBeanLocal;
+import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
 import ejb.session.stateless.PurchasedSessionBeanLocal;
@@ -26,18 +27,24 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import util.exception.CategoryNotFoundException;
 import util.exception.CreateNewPurchaseException;
 import util.exception.CreateNewPurchasedLineItemException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.ProductNotFoundException;
 import util.exception.PromotionNotFoundException;
 import util.exception.PurchasedExistException;
 import util.exception.PurchasedLineItemExistException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateProductException;
 
 @Named(value = "shoppingCartManagedBean")
 @SessionScoped
 public class ShoppingCartManagedBean implements Serializable {
+
+    @EJB
+    private ProductSessionBeanLocal productSessionBeanLocal;
 
     @EJB
     private PromotionSessionBeanLocal promotionSessionBeanLocal;
@@ -149,7 +156,24 @@ public class ShoppingCartManagedBean implements Serializable {
         return -1;
     }
 
-    public void removeAllItems() {
+    public void removeAllItems() { // called after checkout
+
+        for (Item item : this.getItems()) {
+            Product product = item.getProduct(); 
+            product.setQuantityOnHand(item.getProduct().getQuantityOnHand() - item.getQuantity());
+            try { 
+                productSessionBeanLocal.updateProduct(product, product.getCategory().getCategoryId());
+            } catch (ProductNotFoundException ex) {
+                Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (CategoryNotFoundException ex) {
+                Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UpdateProductException ex) {
+                Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InputDataValidationException ex) {
+                Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         this.items.clear();
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
@@ -176,7 +200,7 @@ public class ShoppingCartManagedBean implements Serializable {
 
     }
 
-     public void createNewOrder(ActionEvent event) {
+    public void createNewOrder(ActionEvent event) {
 
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -192,11 +216,11 @@ public class ShoppingCartManagedBean implements Serializable {
             BigDecimal promoPrice = new BigDecimal("0.00");
             Date date = new Date();
 
-            Boolean success = false; 
-            
+            Boolean success = false;
+
             try {
                 Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
-                success = true; 
+                success = true;
             } catch (PromotionNotFoundException ex) {
             }
 
