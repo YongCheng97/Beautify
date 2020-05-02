@@ -57,19 +57,25 @@
                             <h:outputText value="#{booking.service.serviceName}"/>
 
                             <h:outputText value="Date of Appointment:"  style="font-weight: bold"/>
-                            <h:outputText value="#{booking.dateOfAppointment}"/>
+                            <h:outputText value="#{booking.dateOfAppointment.toString().substring(0,10)} #{booking.dateOfAppointment.getYear()+1900}"/>
 
                             <h:outputText value="Start Time:" style="font-weight: bold"/>
-                            <h:outputText value="#{booking.startTime}" />
+                            <h:outputText value="#{booking.startTime.toString().substring(11,19)}" />
 
                             <h:outputText value="End Time" style="font-weight: bold"/>
-                            <h:outputText value="#{booking.endTime}" />
+                            <h:outputText value="#{booking.endTime.toString().substring(11,19)}" />
 
                             <h:outputText value="Location:" style="font-weight: bold"/>
                             <h:outputText value="#{booking.service.serviceProvider.address}" />
 
                             <h:outputText value="Status:" style="font-weight: bold"/>
                             <h:outputText value="#{booking.status}"/>
+                            
+                            <h:outputText value="Listed Price:" style="font-weight: bold"/>
+                            <h:outputText value="$#{booking.service.price}" />
+
+                            <h:outputText value="Price Paid:" style="font-weight: bold"/>
+                            <h:outputText value="$#{booking.price}"/>
 
                         </h:panelGrid>
 

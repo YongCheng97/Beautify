@@ -11,7 +11,6 @@ import entity.Promotion;
 import entity.Service;
 import java.io.IOException;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +27,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
 import util.exception.CreateNewBookingException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
@@ -36,7 +36,7 @@ import util.exception.UnknownPersistenceException;
 import util.exception.BookingExistException;
 
 @Named(value = "serviceBookingManagedBean")
-@SessionScoped
+@ViewScoped
 public class ServiceBookingManagedBean implements Serializable {
 
     @EJB(name = "BookingSessionBeanLocal")

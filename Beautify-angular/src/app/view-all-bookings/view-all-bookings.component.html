@@ -54,6 +54,10 @@
 				<div class="ui-g-6">{{bookingToView.customer.firstName}} {{bookingToView.customer.lastName}}</div>
 			</div>
 			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Contact Number</div>
+				<div class="ui-g-6">{{bookingToView.customer.contactNum}}</div>
+			</div>
+			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Booking</div>
 				<div class="ui-g-6">{{parseDate(bookingToView.dateOfBooking) | date:'EEE, MMM d, yyyy'}}</div>
 			</div>
@@ -76,6 +80,14 @@
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Status</div>
 				<div class="ui-g-6">{{bookingToView.status}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Listed Price</div>
+				<div class="ui-g-6">${{bookingToView.service.price.toFixed(2)}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Price Paid</div>
+				<div class="ui-g-6">${{bookingToView.price.toFixed(2)}}</div>
 			</div>
 		</p-dialog>
 		

@@ -26,7 +26,7 @@
                             <f:facet name="header">
                                 Service Details
                             </f:facet>
-                            <p:panelGrid columns="2" >
+                            <h:panelGrid columns="2" cellpadding="7">
                                 <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
 
                                 <p:commandLink actionListener="#{viewServiceDetailsManagedBean.viewServiceProvider(viewServiceDetailsManagedBean.serviceToView.serviceProvider.serviceProviderId)}" value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
@@ -48,14 +48,14 @@
                                 <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.description}"/>
 
                                 <h:outputLabel value="Service Price:" style="font-weight: bolder"/>
-                                <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.price}"/>
+                                <h:outputText value="$#{viewServiceDetailsManagedBean.serviceToView.price}"/>
 
                                 <h:outputLabel value="Service Tags" style="font-weight: bolder"/>
                                 <p:dataList value="#{viewServiceDetailsManagedBean.serviceToView.tags}" var="tag" type="unordered">
                                     #{tag.name}
                                 </p:dataList>
 
-                            </p:panelGrid>
+                            </h:panelGrid>
 
                             <br/>
 
@@ -147,17 +147,11 @@
                 </p:dialog>
 
 
-
                 <p:dialog id="dialogBooked" widgetVar="dialogBooked" fitViewport="true" header="Service Booking Confirmation" closable="true" closeOnEscape="true"> 
-                    <h:panelGroup>
                         <h2> Your booking has been confirmed! </h2>
                         <p> $#{serviceBookingManagedBean.finalAmount} has been charged to your account.</p>
                         <p:commandButton value="Close" actionListener="#{serviceBookingManagedBean.bookingComplete}"/>&nbsp;
-                    </h:panelGroup>
-
                 </p:dialog>
-
-
 
             </h:form>
 

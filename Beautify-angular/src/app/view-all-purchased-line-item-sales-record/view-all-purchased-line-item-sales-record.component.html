@@ -39,10 +39,6 @@
 				<div class="ui-g-6">{{purchasedLineItemToView.purchasedLineItemId}}</div>
 			</div>
 			<div class="ui-g">
-				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Name</div>
-				<div class="ui-g-6">{{purchasedLineItemToView.purchased.customer.firstName}} {{purchasedLineItemToView.purchased.customer.lastName}}</div>
-			</div>
-			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Product</div>
 				<div class="ui-g-6">{{purchasedLineItemToView.product.name}}</div>
 			</div>
@@ -51,8 +47,12 @@
 				<div class="ui-g-6">{{purchasedLineItemToView.quantity}}</div>
 			</div>
 			<div class="ui-g">
-				<div class="ui-g-6" style="background-color: #f4f4f4;">Status</div>
-				<div class="ui-g-6">{{purchasedLineItemToView.status}}</div>
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Name</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.purchased.customer.firstName}} {{purchasedLineItemToView.purchased.customer.lastName}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Contact Number</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.purchased.customer.contactNum}}</div>
 			</div>
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Address</div>
@@ -61,6 +61,18 @@
 			<div class="ui-g">
 				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Purchase</div>
 				<div class="ui-g-6">{{parseDate(purchasedLineItemToView.purchased.dateOfPurchase) | date:'EEE, MMM d, yyyy'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Status</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.status}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Listed Price</div>
+				<div class="ui-g-6">${{purchasedLineItemToView.product.price.toFixed(2)}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Price Paid</div>
+				<div class="ui-g-6">${{purchasedLineItemToView.price.toFixed(2)}}</div>
 			</div>
 		</p-dialog>
 		
