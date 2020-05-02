@@ -14,6 +14,8 @@ import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
 import ejb.session.stateless.PurchasedSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
+import ejb.session.stateless.SalesForUsSessionBeanLocal;
+import ejb.session.stateless.SalesRecordSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
 import ejb.session.stateless.TagsSessionBeanLocal;
@@ -26,6 +28,8 @@ import entity.Promotion;
 import entity.Purchased;
 import entity.PurchasedLineItem;
 import entity.Review;
+import entity.SalesForUs;
+import entity.SalesRecord;
 import entity.Service;
 import entity.ServiceProvider;
 import entity.Tag;
@@ -54,6 +58,8 @@ import util.exception.CreateNewProductException;
 import util.exception.CreateNewPurchaseException;
 import util.exception.CreateNewPurchasedLineItemException;
 import util.exception.CreateNewReviewException;
+import util.exception.CreateNewSalesForUsException;
+import util.exception.CreateNewSalesRecordException;
 import util.exception.CreateNewServiceException;
 import util.exception.CreateNewTagException;
 import util.exception.CreditCardExistsException;
@@ -114,6 +120,12 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
+    
+    @EJB(name = "SalesRecordSessionBeanLocal")
+    private SalesRecordSessionBeanLocal salesRecordSessionBeanLocal;
+
+    @EJB(name = "SalesForUsSessionBeanLocal")
+    private SalesForUsSessionBeanLocal salesForUsSessionBeanLocal;
 
     private CategoryTypeEnum type;
 
@@ -206,7 +218,7 @@ public class DataInitializationSessionBean {
 
             Booking booking1 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("01/04/2020 12:00"), "Completed", "remarks", sdf2.parse("03/04/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("80.00")), customer1.getCustomerId(), manicure.getServiceId());
             Booking booking2 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("02/04/2020 12:00"), "Completed", "remarks", sdf2.parse("20/04/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("30.00")), customer1.getCustomerId(), haircut.getServiceId());
-            Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("03/04/2020 12:00"), "Approved", "remarks", sdf2.parse("15/04/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("80.00")), customer1.getCustomerId(), facial.getServiceId());
+            Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("05/05/2020 12:00"), "Approved", "remarks", sdf2.parse("10/05/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("80.00")), customer1.getCustomerId(), facial.getServiceId());
 
             // service reviews
             Review review1 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Very good service", null), customer1.getCustomerId(), manicure.getServiceId());
@@ -249,10 +261,22 @@ public class DataInitializationSessionBean {
             customer1.getFavouriteServices().add(haircut);
             manicure.getFavouritedCustomers().add(customer1);
             haircut.getFavouritedCustomers().add(customer1);
-
+            
+            //sales record
+            SalesRecord salesRecord1 = salesRecordSessionBeanLocal.createNewSalesRecordBooking(new SalesRecord(new BigDecimal("80.00").multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("01/04/2020")), booking1.getBookingId());
+            SalesRecord salesRecord2 = salesRecordSessionBeanLocal.createNewSalesRecordBooking(new SalesRecord(new BigDecimal("30.00").multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("02/04/2020")), booking2.getBookingId());
+            SalesRecord salesRecord3 = salesRecordSessionBeanLocal.createNewSalesRecordPurchasedLineItem(new SalesRecord(new BigDecimal("13.00").multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("25/04/2020")), purchasedLineItem4.getPurchasedLineItemId());
+            
+            //sales for us
+            SalesForUs salesForUs1 = salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(new BigDecimal("80.00").multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("01/04/2020")), booking1.getBookingId());
+            SalesForUs salesForUs2 = salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(new BigDecimal("30.00").multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("02/04/2020")), booking2.getBookingId());
+            SalesForUs salesForUs3 = salesForUsSessionBeanLocal.createNewSalesForUsPurchasedLineItem(new SalesForUs(new BigDecimal("13.00").multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("25/04/2020")), purchasedLineItem4.getPurchasedLineItemId());
+            
+            
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException
-                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException | CreateNewPurchaseException | CreateNewPurchasedLineItemException | PurchasedExistException | PurchasedLineItemExistException ex) {
+                | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException | CreateNewPurchaseException | CreateNewPurchasedLineItemException | PurchasedExistException | PurchasedLineItemExistException 
+                | CreateNewSalesRecordException | CreateNewSalesForUsException ex) {
             ex.printStackTrace();
         }
     }

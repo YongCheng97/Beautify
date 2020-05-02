@@ -37,8 +37,8 @@ public class SalesRecord implements Serializable {
     @NotNull
     private Date dateOfPayment;
     
-    @OneToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @OneToOne(optional = true)
+    @JoinColumn(nullable = true)
     private Booking booking;
     
     @OneToOne(optional = true)
@@ -54,8 +54,6 @@ public class SalesRecord implements Serializable {
         this.dateOfPayment = dateOfPayment;
     }
     
-    
-
     public Long getSalesRecordId() {
         return salesRecordId;
     }

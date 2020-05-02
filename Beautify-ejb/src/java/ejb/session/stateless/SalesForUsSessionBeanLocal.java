@@ -18,8 +18,6 @@ import util.exception.SalesForUsNotFoundException;
 @Local
 public interface SalesForUsSessionBeanLocal {
 
-    public SalesForUs createNewSalesForUs(SalesForUs newSalesForUs, Long bookingId, Long purchasedLineItemId) throws CreateNewSalesForUsException;
-
     public List<SalesForUs> retrieveAllSalesForUs();
 
     public SalesForUs retrieveSalesForUsRecordById(Long salesForUsId) throws SalesForUsNotFoundException;
@@ -27,5 +25,9 @@ public interface SalesForUsSessionBeanLocal {
     public void updateSalesForUsRecord(SalesForUs salesForUs);
 
     public void deleteSalesForUsRecord(SalesForUs salesForUs);
+
+    public SalesForUs createNewSalesForUsPurchasedLineItem(SalesForUs newSalesForUs, Long purchasedLineItemId) throws CreateNewSalesForUsException;
+
+    public SalesForUs createNewSalesForUsBooking(SalesForUs newSalesForUs, Long bookingId) throws CreateNewSalesForUsException;
     
 }

@@ -9,8 +9,6 @@ import util.exception.SalesRecordNotFoundException;
 
 public interface SalesRecordSessionBeanLocal {
 
-    public SalesRecord createNewSalesRecord(SalesRecord newSalesRecord, Long bookingId, Long purchasedLineItemId) throws CreateNewSalesRecordException;
-
     public List<SalesRecord> retrieveAllSalesRecord();
 
     public SalesRecord retrieveSalesRecordBySalesRecordId(Long salesRecordId) throws SalesRecordNotFoundException;
@@ -18,5 +16,9 @@ public interface SalesRecordSessionBeanLocal {
     public void deleteSalesRecord(SalesRecord salesRecord) throws SalesRecordNotFoundException;
 
     public void updateSalesRecord(SalesRecord salesRecord) throws SalesRecordNotFoundException;
+
+    public SalesRecord createNewSalesRecordPurchasedLineItem(SalesRecord newSalesRecord, Long purchasedLineItemId) throws CreateNewSalesRecordException;
+
+    public SalesRecord createNewSalesRecordBooking(SalesRecord newSalesRecord, Long bookingId) throws CreateNewSalesRecordException;
     
 }

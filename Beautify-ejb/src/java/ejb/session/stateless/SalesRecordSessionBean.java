@@ -41,31 +41,52 @@ public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
     }
     
     @Override
-    public SalesRecord createNewSalesRecord(SalesRecord newSalesRecord, Long bookingId, Long purchasedLineItemId) throws CreateNewSalesRecordException
+    public SalesRecord createNewSalesRecordBooking(SalesRecord newSalesRecord, Long bookingId) throws CreateNewSalesRecordException
     {
         if(newSalesRecord != null)
         {
            try {
-              if (bookingId == null) {
-                  throw new CreateNewSalesRecordException("A new sales record must be associated with a booking");
-              } 
+                if (bookingId == null) {
+                      throw new CreateNewSalesRecordException("A new sales record must be associated with a booking");
+                } else {
+                  Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
+                  newSalesRecord.setBooking(booking);
+                }
               
-              Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
-              newSalesRecord.setBooking(booking);
+                em.persist(newSalesRecord);
+                em.flush();
               
-              if (purchasedLineItemId == null) {
-                  throw new CreateNewSalesRecordException("A new sales record must be associated with a purchased item");                  
-              }
-              
-              PurchasedLineItem purchasedLineItem = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemId);
-              newSalesRecord.setPurchasedLineItem(purchasedLineItem);
-              
-              em.persist(newSalesRecord);
-              em.flush();
-              
-              return newSalesRecord;
+                return newSalesRecord;
            }
-           catch (PurchasedLineItemNotFoundException | BookingNotFoundException ex) {
+           catch (BookingNotFoundException ex) {
+                throw new CreateNewSalesRecordException(ex.getMessage());
+           }
+        }
+        else 
+        {
+            throw new CreateNewSalesRecordException("Sales Record information not provided");
+        }
+    }
+    
+    @Override
+    public SalesRecord createNewSalesRecordPurchasedLineItem(SalesRecord newSalesRecord, Long purchasedLineItemId) throws CreateNewSalesRecordException
+    {
+        if(newSalesRecord != null)
+        {
+           try {
+                if (purchasedLineItemId == null) {
+                      throw new CreateNewSalesRecordException("A new sales record must be associated with a purchased item");
+                } else {
+                  PurchasedLineItem purchasedLineItem = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemId);
+                  newSalesRecord.setPurchasedLineItem(purchasedLineItem);
+                }
+              
+                em.persist(newSalesRecord);
+                em.flush();
+              
+                return newSalesRecord;
+           }
+           catch (PurchasedLineItemNotFoundException ex) {
                 throw new CreateNewSalesRecordException(ex.getMessage());
            }
         }
@@ -81,10 +102,6 @@ public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
        Query query = em.createQuery("SELECT sr FROM SalesRecord sr");
        List<SalesRecord> salesRecords = query.getResultList();
        
-       for (SalesRecord salesRecord : salesRecords) {
-            salesRecord.getBooking();
-            salesRecord.getPurchasedLineItem();
-        }
        
        return salesRecords;
     }
@@ -97,9 +114,6 @@ public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
         
         if(salesRecord != null)
         {
-            salesRecord.getBooking();
-            salesRecord.getPurchasedLineItem();
-            
             return salesRecord;
         }
         else
