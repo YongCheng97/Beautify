@@ -43,4 +43,6 @@ public interface ProductSessionBeanLocal {
 
     public List<Product> filterProductsByMaximumPrice(BigDecimal maxPrice, Long categoryId);
 
+    public List<Product> retrieveAllProductsByServiceProvider(Long serviceProviderId);
+
 }

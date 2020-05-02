@@ -26,9 +26,13 @@ export class ProductService {
       );
   }
 
-  createProduct(newProduct: Product): Observable<any> {
+  createProduct(newProduct: Product, categoryId: number, tagIds: number[]): Observable<any> {
     let createProductReq = {
+      "username": this.sessionService.getUsername(),
+			"password": this.sessionService.getPassword(),
       "product": newProduct,
+      "categoryId": categoryId,
+			"tagIds": tagIds
     }
 
     return this.httpClient.put<any>(this.baseUrl, createProductReq, httpOptions).pipe(

@@ -26,7 +26,7 @@
                 </p:carousel>
                 <br/>
                 <p:carousel value="#{viewAllProductsManagedBean.products}" headerText="Browse by Products" var="product" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
-                    <p:panel header="#{product.name}" style="text-align:center; min-height: 280px;">
+                    <p:panel header="#{product.name}" style="text-align:center;">
                         <p:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent;">
                             <h:outputText value= "Price: $#{product.price}" style="text-align:center"/>
                             <h:outputText value="Description: #{product.description}" style="text-align:center"/>
@@ -40,7 +40,7 @@
                 </p:carousel>
                 <br/>
                 <p:carousel value="#{viewAllServicesManagedBean.services}" headerText="Browse by Services" var="service" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
-                    <p:panel header="#{service.serviceName}" style="text-align:center; min-height: 280px;">
+                    <p:panel header="#{service.serviceName}" style="text-align:center;">
                         <p:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent;">
                             <h:outputText value= "Price: $#{service.price}" style="text-align:center"/>
                             <h:outputText value="Description: #{service.description}" style="text-align:center"/>
@@ -69,7 +69,7 @@
                 </p:carousel>
                 <br/>
                 <p:carousel value="#{viewAllProductsManagedBean.products}" headerText="Browse by Products" var="product" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
-                    <p:panel header="#{product.name}" style="text-align:center; min-height: 280px;">
+                    <p:panel header="#{product.name}" style="text-align:center;">
                         <p:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent;">
                             <h:outputText value= "Price: $#{product.price}" style="text-align:center"/>
                             <h:outputText value="Description: #{product.description}" style="text-align:center"/>
@@ -83,7 +83,7 @@
                 </p:carousel>
                 <br/>
                 <p:carousel value="#{viewAllServicesManagedBean.services}" headerText="Browse by Services" var="service" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
-                    <p:panel header="#{service.serviceName}" style="text-align:center; min-height: 280px;">
+                    <p:panel header="#{service.serviceName}" style="text-align:center;">
                         <p:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent;">
                             <h:outputText value= "Price: $#{service.price}" style="text-align:center"/>
                             <h:outputText value="Description: #{service.description}" style="text-align:center"/>
