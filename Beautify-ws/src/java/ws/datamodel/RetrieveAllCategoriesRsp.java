@@ -7,7 +7,7 @@ import java.util.List;
 
 public class RetrieveAllCategoriesRsp
 {
-    private List<Category> categoryEntities;
+    private List<Category> categories;
 
     
     
@@ -17,18 +17,18 @@ public class RetrieveAllCategoriesRsp
     
     
     
-    public RetrieveAllCategoriesRsp(List<Category> categoryEntities)
+    public RetrieveAllCategoriesRsp(List<Category> categories)
     {
-        this.categoryEntities = categoryEntities;
+        this.categories = categories;
     }
 
     
     
     public List<Category> getCategoryEntities() {
-        return categoryEntities;
+        return categories;
     }
 
-    public void setCategoryEntities(List<Category> categoryEntities) {
-        this.categoryEntities = categoryEntities;
+    public void setCategoryEntities(List<Category> categories) {
+        this.categories = categories;
     }
 }
