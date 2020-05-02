@@ -51,15 +51,16 @@
                                 <h:outputText value = "#{filterProductsByNameManagedBean.category.name}"/>
                             </f:facet>
 
-                            <p:panel header="#{product.name}" style="text-align:center">
-                                <h:panelGrid columns="1" style="width:100%">
+                            <p:panel header="#{product.name}" style="text-align:center; min-height: 280px;">
+                                <p:panelGrid columns="1" style="width:100%; text-align:center">
                                     <h:outputText value="#{product.skuCode}" />
                                     <h:outputText value= "$#{product.price}" />
                                     <h:outputText value="#{product.description}" />
-                                    <p:graphicImage library="images" name="Facial.jpg" height="120" width="150" alt ="" />
-                                </h:panelGrid>
-                                <p:commandLink actionListener="#{filterProductsManagedBean.clickLink(product.productId)}" style="text-decoration:none;color:blue;">
+                                    <p:graphicImage library="images" name="#{product.name}.jpg" height="120" width="150" alt ="" />
+                                </p:panelGrid>
+                                <p:commandLink actionListener="#{filterProductsByNameManagedBean.viewProduct}" style="text-decoration:none;color:blue; font-size: large">
                                     <h:outputText value = "Click here for more information!"/>
+                                    <f:attribute name="productId" value="#{product.productId}" />
                                 </p:commandLink>
                             </p:panel>
 

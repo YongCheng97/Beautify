@@ -4,6 +4,8 @@ import { IndexComponent } from './index/index.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.component';
+import { ViewAllServicesComponent } from './view-all-services/view-all-services.component';
+import { ViewAllProductsComponent } from './view-all-products/view-all-products.component';
 import { ViewAllReviewsComponent } from './view-all-reviews/view-all-reviews.component';
 import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-items/view-all-purchased-line-items.component';
 
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'main-page', component: MainPageComponent},
   { path: 'sign-up', component: SignUpComponent},
   { path: 'view-all-bookings', component: ViewAllBookingsComponent},
+  { path: 'view-all-services', component: ViewAllServicesComponent},
+  { path: 'view-all-products', component: ViewAllProductsComponent},
   { path: 'view-all-reviews', component: ViewAllReviewsComponent},
   { path: 'view-all-purchased-line-items', component: ViewAllPurchasedLineItemsComponent}
 ];

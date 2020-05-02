@@ -41,10 +41,13 @@
                         <div class="form-group">
                             <input type="email" name="email" class="form-control my-input" id="email"
                                 placeholder="Email" #email="ngModel" [(ngModel)]="newServiceProvider.email"
-                                required="true">
+                                required="true" minlength="4">
                             <div *ngIf="email.invalid && (email.dirty || email.touched || submitted)" class="errorText">
                                 <div *ngIf="email.errors.required" style="color: red;">
                                     Email is required.
+                                </div>
+                                <div *ngIf="email.errors.minlength" style="color: red;">
+                                    Minimum length is 4
                                 </div>
                             </div>
                         </div>
