@@ -28,9 +28,9 @@
 				<tr>
 					<th *ngFor="let col of cols" [ngSwitch]="col.field">
 						<input placeHolder="Search" *ngSwitchCase="'bookingId'" pInputText size="5" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
-						<input placeHolder="Search" *ngSwitchCase="'service.serviceName'" pInputText size="5" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
-						<input placeHolder="Search" *ngSwitchCase="'customer.firstName'" pInputText size="5" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
-						<input placeHolder="Search" *ngSwitchCase="'status'" pInputText size="5" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'service.serviceName'" pInputText size="8" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'customer.firstName'" pInputText size="8" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'status'" pInputText size="8" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
 
 					</th>
 				</tr>
