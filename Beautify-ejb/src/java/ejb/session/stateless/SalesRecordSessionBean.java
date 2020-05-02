@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.Booking;
 import entity.PurchasedLineItem;
 import entity.SalesRecord;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -121,6 +122,38 @@ public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
             throw new SalesRecordNotFoundException("Sales Record ID " + salesRecordId + " does not exist!");
         }                
     }
+    
+    @Override
+    public List<SalesRecord> retrieveAllBookingSalesRecordByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT s FROM SalesRecord s WHERE s.booking IS NOT NULL ORDER BY s.salesRecordId DESC");
+        
+        List<SalesRecord> salesRecordsBooking = query.getResultList();
+        List<SalesRecord> returnList = new ArrayList<>();
+        
+        for (SalesRecord salesRecord:salesRecordsBooking) {
+            if (salesRecord.getBooking().getService().getServiceProvider().getServiceProviderId() == serviceProviderId) {
+                returnList.add(salesRecord);
+            }
+        }
+
+        return returnList;
+    }    
+    
+    @Override
+    public List<SalesRecord> retrieveAllPurchasedLineItemSalesRecordByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT s FROM SalesRecord s WHERE s.purchasedLineItem IS NOT NULL ORDER BY s.salesRecordId DESC");
+        
+        List<SalesRecord> salesRecordsPurchasedLineItem = query.getResultList();
+        List<SalesRecord> returnList = new ArrayList<>();
+        
+        for (SalesRecord salesRecord:salesRecordsPurchasedLineItem) {
+            if (salesRecord.getPurchasedLineItem().getProduct().getServiceProvider().getServiceProviderId() == serviceProviderId) {
+                returnList.add(salesRecord);
+            }
+        }
+
+        return returnList;
+    }    
     
     @Override
     public void updateSalesRecord(SalesRecord salesRecord)

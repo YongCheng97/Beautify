@@ -20,5 +20,9 @@ public interface SalesRecordSessionBeanLocal {
     public SalesRecord createNewSalesRecordPurchasedLineItem(SalesRecord newSalesRecord, Long purchasedLineItemId) throws CreateNewSalesRecordException;
 
     public SalesRecord createNewSalesRecordBooking(SalesRecord newSalesRecord, Long bookingId) throws CreateNewSalesRecordException;
+
+    public List<SalesRecord> retrieveAllPurchasedLineItemSalesRecordByServiceProviderId(Long serviceProviderId);
+
+    public List<SalesRecord> retrieveAllBookingSalesRecordByServiceProviderId(Long serviceProviderId);
     
 }

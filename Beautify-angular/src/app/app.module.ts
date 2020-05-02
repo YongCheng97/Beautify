@@ -29,6 +29,8 @@ import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.
 import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-items/view-all-purchased-line-items.component';
 import { ViewAllServicesComponent } from './view-all-services/view-all-services.component';
 import { ViewAllProductsComponent } from './view-all-products/view-all-products.component';
+import { ViewAllBookingSalesRecordComponent } from './view-all-booking-sales-record/view-all-booking-sales-record.component';
+import { ViewAllPurchasedLineItemSalesRecordComponent } from './view-all-purchased-line-item-sales-record/view-all-purchased-line-item-sales-record.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,11 @@ import { ViewAllProductsComponent } from './view-all-products/view-all-products.
     ViewAllServicesComponent,
     ViewAllProductsComponent, 
 	ViewAllPurchasedLineItemsComponent, 
-    ViewAllBookingsComponent, ViewAllServicesComponent, ViewAllProductsComponent, 
+    ViewAllBookingsComponent, 
+	ViewAllServicesComponent, 
+	ViewAllProductsComponent, 
+	ViewAllBookingSalesRecordComponent, 
+	ViewAllPurchasedLineItemSalesRecordComponent, 
   ],
   imports: [
     BrowserModule,
