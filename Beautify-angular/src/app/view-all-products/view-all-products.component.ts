@@ -28,6 +28,7 @@ export class ViewAllProductsComponent implements OnInit {
         console.log('********** ViewAllProductsComponent.ts: ' + error);
       }
     );
+    console.log(this.products);
   }
 
 }

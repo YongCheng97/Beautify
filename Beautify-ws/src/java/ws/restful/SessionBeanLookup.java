@@ -6,6 +6,7 @@
 package ws.restful;
 
 import ejb.session.stateless.BookingSessionBeanLocal;
+import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import java.util.logging.Level;
@@ -18,14 +19,13 @@ import javax.naming.NamingException;
  * @author Crystal Lee
  */
 class SessionBeanLookup {
-    
+
     private final String ejbModuleJndiPath;
-    
-    public SessionBeanLookup()
-    {
+
+    public SessionBeanLookup() {
         ejbModuleJndiPath = "java:global/Beautify/Beautify-ejb/";
     }
-    
+
     public ServiceProviderSessionBeanLocal lookupServiceProviderSessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
@@ -35,7 +35,7 @@ class SessionBeanLookup {
             throw new RuntimeException(ne);
         }
     }
-    
+
     public BookingSessionBeanLocal lookupBookingSessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
@@ -45,7 +45,17 @@ class SessionBeanLookup {
             throw new RuntimeException(ne);
         }
     }
-    
+
+    public ProductSessionBeanLocal lookupProductSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (ProductSessionBeanLocal) c.lookup(ejbModuleJndiPath + "ProductSessionBean!ejb.session.stateless.ProductSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
     public PurchasedLineItemSessionBeanLocal lookupPurchasedLineItemSessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
