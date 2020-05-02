@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
+import entity.Customer;
 import entity.Product;
 import entity.ServiceProvider;
 import java.io.IOException;
@@ -27,57 +28,59 @@ import javax.servlet.http.HttpSession;
 import util.exception.ProductNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
 
-
 @Named(value = "viewProductDetailsManagedBean")
 @ViewScoped
-public class viewProductDetailsManagedBean implements Serializable 
-{
+public class viewProductDetailsManagedBean implements Serializable {
 
     @EJB(name = "ProductSessionBeanLocal")
     private ProductSessionBeanLocal productSessionBeanLocal;
-    
+
     @EJB
     private ServiceProviderSessionBeanLocal serviceProviderSessionBean;
-    
+
     @Inject
     private ShoppingCartManagedBean shoppingCartManagedBean;
 
     private Long productIdToView;
     private Product productToView;
     private List<String> productImages;
-    
+
+    private boolean productFavourited;
+
     public viewProductDetailsManagedBean() {
     }
-    
+
     @PostConstruct
-    public void postConstruct()
-    {
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        
-        productIdToView = (Long)session.getAttribute("productIdToView");
-        try
-        {            
+    public void postConstruct() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
+
+        productIdToView = (Long) session.getAttribute("productIdToView");
+        try {
             productToView = productSessionBeanLocal.retrieveProductByProdId(productIdToView);
+            for (Customer customer : productToView.getFavouritedCustomers()) {
+                if (customer.getCustomerId() == currentCustomer.getCustomerId()) {
+                    productFavourited = true;
+                    break;
+                } else {
+                    productFavourited = false;
+                }
+            }
             productImages = new ArrayList<String>();
-            
-            for (int i=1; i<=3; i++) {
+
+            for (int i = 1; i <= 3; i++) {
                 productImages.add(productToView.getName() + i + ".jpg");
             }
-        }
-        catch(ProductNotFoundException ex)
-        {
+        } catch (ProductNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the product details: " + ex.getMessage(), null));
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
-    
-    public void foo()
-    {        
+
+    public void foo() {
     }
-    
+
     public void viewServiceProvider(Long serviceProviderId) throws IOException {
         try {
             ServiceProvider serviceProvider = serviceProviderSessionBean.retrieveServiceProviderById(serviceProviderId);
@@ -87,11 +90,11 @@ public class viewProductDetailsManagedBean implements Serializable
             Logger.getLogger(viewAllServiceProvidersManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public List<String> getProductImages() {
         return productImages;
     }
-    
+
     public Product getProductToView() {
         return productToView;
     }
@@ -112,5 +115,13 @@ public class viewProductDetailsManagedBean implements Serializable
      */
     public void setShoppingCartManagedBean(ShoppingCartManagedBean shoppingCartManagedBean) {
         this.shoppingCartManagedBean = shoppingCartManagedBean;
+    }
+
+    public boolean isProductFavourited() {
+        return productFavourited;
+    }
+
+    public void setProductFavourited(boolean productFavourited) {
+        this.productFavourited = productFavourited;
     }
 }

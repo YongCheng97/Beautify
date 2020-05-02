@@ -60,11 +60,11 @@
                             </h:panelGrid>
 
                             <br></br>
-                            <p:commandButton actionListener="#{favouritesManagedBean.addFavouriteProduct}" update="@form" value="Favourite" icon="fa fa-star" title="Favourite" >
+                            <p:commandButton actionListener="#{favouritesManagedBean.addFavouriteProduct}" update="@form" value="Favourite" icon="fa fa-star" title="Favourite" rendered="#{sessionScope.isLogin==true and viewProductDetailsManagedBean.productFavourited==false}">
                                 <f:attribute name="productToFavourite" value="#{viewProductDetailsManagedBean.productToView}" />
                             </p:commandButton>
                             
-                            <p:commandButton actionListener="#{favouritesManagedBean.removeFavouriteProduct}" update="@form" value="Unfavourite" icon="fa fa-star-o" title="Unfavourite" >
+                            <p:commandButton actionListener="#{favouritesManagedBean.removeFavouriteProduct}" update="@form" value="Unfavourite" icon="fa fa-star-o" title="Unfavourite" rendered="#{sessionScope.isLogin==true and viewProductDetailsManagedBean.productFavourited==true}">
                                 <f:attribute name="productToFavourite" value="#{viewProductDetailsManagedBean.productToView}" />
                             </p:commandButton>
 
