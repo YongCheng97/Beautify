@@ -6,181 +6,308 @@
 
     <h1>Welcome To Beautify, {{serviceProvider.name}}!</h1>
 
-    <h2> Profile </h2>
+    <p-panel header="Profile">
 
-    <p>
-        <b> Username: </b> {{serviceProvider.username}}
-    </p>
+        <p>
+            <b> Username: </b> {{serviceProvider.username}}
+        </p>
 
-    <p>
-        <b> Name: </b> {{serviceProvider.name}}
-        <p-button (onClick)="showNameDialog(serviceProvider)" label="Update"></p-button>
-    </p>
+        <p>
+            <b> Name: </b> {{serviceProvider.name}}
+            <p-button (onClick)="showNameDialog(serviceProvider)" label="Update"></p-button>
+        </p>
 
-    <p>
-        <b> Email: </b> {{serviceProvider.email}}
-        <p-button (onClick)="showEmailDialog(serviceProvider)" label="Update"></p-button>
-    </p>
+        <p>
+            <b> Email: </b> {{serviceProvider.email}}
+            <p-button (onClick)="showEmailDialog(serviceProvider)" label="Update"></p-button>
+        </p>
 
-    <p>
-        <b> Address: </b> {{serviceProvider.address}}
-        <p-button (onClick)="showAddressDialog(serviceProvider)" label="Update"></p-button>
-    </p>
+        <p>
+            <b> Address: </b> {{serviceProvider.address}}
+            <p-button (onClick)="showAddressDialog(serviceProvider)" label="Update"></p-button>
+        </p>
 
-    <p>
-        <b> Store Hours: </b>
-        <p-button (onClick)="showHoursDialog(serviceProvider)" label="View"></p-button>
-    </p>
+        <p>
+            <b> Store Hours: </b>
+            <p-button (onClick)="showHoursDialog(serviceProvider)" label="View"></p-button>
+        </p>
 
-    <p>
-        <b> Credit Cards: </b>
-        <p-button (onClick)="showCCDialog(serviceProvider)" label="View"></p-button>
-    </p>
+        <p>
+            <b> Credit Cards: </b>
+            <p-button (onClick)="showCCDialog(serviceProvider)" label="View"></p-button>
+        </p>
 
-    <p>
-        <b> Certification: </b>
-        <p-button label="Upload"></p-button>
-    </p>
+        <p>
+            <b> Certification: </b>
+            <p-button label="Upload"></p-button>
+        </p>
 
-    <p>
-        <b> Approval Status: </b> {{approvalStatus}}
-    </p>
+        <p>
+            <b> Approval Status: </b> {{approvalStatus}}
+        </p>
 
-    <form *ngIf="displayName" #updateNameForm="ngForm" (ngSubmit)="updateName(updateNameForm)">
-        <p-dialog *ngIf="displayName" header="Update Name" modal="true" [(visible)]="displayName"
-            [style]="{width: '50vw'}">
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">Current Name: </div>
-                <div class="ui-g-6">{{serviceProvider.name}}</div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">New Name: </div>
-                <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="newName" /></div>
-            </div>
-            &nbsp;
-            <div style="text-align: center;">
-                <input (onClick)="closeNameDialog()" type="submit" value="Confirm" icon="pi pi-check" />
-            </div>
-        </p-dialog>
-    </form>
-
-    <form *ngIf="displayEmail" #updateEmailForm="ngForm" (ngSubmit)="updateEmail(updateEmailForm)">
-        <p-dialog *ngIf="displayEmail" header="Update Email" modal="true" [(visible)]="displayEmail"
-            [style]="{width: '50vw'}">
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">Current Email: </div>
-                <div class="ui-g-6">{{serviceProvider.email}}</div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">New Email: </div>
-                <div class="ui-g-6"><input type="text" name="email" [(ngModel)]="newEmail" /></div>
-            </div>
-            &nbsp;
-            <div style="text-align: center;">
-                <input (onClick)="closeEmailDialog()" type="submit" />
-            </div>
-        </p-dialog>
-    </form>
-
-    <form *ngIf="displayAddress" #updateAddressForm="ngForm" (ngSubmit)="updateAddress(updateAddressForm)">
-        <p-dialog *ngIf="displayAddress" header="Update Address" modal="true" [(visible)]="displayAddress"
-            [style]="{width: '50vw'}">
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">Current Address: </div>
-                <div class="ui-g-6">{{serviceProvider.address}}</div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">New Address: </div>
-                <div class="ui-g-6"><input type="text" name="address" [(ngModel)]="newAddress" /></div>
-            </div>
-            &nbsp;
-            <div style="text-align: center;">
-                <input (onClick)="closeAddressDialog()" type="submit" label="Confirm" icon="pi pi-check" />
-            </div>
-        </p-dialog>
-    </form>
-
-    <p-dialog *ngIf="displayHours" header="View Store Hours" modal="true" [(visible)]="displayHours"
-        [style]="{width: '50vw'}">
-        <p-table>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Day</th>
-                    <th>Opening Hours</th>
-                    <th>Closing Hours</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-days>
-                <tr>
-
-                </tr>
-            </ng-template>
-        </p-table>
-        &nbsp;
-        <div style="text-align: center;">
-            <p-button type="submit" label="Edit"></p-button>
-        </div>
-    </p-dialog>
-
-    <p-dialog *ngIf="displayCC" header="View Credit Cards" modal="true" [(visible)]="displayCC"
-        [style]="{width: '50vw'}">
-        <p-table [value]="creditCards">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th style="width:20%">Type</th>
-                    <th style="width:20%">Card Name</th>
-                    <th style="width:25%">Card Number</th>
-                    <th style="width:17%">Expiry Date</th>
-                    <th style="width:23%">Delete</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-creditCard>
-                <tr>
-                    <td>{{creditCard.type}}</td>
-                    <td>{{creditCard.cardName}}</td>
-                    <td>{{creditCard.cardNumber}}</td>
-                    <td>{{creditCard.expiryDate}}</td>
-                    <td style="text-align: center;"><button
-                            (click)="deleteCreditCard(creditCard.creditCardId)">Delete</button></td>
-                </tr>
-            </ng-template>
-        </p-table>
-        &nbsp;
-        <div style="text-align: center;">
-            <p-button (onClick)="showAddCCDialog(serviceProvider)" label="Add"></p-button>
-        </div>
-    </p-dialog>
-
-    <form *ngIf="displayAddCC" #addCCForm="ngForm" (ngSubmit)="addCC(addCCForm)">
-        <p-dialog *ngIf="displayAddCC" header="Add Credit Card" modal="true" [(visible)]="displayAddCC"
-            [style]="{width: '50vw'}">
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Type: </div>
-                <div class="ui-g-6">
-                    <select id="type" name="type" [(ngModel)]="ccType">
-                        <option value="" disabled selected> Select One</option>
-						<option *ngFor="let type of types" value="{{type}}">{{type}}</option>
-					</select>
+        <form *ngIf="displayName" #updateNameForm="ngForm" (ngSubmit)="updateName(updateNameForm)">
+            <p-dialog *ngIf="displayName" header="Update Name" modal="true" [(visible)]="displayName"
+                [style]="{width: '50vw'}">
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Current Name: </div>
+                    <div class="ui-g-6">{{serviceProvider.name}}</div>
                 </div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Name: </div>
-                <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccName" /></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Number: </div>
-                <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccNum" /></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-6" style="background-color: #f4f4f4;">Expiry Date: </div>
-                <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccDate" /></div>
-            </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">New Name: </div>
+                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="newName" /></div>
+                </div>
+                &nbsp;
+                <div style="text-align: center;">
+                    <input (onClick)="closeNameDialog()" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+            </p-dialog>
+        </form>
+
+        <form *ngIf="displayEmail" #updateEmailForm="ngForm" (ngSubmit)="updateEmail(updateEmailForm)">
+            <p-dialog *ngIf="displayEmail" header="Update Email" modal="true" [(visible)]="displayEmail"
+                [style]="{width: '50vw'}">
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Current Email: </div>
+                    <div class="ui-g-6">{{serviceProvider.email}}</div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">New Email: </div>
+                    <div class="ui-g-6"><input type="text" name="email" [(ngModel)]="newEmail" /></div>
+                </div>
+                &nbsp;
+                <div style="text-align: center;">
+                    <input class=" " (onClick)="closeEmailDialog()" value="Confirm" type="submit" />
+                </div>
+            </p-dialog>
+        </form>
+
+        <form *ngIf="displayAddress" #updateAddressForm="ngForm" (ngSubmit)="updateAddress(updateAddressForm)">
+            <p-dialog *ngIf="displayAddress" header="Update Address" modal="true" [(visible)]="displayAddress"
+                [style]="{width: '50vw'}">
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Current Address: </div>
+                    <div class="ui-g-6">{{serviceProvider.address}}</div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">New Address: </div>
+                    <div class="ui-g-6"><input type="text" name="address" [(ngModel)]="newAddress" /></div>
+                </div>
+                &nbsp;
+                <div style="text-align: center;">
+                    <input (onClick)="closeAddressDialog()" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+            </p-dialog>
+        </form>
+
+        <p-dialog *ngIf="displayHours" header="View Store Hours" modal="true" [(visible)]="displayHours"
+            [style]="{width: '50vw'}">
+            <p-table [value]="storeHours">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Day</th>
+                        <th>Opening Hours</th>
+                        <th>Closing Hours</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-hr>
+                    <tr>
+                        <td>{{hr.day}}</td>
+                        <td>{{parseDate(hr.openHour) | date:'HH:mm'}}</td>
+                        <td>{{parseDate(hr.closeHour) | date:'HH:mm'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
             &nbsp;
             <div style="text-align: center;">
-                <input (onClick)="closeAddCCDialog()" type="submit" value="Confirm" icon="pi pi-check" />
+                <p-button type="submit" label="Edit" (onClick)="showEditHoursDialog(serviceProvider)"></p-button>
             </div>
         </p-dialog>
-    </form>
+
+        <form *ngIf="displayEditHours" #editHoursForm="ngForm" (ngSubmit)="editHours(editHoursForm)">
+            <p-dialog *ngIf="displayEditHours" header="Edit Store Hours" modal="true" [(visible)]="displayEditHours"
+                [style]="{width: '35vw'}">
+                <div class="ui-g">
+                    <div class="ui-g-3" style="background-color: #f4f4f4;">Monday: </div>
+                    <div class="ui-g-6">
+                        <input id="mondayOpeningHours" placeholder="Opening Hours" aria-label="24hr format"
+                        [ngxTimepicker]="mondayOpeningHr" [format]="24" class="form-control my-input"
+                        name="mondayOpeningHrs" #mondayOpeningHrs="ngModel" [(ngModel)]="mondayOpeningHour">
+                    <ngx-material-timepicker #mondayOpeningHr></ngx-material-timepicker>
+                    <input id="mondayClosingHours" placeholder="Closing Hours" aria-label="24hr format"
+                        [ngxTimepicker]="mondayClosingHr" [format]="24" class="form-control my-input"
+                        style="margin-top: 20px;" name="mondayClosingHrs" #mondayClosingHrs="ngModel"
+                        [(ngModel)]="mondayClosingHour">
+                    <ngx-material-timepicker #mondayClosingHr></ngx-material-timepicker>
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-3" style="background-color: #f4f4f4;">Tuesday: </div>
+                    <div class="ui-g-6">
+                    <input placeholder="Opening Hours" aria-label="24hr format"
+                    [ngxTimepicker]="tuesdayOpeningHr" [format]="24" class="form-control my-input"
+                    name="tuesdayOpeningHrs" #tuesdayOpeningHrs="ngModel"
+                    [(ngModel)]="tuesdayOpeningHour">
+                <ngx-material-timepicker #tuesdayOpeningHr></ngx-material-timepicker>
+
+                <input placeholder="Closing Hours" aria-label="24hr format"
+                    [ngxTimepicker]="tuesdayClosingHr" [format]="24" class="form-control my-input"
+                    style="margin-top: 10px;" name="tuesdayClosingHrs" #tuesdayClosingHrs="ngModel"
+                    [(ngModel)]="tuesdayClosingHour">
+                <ngx-material-timepicker #tuesdayClosingHr></ngx-material-timepicker>
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-3" style="background-color: #f4f4f4;">Wednesday: </div>
+                    <div class="ui-g-6">
+                    <input placeholder="Opening Hours" aria-label="24hr format"
+                    [ngxTimepicker]="wednesdayOpeningHr" [format]="24" class="form-control my-input"
+                    name="wednesdayOpeningHrs" #wednesdayOpeningHrs="ngModel"
+                    [(ngModel)]="wednesdayOpeningHour">
+                <ngx-material-timepicker #wednesdayOpeningHr></ngx-material-timepicker>
+
+                <input placeholder="Closing Hours" aria-label="24hr format"
+                    [ngxTimepicker]="wednesdayClosingHr" [format]="24" class="form-control my-input"
+                    style="margin-top: 10px;" name="wednesdayClosingHrs" #wednesdayClosingHrs="ngModel"
+                    [(ngModel)]="wednesdayClosingHour">
+                <ngx-material-timepicker #wednesdayClosingHr></ngx-material-timepicker>
+                </div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-3" style="background-color: #f4f4f4;">Thursday: </div>
+                    <div class="ui-g-6">
+                    <input placeholder="Opening Hours" aria-label="24hr format"
+                    [ngxTimepicker]="thursdayOpeningHr" [format]="24" class="form-control my-input"
+                    name="thursdayOpeningHrs" #thursdayOpeningHrs="ngModel"
+                    [(ngModel)]="thursdayOpeningHour">
+                <ngx-material-timepicker #thursdayOpeningHr></ngx-material-timepicker>
+
+                <input placeholder="Closing Hours" aria-label="24hr format"
+                    [ngxTimepicker]="thursdayClosingHr" [format]="24" class="form-control my-input"
+                    style="margin-top: 10px;" name="thursdayClosingHrs" #thursdayClosingHrs="ngModel"
+                    [(ngModel)]="thursdayClosingHour">
+                <ngx-material-timepicker #thursdayClosingHr></ngx-material-timepicker>
+                        </div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-3" style="background-color: #f4f4f4;">Friday: </div>
+                    <div class="ui-g-6">
+                        <input placeholder="Opening Hours" aria-label="24hr format"
+                        [ngxTimepicker]="fridayOpeningHr" [format]="24" class="form-control my-input"
+                        name="fridayOpeningHrs" #fridayOpeningHrs="ngModel" [(ngModel)]="fridayOpeningHour">
+                    <ngx-material-timepicker #fridayOpeningHr></ngx-material-timepicker>
+
+                    <input placeholder="Closing Hours" aria-label="24hr format"
+                        [ngxTimepicker]="fridayClosingHr" [format]="24" class="form-control my-input"
+                        style="margin-top: 10px;" name="fridayClosingHrs" #fridayClosingHrs="ngModel"
+                        [(ngModel)]="fridayClosingHour">
+                    <ngx-material-timepicker #fridayClosingHr></ngx-material-timepicker>
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-3" style="background-color: #f4f4f4;">Saturday: </div>
+                    <div class="ui-g-6">
+                        <input placeholder="Opening Hours" aria-label="24hr format"
+                        [ngxTimepicker]="saturdayOpeningHr" [format]="24" class="form-control my-input"
+                        name="saturdayOpeningHrs" #saturdayOpeningHrs="ngModel"
+                        [(ngModel)]="saturdayOpeningHour">
+                    <ngx-material-timepicker #saturdayOpeningHr></ngx-material-timepicker>
+
+                    <input placeholder="Closing Hours" aria-label="24hr format"
+                        [ngxTimepicker]="saturdayClosingHr" [format]="24" class="form-control my-input"
+                        style="margin-top: 10px;" name="saturdayClosingHrs" #saturdayClosingHrs="ngModel"
+                        [(ngModel)]="saturdayClosingHour">
+                    <ngx-material-timepicker #saturdayClosingHr></ngx-material-timepicker>
+                    </div>
+                </div>
+                
+                <div class="ui-g">
+                    <div class="ui-g-3" style="background-color: #f4f4f4;">Sunday: </div>
+                    <div class="ui-g-6">
+                        <input placeholder="Opening Hours" aria-label="24hr format"
+                        [ngxTimepicker]="sundayOpeningHr" [format]="24" class="form-control my-input"
+                        name="sundayOpeningHrs" #sundayOpeningHrs="ngModel" [(ngModel)]="sundayOpeningHour">
+                    <ngx-material-timepicker #sundayOpeningHr></ngx-material-timepicker>
+
+                    <input placeholder="Closing Hours" aria-label="24hr format"
+                        [ngxTimepicker]="sundayClosingHr" [format]="24" class="form-control my-input"
+                        style="margin-top: 10px;" name="sundayClosingHrs" #sundayClosingHrs="ngModel"
+                        [(ngModel)]="sundayClosingHour">
+                    <ngx-material-timepicker #sundayClosingHr></ngx-material-timepicker>
+                    </div>
+                </div>
+                &nbsp;
+                <div style="text-align: center;">
+                    <input (onClick)="closeEditHoursDialog()" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+            </p-dialog>
+        </form>
+
+        <p-dialog *ngIf="displayCC" header="View Credit Cards" modal="true" [(visible)]="displayCC"
+            [style]="{width: '50vw'}">
+            <p-table [value]="creditCards">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width:20%">Type</th>
+                        <th style="width:20%">Card Name</th>
+                        <th style="width:25%">Card Number</th>
+                        <th style="width:17%">Expiry Date</th>
+                        <th style="width:23%">Delete</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-creditCard>
+                    <tr>
+                        <td>{{creditCard.type}}</td>
+                        <td>{{creditCard.cardName}}</td>
+                        <td>{{creditCard.cardNumber}}</td>
+                        <td>{{creditCard.expiryDate}}</td>
+                        <td style="text-align: center;"><button
+                                (click)="deleteCreditCard(creditCard.creditCardId)">Delete</button></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            &nbsp;
+            <div style="text-align: center;">
+                <p-button (onClick)="showAddCCDialog(serviceProvider)" label="Add"></p-button>
+            </div>
+        </p-dialog>
+
+        <form *ngIf="displayAddCC" #addCCForm="ngForm" (ngSubmit)="addCC(addCCForm)">
+            <p-dialog *ngIf="displayAddCC" header="Add Credit Card" modal="true" [(visible)]="displayAddCC"
+                [style]="{width: '50vw'}">
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Type: </div>
+                    <div class="ui-g-6">
+                        <select id="type" name="type" [(ngModel)]="ccType">
+                            <option value="" disabled selected> Select One</option>
+                            <option *ngFor="let type of types" value="{{type}}">{{type}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Name: </div>
+                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccName" /></div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Number: </div>
+                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccNum" /></div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Expiry Date: </div>
+                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccDate" /></div>
+                </div>
+                &nbsp;
+                <div style="text-align: center;">
+                    <input (onClick)="closeAddCCDialog()" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+            </p-dialog>
+        </form>
+    </p-panel>
 
 </section>
 

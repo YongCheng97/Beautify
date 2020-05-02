@@ -17,6 +17,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
+import {RatingModule} from 'primeng/rating';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
@@ -71,6 +72,7 @@ import { ViewAllPurchasedLineItemSalesRecordComponent } from './view-all-purchas
     PanelModule,
     InputTextModule,
     MultiSelectModule,
+    RatingModule, 
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

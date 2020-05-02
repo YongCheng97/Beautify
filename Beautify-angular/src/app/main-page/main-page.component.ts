@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import * as moment from 'moment';
 
 import { SessionService } from '../session.service';
 import { ServiceProviderService } from '../service-provider.service';
 import { ServiceProvider } from '../service-provider';
 import { CreditCard } from '../credit-card'; 
 import { CreditCardService } from '../credit-card.service'; 
+import { Storehour } from '../storehour'; 
 
 @Component({
   selector: 'app-main-page',
@@ -39,7 +41,10 @@ export class MainPageComponent implements OnInit {
   displayEmail: boolean = false;
   displayAddress: boolean = false;
   displayHours: boolean = false;
-  days: string[]
+  displayEditHours: boolean = false; 
+  storeHours: Storehour[]; 
+  openingHours: Date[]; 
+  closingHours: Date[]; 
   displayCC: boolean = false; 
 
   nameSubmitted: boolean;
@@ -48,6 +53,23 @@ export class MainPageComponent implements OnInit {
   newEmail: string
   addressSubmitted: boolean;
   newAddress: string
+  hoursSubmitted: boolean; 
+
+  mondayOpeningHour: Date;
+  tuesdayOpeningHour: Date;
+  wednesdayOpeningHour: Date;
+  thursdayOpeningHour: Date;
+  fridayOpeningHour: Date;
+  saturdayOpeningHour: Date;
+  sundayOpeningHour: Date;
+
+  mondayClosingHour: Date;
+  tuesdayClosingHour: Date;
+  wednesdayClosingHour: Date;
+  thursdayClosingHour: Date;
+  fridayClosingHour: Date;
+  saturdayClosingHour: Date;
+  sundayClosingHour: Date;
 
   resultSuccess: boolean;
   resultError: boolean;
@@ -63,6 +85,7 @@ export class MainPageComponent implements OnInit {
     this.nameSubmitted = false;
     this.emailSubmitted = false;
     this.addressSubmitted = false;
+    this.hoursSubmitted = false; 
     this.resultSuccess = false;
     this.resultError = false;
 
@@ -89,7 +112,20 @@ export class MainPageComponent implements OnInit {
       }
     )
 
-    this.days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday', 'Sunday'];
+    this.storeHours = [] as Storehour[]; 
+    this.openingHours = this.sessionService.getCurrentServiceProvider().openingHours;
+    this.closingHours = this.sessionService.getCurrentServiceProvider().closingHours;
+    let days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    for (var i = 0; i < this.openingHours.length; i++) {
+      let hr: Storehour = new Storehour(); 
+
+      hr.day = days[i]; 
+      hr.openHour = this.openingHours[i]; 
+      hr.closeHour = this.closingHours[i]; 
+
+      this.storeHours.push(hr);   
+    }
 
     this.types = ['VISA', 'MasterCard', 'Amex']; 
 
@@ -176,7 +212,7 @@ export class MainPageComponent implements OnInit {
     this.creditCardId = creditCardId; 
     this.creditCardService.deleteCreditCard(this.creditCardId).subscribe(
       response => {
-        this.router.navigate(["/mainPage"]); 
+        this.router.navigate(["/main-page"]); 
         this.creditCardService.getCreditCards().subscribe(
           response => {
             this.creditCards = response.creditCards; 
@@ -227,7 +263,64 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
+  }
 
+  editHours(editHoursForm: NgForm) {
+    this.hoursSubmitted = true;
+
+    if (editHoursForm.valid) {
+
+      this.serviceProviderToUpdate.openingHours = [];
+      this.serviceProviderToUpdate.closingHours = [];
+
+      this.serviceProviderToUpdate.openingHours.push(moment(this.mondayOpeningHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.openingHours.push(moment(this.tuesdayOpeningHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.openingHours.push(moment(this.wednesdayOpeningHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.openingHours.push(moment(this.thursdayOpeningHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.openingHours.push(moment(this.fridayOpeningHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.openingHours.push(moment(this.saturdayOpeningHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.openingHours.push(moment(this.sundayOpeningHour, "HH:mm").toDate());
+
+      this.serviceProviderToUpdate.closingHours.push(moment(this.mondayClosingHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.closingHours.push(moment(this.tuesdayClosingHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.closingHours.push(moment(this.wednesdayClosingHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.closingHours.push(moment(this.thursdayClosingHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.closingHours.push(moment(this.fridayClosingHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.closingHours.push(moment(this.saturdayClosingHour, "HH:mm").toDate());
+      this.serviceProviderToUpdate.closingHours.push(moment(this.sundayClosingHour, "HH:mm").toDate());
+
+      this.serviceProviderService.updateServiceProvider(this.serviceProviderToUpdate).subscribe(
+        response => {
+          this.resultSuccess = true;
+          this.resultError = true;
+          this.message = "Opening and Closing Hours updated successfully";
+          this.sessionService.setCurrentServiceProvider(this.serviceProviderToUpdate);
+          
+          this.storeHours = [] as Storehour[]; 
+          this.openingHours = this.sessionService.getCurrentServiceProvider().openingHours;
+          this.closingHours = this.sessionService.getCurrentServiceProvider().closingHours;
+          let days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      
+          for (var i = 0; i < this.openingHours.length; i++) {
+            let hr: Storehour = new Storehour(); 
+      
+            hr.day = days[i]; 
+            hr.openHour = this.openingHours[i]; 
+            hr.closeHour = this.closingHours[i]; 
+      
+            this.storeHours.push(hr);   
+          }
+
+        },
+        error => {
+          this.resultError = true;
+          this.resultSuccess = false;
+          this.message = "An error has occured while updating the opening and closing hours: " + error;
+
+          console.log('********** MainPageComponent.ts: ' + error);
+        }
+      )
+    }
   }
 
   showNameDialog(serviceProvider: ServiceProvider) {
@@ -275,6 +368,21 @@ export class MainPageComponent implements OnInit {
   closeAddCCDialog() {
     this.displayAddCC = false;
     this.displayCC = false;  
+  }
+
+  showEditHoursDialog(serviceProvider: ServiceProvider) {
+    this.displayEditHours = true; 
+    this.serviceProvider = serviceProvider; 
+  }
+
+  closeEditHoursDialog() {
+    this.displayEditHours = false; 
+    this.displayHours = false; 
+  }
+
+  parseDate(d: Date)
+	{		
+		return d.toString().replace('[UTC]', '');
   }
 
 }
