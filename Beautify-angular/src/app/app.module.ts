@@ -14,9 +14,9 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { DataViewModule } from 'primeng/dataview';
-import {PanelModule} from 'primeng/panel';
-import {InputTextModule} from 'primeng/inputtext';
-import {MultiSelectModule} from 'primeng/multiselect';
+import { PanelModule } from 'primeng/panel';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
@@ -32,6 +32,8 @@ import { ViewAllBookingsComponent } from './view-all-bookings/view-all-bookings.
 import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-items/view-all-purchased-line-items.component';
 import { ViewAllServicesComponent } from './view-all-services/view-all-services.component';
 import { ViewAllProductsComponent } from './view-all-products/view-all-products.component';
+import { ViewAllBookingSalesRecordComponent } from './view-all-booking-sales-record/view-all-booking-sales-record.component';
+import { ViewAllPurchasedLineItemSalesRecordComponent } from './view-all-purchased-line-item-sales-record/view-all-purchased-line-item-sales-record.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { ViewAllProductsComponent } from './view-all-products/view-all-products.
     ViewAllServicesComponent,
     ViewAllProductsComponent,
     ViewAllPurchasedLineItemsComponent,
-    ViewAllBookingsComponent, 
+    ViewAllBookingsComponent,
+    ViewAllBookingSalesRecordComponent,
+    ViewAllPurchasedLineItemSalesRecordComponent,
   ],
   imports: [
     BrowserModule,

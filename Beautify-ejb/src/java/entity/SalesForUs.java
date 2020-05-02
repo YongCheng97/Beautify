@@ -40,10 +40,6 @@ public class SalesForUs implements Serializable {
     @JoinColumn(nullable = true)
     private Booking booking;
     
-    @ManyToOne(optional = true)
-    @JoinColumn(nullable = true)
-    private ServiceProvider serviceProvider;
-    
     @OneToOne(optional = true)
     @JoinColumn(nullable = true)
     private PurchasedLineItem purchasedLineItem;
@@ -132,20 +128,6 @@ public class SalesForUs implements Serializable {
      */
     public void setBooking(Booking booking) {
         this.booking = booking;
-    }
-
-    /**
-     * @return the serviceProvider
-     */
-    public ServiceProvider getServiceProvider() {
-        return serviceProvider;
-    }
-
-    /**
-     * @param serviceProvider the serviceProvider to set
-     */
-    public void setServiceProvider(ServiceProvider serviceProvider) {
-        this.serviceProvider = serviceProvider;
     }
 
     public PurchasedLineItem getPurchasedLineItem() {

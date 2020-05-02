@@ -1,7 +1,6 @@
 import { Customer } from './customer';
 import { Service } from './service';
 import { Review } from './review';
-import * as moment from 'moment';
 
 export class Booking
 {
@@ -15,9 +14,10 @@ export class Booking
 	customer: Customer;
 	service: Service;
 	review: Review;
+	price: number;
 	
 	
-	constructor(bookingId?: number, dateOfBooking?: Date, status?: string, remarks?: string, dateOfAppointment?: Date, startTime?: Date, endTime?: Date)
+	constructor(bookingId?: number, dateOfBooking?: Date, status?: string, remarks?: string, dateOfAppointment?: Date, startTime?: Date, endTime?: Date, price?: number)
 	{
 		this.bookingId = bookingId;
 		this.dateOfBooking = dateOfBooking;
@@ -26,5 +26,6 @@ export class Booking
         this.dateOfAppointment = dateOfAppointment;
         this.startTime = startTime;
         this.endTime = endTime;
+		this.price = price;
 	}
 }

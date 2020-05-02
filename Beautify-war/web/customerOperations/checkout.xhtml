@@ -89,7 +89,7 @@
                         <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" closable="true" closeOnEscape="true"> 
                             <h2> Your order has been confirmed! </h2>
                             <p> $#{shoppingCartManagedBean.totalAmount} has been charged to your account.</p>
-                            <p:commandButton value="Close" actionListener="#{shoppingCartManagedBean.removeAllItems}" />&nbsp;
+                            <p:commandButton value="Close" process="@this" actionListener="#{shoppingCartManagedBean.removeAllItems}" />&nbsp;
                         </p:dialog>
                     </h:panelGroup>
 

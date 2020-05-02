@@ -34,7 +34,7 @@
 
     <p>
         <b> Credit Cards: </b>
-        <p-button label="Add"></p-button>
+        <p-button (onClick)="showCCDialog(serviceProvider)" label="View"></p-button>
     </p>
 
     <p>
@@ -55,14 +55,12 @@
             </div>
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">New Name: </div>
-                <div class="ui-g-6"><input type="text" name="name" id="name" #name="ngModel"
-                        [(ngModel)]="serviceProviderToUpdate.name" /></div>
+                <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="newName" /></div>
             </div>
             &nbsp;
             <div style="text-align: center;">
-                <input (onClick)="closeNameDialog()" type="submit" label="Confirm" icon="pi pi-check" />
+                <input (onClick)="closeNameDialog()" type="submit" value="Confirm" icon="pi pi-check" />
             </div>
-
         </p-dialog>
     </form>
 
@@ -75,8 +73,7 @@
             </div>
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">New Email: </div>
-                <div class="ui-g-6"><input type="text" pInputText name="email"
-                        (ngModel)="serviceProviderToUpdate.email" /></div>
+                <div class="ui-g-6"><input type="text" name="email" [(ngModel)]="newEmail" /></div>
             </div>
             &nbsp;
             <div style="text-align: center;">
@@ -94,8 +91,7 @@
             </div>
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">New Address: </div>
-                <div class="ui-g-6"><input type="text" pInputText name="address"
-                        (ngModel)="serviceProviderToUpdate.address" /></div>
+                <div class="ui-g-6"><input type="text" name="address" [(ngModel)]="newAddress" /></div>
             </div>
             &nbsp;
             <div style="text-align: center;">
@@ -123,6 +119,30 @@
         &nbsp;
         <div style="text-align: center;">
             <p-button type="submit" label="Edit"></p-button>
+        </div>
+    </p-dialog>
+
+    <p-dialog *ngIf="displayCC" header="View Credit Cards" modal="true" [(visible)]="displayCC"
+        [style]="{width: '50vw'}">
+        <p-table>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Type</th>
+                    <th>Card Name</th>
+                    <th>Card Number</th>
+                    <th>Expiry Date</th>
+                    <th>Delete</th> 
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-days>
+                <tr>
+
+                </tr>
+            </ng-template>
+        </p-table>
+        &nbsp;
+        <div style="text-align: center;">
+            <p-button type="submit" label="Add"></p-button>
         </div>
     </p-dialog>
 

@@ -50,10 +50,10 @@ export class MainMenuComponent implements OnInit {
 				items: [
 					[
 						{
-							items: [{ label: 'Products' }]
+							items: [{ label: 'Products' , routerLink: ['/view-all-purchased-line-item-sales-record']}]
 						},
 						{
-							items: [{ label: 'Services' }]
+							items: [{ label: 'Services' , routerLink: ['/view-all-booking-sales-record']}]
 						},
 					],
 				]

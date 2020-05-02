@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Booking;
+import entity.PurchasedLineItem;
 import entity.SalesForUs;
 import entity.SalesRecord;
 import entity.ServiceProvider;
@@ -13,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.BookingNotFoundException;
 import util.exception.CreateNewSalesForUsException;
+import util.exception.PurchasedLineItemNotFoundException;
 import util.exception.SalesForUsNotFoundException;
 import util.exception.SalesRecordNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
@@ -23,6 +25,9 @@ public class SalesForUsSessionBean implements SalesForUsSessionBeanLocal {
 
     @EJB
     private ServiceProviderSessionBeanLocal serviceProviderSessionBeanLocal;
+    
+    @EJB
+    private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
@@ -35,46 +40,68 @@ public class SalesForUsSessionBean implements SalesForUsSessionBeanLocal {
     }
     
     @Override
-    public SalesForUs createNewSalesForUs(SalesForUs newSalesForUs, Long bookingId, Long serviceProviderId) throws CreateNewSalesForUsException
+    public SalesForUs createNewSalesForUsBooking(SalesForUs newSalesForUs, Long bookingId) throws CreateNewSalesForUsException
     {
-        if(newSalesForUs != null) {
-            try {
-                if (bookingId != null) {
-                    Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
-                    newSalesForUs.setBooking(booking);
+        if(newSalesForUs != null)
+        {
+           try {
+                if (bookingId == null) {
+                      throw new CreateNewSalesForUsException("A new sales for us must be associated with a booking");
+                } else {
+                  Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
+                  newSalesForUs.setBooking(booking);
                 }
-                
-                if (serviceProviderId != null) {
-                    ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderId);
-                    newSalesForUs.setServiceProvider(serviceProvider);
-                }
-                
+              
                 em.persist(newSalesForUs);
                 em.flush();
+              
                 return newSalesForUs;
-            }
-            catch (ServiceProviderNotFoundException | BookingNotFoundException ex) {
+           }
+           catch (BookingNotFoundException ex) {
                 throw new CreateNewSalesForUsException(ex.getMessage());
            }
         }
         else 
         {
-            throw new CreateNewSalesForUsException("SalesForUs information not provided");
+            throw new CreateNewSalesForUsException("Sales Record information not provided");
+        }
+    }
+    
+    @Override
+    public SalesForUs createNewSalesForUsPurchasedLineItem(SalesForUs newSalesForUs, Long purchasedLineItemId) throws CreateNewSalesForUsException
+    {
+        if(newSalesForUs != null)
+        {
+           try {
+                if (purchasedLineItemId == null) {
+                      throw new CreateNewSalesForUsException("A new sales for us must be associated with a purchased item");
+                } else {
+                  PurchasedLineItem purchasedLineItem = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemId);
+                  newSalesForUs.setPurchasedLineItem(purchasedLineItem);
+                }
+              
+                em.persist(newSalesForUs);
+                em.flush();
+              
+                return newSalesForUs;
+           }
+           catch (PurchasedLineItemNotFoundException ex) {
+                throw new CreateNewSalesForUsException(ex.getMessage());
+           }
+        }
+        else 
+        {
+            throw new CreateNewSalesForUsException("Sales For Us information not provided");
         }
     }
     
     @Override
     public List<SalesForUs> retrieveAllSalesForUs()
     {
-       Query query = em.createQuery("SELECT sfu FROM SalesForUs sfu");
-       List<SalesForUs> salesForUslist = query.getResultList();
+        Query query = em.createQuery("SELECT sfu FROM SalesForUs sfu");
+        List<SalesForUs> salesForUslist = query.getResultList();
        
-       for (SalesForUs salesForUs : salesForUslist) {
-            salesForUs.getBooking();
-            salesForUs.getServiceProvider();
-        }
-       
-       return salesForUslist;
+        return salesForUslist;
     }
     
     
@@ -85,8 +112,6 @@ public class SalesForUsSessionBean implements SalesForUsSessionBeanLocal {
         
         if(salesForUs != null)
         {
-            salesForUs.getBooking();
-            salesForUs.getServiceProvider();
             
             return salesForUs;
         }

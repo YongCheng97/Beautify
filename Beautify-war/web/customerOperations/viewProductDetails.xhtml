@@ -41,7 +41,7 @@
                                 <h:outputText value="#{viewProductDetailsManagedBean.productToView.description}"/>
 
                                 <h:outputLabel value="Product Price:" style="font-weight: bolder"/>
-                                <h:outputText value="#{viewProductDetailsManagedBean.productToView.price}"/>
+                                <h:outputText value="$#{viewProductDetailsManagedBean.productToView.price}"/>
 
                                 <h:outputLabel value="Product Quantity:" style="font-weight: bolder"/>
                                 <h:outputText value="#{viewProductDetailsManagedBean.productToView.quantityOnHand}"/>
@@ -55,7 +55,7 @@
                             <br/>
                             <h:panelGrid columns="3" >
                                     <p:outputLabel for="amountToAdd" value="Amount to add to cart:  " style="font-weight: bolder"/>
-                                    <p:spinner id="amountToAdd" min="0" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
+                                    <p:spinner id="amountToAdd" min="0" max="#{viewProductDetailsManagedBean.productToView.quantityOnHand}" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
                                     <p:commandButton value="Add to Shopping Cart" actionListener="#{viewProductDetailsManagedBean.shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}" update="menubar:cartForm"/>
                             </h:panelGrid>
 

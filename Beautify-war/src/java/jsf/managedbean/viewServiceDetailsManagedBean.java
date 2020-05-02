@@ -2,6 +2,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
+import entity.Customer;
 import entity.Service;
 import entity.ServiceProvider;
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class viewServiceDetailsManagedBean implements Serializable {
     private Long serviceIdToView;
     private Service serviceToView;
     private List<String> serviceImages;
+    private boolean serviceFavourited;
     
     public viewServiceDetailsManagedBean() {
     }
@@ -48,16 +50,27 @@ public class viewServiceDetailsManagedBean implements Serializable {
     public void postConstruct()
     {
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
         
         serviceIdToView = (Long)session.getAttribute("serviceIdToView");
         try
         {            
             serviceToView = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceIdToView);
             serviceBookingManagedBean.setCurrentService(serviceToView);
+            
             serviceImages = new ArrayList<String>();
             
             for (int i=1; i<=3; i++) {
                 serviceImages.add(serviceToView.getServiceName()+ i + ".jpg");
+            }
+            
+            for (Customer customer : serviceToView.getFavouritedCustomers()) {
+                if (customer.getCustomerId() == currentCustomer.getCustomerId()) {
+                    serviceFavourited = true;
+                    break;
+                } else {
+                    serviceFavourited = false;
+                }
             }
         }
         catch(ServiceNotFoundException ex)
@@ -105,6 +118,14 @@ public class viewServiceDetailsManagedBean implements Serializable {
     
     public void setServiceImages(List<String> serviceImages) {
         this.serviceImages = serviceImages;
+    }
+
+    public boolean isServiceFavourited() {
+        return serviceFavourited;
+    }
+
+    public void setServiceFavourited(boolean serviceFavourited) {
+        this.serviceFavourited = serviceFavourited;
     }
     
     

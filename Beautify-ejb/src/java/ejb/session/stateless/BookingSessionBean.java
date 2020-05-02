@@ -3,7 +3,11 @@ package ejb.session.stateless;
 import entity.Booking;
 import entity.Customer;
 import entity.Review;
+import entity.SalesForUs;
+import entity.SalesRecord;
 import entity.Service;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -21,6 +25,8 @@ import util.exception.BookingExistException;
 import util.exception.BookingNotFoundException;
 import util.exception.CreateNewBookingException;
 import util.exception.CreateNewReviewException;
+import util.exception.CreateNewSalesForUsException;
+import util.exception.CreateNewSalesRecordException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.ServiceNotFoundException;
@@ -40,6 +46,12 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
     @EJB
     private ServiceSessionBeanLocal serviceSessionBeanLocal;
+    
+    @EJB
+    private SalesRecordSessionBeanLocal salesRecordSessionBeanLocal;
+    
+    @EJB
+    private SalesForUsSessionBeanLocal salesForUsSessionBeanLocal;
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
@@ -161,6 +173,23 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
                 if (bookingToUpdate.getCustomer().equals(bookingToUpdate.getCustomer())) {
                     bookingToUpdate.setStatus(status);
+                    
+                    if (status.equals("Completed")){
+                    BigDecimal salesRecordAmt = bookingToUpdate.getPrice().multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                    BigDecimal salesForUsAmt = bookingToUpdate.getPrice().multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                
+                    try {
+                        salesRecordSessionBeanLocal.createNewSalesRecordBooking(new SalesRecord(salesRecordAmt,new Date()), bookingToUpdate.getBookingId());
+                    } catch (CreateNewSalesRecordException ex) {
+                        System.err.println("An error has occured while creating the new sales record: " + ex.getMessage());
+                    }
+                    
+                    try {
+                        salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(salesForUsAmt,new Date()), bookingToUpdate.getBookingId());
+                    } catch (CreateNewSalesForUsException ex) {
+                        System.err.println("An error has occured while creating the new sales for us: " + ex.getMessage());
+                    }
+                }
                 } else {
                     throw new UpdateBookingException("Customer of booking record to be updated does not match the existing record");
                 }

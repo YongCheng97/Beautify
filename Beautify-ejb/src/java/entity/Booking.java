@@ -1,7 +1,9 @@
 package entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -46,6 +50,11 @@ public class Booking implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Date endTime;
+    @Column(nullable = false, precision = 11, scale = 2)
+    @NotNull
+    @DecimalMin("0.00")
+    @Digits(integer = 9, fraction = 2)
+    private BigDecimal price;
     
     @OneToOne(optional = true)
     @JoinColumn(nullable = true)
@@ -63,7 +72,7 @@ public class Booking implements Serializable {
         
     }
     
-    public Booking(Date dateOfBooking, String status, String remarks, Date dateOfAppointment, Date startTime, Date endTime) {
+    public Booking(Date dateOfBooking, String status, String remarks, Date dateOfAppointment, Date startTime, Date endTime, BigDecimal price) {
         this();
         
         this.dateOfBooking = dateOfBooking;
@@ -72,6 +81,7 @@ public class Booking implements Serializable {
         this.dateOfAppointment = dateOfAppointment;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.price = price;
     }
 
     public Long getBookingId() {
@@ -214,5 +224,13 @@ public class Booking implements Serializable {
 
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }
