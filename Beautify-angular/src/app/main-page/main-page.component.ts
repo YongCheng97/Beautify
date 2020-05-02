@@ -155,6 +155,7 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
+    this.displayName = false; 
   }
 
   updateEmail(updateEmailForm: NgForm) {
@@ -180,6 +181,7 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
+    this.displayEmail = false; 
   }
 
   updateAddress(updateAddressForm: NgForm) {
@@ -205,6 +207,7 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
+    this.displayAddress = false; 
   }
 
   deleteCreditCard(creditCardId: number)
@@ -263,6 +266,7 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
+    this.displayAddCC = false; 
   }
 
   editHours(editHoursForm: NgForm) {
@@ -321,6 +325,7 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
+    this.displayEditHours = false; 
   }
 
   showNameDialog(serviceProvider: ServiceProvider) {
@@ -328,26 +333,14 @@ export class MainPageComponent implements OnInit {
     this.serviceProviderToUpdate = serviceProvider;
   }
 
-  closeNameDialog() {
-    this.displayName = false;
-  }
-
   showEmailDialog(serviceProvider: ServiceProvider) {
     this.displayEmail = true;
     this.serviceProviderToUpdate = serviceProvider;
   }
 
-  closeEmailDialog() {
-    this.displayEmail = false;
-  }
-
   showAddressDialog(serviceProvider: ServiceProvider) {
     this.displayAddress = true;
     this.serviceProviderToUpdate = serviceProvider;
-  }
-
-  closeAddressDialog() {
-    this.displayAddress = false;
   }
 
   showHoursDialog(serviceProvider: ServiceProvider) {
@@ -364,20 +357,10 @@ export class MainPageComponent implements OnInit {
     this.displayAddCC = true; 
     this.serviceProvider = serviceProvider; 
   }
-  
-  closeAddCCDialog() {
-    this.displayAddCC = false;
-    this.displayCC = false;  
-  }
 
   showEditHoursDialog(serviceProvider: ServiceProvider) {
     this.displayEditHours = true; 
     this.serviceProvider = serviceProvider; 
-  }
-
-  closeEditHoursDialog() {
-    this.displayEditHours = false; 
-    this.displayHours = false; 
   }
 
   parseDate(d: Date)
