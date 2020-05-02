@@ -62,20 +62,10 @@ a:hover {
 
 .content {
 	display: block;
-	width: 67.5%;
+	width: 82%;
 	margin: 0.5% 0.5% 0.5% 0.5%;
 	padding: 3px 3px 3px 3px;
 	float: left;
-}
-
-.sidebar {
-	display: block;
-	width: 15%;
-	margin: 0.5% 0% 0.5% 0%;
-	padding: 3px 3px 3px 3px;
-	float: right;
-	background-color: silver;
-	text-align: center;
 }
 
 .footer {
@@ -84,10 +74,6 @@ a:hover {
 	padding: 3px 3px 3px 3px;
 	clear: both;
 	background-color: whitesmoke;
-}
-
-.advertisement {
-	margin: 5px 0px 5px 0px;
 }
 
 .menuHeader1 {
@@ -208,10 +194,3 @@ a:hover {
 	cursor: pointer;
 }
 
-.timepicker-overlay {
-    z-index: 10000000 !important;
-}
-
-.timepicker-backdrop-overlay {
-    z-index: 10000000 !important;
-}
