@@ -9,7 +9,7 @@ import util.exception.SalesRecordNotFoundException;
 
 public interface SalesRecordSessionBeanLocal {
 
-    public SalesRecord createNewSalesRecord(SalesRecord newSalesRecord, Long bookingId, Long productId) throws CreateNewSalesRecordException;
+    public SalesRecord createNewSalesRecord(SalesRecord newSalesRecord, Long bookingId, Long purchasedLineItemId) throws CreateNewSalesRecordException;
 
     public List<SalesRecord> retrieveAllSalesRecord();
 
