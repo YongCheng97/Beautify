@@ -1,0 +1,91 @@
+<app-header></app-header>
+		
+<app-main-menu></app-main-menu>		
+
+<section id="content" class="content">
+
+
+	<app-breadcrumb [pageName]="'viewAllBookingSalesRecord'"></app-breadcrumb>
+
+			
+	<p-panel header="All Sales Record (Bookings)">
+	
+		<p-table [value]="salesRecords">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Sales Record ID</th>
+					<th>Booking ID</th>
+					<th>Date Of Payment</th>
+					<th>Amount Earned</th>
+					<th>View Booking Details</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-salesRecord>
+				<tr>
+					<td>{{salesRecord.salesRecordId}}</td>
+					<td>{{salesRecord.booking.bookingId}}</td>
+					<td>{{parseDate(salesRecord.dateOfPayment) | date:'EEE, MMM d, yyyy'}}</td>
+					<td>${{salesRecord.amount.toFixed(2)}}</td>
+					<td><p-button label="View" (onClick)="showDialog(salesRecord.booking)"></p-button></td>
+				</tr>
+			</ng-template>
+		</p-table>
+		
+		
+		<p-dialog *ngIf="display" header="View Booking Details" modal="true" [(visible)]="display"  [style]="{width: '50vw'}">
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Booking ID</div>
+				<div class="ui-g-6">{{bookingToView.bookingId}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Service</div>
+				<div class="ui-g-6">{{bookingToView.service.serviceName}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Name</div>
+				<div class="ui-g-6">{{bookingToView.customer.firstName}} {{bookingToView.customer.lastName}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Contact Number</div>
+				<div class="ui-g-6">{{bookingToView.customer.contactNum}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Booking</div>
+				<div class="ui-g-6">{{parseDate(bookingToView.dateOfBooking) | date:'EEE, MMM d, yyyy'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Appointment</div>
+				<div class="ui-g-6">{{parseDate(bookingToView.dateOfAppointment) | date:'EEE, MMM d, yyyy'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Start Time</div>
+				<div class="ui-g-6">{{parseDate(bookingToView.startTime) | date:'HH:mm:ss'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">End Time</div>
+				<div class="ui-g-6">{{parseDate(bookingToView.endTime) | date:'HH:mm:ss'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Remarks</div>
+				<div class="ui-g-6">{{bookingToView.remarks}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Status</div>
+				<div class="ui-g-6">{{bookingToView.status}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Listed Price</div>
+				<div class="ui-g-6">${{bookingToView.service.price.toFixed(2)}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Price Paid</div>
+				<div class="ui-g-6">${{bookingToView.price.toFixed(2)}}</div>
+			</div>
+		</p-dialog>
+		
+	</p-panel>
+</section>
+
+<app-sidebar></app-sidebar>
+
+<app-footer></app-footer>

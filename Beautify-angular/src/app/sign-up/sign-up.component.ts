@@ -54,10 +54,6 @@ export class SignUpComponent implements OnInit {
 
     //
 
-    var newVariable = moment(this.mondayOpeningHour, "HH:mm").toDate();
-
-    console.log(typeof (moment(this.mondayOpeningHour, "HH:mm").toDate()));
-
     this.newServiceProvider.openingHours = [];
     this.newServiceProvider.closingHours = [];
 

@@ -11,67 +11,75 @@
         <ez:menubar/>
         <div>
             <h:body>
-                <p:layout style="min-width: 500px;min-height:425px">
 
-                    <p:layoutUnit position="west" size="520">
+                <h:form id="viewServiceDetails">
+                    <p:layout style="min-width: 500px;min-height:425px">
 
-                        <p:galleria value="#{viewServiceDetailsManagedBean.serviceImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
-                            <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
-                        </p:galleria>
-                    </p:layoutUnit>
+                        <p:layoutUnit position="west" size="520">
 
-                    <p:layoutUnit position="center">
-                        <f:facet name="header">
-                            Service Details
-                        </f:facet>
-                        <p:panelGrid columns="2" >
-                            <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
+                            <p:galleria value="#{viewServiceDetailsManagedBean.serviceImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
+                                <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
+                            </p:galleria>
+                        </p:layoutUnit>
 
-                            <p:commandLink actionListener="#{viewServiceDetailsManagedBean.viewServiceProvider(viewServiceDetailsManagedBean.serviceToView.serviceProvider.serviceProviderId)}" value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
+                        <p:layoutUnit position="center">
+                            <f:facet name="header">
+                                Service Details
+                            </f:facet>
+                            <h:panelGrid columns="2" cellpadding="7">
+                                <h:outputLabel value="Service Provider Name:" style="font-weight: bolder"/>
 
-                            <!--                            <h:outputLabel value="Service Provider Opening Hours" style="font-weight: bolder"/>
-                                                        <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.openingHours}">
-                                                            <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
-                                                        </h:outputText>
-                            
-                                                        <h:outputLabel value="Service Provider Closing Hours" style="font-weight: bolder"/>
-                                                        <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.closingHours}">
-                                                            <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
-                                                        </h:outputText>-->
+                                <p:commandLink actionListener="#{viewServiceDetailsManagedBean.viewServiceProvider(viewServiceDetailsManagedBean.serviceToView.serviceProvider.serviceProviderId)}" value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.name}" style="text-decoration:none;color:blue;"/>
 
-                            <h:outputLabel value="Service Name:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
+                                <!--                            <h:outputLabel value="Service Provider Opening Hours" style="font-weight: bolder"/>
+                                                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.openingHours}">
+                                                                <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
+                                                            </h:outputText>
+                                
+                                                            <h:outputLabel value="Service Provider Closing Hours" style="font-weight: bolder"/>
+                                                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceProvider.closingHours}">
+                                                                <f:convertDateTime type="time" timeStyle="short" timeZone="#{viewServiceDetailsManagedBean.timeZone}"/>
+                                                            </h:outputText>-->
 
-                            <h:outputLabel value="Service Description:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.description}"/>
+                                <h:outputLabel value="Service Name:" style="font-weight: bolder"/>
+                                <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>
 
-                            <h:outputLabel value="Service Price:" style="font-weight: bolder"/>
-                            <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.price}"/>
+                                <h:outputLabel value="Service Description:" style="font-weight: bolder"/>
+                                <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.description}"/>
 
-                            <h:outputLabel value="Service Tags" style="font-weight: bolder"/>
-                            <p:dataList value="#{viewServiceDetailsManagedBean.serviceToView.tags}" var="tag" type="unordered">
-                                #{tag.name}
-                            </p:dataList>
+                                <h:outputLabel value="Service Price:" style="font-weight: bolder"/>
+                                <h:outputText value="$#{viewServiceDetailsManagedBean.serviceToView.price}"/>
 
-                        </p:panelGrid>
+                                <h:outputLabel value="Service Tags" style="font-weight: bolder"/>
+                                <p:dataList value="#{viewServiceDetailsManagedBean.serviceToView.tags}" var="tag" type="unordered">
+                                    #{tag.name}
+                                </p:dataList>
 
-                        <br/>
+                            </h:panelGrid>
 
-                        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-                            <h:form>
-                                <p:commandButton value="Book service" onclick="PF('dialogLogin').show()"  icon="fa fa-calendar"/>
-                            </h:form>
-                        </h:panelGroup>
+                            <br/>
 
-                        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-                            <h:form>
+                            <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+                                <p:commandButton value="Book service" oncomplete="PF('dialogLogin').show()"  icon="fa fa-calendar"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{sessionScope.isLogin == true}">
                                 <p:commandButton value="Book service" update="@form formBooking" actionListener="#{serviceBookingManagedBean.directToCheckout}"  oncomplete="PF('dialogBooking').show()"  icon="fa fa-calendar"/>
-                            </h:form>
-                        </h:panelGroup>
+                            </h:panelGroup>
 
-
-                    </p:layoutUnit>
-                </p:layout>
+                            <br></br>
+                            <br></br>
+                            <p:commandButton actionListener="#{favouritesManagedBean.addFavouriteService}" update="@form" value="Favourite" icon="fa fa-star" title="Favourite" rendered="#{sessionScope.isLogin==true and viewServiceDetailsManagedBean.serviceFavourited==false}">
+                                <f:attribute name="serviceToFavourite" value="#{viewServiceDetailsManagedBean.serviceToView}" />
+                            </p:commandButton>
+                            
+                            <p:commandButton actionListener="#{favouritesManagedBean.removeFavouriteService}" update="@form" value="Unfavourite" icon="fa fa-star-o" title="Unfavourite" rendered="#{sessionScope.isLogin==true and viewServiceDetailsManagedBean.serviceFavourited==true}">
+                                <f:attribute name="serviceToFavourite" value="#{viewServiceDetailsManagedBean.serviceToView}" />
+                            </p:commandButton>
+                            
+                        </p:layoutUnit>
+                    </p:layout>
+                </h:form>
             </h:body>
 
             <h:form id="formBooking">
@@ -134,22 +142,22 @@
                             </p:selectOneMenu>
 
                         </h:panelGrid>
-                        <p:commandButton value="Book" actionListener="#{serviceBookingManagedBean.createNewBooking}" oncomplete="PF('dialogBooked').show()" icon="fa fa-calendar"/>
+                        <p:commandButton value="Book" action="#{serviceBookingManagedBean.createNewBooking()}" oncomplete="PF('dialogBooked').show()" update=":formBooking:dialogBooked" icon="fa fa-calendar"/>
                     </p:panel>
                 </p:dialog>
 
-
-
-                <p:dialog id="dialogBooked" widgetVar="dialogBooked" fitViewport="true" header="Service Booking Confirmation" closable="true" closeOnEscape="true"> 
-                    <h:panelGroup>
+                <p:dialog id="dialogBooked" widgetVar="dialogBooked" fitViewport="true" header="Service Booking message" closable="true" closeOnEscape="true"> 
+                    <p:panel style="text-align: center" rendered="#{serviceBookingManagedBean.finishBooking == true}">
                         <h2> Your booking has been confirmed! </h2>
                         <p> $#{serviceBookingManagedBean.finalAmount} has been charged to your account.</p>
                         <p:commandButton value="Close" actionListener="#{serviceBookingManagedBean.bookingComplete}"/>&nbsp;
-                    </h:panelGroup>
+                    </p:panel>
 
+                    <p:panel style="text-align: center" rendered="#{serviceBookingManagedBean.finishBooking == false}">
+                        <h2> #{serviceBookingManagedBean.msg} </h2>
+                        <p:commandButton value="Close" oncomplete="PF('dialogBooked').hide()" />&nbsp;
+                    </p:panel>
                 </p:dialog>
-
-
 
             </h:form>
 

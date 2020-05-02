@@ -7,6 +7,8 @@ import * as moment from 'moment';
 import { SessionService } from '../session.service';
 import { BookingService } from '../booking.service';
 import { Booking } from '../booking';
+import { FilterUtils } from 'primeng/utils';
+
 
 @Component({
   selector: 'app-view-all-bookings',
@@ -47,13 +49,7 @@ export class ViewAllBookingsComponent implements OnInit
 		this.bookingService.getBookings().subscribe(
 			response => {
 				this.bookings = response.bookings;
-				/* for (let booking of this.bookings) {
-					booking.dateOfAppointment = booking.dateOfAppointment.substring(0,10);
-					booking.dateOfBooking = booking.dateOfBooking.substring(0,10);
-					
-					var localTime = moment.utc(booking.startTime).local().format();
-					booking.startTime = localTime;
-				} */
+				
 			},
 			error => {
 				console.log('********** ViewAllBookingsComponent.ts: ' + error);
@@ -61,6 +57,19 @@ export class ViewAllBookingsComponent implements OnInit
 		);
 		
 		this.statuses = ['Approved', 'Completed', 'Cancelled']; 
+		
+		FilterUtils['custom'] = (value, filter): boolean => {
+            if (filter === undefined || filter === null || filter.trim() === '') {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+            
+            return parseInt(filter) > value;
+        }
+		
 	}
 	
 	showDialog(bookingToView: Booking)
