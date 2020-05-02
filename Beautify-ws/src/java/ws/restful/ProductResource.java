@@ -7,7 +7,10 @@ package ws.restful;
 
 import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
+import entity.Product;
 import entity.ServiceProvider;
+import entity.Tag;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
@@ -22,21 +25,25 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import util.exception.InvalidLoginCredentialException;
+import ws.datamodel.ErrorRsp;
+import ws.datamodel.RetrieveAllProductsRsp;
 
 @Path("Product")
 public class ProductResource {
 
     @Context
     private UriInfo context;
-    
+
     private final SessionBeanLookup sessionBeanLookup;
-    
+
     private final ProductSessionBeanLocal productSessionBean;
     private final ServiceProviderSessionBeanLocal serviceProviderSessionBean;
 
     public ProductResource() {
-         sessionBeanLookup = new SessionBeanLookup();
-         
+        sessionBeanLookup = new SessionBeanLookup();
+
         serviceProviderSessionBean = sessionBeanLookup.lookupServiceProviderSessionBeanLocal();
         productSessionBean = sessionBeanLookup.lookupProductSessionBeanLocal();
     }
@@ -45,10 +52,40 @@ public class ProductResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveAllProducts(@QueryParam("username") String username, 
-                                        @QueryParam("password") String password) {
-        ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(username, password);
-                    System.out.println("********** ProductResource.retrieveAllProducts(): Staff " + serviceProvider.getUsername() + " login remotely via web service");
+    public Response retrieveAllProducts(@QueryParam("username") String username,
+            @QueryParam("password") String password) {
+        try {
+            ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(username, password);
+            System.out.println("********** ProductResource.retrieveAllProducts(): Staff " + serviceProvider.getUsername() + " login remotely via web service");
+
+            List<Product> products = productSessionBean.retrieveAllProductsByServiceProvider(serviceProvider.getServiceProviderId());
+
+            for (Product product : products) {
+                if (product.getCategory().getParentCategoryEntity() != null) {
+                    product.getCategory().getParentCategoryEntity().getSubCategoryEntities().clear();
+                }
+
+                product.getCategory().getProducts().clear();
+                product.getCategory().getServices().clear();
+
+                for (Tag tag : product.getTags()) {
+                    tag.getProducts().clear();
+                    tag.getServices().clear();
+                }
+
+                product.getPromotions().clear();
+            }
+
+            return Response.status(Status.OK).entity(new RetrieveAllProductsRsp(products)).build();
+        } catch (InvalidLoginCredentialException ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+            return Response.status(Response.Status.UNAUTHORIZED).entity(errorRsp).build();
+        } catch (Exception ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+        }
     }
 
     /**
