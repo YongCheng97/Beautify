@@ -63,12 +63,16 @@
                                 <h:outputText value = "#{filterServicesByTagsManagedBean.category.name}"/>
                             </f:facet>
 
-                            <p:panel header="#{service.serviceName}" style="text-align:center">
-                                <h:panelGrid columns="1" style="width:100%">
+                            <p:panel header="#{service.serviceName}" style="text-align:center; min-height: 280px;">
+                                <p:panelGrid columns="1" style="width:100%; text-align:center">
                                     <h:outputText value= "$#{service.price}" style="text-align:center"/>
                                     <h:outputText value="#{service.description}" style="text-align:center"/>
-                                    <p:graphicImage library="images" name="Gel Manicure.jpg" height="120" width="150" alt ="" style="text-align:center"/>
-                                </h:panelGrid>
+                                    <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="150" alt ="" style="text-align:center"/>
+                                </p:panelGrid>
+                                <p:commandLink actionListener="#{filterServicesByTagsManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large">
+                                    <h:outputText value = "Click here for more information!"/>
+                                    <f:attribute name="serviceId" value="#{service.serviceId}" />
+                                </p:commandLink>
                             </p:panel>
 
                         </p:dataGrid>

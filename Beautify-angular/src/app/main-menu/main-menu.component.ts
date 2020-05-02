@@ -28,10 +28,10 @@ export class MainMenuComponent implements OnInit {
 				items: [
 					[
 						{
-							items: [{ label: 'Products' }]
+							items: [{ label: 'Products' , routerLink: ['/view-all-products']}]
 						},
 						{
-							items: [{ label: 'Services' }]
+							items: [{ label: 'Services' , routerLink: ['/view-all-services']}]
 						},
 					],
 				]

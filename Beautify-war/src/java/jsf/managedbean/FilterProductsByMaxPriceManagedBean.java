@@ -88,6 +88,13 @@ public class FilterProductsByMaxPriceManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/listingsOfAProductCategory.xhtml?categoryId=" + categoryId);
     }
 
+    public void viewProduct(ActionEvent event) throws IOException {
+        Long productIdToView = (Long) event.getComponent().getAttributes().get("productId");
+        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productIdToView", productIdToView);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/customerOperations/viewProductDetails.xhtml");
+    }
+
     /**
      * @return the categoryId
      */
