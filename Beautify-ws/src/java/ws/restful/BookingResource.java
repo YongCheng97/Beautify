@@ -86,6 +86,11 @@ public class BookingResource {
                 booking.getService().setCategory(null);
                 booking.getService().getTags().clear();
                 booking.getService().getPromotions().clear();
+                
+                booking.getCreditCard().getBookings().clear(); 
+                booking.getCreditCard().setCustomer(null);
+                booking.getCreditCard().setServiceProvider(null);
+                booking.getCreditCard().getPurchaseds().clear(); 
             }
                 
             return Response.status(Response.Status.OK).entity(new RetrieveAllBookingsRsp(bookings)).build();
@@ -137,6 +142,11 @@ public class BookingResource {
             booking.getService().setCategory(null);
             booking.getService().getTags().clear();
             booking.getService().getPromotions().clear();
+            
+            booking.getCreditCard().getBookings().clear(); 
+            booking.getCreditCard().setCustomer(null);
+            booking.getCreditCard().setServiceProvider(null);
+            booking.getCreditCard().getPurchaseds().clear(); 
             
             return Response.status(Response.Status.OK).entity(new RetrieveBookingRsp(booking)).build();
         }

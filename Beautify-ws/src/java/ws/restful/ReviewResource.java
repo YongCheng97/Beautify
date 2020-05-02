@@ -85,6 +85,7 @@ public class ReviewResource {
                     review.getBooking().getService().setServiceProvider(null);
                     review.getBooking().getService().getTags().clear();
                     review.getBooking().getService().getFavouritedCustomers().clear();
+                    review.getBooking().setCreditCard(null); 
                 }
 
                 if (review.getPurchasedLineItem() != null) {
@@ -147,6 +148,7 @@ public class ReviewResource {
                     review.getBooking().getService().setServiceProvider(null);
                     review.getBooking().getService().getTags().clear();
                     review.getBooking().getService().getFavouritedCustomers().clear();
+                    review.getBooking().setCreditCard(null); 
                 }
 
                 if (review.getPurchasedLineItem() != null) {

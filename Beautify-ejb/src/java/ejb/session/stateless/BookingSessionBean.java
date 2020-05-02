@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Booking;
+import entity.CreditCard;
 import entity.Customer;
 import entity.Review;
 import entity.SalesForUs;
@@ -27,6 +28,7 @@ import util.exception.CreateNewBookingException;
 import util.exception.CreateNewReviewException;
 import util.exception.CreateNewSalesForUsException;
 import util.exception.CreateNewSalesRecordException;
+import util.exception.CreditCardNotFoundException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.ServiceNotFoundException;
@@ -46,12 +48,15 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
     @EJB
     private ServiceSessionBeanLocal serviceSessionBeanLocal;
-    
+
     @EJB
     private SalesRecordSessionBeanLocal salesRecordSessionBeanLocal;
-    
+
     @EJB
     private SalesForUsSessionBeanLocal salesForUsSessionBeanLocal;
+
+    @EJB
+    private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
@@ -62,7 +67,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     }
 
     @Override
-    public Booking createNewBooking(Booking newBooking, Long customerId, Long serviceId) throws BookingExistException, UnknownPersistenceException, InputDataValidationException, CreateNewBookingException, CustomerNotFoundException {
+    public Booking createNewBooking(Booking newBooking, Long customerId, Long serviceId, Long creditCardId) throws BookingExistException, UnknownPersistenceException, InputDataValidationException, CreateNewBookingException, CustomerNotFoundException {
         Set<ConstraintViolation<Booking>> constraintViolations = validator.validate(newBooking);
 
         if (constraintViolations.isEmpty()) {
@@ -84,6 +89,11 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 newBooking.setService(service);
                 service.getBookings().add(newBooking);
 
+                CreditCard creditcard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(creditCardId);
+                
+                newBooking.setCreditCard(creditcard);
+                creditcard.getBookings().add(newBooking);   
+                
                 em.persist(newBooking);
                 em.flush();
 
@@ -98,7 +108,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException | ServiceNotFoundException ex) {
+            } catch (CustomerNotFoundException | ServiceNotFoundException | CreditCardNotFoundException ex) {
                 throw new CreateNewBookingException("An error has occured while creating the new review: " + ex.getMessage());
             }
         } else {
@@ -141,7 +151,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
         return bookings;
     }
-    
+
     @Override
     public List<Booking> retrieveAllBookingsByServiceProviderId(Long serviceProviderId) {
         Query query = em.createQuery("SELECT b FROM Booking b WHERE b.service.serviceProvider.serviceProviderId = :inServiceProviderId ORDER BY b.dateOfAppointment DESC, b.startTime ASC");
@@ -161,10 +171,10 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         }
         em.remove(bookingToDelete);
     }
-    
+
     @Override
     public void updateBookingStatus(Long bookingId, String status) throws BookingNotFoundException, UpdateBookingException, InputDataValidationException {
-        if (bookingId!= null) {
+        if (bookingId != null) {
             Booking booking = retrieveBookingByBookingId(bookingId);
             Set<ConstraintViolation<Booking>> constraintViolations = validator.validate(booking);
 
@@ -173,23 +183,23 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
                 if (bookingToUpdate.getCustomer().equals(bookingToUpdate.getCustomer())) {
                     bookingToUpdate.setStatus(status);
-                    
-                    if (status.equals("Completed")){
-                    BigDecimal salesRecordAmt = bookingToUpdate.getPrice().multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-                    BigDecimal salesForUsAmt = bookingToUpdate.getPrice().multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-                
-                    try {
-                        salesRecordSessionBeanLocal.createNewSalesRecordBooking(new SalesRecord(salesRecordAmt,new Date()), bookingToUpdate.getBookingId());
-                    } catch (CreateNewSalesRecordException ex) {
-                        System.err.println("An error has occured while creating the new sales record: " + ex.getMessage());
+
+                    if (status.equals("Completed")) {
+                        BigDecimal salesRecordAmt = bookingToUpdate.getPrice().multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                        BigDecimal salesForUsAmt = bookingToUpdate.getPrice().multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+
+                        try {
+                            salesRecordSessionBeanLocal.createNewSalesRecordBooking(new SalesRecord(salesRecordAmt, new Date()), bookingToUpdate.getBookingId());
+                        } catch (CreateNewSalesRecordException ex) {
+                            System.err.println("An error has occured while creating the new sales record: " + ex.getMessage());
+                        }
+
+                        try {
+                            salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(salesForUsAmt, new Date()), bookingToUpdate.getBookingId());
+                        } catch (CreateNewSalesForUsException ex) {
+                            System.err.println("An error has occured while creating the new sales for us: " + ex.getMessage());
+                        }
                     }
-                    
-                    try {
-                        salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(salesForUsAmt,new Date()), bookingToUpdate.getBookingId());
-                    } catch (CreateNewSalesForUsException ex) {
-                        System.err.println("An error has occured while creating the new sales for us: " + ex.getMessage());
-                    }
-                }
                 } else {
                     throw new UpdateBookingException("Customer of booking record to be updated does not match the existing record");
                 }
