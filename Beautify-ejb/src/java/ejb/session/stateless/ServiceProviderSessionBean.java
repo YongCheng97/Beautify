@@ -112,9 +112,21 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
     }
 
     @Override
+    public ServiceProvider retrieveServiceProviderByUsername(String username) throws ServiceProviderNotFoundException {
+        Query query = em.createQuery("SELECT s FROM ServiceProvider s WHERE s.username = :inUsername");
+        query.setParameter("inUsername", username);
+
+        try {
+            return (ServiceProvider) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new ServiceProviderNotFoundException("Service Provider username " + username + " does not exist!");
+        }
+    }
+
+    @Override
     public ServiceProvider serviceProviderLogin(String username, String password) throws InvalidLoginCredentialException {
         try {
-            ServiceProvider serviceProvider = retrieveServiceProviderByName(username);
+            ServiceProvider serviceProvider = retrieveServiceProviderByUsername(username);
             String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + serviceProvider.getSalt()));
 
             if (serviceProvider.getPassword().equals(passwordHash)) {
@@ -138,7 +150,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
             if (constraintViolations.isEmpty()) {
                 ServiceProvider serviceProviderToUpdate = retrieveServiceProviderById(serviceProvider.getServiceProviderId());
 
-                if (serviceProviderToUpdate.getName().equals(serviceProvider.getName())) {
+                if (serviceProviderToUpdate.getUsername().equals(serviceProvider.getUsername())) {
                     serviceProviderToUpdate.setName(serviceProvider.getName());
                     serviceProviderToUpdate.setEmail(serviceProvider.getEmail());
                     serviceProviderToUpdate.setAddress(serviceProvider.getAddress());

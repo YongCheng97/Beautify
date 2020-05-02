@@ -33,8 +33,10 @@ public interface ServiceProviderSessionBeanLocal {
 
     public List<ServiceProvider> searchServiceProviderByName(String searchString);
 
-    public List<ServiceProvider> filterServiceProviderByTags(List<Long> tagIds, String condition); 
+    public List<ServiceProvider> filterServiceProviderByTags(List<Long> tagIds, String condition);
 
     public ServiceProvider retrieveServiceProviderByEmail(String email) throws ServiceProviderNotFoundException;
-    
+
+    public ServiceProvider retrieveServiceProviderByUsername(String username) throws ServiceProviderNotFoundException;
+
 }
