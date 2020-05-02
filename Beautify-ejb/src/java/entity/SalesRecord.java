@@ -41,10 +41,6 @@ public class SalesRecord implements Serializable {
     @JoinColumn(nullable = false)
     private Booking booking;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
-    private Product product;
-    
     @OneToOne(optional = true)
     @JoinColumn(nullable = true)
     private PurchasedLineItem purchasedLineItem;
@@ -133,20 +129,6 @@ public class SalesRecord implements Serializable {
      */
     public void setBooking(Booking booking) {
         this.booking = booking;
-    }
-
-    /**
-     * @return the product
-     */
-    public Product getProduct() {
-        return product;
-    }
-
-    /**
-     * @param product the product to set
-     */
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public PurchasedLineItem getPurchasedLineItem() {

@@ -2,10 +2,17 @@ package ejb.session.stateless;
 
 import entity.Product;
 import entity.PurchasedLineItem;
+import entity.SalesForUs;
+import entity.SalesRecord;
 import entity.ServiceProvider;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,7 +23,10 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.exception.BookingNotFoundException;
 import util.exception.CreateNewPurchasedLineItemException;
+import util.exception.CreateNewSalesForUsException;
+import util.exception.CreateNewSalesRecordException;
 import util.exception.InputDataValidationException;
 import util.exception.ProductNotFoundException;
 import util.exception.PurchasedLineItemExistException;
@@ -32,6 +42,12 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
     
     @EJB
     private ProductSessionBeanLocal productSessionBeanLocal;
+    
+    @EJB
+    private SalesRecordSessionBeanLocal salesRecordSessionBeanLocal;
+    
+    @EJB
+    private SalesForUsSessionBeanLocal salesForUsSessionBeanLocal;
     
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
@@ -120,6 +136,22 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
 
                 purchasedLineItemToUpdate.setQuantity(purchasedLineItem.getQuantity());
                 purchasedLineItemToUpdate.setStatus(purchasedLineItem.getStatus());
+                if (purchasedLineItem.getStatus().equals("Product Received")){
+                    BigDecimal salesRecordAmt = purchasedLineItemToUpdate.getPrice().multiply(new BigDecimal(0.95));
+                    BigDecimal salesForUsAmt = purchasedLineItemToUpdate.getPrice().multiply(new BigDecimal(0.05));
+                
+                    try {
+                        salesRecordSessionBeanLocal.createNewSalesRecord(new SalesRecord(salesRecordAmt,new Date()), null, purchasedLineItem.getPurchasedLineItemId());
+                    } catch (CreateNewSalesRecordException ex) {
+                        System.err.println("An error has occured while creating the new sales record: " + ex.getMessage());
+                    }
+                    
+                    try {
+                        salesForUsSessionBeanLocal.createNewSalesForUs(new SalesForUs(salesForUsAmt,new Date()), null, purchasedLineItem.getPurchasedLineItemId());
+                    } catch (CreateNewSalesForUsException ex) {
+                        System.err.println("An error has occured while creating the new sales for us: " + ex.getMessage());
+                    }
+                }
                 purchasedLineItemToUpdate.setPrice(purchasedLineItem.getPrice());
                 
                 return purchasedLineItemToUpdate;

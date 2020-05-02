@@ -1,7 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Booking;
-import entity.Product;
+import entity.PurchasedLineItem;
 import entity.SalesRecord;
 import java.util.List;
 import javax.ejb.EJB;
@@ -15,7 +15,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.BookingNotFoundException;
 import util.exception.CreateNewSalesRecordException;
-import util.exception.ProductNotFoundException;
+import util.exception.PurchasedLineItemNotFoundException;
 import util.exception.SalesRecordNotFoundException;
 
 @Stateless
@@ -24,7 +24,7 @@ import util.exception.SalesRecordNotFoundException;
 public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
 
     @EJB
-    private ProductSessionBeanLocal productSessionBeanLocal;
+    private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
 
     @EJB
     private BookingSessionBeanLocal bookingSessionBeanLocal;
@@ -41,7 +41,7 @@ public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
     }
     
     @Override
-    public SalesRecord createNewSalesRecord(SalesRecord newSalesRecord, Long bookingId, Long productId) throws CreateNewSalesRecordException
+    public SalesRecord createNewSalesRecord(SalesRecord newSalesRecord, Long bookingId, Long purchasedLineItemId) throws CreateNewSalesRecordException
     {
         if(newSalesRecord != null)
         {
@@ -53,19 +53,19 @@ public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
               Booking booking = bookingSessionBeanLocal.retrieveBookingByBookingId(bookingId);
               newSalesRecord.setBooking(booking);
               
-              if (productId == null) {
-                  throw new CreateNewSalesRecordException("A new sales record must be associated with a product");                  
+              if (purchasedLineItemId == null) {
+                  throw new CreateNewSalesRecordException("A new sales record must be associated with a purchased item");                  
               }
               
-              Product product = productSessionBeanLocal.retrieveProductByProdId(productId);
-              newSalesRecord.setProduct(product);
+              PurchasedLineItem purchasedLineItem = purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchasedLineItemId);
+              newSalesRecord.setPurchasedLineItem(purchasedLineItem);
               
               em.persist(newSalesRecord);
               em.flush();
               
               return newSalesRecord;
            }
-           catch (ProductNotFoundException | BookingNotFoundException ex) {
+           catch (PurchasedLineItemNotFoundException | BookingNotFoundException ex) {
                 throw new CreateNewSalesRecordException(ex.getMessage());
            }
         }
@@ -83,7 +83,7 @@ public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
        
        for (SalesRecord salesRecord : salesRecords) {
             salesRecord.getBooking();
-            salesRecord.getProduct();
+            salesRecord.getPurchasedLineItem();
         }
        
        return salesRecords;
@@ -98,7 +98,7 @@ public class SalesRecordSessionBean implements SalesRecordSessionBeanLocal {
         if(salesRecord != null)
         {
             salesRecord.getBooking();
-            salesRecord.getProduct();
+            salesRecord.getPurchasedLineItem();
             
             return salesRecord;
         }

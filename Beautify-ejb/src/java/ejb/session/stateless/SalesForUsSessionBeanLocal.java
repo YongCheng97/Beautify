@@ -18,7 +18,7 @@ import util.exception.SalesForUsNotFoundException;
 @Local
 public interface SalesForUsSessionBeanLocal {
 
-    public SalesForUs createNewSalesForUs(SalesForUs newSalesForUs, Long bookingId, Long serviceProviderId) throws CreateNewSalesForUsException;
+    public SalesForUs createNewSalesForUs(SalesForUs newSalesForUs, Long bookingId, Long purchasedLineItemId) throws CreateNewSalesForUsException;
 
     public List<SalesForUs> retrieveAllSalesForUs();
 
