@@ -26,7 +26,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import util.exception.CreateNewProductException;
 import util.exception.InvalidLoginCredentialException;
+import ws.datamodel.CreateProductReq;
+import ws.datamodel.CreateProductRsp;
 import ws.datamodel.ErrorRsp;
 import ws.datamodel.RetrieveAllProductsRsp;
 
@@ -74,6 +77,10 @@ public class ProductResource {
                 }
 
                 product.getPromotions().clear();
+                product.getFavouritedCustomers().clear();
+                product.getServiceProvider().getCreditCards().clear();
+                product.getServiceProvider().getProducts().clear();
+                product.getServiceProvider().getServices().clear();
             }
 
             return Response.status(Status.OK).entity(new RetrieveAllProductsRsp(products)).build();
@@ -88,14 +95,37 @@ public class ProductResource {
         }
     }
 
-    /**
-     * PUT method for updating or creating an instance of ProductResource
-     *
-     * @param content representation for the resource
-     */
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void putXml(String content) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createProduct(CreateProductReq createProductReq) {
+        if (createProductReq != null) {
+            try {
+                ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(createProductReq.getUsername(), createProductReq.getPassword());
+                System.out.println("********** ProductResource.createProduct(): Staff " + serviceProvider.getUsername() + " login remotely via web service");
+
+                Product product = productSessionBean.createNewProduct(createProductReq.getProduct(), createProductReq.getCategoryId(), serviceProvider.getServiceProviderId(),createProductReq.getTagIds());
+                CreateProductRsp createProductRsp = new CreateProductRsp(product.getProductId());
+
+                return Response.status(Response.Status.OK).entity(createProductRsp).build();
+            } catch (InvalidLoginCredentialException ex) {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+                return Response.status(Status.UNAUTHORIZED).entity(errorRsp).build();
+            } catch (CreateNewProductException ex) {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+                return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
+            } catch (Exception ex) {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+            }
+        } else {
+            ErrorRsp errorRsp = new ErrorRsp("Invalid create new product request");
+
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
+        }
     }
 
 }

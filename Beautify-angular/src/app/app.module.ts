@@ -13,7 +13,10 @@ import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { MegaMenuModule } from 'primeng/megamenu';
-import { CarouselModule } from 'primeng/carousel';
+import { DataViewModule } from 'primeng/dataview';
+import {PanelModule} from 'primeng/panel';
+import {InputTextModule} from 'primeng/inputtext';
+import {MultiSelectModule} from 'primeng/multiselect';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
@@ -60,7 +63,10 @@ import { ViewAllProductsComponent } from './view-all-products/view-all-products.
     MatFormFieldModule,
     DropdownModule,
     MegaMenuModule,
-    CarouselModule,
+    DataViewModule,
+    PanelModule,
+    InputTextModule,
+    MultiSelectModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

@@ -4,32 +4,112 @@
 
 <section id="content" class="content">
 
-    <p-carousel [value]="products" [numVisible]="4" [numScroll]="3" [circular]="false"
-        [responsiveOptions]="responsiveOptions">
+    <p-dataView #dv [value]="products" [paginator]="true" [rows]="20" paginatorPosition="both" filterBy="name">
         <p-header>
-            <h3>View All Products</h3>
-        </p-header>
-        <ng-template let-product pTemplate="item">
-            <div class="product-details">
-                <div class="p-grid p-nogutter">
-                    <!-- <div class="p-col-12">
-                    <img src="assets/showcase/images/demo/car/{{car.brand}}.png" />
-                </div> -->
-                    <div class="p-col-12 car-data">
-                        <div class="product-title">{{product.name}}</div>
-                        <div class="product-subtitle">${{product.price}} | Quantity:{{product.quantityOnHand}}</div>
-                        <div class="product-description">{{product.description}}</div>
-
-                        <div class="car-buttons">
-                            <button pButton type="button" class="ui-button-secondary" icon="pi pi-search"></button>
-                            <button pButton type="button" class="ui-button-secondary" icon="pi pi-star"></button>
-                            <button pButton type="button" class="ui-button-secondary" icon="pi pi-cog"></button>
+            <div class="ui-helper-clearfix">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <p-button label="Create New Product" icon="pi pi-plus" (onClick)="showDialog()"></p-button>
+                    </div>
+                    <div class="p-col-6 p-md-4 filter-container">
+                        <div style="position:relative">
+                            <input pInputText type="search" pInputText placeholder="Search by Name"
+                                (input)="dv.filter($event.target.value)" style="font: large;">
                         </div>
+                    </div>
+                    <div class="p-col-6 p-md-4" style="text-align:right">
+                        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
                     </div>
                 </div>
             </div>
+        </p-header>
+        <ng-template let-product pTemplate="listItem">
+            <div class="p-col-12">
+                <div class="product-details">
+                    <div>
+                        <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png"> -->
+                        <div class="ui-g">
+                            <div class="p-col-12">Name: <b>{{product.name}}</b></div>
+                            <div class="p-col-12">Price: <b>${{product.price}}</b></div>
+                            <div class="p-col-12">Quantity: <b>{{product.quantityOnHand}}</b></div>
+                        </div>
+                    </div>
+                    <button pButton type="button" icon="pi pi-search"></button>
+                </div>
+            </div>
         </ng-template>
-    </p-carousel>
+        <ng-template let-product pTemplate="gridItem">
+            <div style="padding:.5em" class="p-col-12 p-md-3">
+                <p-panel class="panel" [header]="product.name" [style]="{'text-align':'center'}">
+                    <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" width="60"> -->
+                    <div class="product-detail">${{product.price}}</div>
+                    <div class="product-detail">Quantity: {{product.quantityOnHand}}</div>
+                    <button pButton type="button" icon="pi pi-search" style="margin-top:0"></button>
+                </p-panel>
+            </div>
+        </ng-template>
+    </p-dataView>
+
+    <p-dialog *ngIf="displayAdd" header="Create New Product" modal="true" [(visible)]="displayAdd"
+        [style]="{width: '50vw'}">
+        <form (ngSubmit)="create(addProductForm)">
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Product SkuCode</div>
+                <div class="ui-g-6">
+                    <input id="skuCode" name="skuCode" #name="ngModel" type="text" [(ngModel)]="newProduct.skuCode"
+                        required="true" />
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Product Name</div>
+                <div class="ui-g-6">
+                    <input id="name" name="name" #name="ngModel" type="text" [(ngModel)]="newProduct.name"
+                        required="true" />
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Product Price</div>
+                <div class="ui-g-6">
+                    <input id="price" name="price" #name="ngModel" type="text" [(ngModel)]="newProduct.price"
+                        required="true" />
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Product Description</div>
+                <div class="ui-g-6">
+                    <input id="description" name="description" #name="ngModel" type="text"
+                        [(ngModel)]="newProduct.description" required="true" />
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Product Quantity</div>
+                <div class="ui-g-6">
+                    <input id="quantity" name="quantity" #name="ngModel" type="text"
+                        [(ngModel)]="newProduct.quantityOnHand" required="true" />
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Product Category</div>
+                <div class="ui-g-6">
+                    <p-dropdown [options]="categories" name="selectedCategory" #name="ngModel" [(ngModel)]="selectedCategory"></p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Product Tags</div>
+                <div class="ui-g-6">
+                    <p-multiSelect [options]="tags" name="tagIds" #name="ngModel" [(ngModel)]="tagIds"></p-multiSelect>
+                </div>
+            </div>
+            <br />
+            <div class="ui-g" style="float:right">
+                <button (click)="clear()">Clear</button>
+                &nbsp;
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </p-dialog>
 </section>
+
+
 
 <app-footer></app-footer>

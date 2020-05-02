@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Category;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Local;
@@ -13,6 +14,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.enumeration.CategoryTypeEnum;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateNewCategoryException;
 import util.exception.DeleteCategoryException;
@@ -110,17 +112,51 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
 
         return leafCategoryEntities;
     }
-    
+
+    @Override
+    public List<Category> retrieveAllProductCategories() {
+        Query query = em.createQuery("SELECT c FROM Category c WHERE c.subCategoryEntities IS EMPTY ORDER BY c.name ASC");
+        List<Category> leafCategoryEntities = query.getResultList();
+        List<Category> productCategories = new ArrayList<>();
+        for (Category category : leafCategoryEntities) {
+            if (category.getType() == CategoryTypeEnum.PRODUCT) {
+                productCategories.add(category);
+            }
+        }
+        for (Category leafCategoryEntity : productCategories) {
+            leafCategoryEntity.getProducts().size();
+        }
+
+        return productCategories;
+    }
+
+    @Override
+    public List<Category> retrieveAllServiceCategories() {
+        Query query = em.createQuery("SELECT c FROM Category c WHERE c.subCategoryEntities IS EMPTY ORDER BY c.name ASC");
+        List<Category> leafCategoryEntities = query.getResultList();
+        List<Category> productCategories = new ArrayList<>();
+        for (Category category : leafCategoryEntities) {
+            if (category.getType() == CategoryTypeEnum.SERVICE) {
+                productCategories.add(category);
+            }
+        }
+        for (Category leafCategoryEntity : productCategories) {
+            leafCategoryEntity.getProducts().size();
+        }
+
+        return productCategories;
+    }
+
     @Override
     public List<Category> retrieveLeafCategory(Long rootCategoryId) {
         Query query = em.createQuery("SELECT c FROM Category c WHERE c.parentCategoryEntity.categoryId = :inRootCategoryId ORDER BY c.name ASC");
         query.setParameter("inRootCategoryId", rootCategoryId);
         List<Category> leafCategories = query.getResultList();
-        
+
         for (Category leafCategory : leafCategories) {
             leafCategory.getProducts().size();
         }
-        
+
         return leafCategories;
     }
 
@@ -139,7 +175,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
     @Override
     public Category retrieveCategoryByCategoryId(Long categoryId) throws CategoryNotFoundException {
         Category categoryEntity = em.find(Category.class, categoryId);
-        
+
         categoryEntity.getProducts().size();
 
         if (categoryEntity != null) {

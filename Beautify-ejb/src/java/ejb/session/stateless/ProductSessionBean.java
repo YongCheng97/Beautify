@@ -127,7 +127,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<Product> retrieveAllProductsByServiceProvider(Long serviceProviderId) {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.serviceProvider.serviceProviderId = :serviceProviderId BY p.skuCode ASC");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.serviceProvider.serviceProviderId = :serviceProviderId ORDER BY p.skuCode ASC");
         query.setParameter("serviceProviderId", serviceProviderId);
         List<Product> products = query.getResultList();
 
