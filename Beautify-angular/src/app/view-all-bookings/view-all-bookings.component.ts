@@ -7,6 +7,8 @@ import * as moment from 'moment';
 import { SessionService } from '../session.service';
 import { BookingService } from '../booking.service';
 import { Booking } from '../booking';
+import { FilterUtils } from 'primeng/utils';
+
 
 @Component({
   selector: 'app-view-all-bookings',
@@ -55,6 +57,18 @@ export class ViewAllBookingsComponent implements OnInit
 		);
 		
 		this.statuses = ['Approved', 'Completed', 'Cancelled']; 
+		
+		FilterUtils['custom'] = (value, filter): boolean => {
+            if (filter === undefined || filter === null || filter.trim() === '') {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+            
+            return parseInt(filter) > value;
+        }
 		
 	}
 	

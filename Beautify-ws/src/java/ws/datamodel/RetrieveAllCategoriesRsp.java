@@ -3,32 +3,22 @@ package ws.datamodel;
 import entity.Category;
 import java.util.List;
 
+public class RetrieveAllCategoriesRsp {
 
-
-public class RetrieveAllCategoriesRsp
-{
     private List<Category> categories;
 
-    
-    
-    public RetrieveAllCategoriesRsp()
-    {
+    public RetrieveAllCategoriesRsp() {
     }
-    
-    
-    
-    public RetrieveAllCategoriesRsp(List<Category> categories)
-    {
+
+    public RetrieveAllCategoriesRsp(List<Category> categories) {
         this.categories = categories;
     }
 
-    
-    
-    public List<Category> getCategoryEntities() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategoryEntities(List<Category> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 }
