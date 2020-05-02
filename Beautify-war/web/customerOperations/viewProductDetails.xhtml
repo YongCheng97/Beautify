@@ -37,7 +37,7 @@
                                 <h:outputLabel value="Product Name:" style="font-weight: bolder"/>
                                 <h:outputText value="#{viewProductDetailsManagedBean.productToView.name}"/>
 
-                                <h:outputLabel value="Product Desription:" style="font-weight: bolder"/>
+                                <h:outputLabel value="Product Description:" style="font-weight: bolder"/>
                                 <h:outputText value="#{viewProductDetailsManagedBean.productToView.description}"/>
 
                                 <h:outputLabel value="Product Price:" style="font-weight: bolder"/>
@@ -54,11 +54,9 @@
                             </h:panelGrid>
                             <br/>
                             <h:panelGrid columns="3" >
-                                <h:form>
                                     <p:outputLabel for="amountToAdd" value="Amount to add to cart:  " style="font-weight: bolder"/>
                                     <p:spinner id="amountToAdd" min="0" value="#{viewProductDetailsManagedBean.shoppingCartManagedBean.amountToCart}" />
                                     <p:commandButton value="Add to Shopping Cart" actionListener="#{viewProductDetailsManagedBean.shoppingCartManagedBean.addToCart(viewProductDetailsManagedBean.productToView)}" update="menubar:cartForm"/>
-                                </h:form>
                             </h:panelGrid>
 
                             <br></br>
