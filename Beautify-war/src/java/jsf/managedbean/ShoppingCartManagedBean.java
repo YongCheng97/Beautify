@@ -176,7 +176,7 @@ public class ShoppingCartManagedBean implements Serializable {
 
     }
 
-    public void createNewOrder(ActionEvent event) {
+     public void createNewOrder(ActionEvent event) {
 
         FacesContext context = FacesContext.getCurrentInstance();
 

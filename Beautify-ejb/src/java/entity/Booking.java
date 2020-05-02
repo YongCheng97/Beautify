@@ -31,8 +31,7 @@ public class Booking implements Serializable {
     @NotNull
     @Size(max = 128)
     private String status;
-    @Column(nullable = false, length = 128)
-    @NotNull
+    @Column(nullable = true, length = 128)
     @Size(max = 128)
     private String remarks;
     @Temporal(TemporalType.TIMESTAMP)
