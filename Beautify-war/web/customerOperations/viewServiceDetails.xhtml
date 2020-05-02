@@ -142,15 +142,30 @@
                             </p:selectOneMenu>
 
                         </h:panelGrid>
-                        <p:commandButton value="Book" actionListener="#{serviceBookingManagedBean.createNewBooking}" oncomplete="PF('dialogBooked').show()" icon="fa fa-calendar"/>
+                        <p:commandButton value="Book" action="#{serviceBookingManagedBean.createNewBooking()}" oncomplete="PF('dialogBooked').show()" update=":formBooking:dialogBooked" icon="fa fa-calendar"/>
                     </p:panel>
                 </p:dialog>
 
 
+<<<<<<< Updated upstream
                 <p:dialog id="dialogBooked" widgetVar="dialogBooked" fitViewport="true" header="Service Booking Confirmation" closable="true" closeOnEscape="true"> 
                         <h2> Your booking has been confirmed! </h2>
                         <p> $#{serviceBookingManagedBean.finalAmount} has been charged to your account.</p>
                         <p:commandButton value="Close" actionListener="#{serviceBookingManagedBean.bookingComplete}"/>&nbsp;
+=======
+
+                <p:dialog id="dialogBooked" widgetVar="dialogBooked" fitViewport="true" header="Service Booking message" closable="true" closeOnEscape="true"> 
+                    <p:panel style="text-align: center" rendered="#{serviceBookingManagedBean.finishBooking == true}">
+                        <h2> Your booking has been confirmed! </h2>
+                        <p> $#{serviceBookingManagedBean.finalAmount} has been charged to your account.</p>
+                        <p:commandButton value="Close" actionListener="#{serviceBookingManagedBean.bookingComplete}"/>&nbsp;
+                    </p:panel>
+
+                    <p:panel style="text-align: center" rendered="#{serviceBookingManagedBean.finishBooking == false}">
+                        <h2> #{serviceBookingManagedBean.msg} </h2>
+                        <p:commandButton value="Close" oncomplete="PF('dialogBooked').hide()" />&nbsp;
+                    </p:panel>
+>>>>>>> Stashed changes
                 </p:dialog>
 
             </h:form>
