@@ -9,14 +9,25 @@
 			
 	<p-panel header="All Sales Record (Products)">
 	
-		<p-table [value]="salesRecords">
+		<p-table #dt [value]="salesRecords">
 			<ng-template pTemplate="header">
 				<tr>
-					<th>Sales Record ID</th>
-					<th>Order Item ID</th>
-					<th>Date Of Payment</th>
-					<th>Amount Earned</th>
-					<th>View Order Item Details</th>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+						{{col.header}}
+						<p-sortIcon *ngSwitchCase="'salesRecordId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'purchasedLineItem.purchasedLineItemId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'amount'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'dateOfPayment'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+
+					</th>
+				</tr>
+				
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field">
+						<input placeHolder="Search" *ngSwitchCase="'salesRecordId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'purchasedLineItem.purchasedLineItemId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'amount'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">					
+					</th>
 				</tr>
 			</ng-template>
 			<ng-template pTemplate="body" let-salesRecord>

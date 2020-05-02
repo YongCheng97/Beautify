@@ -8,24 +8,31 @@
 			
 	<p-panel header="View All Bookings">
 	
-		<p-table [value]="bookings">
-			<ng-template pTemplate="caption">
-				<div style="text-align: right">        
-					<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-					<input type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-				</div>
-			</ng-template>
-			<ng-template pTemplate="header">
+		<p-table #dt [value]="bookings" [paginator]="true" [rows]="10">
+			
+			<ng-template pTemplate="header" let-col>
 				<tr>
-					<th>Booking ID</th>
-					<th>Service</th>
-					<th>Customer Name</th>
-					<th>Date Of Appointment</th>
-					<th>Start Time</th>
-					<th>End Time</th>
-					<th>Status</th>
-					<th>View Details</th>
-					<th>Update Status</th>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+						{{col.header}}
+						<p-sortIcon *ngSwitchCase="'bookingId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'startTime'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'endTime'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'dateOfAppointment'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'service.serviceName'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'customer.firstName'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'status'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						
+					</th>
+				</tr>
+				
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field">
+						<input placeHolder="Search" *ngSwitchCase="'bookingId'" pInputText size="5" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'service.serviceName'" pInputText size="5" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'customer.firstName'" pInputText size="5" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'status'" pInputText size="5" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+
+					</th>
 				</tr>
 			</ng-template>
 			<ng-template pTemplate="body" let-booking>

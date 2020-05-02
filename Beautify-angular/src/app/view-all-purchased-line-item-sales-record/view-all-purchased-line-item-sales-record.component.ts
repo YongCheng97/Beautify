@@ -19,6 +19,7 @@ import { SalesRecord } from '../sales-record';
 export class ViewAllPurchasedLineItemSalesRecordComponent implements OnInit
 {
 	salesRecords: SalesRecord[];
+	cols: any[];
 	display: boolean = false;
 	purchasedLineItemToView: PurchasedLineItem;
 	
@@ -46,6 +47,13 @@ export class ViewAllPurchasedLineItemSalesRecordComponent implements OnInit
 			}
 		);
 		
+		this.cols = [
+            { field: 'salesRecordId', header: 'Sales Record ID' },
+            { field: 'purchasedLineItem.purchasedLineItemId', header: 'Order Item ID' },
+            { field: 'dateOfPayment', header: 'Date Of Payment' },
+            { field: 'amount', header: 'Amount Earned' },
+			{ field: '', header: 'View Order Item Details' }
+        ];
 	}
 	
 	showDialog(purchasedLineItemToView: PurchasedLineItem)
