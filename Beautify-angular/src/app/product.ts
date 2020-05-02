@@ -1,5 +1,6 @@
-export class Product 
-{
+
+	export class Product 
+	{
     productId: number; 
     skuCode: string; 
     name: string;

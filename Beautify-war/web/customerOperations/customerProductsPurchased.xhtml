@@ -73,8 +73,11 @@
 
                                     <h:outputText value="Quantity:" style="font-weight: bold"/>
                                     <h:outputText value="#{purchasedLineItem.quantity}" />
+                                    
+                                    <h:outputText value="Product Price Per Unit:" style="font-weight: bold"/>
+                                    <h:outputText value="$#{purchasedLineItem.product.price}" />
 
-                                    <h:outputText value="Price Per Unit:" style="font-weight: bold"/>
+                                    <h:outputText value="Bought At (Per Unit):" style="font-weight: bold"/>
                                     <h:outputText value="$#{purchasedLineItem.price}" />
 
                                     <h:outputText value="Status:" style="font-weight: bold"/>

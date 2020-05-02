@@ -5,18 +5,22 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Customer;
 import entity.Product;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.ProductNotFoundException;
+import util.exception.ReviewNotFoundException;
 
 /**
  *
@@ -27,10 +31,16 @@ import util.exception.ProductNotFoundException;
 public class FavouritesManagedBean implements Serializable{
 
     private Customer currentCustomer;
+    
+    @EJB
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
 
     @Inject
     private CustomerManagementManagedBean customerManagementManagedBean;
-
+    
+    @Inject
+    private viewProductDetailsManagedBean viewProductDetailsManagedBean;
+            
     public FavouritesManagedBean() {
     }
 
@@ -42,34 +52,33 @@ public class FavouritesManagedBean implements Serializable{
     public void addFavouriteProduct(ActionEvent event) {
         try {
             Product productToFavourite = (Product) event.getComponent().getAttributes().get("productToFavourite");
-            currentCustomer.getFavouriteProducts().add(productToFavourite);
-            productToFavourite.getFavouritedCustomers().add(currentCustomer);
+            customerSessionBeanLocal.addFavouriteProduct(currentCustomer.getCustomerId(), productToFavourite.getProductId());
+            Customer cust = customerSessionBeanLocal.retrieveCustomerByCustId(currentCustomer.getCustomerId());
 
-            customerManagementManagedBean.setFavouriteProducts(currentCustomer.getFavouriteProducts());
+            customerManagementManagedBean.getFavouriteProducts().add(productToFavourite);
+            viewProductDetailsManagedBean.setProductFavourited(true);
+            
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product favourited successfully", null));
+        } catch (CustomerNotFoundException | ProductNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting review: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
 
-    public boolean isFavourited(ActionEvent event) {
-        Product productToFavourite = (Product) event.getComponent().getAttributes().get("productToFavourite");
-        for(Customer customer:productToFavourite.getFavouritedCustomers()) {
-            if (customer.getCustomerId() == currentCustomer.getCustomerId()){
-                return true;
-            }
-        }
-        return false;
-    }
     
     public void removeFavouriteProduct(ActionEvent event) {
         try {
             Product productToFavourite = (Product) event.getComponent().getAttributes().get("productToFavourite");
-            currentCustomer.getFavouriteProducts().remove(productToFavourite);
-            productToFavourite.getFavouritedCustomers().remove(currentCustomer);
+            customerSessionBeanLocal.removeFavouriteProduct(currentCustomer.getCustomerId(), productToFavourite.getProductId());
+            Customer cust = customerSessionBeanLocal.retrieveCustomerByCustId(currentCustomer.getCustomerId());
 
-            customerManagementManagedBean.setFavouriteProducts(currentCustomer.getFavouriteProducts());
+            customerManagementManagedBean.getFavouriteProducts().remove(productToFavourite);
+            viewProductDetailsManagedBean.setProductFavourited(false);
+            
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product unfavourited successfully", null));
+        } catch (CustomerNotFoundException | ProductNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting review: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
