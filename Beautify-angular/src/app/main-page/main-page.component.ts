@@ -44,9 +44,6 @@ export class MainPageComponent implements OnInit {
 
   ngOnInit() {
     this.serviceProvider = this.sessionService.getCurrentServiceProvider();
-    console.log("***** INIT" + this.serviceProvider.password);
-    console.log("***** INIT " + this.serviceProvider.name);
-    console.log("***** INIT " + this.serviceProvider.address);
 
     if (this.serviceProvider.isApproved) {
       this.approvalStatus = "Approved";
