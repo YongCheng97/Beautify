@@ -83,8 +83,11 @@ class SessionBeanLookup {
         try {
             javax.naming.Context c = new InitialContext();
             return (TagsSessionBeanLocal) c.lookup("java:global/Beautify/Beautify-ejb/TagsSessionBean!ejb.session.stateless.TagsSessionBeanLocal");
-    
-    
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
 
     public SalesRecordSessionBeanLocal lookupSalesRecordSessionBeanLocal() {
         try {
