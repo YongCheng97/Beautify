@@ -16,7 +16,9 @@ import { MegaMenuModule } from 'primeng/megamenu';
 import { DataViewModule } from 'primeng/dataview';
 import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
+import {ListboxModule} from 'primeng/listbox';
+import {SpinnerModule} from 'primeng/spinner';
+import {InputTextareaModule} from 'primeng/inputtextarea';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
@@ -70,7 +72,9 @@ import { ViewAllPurchasedLineItemSalesRecordComponent } from './view-all-purchas
     DataViewModule,
     PanelModule,
     InputTextModule,
-    MultiSelectModule,
+    ListboxModule,
+    SpinnerModule,
+    InputTextareaModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

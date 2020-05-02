@@ -31,5 +31,7 @@ public interface ServiceSessionBeanLocal {
     public List<Service> filterServicesByMinimumPrice(BigDecimal minPrice, Long categoryId);
 
     public List<Service> filterServicesByMaximumPrice(BigDecimal maxPrice, Long categoryId);
+
+    public List<Service> retrieveAllServicesByServiceProvider(Long serviceProviderId);
     
 }

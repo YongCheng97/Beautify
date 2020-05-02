@@ -17,8 +17,15 @@ export class CategoryService {
     private sessionService: SessionService) {
   }
 
-  getCategories(): Observable<any> {
+  getProductCategories(): Observable<any> {
     return this.httpClient.get<any>(this.baseUrl + "/retrieveAllProductCategories?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+      (
+        catchError(this.handleError)
+      );
+  }
+
+  getServiceCategories(): Observable<any> {
+    return this.httpClient.get<any>(this.baseUrl + "/retrieveAllServiceCategories?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
       (
         catchError(this.handleError)
       );

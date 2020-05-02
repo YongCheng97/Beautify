@@ -134,6 +134,30 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
     }
 
     @Override
+    public List<Service> retrieveAllServicesByServiceProvider(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT s FROM Service s ORDER BY s.price ASC");
+        List<Service> services = query.getResultList();
+        List<Service> newServices = new ArrayList<>();
+
+        for (Service service : services) {
+            if (service.getServiceProvider().getServiceProviderId() == serviceProviderId) {
+                newServices.add(service);
+            }
+        }
+
+        for (Service service : newServices) {
+            service.getBookings().size();
+            service.getPromotions().size();
+            service.getTags().size();
+
+            service.getCategory();
+            service.getServiceProvider();
+        }
+
+        return newServices;
+    }
+
+    @Override
     public List<Service> retrieveAllServicesFromCategory(Long categoryId) {
         Query query = em.createQuery("SELECT s FROM Service s WHERE s.category.categoryId = :categoryId ORDER BY s.price ASC");
         query.setParameter("categoryId", categoryId);
@@ -310,7 +334,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
                 Query query = em.createQuery(jpql);
                 services = query.getResultList();
             }
-            
+
             List<Service> newServices = new ArrayList<>();
 
             for (Service service : services) {

@@ -11,6 +11,7 @@ import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
 import ejb.session.stateless.SalesRecordSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
+import ejb.session.stateless.ServiceSessionBeanLocal;
 import ejb.session.stateless.TagsSessionBeanLocal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,6 +94,16 @@ class SessionBeanLookup {
         try {
             javax.naming.Context c = new InitialContext();
             return (SalesRecordSessionBeanLocal) c.lookup(ejbModuleJndiPath + "SalesRecordSessionBean!ejb.session.stateless.SalesRecordSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    public ServiceSessionBeanLocal lookupServiceSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (ServiceSessionBeanLocal) c.lookup(ejbModuleJndiPath + "ServiceSessionBean!ejb.session.stateless.ServiceSessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

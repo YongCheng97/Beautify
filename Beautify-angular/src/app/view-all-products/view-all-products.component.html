@@ -32,6 +32,7 @@
                             <div class="p-col-12">Name: <b>{{product.name}}</b></div>
                             <div class="p-col-12">Price: <b>${{product.price}}</b></div>
                             <div class="p-col-12">Quantity: <b>{{product.quantityOnHand}}</b></div>
+                            <div class="p-col-12">Category: <b>{{product.category.name}}</b></div>
                         </div>
                     </div>
                     <button pButton type="button" icon="pi pi-search"></button>
@@ -50,8 +51,8 @@
         </ng-template>
     </p-dataView>
 
-    <p-dialog *ngIf="displayAdd" header="Create New Product" modal="true" [(visible)]="displayAdd"
-        [style]="{width: '50vw'}">
+    <p-dialog *ngIf="displayAdd" header="Create New Product" modal="true" [(visible)]="displayAdd" height="200"
+        [style]="{width: '60vw'}">
         <form (ngSubmit)="create(addProductForm)">
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Product SkuCode</div>
@@ -70,34 +71,34 @@
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Product Price</div>
                 <div class="ui-g-6">
-                    <input id="price" name="price" #name="ngModel" type="text" [(ngModel)]="newProduct.price"
-                        required="true" />
+                    <p-spinner id="price" name="price" #name="ngModel" [(ngModel)]="newProduct.price"
+                        required="true" ></p-spinner>
                 </div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Product Description</div>
                 <div class="ui-g-6">
-                    <input id="description" name="description" #name="ngModel" type="text"
-                        [(ngModel)]="newProduct.description" required="true" />
+                    <textarea pInputTextarea id="description" name="description" #name="ngModel" type="text"
+                        [(ngModel)]="newProduct.description" required="true" autoResize="autoResize" rows="5" cols="30"></textarea>
                 </div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Product Quantity</div>
                 <div class="ui-g-6">
-                    <input id="quantity" name="quantity" #name="ngModel" type="text"
-                        [(ngModel)]="newProduct.quantityOnHand" required="true" />
+                    <p-spinner id="quantity" name="quantity" #name="ngModel"
+                        [(ngModel)]="newProduct.quantityOnHand" required="true"></p-spinner>
                 </div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Product Category</div>
                 <div class="ui-g-6">
-                    <p-dropdown [options]="categories" name="selectedCategory" #name="ngModel" [(ngModel)]="selectedCategory"></p-dropdown>
+                    <p-dropdown [options]="categories" optionLabel="name" editable="true" placeholder="Select a Category" name="selectedCategory" #name="ngModel" [(ngModel)]="selectedCategory"></p-dropdown>
                 </div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Product Tags</div>
                 <div class="ui-g-6">
-                    <p-multiSelect [options]="tags" name="tagIds" #name="ngModel" [(ngModel)]="tagIds"></p-multiSelect>
+                    <p-listbox [options]="tags" optionLabel="name" [multiple]="true" [checkbox]="true" name="tagIds" #name="ngModel" [(ngModel)]="selectedTags"></p-listbox>
                 </div>
             </div>
             <br />

@@ -76,4 +76,40 @@ public class CategoryResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
         }
     }
+
+    @Path("retrieveAllServiceCategories")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllServiceCategories(@QueryParam("username") String username,
+            @QueryParam("password") String password) {
+        try {
+            ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(username, password);
+            System.out.println("********** CategoryResource.retrieveAllCategories(): Staff " + serviceProvider.getUsername() + " login remotely via web service");
+
+            List<Category> categoryEntities = categorySessionBean.retrieveAllServiceCategories();
+
+            for (Category categoryEntity : categoryEntities) {
+                if (categoryEntity.getParentCategoryEntity() != null) {
+                    categoryEntity.getParentCategoryEntity().getSubCategoryEntities().clear();
+                }
+
+                categoryEntity.getSubCategoryEntities().clear();
+                categoryEntity.getParentCategoryEntity().getProducts().clear();
+                categoryEntity.getParentCategoryEntity().getServices().clear();
+                categoryEntity.getProducts().clear();
+                categoryEntity.getServices().clear();
+            }
+            System.out.println("Service Categories" + categoryEntities);
+            return Response.status(Response.Status.OK).entity(new RetrieveAllCategoriesRsp(categoryEntities)).build();
+        } catch (InvalidLoginCredentialException ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+            return Response.status(Response.Status.UNAUTHORIZED).entity(errorRsp).build();
+        } catch (Exception ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+        }
+    }
 }
