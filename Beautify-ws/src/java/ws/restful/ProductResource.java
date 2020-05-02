@@ -82,7 +82,9 @@ public class ProductResource {
                 product.getServiceProvider().getProducts().clear();
                 product.getServiceProvider().getServices().clear();
             }
-
+            
+            System.out.println("Products: " + products);
+            
             return Response.status(Status.OK).entity(new RetrieveAllProductsRsp(products)).build();
         } catch (InvalidLoginCredentialException ex) {
             ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());

@@ -28,6 +28,7 @@ export class ViewAllProductsComponent implements OnInit {
   selectedCategory: Category;
   tagIds: string[];
   categories: Category[];
+  categoryNames: string[];
   selectedTags: Tag[];
   tags: Tag[];
 
@@ -51,6 +52,16 @@ export class ViewAllProductsComponent implements OnInit {
 
   ngOnInit() {
     this.serviceProvider = this.sessionService.getCurrentServiceProvider();
+
+    this.categoryService.getProductCategories().subscribe(
+      response => {
+        this.categories = response.categories;
+      },
+      error => {
+        console.log('********** CreateNewProductComponent.ts: ' + error);
+      }
+    );
+
     this.productService.getProducts().subscribe(
       response => {
         this.products = response.products;
@@ -59,18 +70,6 @@ export class ViewAllProductsComponent implements OnInit {
         console.log('********** ViewAllProductsComponent.ts: ' + error);
       }
     );
-
-    this.categoryService.getCategories().subscribe(
-      response => {
-        this.categories = response.categories;
-        console.log(response.categories);
-      },
-      error => {
-        console.log('********** CreateNewProductComponent.ts: ' + error);
-      }
-    );
-
-    console.log(this.categories);
 
     this.tagService.getTags().subscribe(
       response => {
@@ -92,12 +91,13 @@ export class ViewAllProductsComponent implements OnInit {
   }
 
   create(addProductForm: NgForm) {
+
     this.categoryId = this.selectedCategory.categoryId;
 
     let longTagIds: number[] = new Array();
 
-    for (var i = 0; i < this.tagIds.length; i++) {
-      longTagIds.push(parseInt(this.tagIds[i]));
+    for (var i = 0; i < this.selectedTags.length; i++) {
+      longTagIds.push(this.selectedTags[i].tagId);
     }
 
     this.submitted = true;
@@ -119,6 +119,7 @@ export class ViewAllProductsComponent implements OnInit {
         }
       );
     // }
+    this.displayAdd = false;
   }
 }
 

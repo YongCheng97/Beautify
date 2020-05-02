@@ -5,20 +5,20 @@ import java.util.List;
 
 public class RetrieveAllTagsRsp {
 
-    private List<Tag> tagEntities;
+    private List<Tag> tags;
 
     public RetrieveAllTagsRsp() {
     }
 
-    public RetrieveAllTagsRsp(List<Tag> tagEntities) {
-        this.tagEntities = tagEntities;
+    public RetrieveAllTagsRsp(List<Tag> tags) {
+        this.tags= tags;
     }
 
-    public List<Tag> getTagEntities() {
-        return tagEntities;
+    public List<Tag> getTags() {
+        return tags;
     }
 
-    public void setTagEntities(List<Tag> tagEntities) {
-        this.tagEntities = tagEntities;
+    public void setTagEntities(List<Tag> tags) {
+        this.tags = tags;
     }
 }
