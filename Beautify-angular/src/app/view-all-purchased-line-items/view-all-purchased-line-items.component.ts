@@ -15,6 +15,7 @@ import { PurchasedLineItem } from '../purchased-line-item';
 export class ViewAllPurchasedLineItemsComponent implements OnInit {
 
 	purchasedLineItems: PurchasedLineItem[];
+	cols: any[];
 	display: boolean = false;
 	displayStatus: boolean = false;
 	purchasedLineItemToView: PurchasedLineItem;
@@ -47,6 +48,16 @@ export class ViewAllPurchasedLineItemsComponent implements OnInit {
 		);
 		
 		this.statuses = ['Order Confirmed', 'Shipped', 'Cancelled']; 
+		
+		this.cols = [
+            { field: 'purchasedLineItemId', header: 'Order Item ID' },
+            { field: 'purchased.customer.firstName', header: 'Customer Name' },
+            { field: 'product.name', header: 'Product' },
+			{ field: 'quantity', header: 'Quantity' },
+            { field: 'status', header: 'Status' },
+            { field: '', header: 'View Details' },
+			{ field: '', header: 'Update Status' }
+        ];
 	}
 	
 	showDialog(purchasedLineItemToView: PurchasedLineItem)
@@ -85,6 +96,8 @@ export class ViewAllPurchasedLineItemsComponent implements OnInit {
 				}
 			);
 		}
+		
+		this.displayStatus = false;
 	}
 	
 	parseDate(d: Date)
