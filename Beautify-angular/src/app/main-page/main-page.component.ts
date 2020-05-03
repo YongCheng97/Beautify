@@ -333,11 +333,12 @@ export class MainPageComponent implements OnInit {
     this.displayEditHours = false; 
   }
   
-  changePW(changePWForm: NgForm) {
+  changePassword(changePWForm: NgForm) {
 	  
 	  if (changePWForm.valid) {
-		   
-			if (this.currentPassword==this.serviceProviderToUpdate.password && this.newPassword==this.confirmPassword){
+		   console.log(this.currentPassword ,this.newPassword ,this.confirmPassword);
+			
+			if (this.currentPassword==this.sessionService.getPassword() && this.newPassword==this.confirmPassword){
 
 			  this.serviceProviderToUpdate.password = this.confirmPassword;
 
@@ -356,11 +357,13 @@ export class MainPageComponent implements OnInit {
 				  console.log('********** MainPageComponent.ts: ' + error);
 				}
 			  );
-			}
-			this.displayChangePW = false;   
+			  
+			this.displayChangePW = false;  			
 		  } else {
 			  this.message = "Password does not match";
+			  
 		  }
+	  }
   }
   
 

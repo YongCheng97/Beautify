@@ -313,7 +313,7 @@
             </p-dialog>
         </form>
 		
-		<form *ngIf="displayChangePW" #changePWForm="ngForm" (ngSubmit)="changePW(changePWForm)">
+		<form *ngIf="displayChangePW" #changePWForm="ngForm" (ngSubmit)="changePassword(changePWForm)">
             <p-dialog *ngIf="displayChangePW" header="Change Password" modal="true" [(visible)]="displayChangePW"
                 [style]="{width: '50vw'}">
                 
