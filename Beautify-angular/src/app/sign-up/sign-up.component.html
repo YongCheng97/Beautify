@@ -24,6 +24,7 @@
         <div *ngIf="resultError == true" style="text-align: center; color: red;">
             {{message}}
         </div>
+        <p-messages [(value)]="message"></p-messages>
         <br />
         <div class="row">
             <div class="col-md-4 mx-auto">
@@ -39,6 +40,18 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <input type="text" name="username" #username="ngModel" class="form-control my-input"
+                                id="username" placeholder="Username" [(ngModel)]="newServiceProvider.username"
+                                required="true">
+                            <div *ngIf="username.invalid && (username.dirty || username.touched || submitted)"
+                                class="errorText">
+                                <div *ngIf="username.errors.required" style="color: red;">
+                                    Username is required.
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
                             <input type="email" name="email" class="form-control my-input" id="email"
                                 placeholder="Email" #email="ngModel" [(ngModel)]="newServiceProvider.email"
                                 required="true" minlength="4">
@@ -48,17 +61,6 @@
                                 </div>
                                 <div *ngIf="email.errors.minlength" style="color: red;">
                                     Minimum length is 4
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="username" #name="ngModel" class="form-control my-input"
-                                id="username" placeholder="Username" [(ngModel)]="newServiceProvider.username"
-                                required="true">
-                            <div *ngIf="username.invalid && (username.dirty || username.touched || submitted)"
-                                class="errorText">
-                                <div *ngIf="username.errors.required" style="color: red;">
-                                    Username is required.
                                 </div>
                             </div>
                         </div>

@@ -22,6 +22,8 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import {RatingModule} from 'primeng/rating';
 import {FileUploadModule} from 'primeng/fileupload';
+import {MessageModule} from 'primeng/message';
+import {MessagesModule} from 'primeng/messages';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
@@ -83,6 +85,8 @@ import { ViewAllPromotionsComponent } from './view-all-promotions/view-all-promo
     MultiSelectModule,
     RatingModule, 
     FileUploadModule,
+    MessageModule,
+    MessagesModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
