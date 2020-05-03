@@ -84,6 +84,7 @@ public class CreditCardResource {
                     cc.getServiceProvider().getCreditCards().clear();
                     cc.getServiceProvider().getProducts().clear();
                     cc.getServiceProvider().getServices().clear();
+                    cc.getServiceProvider().getPromotions().clear(); 
                 }
 
                 for (Booking booking : cc.getBookings()) {

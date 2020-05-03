@@ -3,7 +3,9 @@ package ejb.session.stateless;
 import entity.Product;
 import entity.Promotion;
 import entity.Service;
+import entity.ServiceProvider;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -47,11 +49,59 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public Promotion createNewPromotion(Promotion newPromotion) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
+    public Promotion createNewServicePromotion(Promotion newPromotion, Long serviceProviderId, Long serviceId) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
         try {
             Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(newPromotion);
 
             if (constraintViolations.isEmpty()) {
+
+                ServiceProvider serviceProvider = em.find(ServiceProvider.class, serviceProviderId);
+
+                newPromotion.setServiceProvider(serviceProvider);
+                serviceProvider.getPromotions().add(newPromotion);
+
+                Service service = em.find(Service.class, serviceId);
+
+                newPromotion.setService(service);
+                service.getPromotions().add(newPromotion);
+
+                em.persist(newPromotion);
+                em.flush();
+
+                return newPromotion;
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    throw new PromotionNameExistException();
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } else {
+                throw new UnknownPersistenceException(ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public Promotion createNewProductPromotion(Promotion newPromotion, Long serviceProviderId, Long productId) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
+        try {
+            Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(newPromotion);
+
+            if (constraintViolations.isEmpty()) {
+
+                ServiceProvider serviceProvider = em.find(ServiceProvider.class, serviceProviderId);
+
+                newPromotion.setServiceProvider(serviceProvider);
+                serviceProvider.getPromotions().add(newPromotion);
+
+                Product product = em.find(Product.class, productId);
+
+                newPromotion.setProduct(product);
+                product.getPromotions().add(newPromotion);
+
                 em.persist(newPromotion);
                 em.flush();
 
@@ -75,6 +125,14 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     @Override
     public List<Promotion> retrieveAllPromotions() {
         Query query = em.createQuery("SELECT p FROM Promotion p");
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Promotion> retrievePromotionsByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT DISTINCT p FROM Promotion p WHERE p.serviceProvider.serviceProviderId = :inProviderId");
+        query.setParameter("inProviderId", serviceProviderId);
 
         return query.getResultList();
     }
@@ -116,6 +174,42 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
+    public List<Promotion> retrieveAllServicePromotionsByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT DISTINCT p FROM Promotion p WHERE p.serviceProvider.serviceProviderId = :inProviderId");
+        query.setParameter("inProviderId", serviceProviderId);
+
+        List<Promotion> promotions = query.getResultList();
+
+        List<Promotion> servicePromotions = new ArrayList<>();
+
+        for (Promotion p : promotions) {
+            if (p.getProduct() == null) {
+                servicePromotions.add(p);
+            }
+        }
+
+        return servicePromotions;
+    }
+
+    @Override
+    public List<Promotion> retrieveAllProductPromotionsByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT DISTINCT p FROM Promotion p WHERE p.serviceProvider.serviceProviderId = :inProviderId");
+        query.setParameter("inProviderId", serviceProviderId);
+
+        List<Promotion> promotions = query.getResultList();
+
+        List<Promotion> productPromotions = new ArrayList<>();
+
+        for (Promotion p : promotions) {
+            if (p.getService() == null) {
+                productPromotions.add(p);
+            }
+        }
+
+        return productPromotions;
+    }
+
+    @Override
     public void updatePromotion(Promotion promotion) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException {
         if (promotion != null && promotion.getPromotionId() != null) {
             Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(promotion);
@@ -144,57 +238,22 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException {
         Promotion promotionToRemove = retrievePromotionByPromotionId(promotionId);
 
+        promotionToRemove.getServiceProvider().getPromotions().remove(promotionToRemove);
+        promotionToRemove.setServiceProvider(null);
+
+        if (promotionToRemove.getProduct() != null) {
+            promotionToRemove.getProduct().getPromotions().remove(promotionToRemove);
+            promotionToRemove.setProduct(null);
+        }
+
+        if (promotionToRemove.getService() != null) {
+            promotionToRemove.getService().getPromotions().remove(promotionToRemove);
+            promotionToRemove.setService(null);
+        }
+
         em.remove(promotionToRemove);
     }
 
-    /*@Override
-    public void updateServiceDiscountPrice(Service service) {
-        List<Promotion> promotions = service.getPromotions();
-        if (promotions.isEmpty()) {
-            service.setDiscountPrice(null);
-        } else {
-            Date date = new Date();
-            BigDecimal discountPrice = new BigDecimal("0.00");
-            Boolean update = false;
-
-            for (Promotion promotion : promotions) {
-                if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
-                    discountPrice = service.getPrice().multiply(promotion.getDiscountRate());
-                    service.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
-                    update = true;
-                }
-            }
-
-            if (!update) {
-                service.setDiscountPrice(null);
-            }
-        }
-    }
-
-    @Override
-    public void updateProductDiscountPrice(Product product) {
-        List<Promotion> promotions = product.getPromotions();
-        if (promotions.isEmpty()) {
-            product.setDiscountPrice(null);
-        } else {
-            Date date = new Date();
-            BigDecimal discountPrice = new BigDecimal("0.00");
-            Boolean update = false;
-
-            for (Promotion promotion : promotions) {
-                if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
-                    discountPrice = product.getPrice().multiply(promotion.getDiscountRate());
-                    product.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
-                    update = true;
-                }
-            }
-
-            if (!update) { // no current working promo 
-                product.setDiscountPrice(null);
-            }
-        }
-    } */
-    
     @Override
     public Boolean checkPromoCode(String promoCode) {
         Boolean valid = false;
@@ -205,7 +264,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
             Date date = new Date();
 
             if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
-                valid = true; 
+                valid = true;
             }
 
         } catch (PromotionNotFoundException ex) {

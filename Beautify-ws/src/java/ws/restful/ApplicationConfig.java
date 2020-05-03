@@ -25,6 +25,7 @@ public class ApplicationConfig extends Application {
         resources.add(ws.restful.CreditCardResource.class);
         resources.add(ws.restful.FileUploadResource.class);
         resources.add(ws.restful.ProductResource.class);
+        resources.add(ws.restful.PromotionResource.class);
         resources.add(ws.restful.PurchasedLineItemResource.class);
         resources.add(ws.restful.ReviewResource.class);
         resources.add(ws.restful.SalesForUsResource.class);

@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
@@ -43,6 +45,18 @@ public class Promotion implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Date endDate;
+    
+    @ManyToOne(optional = true)
+    @JoinColumn(nullable = true)
+    private Service service; 
+    
+    @ManyToOne(optional = true)
+    @JoinColumn(nullable = true)
+    private Product product; 
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = true)
+    private ServiceProvider serviceProvider; 
 
     public Promotion() {
     }
@@ -132,6 +146,30 @@ public class Promotion implements Serializable {
      */
     public void setPromoCode(String promoCode) {
         this.promoCode = promoCode;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public ServiceProvider getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
     
 }

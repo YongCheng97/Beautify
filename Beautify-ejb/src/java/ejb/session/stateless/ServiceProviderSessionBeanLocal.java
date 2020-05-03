@@ -39,4 +39,6 @@ public interface ServiceProviderSessionBeanLocal {
 
     public ServiceProvider retrieveServiceProviderByUsername(String username) throws ServiceProviderNotFoundException;
 
+    public void changePassword(ServiceProvider serviceProvider) throws ServiceProviderNotFoundException, UpdateServiceProviderException, InputDataValidationException;
+
 }

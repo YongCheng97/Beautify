@@ -88,6 +88,7 @@ public class ProductResource {
                 product.getServiceProvider().getCreditCards().clear();
                 product.getServiceProvider().getProducts().clear();
                 product.getServiceProvider().getServices().clear();
+                product.getServiceProvider().getPromotions().clear(); 
             }
 
             System.out.println("Products: " + products);

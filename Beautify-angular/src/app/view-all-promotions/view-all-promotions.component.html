@@ -1,0 +1,223 @@
+<app-header></app-header>
+
+<app-main-menu></app-main-menu>
+
+<section id="content" class="content">
+
+    <p-panel header="Promotions">
+
+        <h2> Product Promotions </h2>
+        <p-button label="Create New Product Promotion" icon="pi pi-plus" (onClick)="showAddProductPromoDialog()"></p-button>
+
+        <br /><br />
+
+        <p-table #dt [value]="productPromotions" [paginator]="true" [rows]="10">
+            <ng-template pTemplate="header" let-col>
+                <tr>
+                    <th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon *ngSwitchCase="'promotionId'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'promoCode'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'name'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'discountRate'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'startDate'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'endDate'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th *ngFor="let col of cols" [ngSwitch]="col.field">
+                        <input placeHolder="Search" *ngSwitchCase="'promotionId'" pInputText size="10" type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input placeHolder="Search" *ngSwitchCase="'promoCode'" pInputText size="10" type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input placeHolder="Search" *ngSwitchCase="'name'" pInputText size="10" type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input placeHolder="Search" *ngSwitchCase="'discountRate'" pInputText size="10" type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-promotion>
+                <tr>
+                    <td>{{promotion.promotionId}}</td>
+                    <td>{{promotion.promoCode}}</td>
+                    <td>{{promotion.name}}</td>
+                    <td>{{promotion.discountRate}}</td>
+                    <td>{{parseDate(promotion.startDate) | date: 'MMM d, yyyy'}}</td>
+                    <td>{{parseDate(promotion.endDate) | date: 'MMM d, yyyy'}}</td>
+                    <td>{{promotion.product.name}} </td>
+                    <td style="text-align: center;">
+                        <p-button label="Delete" (onClick)="deletePromotion(promotion.promotionId)"></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <br /><br />
+
+        <h2> Service Promotions </h2>
+        <p-button label="Create New Service Promotion" icon="pi pi-plus" (onClick)="showAddServicePromoDialog()"></p-button>
+
+        <br /><br />
+
+        <p-table #dt [value]="servicePromotions" [paginator]="true" [rows]="10">
+            <ng-template pTemplate="header" let-col>
+                <tr>
+                    <th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon *ngSwitchCase="'promotionId'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'promoCode'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'name'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'discountRate'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'startDate'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        <p-sortIcon *ngSwitchCase="'endDate'" [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th *ngFor="let col of cols" [ngSwitch]="col.field">
+                        <input placeHolder="Search" *ngSwitchCase="'promotionId'" pInputText size="10" type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input placeHolder="Search" *ngSwitchCase="'promoCode'" pInputText size="10" type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input placeHolder="Search" *ngSwitchCase="'name'" pInputText size="10" type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input placeHolder="Search" *ngSwitchCase="'discountRate'" pInputText size="10" type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-promotion>
+                <tr>
+                    <td>{{promotion.promotionId}}</td>
+                    <td>{{promotion.promoCode}}</td>
+                    <td>{{promotion.name}}</td>
+                    <td>{{promotion.discountRate}}</td>
+                    <td>{{parseDate(promotion.startDate) | date: 'MMM d, yyyy'}}</td>
+                    <td>{{parseDate(promotion.endDate) | date: 'MMM d, yyyy'}}</td>
+                    <td>{{promotion.product.name}} </td>
+                    <td style="text-align: center;">
+                        <p-button label="Delete" (onClick)="deletePromotion(promotion.promotionId)"></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <form *ngIf="displayAddServicePromo" #addServicePromoForm="ngForm" (ngSubmit)="addServicePromo(addServicePromoForm)">
+            <p-dialog *ngIf="displayAddServicePromo" header="Add New Service Promotion" modal="true"
+                [(visible)]="displayAddServicePromo" [style]="{width: '50vw'}">
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
+                    <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
+                    </div>
+                </div>
+                <div class=" ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
+                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
+                    <div class="ui-g-6"><input type="text" name="discountRate" id="discountRate"
+                            [(ngModel)]="newDiscountRate" />
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Start Date: </div>
+                    <div class="ui-g-6"><input type="date" name="startDate" id="startDate" [(ngModel)]="newStartDate" />
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
+                    <div class="ui-g-6"><input type="date" name="endDate" id="endDate" [(ngModel)]="newEndDate" /></div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Select service: </div>
+                    <select id="service" name="service" [(ngModel)]="newService">
+                        <option value="" disabled selected> Select One Service</option>
+                        <option *ngFor="let service of services" value="{{service.name}}">{{service.name}}</option>
+                    </select>
+                </div>
+                &nbsp;
+                <div style="text-align: center;">
+                    <input class="button button3" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+            </p-dialog>
+        </form>
+
+        <form *ngIf="displayAddProductPromo" #addProductPromoForm="ngForm" (ngSubmit)="addProductPromo(addProductPromoForm)">
+            <p-dialog *ngIf="displayAddProductPromo" header="Add New Product Promotion" modal="true"
+                [(visible)]="displayAddProductPromo" [style]="{width: '50vw'}">
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
+                    <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
+                    </div>
+                </div>
+                <div class=" ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
+                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
+                    <div class="ui-g-6"><input type="text" name="discountRate" id="discountRate"
+                            [(ngModel)]="newDiscountRate" />
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Start Date: </div>
+                    <div class="ui-g-6"><input type="date" name="startDate" id="startDate" [(ngModel)]="newStartDate" />
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
+                    <div class="ui-g-6"><input type="date" name="endDate" id="endDate" [(ngModel)]="newEndDate" /></div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Select product: </div>
+                    <select id="product" name="product" [(ngModel)]="newProduct">
+                        <option value="" disabled selected> Select One Product</option>
+                        <option *ngFor="let product of products" value="{{product.name}}">{{product.name}}</option>
+                    </select>
+                </div>
+                &nbsp;
+                <div style="text-align: center;">
+                    <input class="button button3" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+            </p-dialog>
+        </form>
+
+    </p-panel>
+
+</section>
+
+<app-sidebar></app-sidebar>
+
+<app-footer></app-footer>
