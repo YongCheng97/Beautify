@@ -122,6 +122,16 @@ public class PromotionResource {
                     promotion.getService().getPromotions().clear();
                     promotion.getService().setServiceProvider(null);
                     promotion.getService().setCategory(null);
+                    promotion.getService().getBookings().clear(); 
+                }
+
+                if (promotion.getProduct() != null) {
+                    promotion.getProduct().getTags().clear();
+                    promotion.getProduct().getFavouritedCustomers().clear();
+                    promotion.getProduct().getPromotions().clear();
+                    promotion.getProduct().setServiceProvider(null);
+                    promotion.getProduct().setCategory(null);
+
                 }
 
                 promotion.setServiceProvider(null);
@@ -152,8 +162,8 @@ public class PromotionResource {
                 Promotion promotion = new Promotion();
 
                 if (createPromotionReq.getServiceId() != null) {
-                    promotion = promotionSessionBeanLocal.createNewProductPromotion(createPromotionReq.getPromotion(), serviceProvider.getServiceProviderId(), createPromotionReq.getServiceId());
-                } else {
+                    promotion = promotionSessionBeanLocal.createNewServicePromotion(createPromotionReq.getPromotion(), serviceProvider.getServiceProviderId(), createPromotionReq.getServiceId());
+                } else if (createPromotionReq.getProductId() != null) {
                     promotion = promotionSessionBeanLocal.createNewProductPromotion(createPromotionReq.getPromotion(), serviceProvider.getServiceProviderId(), createPromotionReq.getProductId());
                 }
 

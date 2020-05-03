@@ -46,6 +46,8 @@ export class PromotionService {
   createPromotion(newPromotion: Promotion, serviceId: number, productId: number): Observable<any> 
   {
     console.log("create promo runs"); 
+    console.log("serviceId " + serviceId); 
+    console.log("productId " + productId);
     let createPromotionReq = {
       "username": this.sessionService.getUsername(), 
       "password": this.sessionService.getPassword(), 
