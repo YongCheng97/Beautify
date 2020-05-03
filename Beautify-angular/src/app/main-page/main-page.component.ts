@@ -339,7 +339,7 @@ export class MainPageComponent implements OnInit {
 		   
 			if (this.currentPassword==this.serviceProviderToUpdate.password && this.newPassword==this.confirmPassword){
 
-			  this.serviceProviderToUpdate.password = this.password;
+			  this.serviceProviderToUpdate.password = this.confirmPassword;
 
 			  this.serviceProviderService.changePassword(this.serviceProviderToUpdate).subscribe(
 				response => {
