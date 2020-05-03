@@ -37,7 +37,7 @@ export class MainMenuComponent implements OnInit {
 				]
 			},
 			{
-				label: 'View Tags', icon: 'pi pi-fw pi-tags',
+				label: 'View Tags', icon: 'pi pi-fw pi-tags', routerLink: ['/view-all-tags']
 			},
 			{
 				label: 'View Sales Record', icon: 'pi pi-fw pi-chart-bar',

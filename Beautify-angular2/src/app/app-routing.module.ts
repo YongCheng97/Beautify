@@ -5,13 +5,15 @@ import { IndexComponent } from './index/index.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ViewAllBookingSalesForUsComponent } from './view-all-booking-sales-for-us/view-all-booking-sales-for-us.component';
 import { ViewAllPurchasedLineItemSalesForUsComponent } from './view-all-purchased-line-item-sales-for-us/view-all-purchased-line-item-sales-for-us.component';
+import { ViewAllTagsComponent } from './view-all-tags/view-all-tags.component';
 
 const routes: Routes = [
 	{ path: '', redirectTo: '/index', pathMatch: 'full' },
 	{ path: 'index', component: IndexComponent },
 	{ path: 'main-page', component: MainPageComponent},
 	{ path: 'view-all-booking-sales-for-us', component: ViewAllBookingSalesForUsComponent},
-	{ path: 'view-all-purchased-line-item-sales-for-us', component: ViewAllPurchasedLineItemSalesForUsComponent}
+	{ path: 'view-all-purchased-line-item-sales-for-us', component: ViewAllPurchasedLineItemSalesForUsComponent},
+	{ path: 'view-all-tags', component: ViewAllTagsComponent}
 ];
 
 @NgModule({
