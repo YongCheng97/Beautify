@@ -36,6 +36,10 @@ export class MainPageComponent implements OnInit {
   ccName: string; 
   ccNum: string; 
   ccDate: string; 
+  
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 
   displayName: boolean = false;
   displayEmail: boolean = false;
@@ -46,6 +50,7 @@ export class MainPageComponent implements OnInit {
   openingHours: Date[]; 
   closingHours: Date[]; 
   displayCC: boolean = false; 
+  displayChangePW: boolean = false;
 
   nameSubmitted: boolean;
   newName: string
@@ -327,6 +332,37 @@ export class MainPageComponent implements OnInit {
     }
     this.displayEditHours = false; 
   }
+  
+  changePW(changePWForm: NgForm) {
+	  
+	  if (changePWForm.valid) {
+		   
+			if (this.currentPassword==this.serviceProviderToUpdate.password && this.newPassword==this.confirmPassword){
+
+			  this.serviceProviderToUpdate.password = this.password;
+
+			  this.serviceProviderService.changePassword(this.serviceProviderToUpdate).subscribe(
+				response => {
+				  this.resultSuccess = true;
+				  this.resultError = true;
+				  this.message = "Password updated successfully";
+				  this.sessionService.setCurrentServiceProvider(this.serviceProviderToUpdate);
+				},
+				error => {
+				  this.resultError = true;
+				  this.resultSuccess = false;
+				  this.message = "An error has occured while updating the password: " + error;
+
+				  console.log('********** MainPageComponent.ts: ' + error);
+				}
+			  );
+			}
+			this.displayChangePW = false;   
+		  } else {
+			  this.message = "Password does not match";
+		  }
+  }
+  
 
   showNameDialog(serviceProvider: ServiceProvider) {
     this.displayName = true;
@@ -361,6 +397,11 @@ export class MainPageComponent implements OnInit {
   showEditHoursDialog(serviceProvider: ServiceProvider) {
     this.displayEditHours = true; 
     this.serviceProvider = serviceProvider; 
+  }
+  
+  showPasswordDialog(serviceProvider: ServiceProvider) {
+    this.displayChangePW = true;
+    this.serviceProviderToUpdate = serviceProvider;
   }
 
   parseDate(d: Date)

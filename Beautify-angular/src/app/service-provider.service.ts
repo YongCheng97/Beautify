@@ -51,6 +51,19 @@ export class ServiceProviderService {
 				catchError(this.handleError)
 			);
 	}
+	
+	changePassword(providerToUpdate: ServiceProvider): Observable<any> {
+		let updateProviderReq = {
+			"username": this.sessionService.getUsername(),
+			"password": this.sessionService.getPassword(),
+			"serviceProvider": providerToUpdate,
+		};
+
+		return this.httpClient.post<any>(this.baseUrl + "/changePassword" , updateProviderReq, httpOptions).pipe
+			(
+				catchError(this.handleError)
+			);
+	}
 
 	private handleError(error: HttpErrorResponse) {
 		let errorMessage: string = "";

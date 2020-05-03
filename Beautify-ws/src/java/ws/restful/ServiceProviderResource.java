@@ -136,6 +136,45 @@ public class ServiceProviderResource {
         }
     }
     
+    @Path("changePassword")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changePassword(UpdateServiceProviderReq updateServiceProviderReq) 
+    {
+        if (updateServiceProviderReq != null) 
+        {
+            try 
+            {
+                ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(updateServiceProviderReq.getUsername(), updateServiceProviderReq.getPassword());
+                System.out.println("********** ServiceProviderResouce.updateServiceProvider(): Service Provider " + serviceProvider.getName() + " login remotely via web service");
+                
+                serviceProviderSessionBean.changePassword(updateServiceProviderReq.getServiceProvider());
+                
+                return Response.status(Response.Status.OK).build();
+            }
+            catch(InvalidLoginCredentialException ex)
+            {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+            
+                return Response.status(Response.Status.UNAUTHORIZED).entity(errorRsp).build();
+            }
+            catch(Exception ex)
+            {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+            }
+        } 
+        else 
+        {
+            ErrorRsp errorRsp = new ErrorRsp("Invalid update purchased line item request");
+            
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
+        }
+    }
+    
+    
     @Path("retrieveAllServiceProviders")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)

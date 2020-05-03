@@ -45,6 +45,11 @@
         <p>
             <b> Approval Status: </b> {{approvalStatus}}
         </p>
+		
+		<p>
+            <b> Change Password: </b>
+            <p-button (onClick)="showPasswordDialog(serviceProvider)" label="Change"></p-button>
+        </p>
 
         <form *ngIf="displayName" #updateNameForm="ngForm" (ngSubmit)="updateName(updateNameForm)">
             <p-dialog *ngIf="displayName" header="Update Name" modal="true" [(visible)]="displayName"
@@ -304,6 +309,29 @@
                 &nbsp;
                 <div style="text-align: center;">
                     <input class="button button3" (onClick)="closeAddCCDialog()" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+            </p-dialog>
+        </form>
+		
+		<form *ngIf="displayChangePW" #changePWForm="ngForm" (ngSubmit)="changePW(changePWForm)">
+            <p-dialog *ngIf="displayChangePW" header="Change Password" modal="true" [(visible)]="displayChangePW"
+                [style]="{width: '50vw'}">
+                
+                <div class="ui-g">
+                    <div class="ui-g-6">Current Password: </div>
+                    <div class="ui-g-6"><input pPassword type="password" name="currentPW" id="currentPW" [(ngModel)]="currentPW" /></div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6">New Password: </div>
+                    <div class="ui-g-6"><input pPassword type="password" name="newPW" id="newPW" [(ngModel)]="newPW" /></div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-6">Confirm New Password: </div>
+                    <div class="ui-g-6"><input pPassword type="password" name="confirmPW" id="confirmPW" [(ngModel)]="confirmPW" /></div>
+                </div>
+                &nbsp;
+                <div style="text-align: center;">
+                    <input class="button button3" type="submit" value="Confirm" icon="pi pi-check" />
                 </div>
             </p-dialog>
         </form>
