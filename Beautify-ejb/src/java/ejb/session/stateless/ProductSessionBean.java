@@ -120,7 +120,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<Product> retrieveAllProducts() {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.isDeleted = FALSE BY p.skuCode ASC");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.isDeleted = FALSE ORDER BY p.skuCode ASC");
         List<Product> products = query.getResultList();
 
         for (Product product : products) {
@@ -395,6 +395,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
         Product productEntityToRemove = retrieveProductByProdId(productId);
 
             productEntityToRemove.getCategory().getProducts().remove(productEntityToRemove);
+            productEntityToRemove.setCategory(null);
 
             for (Tag tag : productEntityToRemove.getTags()) {
                 tag.getProducts().remove(productEntityToRemove);
