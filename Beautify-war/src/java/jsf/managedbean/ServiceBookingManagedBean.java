@@ -104,7 +104,7 @@ public class ServiceBookingManagedBean implements Serializable {
         System.out.println("" + this.finishBooking);
         setMsg("Appointment date and selection of credit card is required!");
     }
-    
+
     public void createNewBooking() throws IOException {
         System.out.println("Start time: " + sdf1.format(this.startTime));
         System.out.println("End time: " + sdf1.format(this.endTime));
@@ -150,7 +150,7 @@ public class ServiceBookingManagedBean implements Serializable {
                         finalPrice = currentService.getPrice();
                     }
                     setFinalAmount(finalPrice);
-                    Booking newBooking = new Booking(date, "Approved", this.remarks, this.appointmentDate, this.startTime, this.endTime,finalPrice);
+                    Booking newBooking = new Booking(date, "Approved", this.remarks, this.appointmentDate, this.startTime, this.endTime, finalPrice);
                     CreditCard cc = creditCardSessionBeanLocal.retrieveCreditCardByLastFourNum(creditCardNum);
 
                     booking = bookingSessionBeanLocal.createNewBooking(newBooking, currentCustomer.getCustomerId(), currentService.getServiceId(), cc.getCreditCardId());
@@ -166,8 +166,7 @@ public class ServiceBookingManagedBean implements Serializable {
                 }
             }
 
-        } else if (index
-                > 0) {
+        } else if (index > 0) {
             setMsg("The starting time cannot be after the end time");
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
 
@@ -192,36 +191,53 @@ public class ServiceBookingManagedBean implements Serializable {
 
     public void checkPromoCode(ActionEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
+        Boolean success = false;
 
         try {
             Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
 
-            Boolean exists = false;
-
-            List<Promotion> servicePromotions = currentService.getPromotions();
-            if (servicePromotions.contains(promotion)) {
-                exists = true;
-            }
-
-            Boolean valid = promotionSessionBeanLocal.checkPromoCode(promoCode); // promo is valid for this date
-
-            if (valid && exists) {
-                setMsg("Promo Code Applied!");
-                BigDecimal promoPrice = new BigDecimal("0.00");
-
-                promoPrice = (currentService.getPrice().multiply(promotion.getDiscountRate())).setScale(2, BigDecimal.ROUND_HALF_UP);
-
-                setFinalAmount(promoPrice);
-
-            } else {
-                setMsg("Invalid Promo Code!");
-            }
+            success = true;
+        } catch (PromotionNotFoundException ex) {
+            setMsg("Invalid Promo Code!");
 
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
-        } catch (PromotionNotFoundException ex) {
-            Logger.getLogger(ShoppingCartManagedBean.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (success) {
+
+                try {
+                    Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
+
+                    Boolean exists = false;
+
+                    List<Promotion> servicePromotions = currentService.getPromotions();
+                    if (servicePromotions.contains(promotion)) {
+                        exists = true;
+                    }
+
+                    Boolean valid = promotionSessionBeanLocal.checkPromoCode(promoCode); // promo is valid for this date
+
+                    if (valid && exists) {
+                        setMsg("Promo Code Applied!");
+                        BigDecimal promoPrice = new BigDecimal("0.00");
+
+                        promoPrice = (currentService.getPrice().multiply(promotion.getDiscountRate())).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+                        setFinalAmount(promoPrice);
+
+                    } else {
+                        setMsg("Invalid Promo Code!");
+                    }
+
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
+                } catch (PromotionNotFoundException ex) {
+                    Logger.getLogger(ShoppingCartManagedBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
+                }
+            }
         }
+
     }
 
     public boolean checkBookingExists() {
