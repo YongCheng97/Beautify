@@ -30,5 +30,7 @@ public interface PurchasedLineItemSessionBeanLocal {
     public void deletePurchasedLineItem(Long purchasedLineItemId);
 
     public List<PurchasedLineItem> retrieveAllPurchasedLineItemByServiceProviderId(Long serviceProviderId) throws PurchasedLineItemNotFoundException;
+
+    public List<PurchasedLineItem> retrieveAllPurchasedLineItemByProduct(Long productId);
     
 }

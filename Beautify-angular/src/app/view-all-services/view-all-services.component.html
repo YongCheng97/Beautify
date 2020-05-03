@@ -33,7 +33,13 @@
                             <div class="p-col-12">Category: <b>{{service.category.name}}</b></div>
                         </div>
                     </div>
-                    <button pButton type="button" icon="pi pi-search"></button>
+                    <div style="text-align: right;">
+                        <p-button icon="pi pi-info-circle" (onClick)="showViewDialog(service)"></p-button>
+                        &nbsp;
+                        <p-button icon="pi pi-pencil" (onClick)="showUpdateDialog(service)"></p-button>
+                        &nbsp;
+                        <p-button icon="pi pi-trash" (onClick)="showDeleteDialog(service)"></p-button>
+                    </div>
                 </div>
             </div>
         </ng-template>
@@ -43,7 +49,11 @@
                     <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" width="60"> -->
                     <div class="product-detail">${{service.price}}</div>
                     <div class="product-detail">Category: {{service.category.name}}</div>
-                    <button pButton type="button" icon="pi pi-search" style="margin-top:0"></button>
+                    <p-button icon="pi pi-info-circle" (onClick)="showViewDialog(service)"></p-button>
+                    &nbsp;
+                    <p-button icon="pi pi-pencil" (onClick)="showUpdateDialog(service)"></p-button>
+                    &nbsp;
+                    <p-button icon="pi pi-trash" (onClick)="showDeleteDialog(service)"></p-button>
                 </p-panel>
             </div>
         </ng-template>
@@ -62,15 +72,16 @@
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Service Price</div>
                 <div class="ui-g-6">
-                    <p-spinner id="price" name="price" #name="ngModel" [(ngModel)]="newService.price"
-                        required="true" ></p-spinner>
+                    <input type="text" id="price" name="price" #name="ngModel" [(ngModel)]="newService.price"
+                        required="true" />
                 </div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Service Description</div>
                 <div class="ui-g-6">
                     <textarea pInputTextarea id="description" name="description" #name="ngModel" type="text"
-                        [(ngModel)]="newService.description" required="true" autoResize="autoResize" rows="5" cols="30"></textarea>
+                        [(ngModel)]="newService.description" required="true" autoResize="autoResize" rows="5"
+                        cols="30"></textarea>
                 </div>
             </div>
             <div class="ui-g">
@@ -92,7 +103,107 @@
             <div class="ui-g" style="float:right">
                 <button (click)="clear()">Clear</button>
                 &nbsp;
-                <input type="submit" value="Submit"/>
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </p-dialog>
+
+    <p-dialog *ngIf="displayUpdate" header="Update Service Details" modal="true" [(visible)]="displayUpdate"
+        [style]="{width: '50vw'}">
+        <form (ngSubmit)="update(updateServiceForm)">
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Service Id</div>
+                <div class="ui-g-6">{{serviceToUpdate.serviceId}}</div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Service Name</div>
+                <div class="ui-g-6">
+                    <input id="name" name="name" #name="ngModel" type="text" [(ngModel)]="serviceToUpdate.name"
+                        required="true" />
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Service Price</div>
+                <div class="ui-g-6">
+                    <input id="price" name="price" #name="ngModel" type="text" [(ngModel)]="serviceToUpdate.price"
+                        required="true" />
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Service Description</div>
+                <div class="ui-g-6">
+                    <textarea pInputTextarea id="description" name="description" #name="ngModel" type="text"
+                        [(ngModel)]="serviceToUpdate.description" required="true" autoResize="autoResize" rows="5"
+                        cols="30"></textarea>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Service Category</div>
+                <div class="ui-g-6">
+                    <p-dropdown [options]="categories" optionLabel="name" editable="true"
+                        placeholder="Select a Category" name="updatedCategory" #name="ngModel"
+                        [(ngModel)]="updatedCategory"></p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Service Tags</div>
+                <div class="ui-g-6">
+                    <p-listbox [options]="tags" optionLabel="name" [multiple]="true" [checkbox]="true" name="tagIds"
+                        #name="ngModel" [(ngModel)]="selectUpdatedTags"></p-listbox>
+                </div>
+            </div>
+            <br />
+            <div class="ui-g" style="float:right">
+                <button (click)="clear()">Clear</button>
+                &nbsp;
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </p-dialog>
+
+    <p-dialog *ngIf="displayView" header="View Service Details" modal="true" [(visible)]="displayView"
+        [style]="{width: '50vw'}">
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Service ID</div>
+            <div class="ui-g-6">{{serviceToView.serviceId}}</div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Name</div>
+            <div class="ui-g-6">{{serviceToView.serviceName}}</div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Service Price</div>
+            <div class="ui-g-6">{{serviceToView.price | currency}}</div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Description</div>
+            <div class="ui-g-6">{{serviceToView.description}}</div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Category</div>
+            <div class="ui-g-6">{{serviceToView.category.name}}</div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-6" style="background-color: #f4f4f4;">Tag(s)</div>
+            <div class="ui-g-6">
+                <ul style="margin-left: 20px;">
+                    <li *ngFor="let tag of serviceToView.tags">{{tag.name}}</li>
+                </ul>
+            </div>
+        </div>
+    </p-dialog>
+
+    <p-dialog *ngIf="displayDelete" header="Delete Service" modal="true" [(visible)]="displayDelete" height="200"
+        [style]="{width: '50vw'}">
+        <form (ngSubmit)="delete(deleteServiceForm)">
+            <div style="text-align: center;">
+                <div style="text-align: center;">
+                    Are you sure you want to delete this service?
+                </div>
+                <div style="clear:both;">&nbsp;</div>
+                <div>
+                    <input type="submit" value="Confirm" />
+                </div>
             </div>
         </form>
     </p-dialog>

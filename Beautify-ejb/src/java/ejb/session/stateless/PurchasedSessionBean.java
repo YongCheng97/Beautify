@@ -43,21 +43,21 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
 
     @EJB
     private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
-    
+
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
-     
+
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
-    
+
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
+
     public PurchasedSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public Purchased createNewPurchased(Purchased newPurchased, Long customerId, List<Long> purchasedLineItemIds, Long creditCardId) throws UnknownPersistenceException, InputDataValidationException, CustomerNotFoundException, CreateNewPurchaseException, PurchasedExistException {
         Set<ConstraintViolation<Purchased>> constraintViolations = validator.validate(newPurchased);
@@ -67,26 +67,26 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
                 if (customerId == null) {
                     throw new CreateNewPurchaseException("A new purchase must be associated with a customer");
                 }
-                
+
                 Customer customer = customerSessionBeanLocal.retrieveCustomerByCustId(customerId);
-                
+
                 newPurchased.setCustomer(customer);
                 customer.getPurchaseds().add(newPurchased);
-                
+
                 List<PurchasedLineItem> purchasedLineItems = new ArrayList<>();
-                
-                for (Long purchaseLineItemId:purchasedLineItemIds) {
+
+                for (Long purchaseLineItemId : purchasedLineItemIds) {
                     purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchaseLineItemId).setPurchased(newPurchased);
                     purchasedLineItems.add(purchasedLineItemSessionBeanLocal.retrievePurchasedLineItemByPurchasedLineItemId(purchaseLineItemId));
                 }
-                
+
                 newPurchased.setPurchasedLineItems(purchasedLineItems);
-                
-                CreditCard creditCard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(creditCardId); 
-                
+
+                CreditCard creditCard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(creditCardId);
+
                 newPurchased.setCreditCard(creditCard);
-                creditCard.getPurchaseds().add(newPurchased); 
-               
+                creditCard.getPurchaseds().add(newPurchased);
+
                 em.persist(newPurchased);
                 em.flush();
 
@@ -101,14 +101,14 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (CustomerNotFoundException | PurchasedLineItemNotFoundException | CreditCardNotFoundException ex) { 
+            } catch (CustomerNotFoundException | PurchasedLineItemNotFoundException | CreditCardNotFoundException ex) {
                 throw new CreateNewPurchaseException("An error has occured while creating the new purchased: " + ex.getMessage());
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     @Override
     public Purchased retrievePurchasedByPurchasedId(Long purchasedId) throws PurchasedNotFoundException {
         Purchased purchased = em.find(Purchased.class, purchasedId);
@@ -119,7 +119,7 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
             throw new PurchasedNotFoundException("Purchased ID " + purchasedId + " does not exist!");
         }
     }
-    
+
     @Override
     public List<Purchased> retrieveAllPurchasedByCustomerId(Long customerId) {
         Query query = em.createQuery("SELECT p FROM Purchased p WHERE p.customer.customerId = :inCustomerId ORDER BY p.dateOfPurchase DESC");
@@ -128,22 +128,22 @@ public class PurchasedSessionBean implements PurchasedSessionBeanLocal {
 
         return purchaseds;
     }
-    
+
     @Override
-    public void deletePurchased(Long purchasedId){
+    public void deletePurchased(Long purchasedId) {
         Purchased purchasedToDelete = em.find(Purchased.class, purchasedId);
         List<PurchasedLineItem> purchasedLineItems = purchasedToDelete.getPurchasedLineItems();
-        
-        for (PurchasedLineItem purchasedLineItem:purchasedLineItems){
+
+        for (PurchasedLineItem purchasedLineItem : purchasedLineItems) {
             purchasedLineItemSessionBeanLocal.deletePurchasedLineItem(purchasedLineItem.getPurchasedLineItemId());
         }
-        
+
         Customer customer = purchasedToDelete.getCustomer();
         customer.getPurchaseds().remove(purchasedToDelete);
-        
+
         em.remove(purchasedToDelete);
     }
-    
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Purchased>> constraintViolations) {
         String msg = "Input data validation error!:";
 

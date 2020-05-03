@@ -20,16 +20,24 @@ export class ViewAllServicesComponent implements OnInit {
 
   services: Service[];
   newService: Service;
+  serviceToView: Service;
+  serviceToUpdate: Service;
+  serviceToDelete: Service;
   serviceProvider: ServiceProvider;
   displayAdd: boolean = false;
+  displayView: boolean = false;
+  displayUpdate: boolean = false;
+  displayDelete: boolean = false;
   submitted: boolean;
 
   categoryId: number;
   selectedCategory: Category;
+  updatedCategory: Category;
   tagIds: string[];
   categories: Category[];
   categoryNames: string[];
   selectedTags: Tag[];
+  selectUpdatedTags: Tag[];
   tags: Tag[];
 
   resultSuccess: boolean;
@@ -85,6 +93,21 @@ export class ViewAllServicesComponent implements OnInit {
     this.displayAdd = true;
   }
 
+  showViewDialog(serviceToView: Service) {
+    this.displayView = true;
+    this.serviceToView = serviceToView;
+  }
+
+  showUpdateDialog(serviceToUpdate: Service) {
+    this.displayUpdate = true;
+    this.serviceToUpdate = serviceToUpdate;
+  }
+
+  showDeleteDialog(serviceToDelete: Service) {
+    this.displayDelete = true;
+    this.serviceToDelete = serviceToDelete;
+  }
+
 
   clear() {
     this.submitted = false;
@@ -104,22 +127,64 @@ export class ViewAllServicesComponent implements OnInit {
     this.submitted = true;
 
     // if (addProductForm.valid) {
-      this.serviceService.createService(this.newService, this.categoryId, longTagIds).subscribe(
-        response => {
-          let newServiceId: number = response.serviceId;
-          this.resultSuccess = true;
-          this.resultError = false;
-          this.message = "New service " + newServiceId + " created successfully";
-        },
-        error => {
-          this.resultError = true;
-          this.resultSuccess = false;
-          this.message = "An error has occurred while creating the new service: " + error;
+    this.serviceService.createService(this.newService, this.categoryId, longTagIds).subscribe(
+      response => {
+        let newServiceId: number = response.serviceId;
+        this.resultSuccess = true;
+        this.resultError = false;
+        this.message = "New service " + newServiceId + " created successfully";
+      },
+      error => {
+        this.resultError = true;
+        this.resultSuccess = false;
+        this.message = "An error has occurred while creating the new service: " + error;
 
-          console.log('********** CreateNewServiceComponent.ts: ' + error);
-        }
-      );
+        console.log('********** CreateNewServiceComponent.ts: ' + error);
+      }
+    );
     // }
     this.displayAdd = false;
+  }
+
+  update(updateServiceForm: NgForm) {
+
+    this.categoryId = this.updatedCategory.categoryId;
+    let longTagIds: number[] = new Array();
+
+    for (var i = 0; i < this.selectUpdatedTags.length; i++) {
+      longTagIds.push(this.selectUpdatedTags[i].tagId);
+    }
+
+    this.submitted = true;
+
+    // if (updateProductForm.valid) {
+    this.serviceService.updateService(this.serviceToUpdate, this.categoryId, longTagIds).subscribe(
+      response => {
+        this.resultSuccess = true;
+        this.resultError = false;
+        this.message = "Service updated successfully";
+        this.displayUpdate = false;
+      },
+      error => {
+        this.resultError = true;
+        this.resultSuccess = false;
+        this.message = "An error has occurred while updating the service: " + error;
+
+        console.log('********** UpdateServiceComponent.ts: ' + error);
+      }
+    );
+    // }
+  }
+
+  delete(deleteServiceForm: NgForm) {
+    this.serviceService.deleteService(this.serviceToDelete.serviceId).subscribe(
+      response => {
+        this.router.navigate(["/view-all-services"]);
+        this.displayDelete = false;
+      },
+      error => {
+        console.log('********** DeleteServiceComponent.ts: ' + error);
+      }
+    );
   }
 }

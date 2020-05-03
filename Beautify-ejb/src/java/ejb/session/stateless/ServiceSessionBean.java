@@ -1,6 +1,8 @@
 package ejb.session.stateless;
 
+import entity.Booking;
 import entity.Category;
+import entity.Product;
 import entity.Service;
 import entity.ServiceProvider;
 import entity.Tag;
@@ -10,6 +12,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -23,17 +27,24 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateNewServiceException;
+import util.exception.DeleteServiceException;
 import util.exception.InputDataValidationException;
+import util.exception.ProductNotFoundException;
 import util.exception.ServiceExistException;
 import util.exception.ServiceNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
 import util.exception.TagNotFoundException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateProductException;
+import util.exception.UpdateServiceException;
 
 @Stateless
 @Local(ServiceSessionBeanLocal.class)
 
 public class ServiceSessionBean implements ServiceSessionBeanLocal {
+
+    @EJB
+    private BookingSessionBeanLocal bookingSessionBean;
 
     @EJB(name = "TagsSessionBeanLocal")
     private TagsSessionBeanLocal tagsSessionBeanLocal;
@@ -355,6 +366,70 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
             });
 
             return newServices;
+        }
+    }
+    @Override
+    public void updateService(Service service, Long categoryId, List<Long> tagIds) throws ServiceNotFoundException, CategoryNotFoundException, TagNotFoundException, UpdateServiceException, InputDataValidationException {
+        if (service != null && service.getServiceId() != null) {
+            Set<ConstraintViolation<Service>> constraintViolations = validator.validate(service);
+
+            if (constraintViolations.isEmpty()) {
+                
+                Service serviceToUpdate = retrieveServiceByServiceId(service.getServiceId());
+                
+                    if (categoryId != null && (!serviceToUpdate.getCategory().getCategoryId().equals(categoryId))) {
+                        Category categoryEntityToUpdate = categorySessionBeanLocal.retrieveCategoryByCategoryId(categoryId);
+
+                        if (!categoryEntityToUpdate.getSubCategoryEntities().isEmpty()) {
+                            throw new UpdateServiceException("Selected category for the new service is not a leaf category");
+                        }
+
+                        serviceToUpdate.setCategory(categoryEntityToUpdate);
+                    }
+
+                    if (tagIds != null) {
+                        for (Tag tagEntity : serviceToUpdate.getTags()) {
+                            tagEntity.getProducts().remove(serviceToUpdate);
+                        }
+
+                        serviceToUpdate.getTags().clear();
+
+                        for (Long tagId : tagIds) {
+                            try {
+                                Tag tagEntity = tagsSessionBeanLocal.retrieveTagByTagId(tagId);
+                                serviceToUpdate.addTag(tagEntity);
+                            } catch (TagNotFoundException ex) {
+                                Logger.getLogger(ProductSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                    serviceToUpdate.setDescription(service.getDescription());
+                    serviceToUpdate.setServiceName(service.getServiceName());
+                    serviceToUpdate.setPrice(service.getPrice());
+                    serviceToUpdate.setCategory(service.getCategory());
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new ServiceNotFoundException("Service ID not provided for product to be updated");
+        }
+    }
+    @Override
+    public void deleteService(Long serviceId) throws ServiceNotFoundException, DeleteServiceException {
+        Service serviceToRemove = retrieveServiceByServiceId(serviceId);
+        List<Booking> bookings = bookingSessionBean.retrieveAllBookingsByServiceId(serviceId);
+        if (bookings.isEmpty()) {
+            serviceToRemove.getCategory().getServices().remove(serviceToRemove);
+
+            for (Tag tag : serviceToRemove.getTags()) {
+                tag.getServices().remove(serviceToRemove);
+            }
+
+            serviceToRemove.getTags().clear();
+
+            em.remove(serviceToRemove);
+        } else {
+            throw new DeleteServiceException("Service ID " + serviceId + " is associated with existing bookings and cannot be deleted!");
         }
     }
 

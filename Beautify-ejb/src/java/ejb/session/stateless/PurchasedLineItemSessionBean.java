@@ -39,16 +39,16 @@ import util.exception.UnknownPersistenceException;
  */
 @Stateless
 public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBeanLocal {
-    
+
     @EJB
     private ProductSessionBeanLocal productSessionBeanLocal;
-    
+
     @EJB
     private SalesRecordSessionBeanLocal salesRecordSessionBeanLocal;
-    
+
     @EJB
     private SalesForUsSessionBeanLocal salesForUsSessionBeanLocal;
-    
+
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
 
@@ -59,7 +59,7 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public PurchasedLineItem createNewPurchasedLineItem(PurchasedLineItem newPurchasedLineItem, Long productId) throws UnknownPersistenceException, CreateNewPurchasedLineItemException, PurchasedLineItemExistException, InputDataValidationException {
         Set<ConstraintViolation<PurchasedLineItem>> constraintViolations = validator.validate(newPurchasedLineItem);
@@ -69,10 +69,10 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
                 if (productId == null) {
                     throw new CreateNewPurchasedLineItemException("A new line item must be associated with a product");
                 }
-                
+
                 Product product = productSessionBeanLocal.retrieveProductByProdId(productId);
                 newPurchasedLineItem.setProduct(product);
-                
+
                 em.persist(newPurchasedLineItem);
                 em.flush();
 
@@ -87,14 +87,14 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (ProductNotFoundException ex) { 
+            } catch (ProductNotFoundException ex) {
                 throw new CreateNewPurchasedLineItemException("An error has occured while creating the new line item: " + ex.getMessage());
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     @Override
     public PurchasedLineItem retrievePurchasedLineItemByPurchasedLineItemId(Long purchasedLineItemId) throws PurchasedLineItemNotFoundException {
         PurchasedLineItem purchasedLineItem = em.find(PurchasedLineItem.class, purchasedLineItemId);
@@ -105,30 +105,45 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
             throw new PurchasedLineItemNotFoundException("Purchased Line Item ID " + purchasedLineItemId + " does not exist!");
         }
     }
-            
+
     @Override
-    public List<PurchasedLineItem> retrieveAllPurchasedLineItemByServiceProviderId(Long serviceProviderId) throws PurchasedLineItemNotFoundException {
-        
-        Query query = em.createQuery("SELECT p FROM PurchasedLineItem p ORDER BY p.purchasedLineItemId DESC");
+    public List<PurchasedLineItem> retrieveAllPurchasedLineItemByProduct(Long productId) {
+
+        Query query = em.createQuery("SELECT p FROM PurchasedLineItem p WHERE p.product.productId = :productId BY p.purchasedLineItemId DESC");
+        query.setParameter("productId", productId);
         List<PurchasedLineItem> purchasedLineItems = query.getResultList();
         
+        for (PurchasedLineItem purchasedLineItem : purchasedLineItems) {
+            purchasedLineItem.getPurchased();
+            purchasedLineItem.getProduct();
+        }
+        return purchasedLineItems;
+
+    }
+
+    @Override
+    public List<PurchasedLineItem> retrieveAllPurchasedLineItemByServiceProviderId(Long serviceProviderId) throws PurchasedLineItemNotFoundException {
+
+        Query query = em.createQuery("SELECT p FROM PurchasedLineItem p ORDER BY p.purchasedLineItemId DESC");
+        List<PurchasedLineItem> purchasedLineItems = query.getResultList();
+
         List<PurchasedLineItem> purchasedLineItemsSP = new ArrayList<>();
-                
+
         for (PurchasedLineItem purchasedLineItem : purchasedLineItems) {
             Product product = purchasedLineItem.getProduct();
             Long sP = product.getServiceProvider().getServiceProviderId();
-            if (sP == serviceProviderId){
+            if (sP == serviceProviderId) {
                 purchasedLineItemsSP.add(purchasedLineItem);
             }
         }
 
         return purchasedLineItemsSP;
-        
+
     }
-            
+
     @Override
     public PurchasedLineItem updatePurchasedLineItem(PurchasedLineItem purchasedLineItem) throws InputDataValidationException, PurchasedLineItemNotFoundException {
-         if (purchasedLineItem != null && purchasedLineItem.getPurchasedLineItemId()!= null) {
+        if (purchasedLineItem != null && purchasedLineItem.getPurchasedLineItemId() != null) {
             Set<ConstraintViolation<PurchasedLineItem>> constraintViolations = validator.validate(purchasedLineItem);
 
             if (constraintViolations.isEmpty()) {
@@ -136,24 +151,24 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
 
                 purchasedLineItemToUpdate.setQuantity(purchasedLineItem.getQuantity());
                 purchasedLineItemToUpdate.setStatus(purchasedLineItem.getStatus());
-                if (purchasedLineItem.getStatus().equals("Product Received")){
+                if (purchasedLineItem.getStatus().equals("Product Received")) {
                     BigDecimal salesRecordAmt = purchasedLineItemToUpdate.getPrice().multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                     BigDecimal salesForUsAmt = purchasedLineItemToUpdate.getPrice().multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-                
+
                     try {
-                        salesRecordSessionBeanLocal.createNewSalesRecordPurchasedLineItem(new SalesRecord(salesRecordAmt,new Date()), purchasedLineItem.getPurchasedLineItemId());
+                        salesRecordSessionBeanLocal.createNewSalesRecordPurchasedLineItem(new SalesRecord(salesRecordAmt, new Date()), purchasedLineItem.getPurchasedLineItemId());
                     } catch (CreateNewSalesRecordException ex) {
                         System.err.println("An error has occured while creating the new sales record: " + ex.getMessage());
                     }
-                    
+
                     try {
-                        salesForUsSessionBeanLocal.createNewSalesForUsPurchasedLineItem(new SalesForUs(salesForUsAmt,new Date()), purchasedLineItem.getPurchasedLineItemId());
+                        salesForUsSessionBeanLocal.createNewSalesForUsPurchasedLineItem(new SalesForUs(salesForUsAmt, new Date()), purchasedLineItem.getPurchasedLineItemId());
                     } catch (CreateNewSalesForUsException ex) {
                         System.err.println("An error has occured while creating the new sales for us: " + ex.getMessage());
                     }
                 }
                 purchasedLineItemToUpdate.setPrice(purchasedLineItem.getPrice());
-                
+
                 return purchasedLineItemToUpdate;
             } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
@@ -162,14 +177,14 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
             throw new PurchasedLineItemNotFoundException("Purchased Line Item ID not provided for line item to be updated");
         }
     }
-    
+
     @Override
-    public void deletePurchasedLineItem(Long purchasedLineItemId){
+    public void deletePurchasedLineItem(Long purchasedLineItemId) {
         PurchasedLineItem purchasedLineItemToDelete = em.find(PurchasedLineItem.class, purchasedLineItemId);
-        
+
         em.remove(purchasedLineItemToDelete);
     }
-    
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<PurchasedLineItem>> constraintViolations) {
         String msg = "Input data validation error!:";
 
