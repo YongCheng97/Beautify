@@ -46,6 +46,7 @@ public class Product implements Serializable {
     @NotNull
     @Min(0)
     private Integer quantityOnHand;
+    private Boolean isDeleted;
 
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
@@ -70,6 +71,7 @@ public class Product implements Serializable {
         this.tags = new ArrayList<>();
         this.favouritedCustomers = new ArrayList<>();
         this.promotions = new ArrayList<>();
+        this.isDeleted = false;
     }
 
     public Product(String skuCode, String name, BigDecimal price, String description, Integer quantityOnHand) {
@@ -79,6 +81,7 @@ public class Product implements Serializable {
         this.price = price;
         this.description = description;
         this.quantityOnHand = quantityOnHand;
+        this.isDeleted = false;
     }
 
     public Long getProductId() {
@@ -244,6 +247,20 @@ public class Product implements Serializable {
 
     public void setQuantityOnHand(Integer quantityOnHand) {
         this.quantityOnHand = quantityOnHand;
+    }
+
+    /**
+     * @return the isDeleted
+     */
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    /**
+     * @param isDeleted the isDeleted to set
+     */
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
 }

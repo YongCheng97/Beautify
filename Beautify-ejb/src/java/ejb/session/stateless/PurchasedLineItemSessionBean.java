@@ -109,7 +109,7 @@ public class PurchasedLineItemSessionBean implements PurchasedLineItemSessionBea
     @Override
     public List<PurchasedLineItem> retrieveAllPurchasedLineItemByProduct(Long productId) {
 
-        Query query = em.createQuery("SELECT p FROM PurchasedLineItem p WHERE p.product.productId = :productId BY p.purchasedLineItemId DESC");
+        Query query = em.createQuery("SELECT p FROM PurchasedLineItem p WHERE p.product.productId = :productId ORDER BY p.purchasedLineItemId DESC");
         query.setParameter("productId", productId);
         List<PurchasedLineItem> purchasedLineItems = query.getResultList();
         
