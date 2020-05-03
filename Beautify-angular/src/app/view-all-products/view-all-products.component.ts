@@ -6,6 +6,7 @@ import { SessionService } from '../session.service';
 import { ProductService } from '../product.service';
 import { CategoryService } from '../category.service';
 import { TagService } from '../tag.service';
+import { ImageService } from '../image.service';
 import { ServiceProvider } from '../service-provider';
 import { Product } from '../product';
 import { Tag } from '../tag';
@@ -23,11 +24,13 @@ export class ViewAllProductsComponent implements OnInit {
   productToView: Product;
   productToDelete: Product;
   productToUpdate: Product;
+  productToUpload: Product;
   serviceProvider: ServiceProvider;
   displayAdd: boolean = false;
   displayView: boolean = false;
   displayUpdate: boolean = false;
   displayDelete: boolean = false;
+  displayPhoto: boolean = false;
   submitted: boolean;
 
   categoryId: number;
@@ -44,12 +47,15 @@ export class ViewAllProductsComponent implements OnInit {
   resultError: boolean;
   message: string;
 
+  uploadedFiles: any[] = [];
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     public sessionService: SessionService,
     private productService: ProductService,
     private categoryService: CategoryService,
-    private tagService: TagService) {
+    private tagService: TagService,
+    private imageService: ImageService) {
 
     this.submitted = false;
     this.newProduct = new Product();
@@ -89,6 +95,22 @@ export class ViewAllProductsComponent implements OnInit {
     );
   }
 
+  onUpload(event) {
+    for(let file of event.files) {
+        this.uploadedFiles.push(file);
+    }
+    console.log("test");
+    this.imageService.uploadImage(this.uploadedFiles, this.productToUpload).subscribe(
+      response => {
+        this.resultSuccess = true;
+        this.resultError = false;
+        this.message = "Files uploaded successfully!";
+      },
+      error => {
+        console.log('********** CreateNewProductComponent.ts: ' + error);
+      })
+}
+
   showDialog() {
     this.displayAdd = true;
   }
@@ -106,6 +128,11 @@ export class ViewAllProductsComponent implements OnInit {
   showDeleteDialog(productToDelete: Product) {
     this.displayDelete = true;
     this.productToDelete = productToDelete;
+  }
+
+  showPhotoDialog(productToUpload: Product) {
+    this.displayPhoto = true;
+    this.productToUpload = productToUpload;
   }
 
   clear() {

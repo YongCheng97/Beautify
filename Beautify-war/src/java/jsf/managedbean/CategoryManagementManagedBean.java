@@ -7,6 +7,8 @@ package jsf.managedbean;
 
 import ejb.session.stateless.CategorySessionBeanLocal;
 import entity.Category;
+import entity.Product;
+import entity.Service;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -31,6 +33,8 @@ public class CategoryManagementManagedBean implements Serializable {
     private List<Category> categories;
     private Category newCategory;
     private Long categoryId;
+    private List<Product> products;
+    private List<Service> services;
 
     public CategoryManagementManagedBean() {
     }
@@ -41,6 +45,18 @@ public class CategoryManagementManagedBean implements Serializable {
         categoryId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("categoryId"));
         try {
             newCategory = categorySessionBean.retrieveCategoryByCategoryId(categoryId);
+            products = newCategory.getProducts();
+            for (Product product : products) {
+                if (product.getIsDeleted() == true) {
+                    products.remove(product);
+                }
+            }
+            services = newCategory.getServices();
+            for (Service service : services) {
+                if (service.getIsDeleted() == true) {
+                    services.remove(service);
+                }
+            }
         } catch (CategoryNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving category: " + ex.getMessage(), null));
         } catch (Exception ex) {
@@ -129,6 +145,20 @@ public class CategoryManagementManagedBean implements Serializable {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    /**
+     * @return the products
+     */
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    /**
+     * @param products the products to set
+     */
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
 }

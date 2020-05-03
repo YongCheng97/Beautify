@@ -21,6 +21,8 @@ import {SpinnerModule} from 'primeng/spinner';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import {RatingModule} from 'primeng/rating';
+import {FileUploadModule} from 'primeng/fileupload';
+
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { AppComponent } from './app.component';
@@ -78,6 +80,7 @@ import { ViewAllPurchasedLineItemSalesRecordComponent } from './view-all-purchas
     InputTextareaModule,
     MultiSelectModule,
     RatingModule, 
+    FileUploadModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
