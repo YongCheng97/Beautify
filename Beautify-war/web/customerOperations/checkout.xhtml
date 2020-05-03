@@ -10,7 +10,7 @@
 
     <ui:define name="content">
 
-        <ez:menubar/>
+        <ez:menubar id="menubar"/>
 
         <h2>Checkout</h2>
 
@@ -40,7 +40,7 @@
                         </p:column>
 
                         <p:column style="width: 20%; text-align: center">
-                            <p:commandButton id="remove" value="Remove" action="#{shoppingCartManagedBean.removeFromCart(item.product)}" process="@this" update="@form" icon="fa fa-remove"/>
+                            <p:commandButton id="remove" value="Remove" action="#{shoppingCartManagedBean.removeFromCart(item.product)}" process="@this" update="@form,menubar:cartForm" icon="fa fa-remove"/>
                         </p:column> 
                     </p:dataTable>
 
@@ -52,8 +52,8 @@
                 <div style="float: right; width: 30%; text-align: center" >
 
                     <!-- <h:panelGroup id="amount"> --> 
-                        <h2>Total Amount: </h2>
-                        <h3><u> $#{shoppingCartManagedBean.totalAmount} </u></h3>
+                    <h2>Total Amount: </h2>
+                    <h3><u> $#{shoppingCartManagedBean.totalAmount} </u></h3>
                     <!-- </h:panelGroup> --> 
 
                     <br></br>
@@ -63,15 +63,15 @@
                     </h:panelGroup>
 
                     <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-                        <p:outputLabel value="Select Credit Card:  " />
-                        <p:selectOneMenu value="#{shoppingCartManagedBean.creditCardNum}" style="width:150px" required="true" requiredMessage="Credit Card is required">
+                        <p:outputLabel for="creditCard" value="Select Credit Card:  " />
+                        <p:selectOneMenu id="creditCard" value="#{shoppingCartManagedBean.creditCardNum}" style="width:150px" required="true" requiredMessage="Credit Card is required">
                             <f:selectItem itemLabel="Credit Card" noSelectionOption="false" />
                             <f:selectItems value="#{shoppingCartManagedBean.creditCards}" />
                         </p:selectOneMenu>
 
                         <br></br><br></br>
 
-                        <p:outputLabel value="Enter Delivery Address: " />
+                        <p:outputLabel for="address" value="Enter Delivery Address: " />
                         <p:inputText id ="address" value ="#{shoppingCartManagedBean.order.address}" required="true" requiredMessage="Address is required" />
 
                         <br></br><br></br>
@@ -82,16 +82,22 @@
 
                         <br></br><br></br>
 
-                        <p:commandButton style="align-self: center" value = "Pay" actionListener="#{shoppingCartManagedBean.createNewOrder}" oncomplete="PF('dialogPay').show()" icon="fa fa-dollar"/>
+                        <p:commandButton style="align-self: center" value = "Pay" action="#{shoppingCartManagedBean.createNewOrder()}" oncomplete="PF('dialogPay').show()" update="@form,:form:dialogPay" icon="fa fa-dollar"/>
                     </h:panelGroup>
 
-                    <h:panelGroup rendered="#{sessionScope.haveItems == true}"> 
-                        <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" closable="true" closeOnEscape="true"> 
+
+                    <p:dialog id="dialogPay" widgetVar="dialogPay" fitViewport="true" header="Order Confirmation" width="800px" closable="true" closeOnEscape="true"> 
+                        <p:panel style="text-align: center" rendered="#{shoppingCartManagedBean.finishCheckout == true}">
                             <h2> Your order has been confirmed! </h2>
                             <p> $#{shoppingCartManagedBean.totalAmount} has been charged to your account.</p>
                             <p:commandButton value="Close" process="@this" actionListener="#{shoppingCartManagedBean.removeAllItems}" />&nbsp;
-                        </p:dialog>
-                    </h:panelGroup>
+                        </p:panel>
+                        <p:panel style="text-align: center" rendered="#{shoppingCartManagedBean.finishCheckout == false}">
+                            <h2> #{shoppingCartManagedBean.msg} </h2>
+                            <p:commandButton value="Close" oncomplete="PF('dialogPay'.hide()" />&nbsp;
+                        </p:panel>
+                    </p:dialog>
+
 
                 </div>
             </div>

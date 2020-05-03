@@ -131,15 +131,15 @@
                             <p:outputLabel for="remarks" value="Final Price:" style="font-weight: bolder"/>
                             <h:outputText value="$#{serviceBookingManagedBean.finalAmount}"/>
 
-                            <p:outputLabel value="Select Credit Card: " style="font-weight: bolder" />
-                            <p:selectOneMenu value="#{serviceBookingManagedBean.creditCardNum}" style="width:150px" required="true" requiredMessage="Credit Card is required">
+                            <p:outputLabel for="creditCard" value="Select Credit Card: " style="font-weight: bolder" />
+                            <p:selectOneMenu id="creditCard" value="#{serviceBookingManagedBean.creditCardNum}" style="width:150px"  required="true" requiredMessage="Credit Card is required">
                                 <f:selectItem itemLabel="Credit Card" noSelectionOption="false" />
                                 <f:selectItems value="#{serviceBookingManagedBean.creditCards}" />
                             </p:selectOneMenu>
 
                         </h:panelGrid>
                         <br></br>
-                        <p:commandButton value="Book" action="#{serviceBookingManagedBean.createNewBooking()}" oncomplete="PF('dialogBooked').show()" update=":formBooking:dialogBooked" icon="fa fa-calendar"/>
+                        <p:commandButton value="Book" action="#{serviceBookingManagedBean.createNewBooking()}" oncomplete="PF('dialogBooking').show(),PF('dialogBooked').show()" update="@form,:formBooking:dialogBooked" icon="fa fa-calendar"/>
                     </p:panel>
                 </p:dialog>
 
