@@ -25,25 +25,47 @@ export class PromotionService {
   {
   }
 
-  getPromotions(): Observable<any> 
+  getProductPromotions(): Observable<any> 
   {
     console.log("this runs"); 
-    return this.httpClient.get<any>(this.baseUrl + "/retrieveAllPromotions?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+    return this.httpClient.get<any>(this.baseUrl + "/retrieveAllProductPromotions?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
 		(
 			catchError(this.handleError)
 		);
   }
 
-  createPromotion(newPromotion: Promotion): Observable<any> 
+  getServicePromotions(): Observable<any> 
+  {
+    console.log("this runs"); 
+    return this.httpClient.get<any>(this.baseUrl + "/retrieveAllServicePromotions?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+		(
+			catchError(this.handleError)
+		);
+  }
+
+  createPromotion(newPromotion: Promotion, serviceId: number, productId: number): Observable<any> 
   {
     console.log("create promo runs"); 
+    console.log("serviceId " + serviceId); 
+    console.log("productId " + productId);
     let createPromotionReq = {
       "username": this.sessionService.getUsername(), 
       "password": this.sessionService.getPassword(), 
       "promotion": newPromotion,
+      "serviceId": serviceId,
+      "productId": productId
     }; 
 
     return this.httpClient.put<any>(this.baseUrl, createPromotionReq, httpOptions).pipe
+		(
+			catchError(this.handleError)
+		);
+  }
+
+  deletePromotion(promotionId: number): Observable<any>
+  {
+    console.log("delete promo runs"); 
+    return this.httpClient.delete<any>(this.baseUrl + "/" + promotionId + "?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
 		(
 			catchError(this.handleError)
 		);

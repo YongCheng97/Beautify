@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import * as moment from 'moment';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -20,13 +21,19 @@ import { ServiceService } from '../service.service';
 export class ViewAllPromotionsComponent implements OnInit {
 
   displayPromotion: boolean = false; 
-  promotions: Promotion[]; 
+  productPromotions: Promotion[]; 
+  servicePromotions: Promotion[]; 
   promotionToView: Promotion; 
 
   products: Product[]; 
   services: Service[];
 
-  displayAddPromo: boolean = false;
+  displayAddProductPromo: boolean = false;
+  displayAddServicePromo: boolean = false;
+  newProduct: Product; 
+  newService: Service; 
+  newProductId: number; 
+  newServiceId: number; 
   newPromotion: Promotion; 
   newPromoCode: string; 
   newPromoName: string; 
@@ -34,25 +41,50 @@ export class ViewAllPromotionsComponent implements OnInit {
   newStartDate: Date; 
   newEndDate: Date; 
 
+  promotionId: number; 
+
   promoSubmitted: boolean; 
 
   resultSuccess: boolean; 
   resultError: boolean; 
   message: string; 
 
+  error: boolean; 
+  errorMessage: string; 
+
   cols: any[]; 
+  cols1: any[];
 
   constructor(public sessionService: SessionService, 
     private promotionService: PromotionService,
     private router: Router,
     private activatedRouter: ActivatedRoute, 
     private productService: ProductService, 
-    private serviceService: ServiceService) { }
+    private serviceService: ServiceService) 
+    { 
+      this.error = false; 
+
+      this.newPromotion = new Promotion(); 
+
+      this.newProduct = new Product(); 
+
+      this.newService = new Service(); 
+    }
 
   ngOnInit() {
-    this.promotionService.getPromotions().subscribe(
+
+    this.promotionService.getServicePromotions().subscribe(
       response => {
-        this.promotions = response.promotions;
+        this.servicePromotions = response.promotions;
+      },
+      error => {
+        console.log("************* ViewAllPromotionsComponent.ts: " + error); 
+      }
+    )
+
+    this.promotionService.getProductPromotions().subscribe(
+      response => {
+        this.productPromotions = response.promotions;
       },
       error => {
         console.log("************* ViewAllPromotionsComponent.ts: " + error); 
@@ -66,8 +98,19 @@ export class ViewAllPromotionsComponent implements OnInit {
       { field: 'discountRate', header: 'Discount Rate'},
       { field: 'startDate', header: 'Start Date'},
       { field: 'endDate', header: 'End Date'},
-      { field: '', header: 'Product / Service Name' }, 
-      { field: '', header: 'Add to Product / Service' }
+      { field: 'product.name', header: 'Product Name' }, 
+      { field: '', header: 'Delete' }
+    ]
+
+    this.cols1 = [
+      { field: 'promotionId', header: 'Promotion ID' },
+      { field: 'promoCode', header: 'Code' },
+      { field: 'name', header: 'Name' },
+      { field: 'discountRate', header: 'Discount Rate'},
+      { field: 'startDate', header: 'Start Date'},
+      { field: 'endDate', header: 'End Date'},
+      { field: 'service.serviceName', header: 'Service Name' }, 
+      { field: '', header: 'Delete' }
     ]
 
     this.productService.getProducts().subscribe(
@@ -81,12 +124,12 @@ export class ViewAllPromotionsComponent implements OnInit {
 
     this.serviceService.getServices().subscribe(
       response => {
-        this.services = response.services; 
-      }, 
+        this.services = response.services;
+      },
       error => {
-        console.log("************* ViewAllPromotionsComponent.ts: " + error); 
+        console.log('********** ViewAllProductsComponent.ts: ' + error);
       }
-    )
+    );
 
   }
 
@@ -95,30 +138,37 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.promotionToView = promotionToView; 
   } 
 
-  showAddPromoDialog() {
-    this.displayAddPromo = true; 
+  showAddProductPromoDialog() {
+    this.displayAddProductPromo = true; 
   }
 
-  addPromo(addPromoForm: NgForm) {
+  showAddServicePromoDialog() {
+    this.displayAddServicePromo = true; 
+  }
+
+  addProductPromo(addProductPromoForm: NgForm) {
     this.promoSubmitted = true; 
+
+    this.newProductId = this.newProduct.productId; 
+    this.newServiceId = null; 
 
     this.newPromotion.name = this.newPromoName;
     this.newPromotion.promoCode = this.newPromoCode; 
     this.newPromotion.discountRate = this.newDiscountRate; 
-    this.newPromotion.startDate = this.newStartDate;
-    this.newPromotion.endDate = this.newEndDate; 
+    this.newPromotion.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
+    this.newPromotion.endDate = moment(this.newEndDate, "dd/MM/yy").toDate(); 
 
-    if (addPromoForm.valid) 
+    if (addProductPromoForm.valid) 
     {
-      this.promotionService.createPromotion(this.newPromotion).subscribe(
+      this.promotionService.createPromotion(this.newPromotion, this.newServiceId, this.newProductId).subscribe(
         response => {
           let newPromoId: number = response.promoId; 
           this.resultSuccess = true; 
           this.resultError = false; 
-          this.message = "New Promotion " + newPromoId + " created successfully!"; 
-          this.promotionService.getPromotions().subscribe(
+          this.message = "New Product Promotion " + newPromoId + " created successfully!"; 
+          this.promotionService.getProductPromotions().subscribe(
             response => {
-              this.promotions = response.promotions; 
+              this.productPromotions = response.promotions; 
             }, 
             error => {
               console.log("***************** PromotionComponent.ts: " + error); 
@@ -135,7 +185,84 @@ export class ViewAllPromotionsComponent implements OnInit {
       )
     }
 
-    this.displayAddPromo = false; 
+    this.displayAddProductPromo = false; 
+  }
+
+  addServicePromo(addServicePromoForm: NgForm) {
+    this.promoSubmitted = true; 
+
+    this.newServiceId = this.newService.serviceId; 
+    this.newProductId = null;
+
+    console.log(this.newProduct.productId); 
+
+    this.newPromotion.name = this.newPromoName;
+    this.newPromotion.promoCode = this.newPromoCode; 
+    this.newPromotion.discountRate = this.newDiscountRate; 
+    this.newPromotion.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
+    this.newPromotion.endDate = moment(this.newEndDate, "dd/MM/yy").toDate(); 
+
+    if (addServicePromoForm.valid) 
+    {
+      this.promotionService.createPromotion(this.newPromotion, this.newServiceId, this.newProductId).subscribe(
+        response => {
+          let newPromoId: number = response.promoId; 
+          this.resultSuccess = true; 
+          this.resultError = false; 
+          this.message = "New service Promotion " + newPromoId + " created successfully!"; 
+          this.promotionService.getServicePromotions().subscribe(
+            response => {
+              this.servicePromotions = response.promotions; 
+            }, 
+            error => {
+              console.log("***************** PromotionComponent.ts: " + error); 
+            }
+          )
+        }, 
+        error => {
+          this.resultError = true; 
+          this.resultSuccess = false; 
+          this.message = "An error has occured while created the new promotion"; 
+          
+          console.log("*************** PromotionComponent.ts: " + error); 
+        }
+      )
+
+    }
+    this.displayAddServicePromo = false; 
+  }
+
+  deletePromotion(promotionId: number)
+  {
+    this.promotionId = promotionId; 
+    this.promotionService.deletePromotion(this.promotionId).subscribe(
+      response => {
+        this.router.navigate(["/view-all-promotions"]); 
+
+        this.promotionService.getServicePromotions().subscribe(
+          response => {
+            this.servicePromotions = response.promotions; 
+          }, 
+          error => {
+            console.log('********** ViewAllPromotionsComponent.ts: ' + error);
+          }
+        )
+
+        this.promotionService.getProductPromotions().subscribe(
+          response => {
+            this.productPromotions = response.promotions; 
+          }, 
+          error => {
+            console.log('********** ViewAllPromotionsComponent.ts: ' + error);
+          }
+        )
+
+      }, 
+      error => {
+        this.error = true; 
+        this.errorMessage = error; 
+      }
+    ); 
   }
 
   parseDate(d: Date) {
