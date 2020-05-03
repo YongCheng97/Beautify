@@ -170,7 +170,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
     }
     
     @Override
-    public void changePassword(ServiceProvider serviceProvider) throws ServiceProviderNotFoundException, UpdateServiceProviderException, InputDataValidationException {
+    public void changePassword(ServiceProvider serviceProvider, String newPassword) throws ServiceProviderNotFoundException, UpdateServiceProviderException, InputDataValidationException {
         if (serviceProvider != null && serviceProvider.getServiceProviderId() != null) {
             Set<ConstraintViolation<ServiceProvider>> constraintViolations = validator.validate(serviceProvider);
 
@@ -178,7 +178,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
                 ServiceProvider serviceProviderToUpdate = retrieveServiceProviderById(serviceProvider.getServiceProviderId());
 
                 if (serviceProviderToUpdate.getUsername().equals(serviceProvider.getUsername())) {
-                    serviceProviderToUpdate.setPassword(serviceProvider.getPassword());
+                    serviceProviderToUpdate.setPassword(newPassword);
                 } else {
                     throw new UpdateServiceProviderException("Name of service provider record to be updated does not match the existing record");
                 }

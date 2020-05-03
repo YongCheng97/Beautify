@@ -52,14 +52,16 @@ export class ServiceProviderService {
 			);
 	}
 	
-	changePassword(providerToUpdate: ServiceProvider): Observable<any> {
-		let updateProviderReq = {
+	changePassword(newPassword: String): Observable<any> {
+		let changeServiceProviderPasswordReq = {
 			"username": this.sessionService.getUsername(),
 			"password": this.sessionService.getPassword(),
-			"serviceProvider": providerToUpdate,
+			"serviceProvider": this.sessionService.getCurrentServiceProvider(),
+			"newPassword": newPassword,
 		};
+		
 
-		return this.httpClient.post<any>(this.baseUrl + "/changePassword" , updateProviderReq, httpOptions).pipe
+		return this.httpClient.post<any>(this.baseUrl + "/changePassword" , changeServiceProviderPasswordReq, httpOptions).pipe
 			(
 				catchError(this.handleError)
 			);

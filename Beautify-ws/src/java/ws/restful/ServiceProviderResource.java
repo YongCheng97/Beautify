@@ -27,6 +27,7 @@ import util.exception.InvalidLoginCredentialException;
 import util.exception.ServiceProviderExistException;
 import util.exception.ServiceProviderNotFoundException;
 import util.exception.UnknownPersistenceException;
+import ws.datamodel.ChangeServiceProviderPasswordReq;
 import ws.datamodel.CreateServiceProviderReq;
 import ws.datamodel.CreateServiceProviderRsp;
 import ws.datamodel.ErrorRsp;
@@ -141,16 +142,16 @@ public class ServiceProviderResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response changePassword(UpdateServiceProviderReq updateServiceProviderReq) 
+    public Response changePassword(ChangeServiceProviderPasswordReq changeServiceProviderPasswordReq) 
     {
-        if (updateServiceProviderReq != null) 
+        if (changeServiceProviderPasswordReq != null) 
         {
             try 
             {
-                ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(updateServiceProviderReq.getUsername(), updateServiceProviderReq.getPassword());
-                System.out.println("********** ServiceProviderResouce.updateServiceProvider(): Service Provider " + serviceProvider.getName() + " login remotely via web service");
+                ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(changeServiceProviderPasswordReq.getUsername(), changeServiceProviderPasswordReq.getPassword());
+                System.out.println("********** ServiceProviderResouce.changePassword(): Service Provider " + serviceProvider.getName() + " login remotely via web service");
                 
-                serviceProviderSessionBean.changePassword(updateServiceProviderReq.getServiceProvider());
+                serviceProviderSessionBean.changePassword(changeServiceProviderPasswordReq.getServiceProvider(), changeServiceProviderPasswordReq.getNewPassword());
                 
                 return Response.status(Response.Status.OK).build();
             }
