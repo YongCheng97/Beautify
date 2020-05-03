@@ -53,6 +53,7 @@ export class ViewAllPromotionsComponent implements OnInit {
   errorMessage: string; 
 
   cols: any[]; 
+  cols1: any[];
 
   constructor(public sessionService: SessionService, 
     private promotionService: PromotionService,
@@ -64,6 +65,10 @@ export class ViewAllPromotionsComponent implements OnInit {
       this.error = false; 
 
       this.newPromotion = new Promotion(); 
+
+      this.newProduct = new Product(); 
+
+      this.newService = new Service(); 
     }
 
   ngOnInit() {
@@ -93,7 +98,18 @@ export class ViewAllPromotionsComponent implements OnInit {
       { field: 'discountRate', header: 'Discount Rate'},
       { field: 'startDate', header: 'Start Date'},
       { field: 'endDate', header: 'End Date'},
-      { field: '', header: 'Product Name' }, 
+      { field: 'product.name', header: 'Product Name' }, 
+      { field: '', header: 'Delete' }
+    ]
+
+    this.cols1 = [
+      { field: 'promotionId', header: 'Promotion ID' },
+      { field: 'promoCode', header: 'Code' },
+      { field: 'name', header: 'Name' },
+      { field: 'discountRate', header: 'Discount Rate'},
+      { field: 'startDate', header: 'Start Date'},
+      { field: 'endDate', header: 'End Date'},
+      { field: 'service.serviceName', header: 'Service Name' }, 
       { field: '', header: 'Delete' }
     ]
 
@@ -108,12 +124,12 @@ export class ViewAllPromotionsComponent implements OnInit {
 
     this.serviceService.getServices().subscribe(
       response => {
-        this.services = response.services; 
-      }, 
+        this.services = response.services;
+      },
       error => {
-        console.log("************* ViewAllPromotionsComponent.ts: " + error); 
+        console.log('********** ViewAllProductsComponent.ts: ' + error);
       }
-    )
+    );
 
   }
 
@@ -178,6 +194,8 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.newServiceId = this.newService.serviceId; 
     this.newProductId = null;
 
+    console.log(this.newProduct.productId); 
+
     this.newPromotion.name = this.newPromoName;
     this.newPromotion.promoCode = this.newPromoCode; 
     this.newPromotion.discountRate = this.newDiscountRate; 
@@ -209,9 +227,9 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error); 
         }
       )
-    }
 
-    this.displayAddProductPromo = false; 
+    }
+    this.displayAddServicePromo = false; 
   }
 
   deletePromotion(promotionId: number)
