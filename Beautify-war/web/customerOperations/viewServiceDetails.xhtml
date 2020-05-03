@@ -55,35 +55,31 @@
                                     #{tag.name}
                                 </p:dataList>
 
+                                <p:commandButton actionListener="#{favouritesManagedBean.addFavouriteService}" update="@form" value="Favourite" icon="fa fa-star" title="Favourite" rendered="#{sessionScope.isLogin==true and viewServiceDetailsManagedBean.serviceFavourited==false}">
+                                    <f:attribute name="serviceToFavourite" value="#{viewServiceDetailsManagedBean.serviceToView}" />
+                                </p:commandButton>
+
+                                <p:commandButton actionListener="#{favouritesManagedBean.removeFavouriteService}" update="@form" value="Unfavourite" icon="fa fa-star-o" title="Unfavourite" rendered="#{sessionScope.isLogin==true and viewServiceDetailsManagedBean.serviceFavourited==true}">
+                                    <f:attribute name="serviceToFavourite" value="#{viewServiceDetailsManagedBean.serviceToView}" />
+                                </p:commandButton>
+                                    
+                                <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+                                    <p:commandButton value="Book service" oncomplete="PF('dialogLogin').show()"  icon="fa fa-calendar"/>
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+                                    <p:commandButton value="Book service" update="@form formBooking" actionListener="#{serviceBookingManagedBean.directToCheckout}"  oncomplete="PF('dialogBooking').show()"  icon="fa fa-calendar"/>
+                                </h:panelGroup>
+
                             </h:panelGrid>
 
-                            <br/>
-
-                            <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-                                <p:commandButton value="Book service" oncomplete="PF('dialogLogin').show()"  icon="fa fa-calendar"/>
-                            </h:panelGroup>
-
-                            <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-                                <p:commandButton value="Book service" update="@form formBooking" actionListener="#{serviceBookingManagedBean.directToCheckout}"  oncomplete="PF('dialogBooking').show()"  icon="fa fa-calendar"/>
-                            </h:panelGroup>
-
-                            <br></br>
-                            <br></br>
-                            <p:commandButton actionListener="#{favouritesManagedBean.addFavouriteService}" update="@form" value="Favourite" icon="fa fa-star" title="Favourite" rendered="#{sessionScope.isLogin==true and viewServiceDetailsManagedBean.serviceFavourited==false}">
-                                <f:attribute name="serviceToFavourite" value="#{viewServiceDetailsManagedBean.serviceToView}" />
-                            </p:commandButton>
-                            
-                            <p:commandButton actionListener="#{favouritesManagedBean.removeFavouriteService}" update="@form" value="Unfavourite" icon="fa fa-star-o" title="Unfavourite" rendered="#{sessionScope.isLogin==true and viewServiceDetailsManagedBean.serviceFavourited==true}">
-                                <f:attribute name="serviceToFavourite" value="#{viewServiceDetailsManagedBean.serviceToView}" />
-                            </p:commandButton>
-                            
                         </p:layoutUnit>
                     </p:layout>
                 </h:form>
             </h:body>
 
             <h:form id="formBooking">
-                <p:dialog id="dialogBooking" fitViewport="true" widgetVar="dialogBooking" header="Service Booking Details" closable="true">
+                <p:dialog id="dialogBooking" fitViewport="true" widgetVar="dialogBooking" header="Service Booking Details" closable="true" height="350px" width="800px" >
 
                     <p:panel style="text-align:center">
 
@@ -135,14 +131,15 @@
                             <p:outputLabel for="remarks" value="Final Price:" style="font-weight: bolder"/>
                             <h:outputText value="$#{serviceBookingManagedBean.finalAmount}"/>
 
-                            <p:outputLabel value="Select Credit Card: " style="font-weight: bolder" />
-                            <p:selectOneMenu value="#{serviceBookingManagedBean.creditCardNum}" style="width:150px" required="true" requiredMessage="Credit Card is required">
+                            <p:outputLabel for="creditCard" value="Select Credit Card: " style="font-weight: bolder" />
+                            <p:selectOneMenu id="creditCard" value="#{serviceBookingManagedBean.creditCardNum}" style="width:150px"  required="true" requiredMessage="Credit Card is required">
                                 <f:selectItem itemLabel="Credit Card" noSelectionOption="false" />
                                 <f:selectItems value="#{serviceBookingManagedBean.creditCards}" />
                             </p:selectOneMenu>
 
                         </h:panelGrid>
-                        <p:commandButton value="Book" action="#{serviceBookingManagedBean.createNewBooking()}" oncomplete="PF('dialogBooked').show()" update=":formBooking:dialogBooked" icon="fa fa-calendar"/>
+                        <br></br>
+                        <p:commandButton value="Book" action="#{serviceBookingManagedBean.createNewBooking()}" oncomplete="PF('dialogBooking').show(),PF('dialogBooked').show()" update="@form,:formBooking:dialogBooked" icon="fa fa-calendar"/>
                     </p:panel>
                 </p:dialog>
 

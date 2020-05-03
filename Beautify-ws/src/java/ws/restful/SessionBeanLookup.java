@@ -9,9 +9,11 @@ import ejb.session.stateless.BookingSessionBeanLocal;
 import ejb.session.stateless.CategorySessionBeanLocal;
 import ejb.session.stateless.ProductSessionBeanLocal;
 import ejb.session.stateless.PurchasedLineItemSessionBeanLocal;
+import ejb.session.stateless.SalesForUsSessionBeanLocal;
 import ejb.session.stateless.SalesRecordSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
+import ejb.session.stateless.StaffSessionBeanLocal;
 import ejb.session.stateless.TagsSessionBeanLocal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,6 +106,26 @@ class SessionBeanLookup {
         try {
             javax.naming.Context c = new InitialContext();
             return (ServiceSessionBeanLocal) c.lookup(ejbModuleJndiPath + "ServiceSessionBean!ejb.session.stateless.ServiceSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    public SalesForUsSessionBeanLocal lookupSalesForUsSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (SalesForUsSessionBeanLocal) c.lookup(ejbModuleJndiPath + "SalesForUsSessionBean!ejb.session.stateless.SalesForUsSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    public StaffSessionBeanLocal lookupStaffSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (StaffSessionBeanLocal) c.lookup(ejbModuleJndiPath + "StaffSessionBean!ejb.session.stateless.StaffSessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

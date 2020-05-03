@@ -64,7 +64,9 @@ public class viewServiceDetailsManagedBean implements Serializable {
                 serviceImages.add(serviceToView.getServiceName()+ i + ".jpg");
             }
             
-            for (Customer customer : serviceToView.getFavouritedCustomers()) {
+            List<Customer> favouriteCustomers = serviceToView.getFavouritedCustomers();
+            if (!favouriteCustomers.isEmpty() && currentCustomer != null)
+            for (Customer customer : favouriteCustomers) {
                 if (customer.getCustomerId() == currentCustomer.getCustomerId()) {
                     serviceFavourited = true;
                     break;

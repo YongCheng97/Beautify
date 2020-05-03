@@ -18,6 +18,7 @@ import ejb.session.stateless.SalesForUsSessionBeanLocal;
 import ejb.session.stateless.SalesRecordSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.ServiceSessionBeanLocal;
+import ejb.session.stateless.StaffSessionBeanLocal;
 import ejb.session.stateless.TagsSessionBeanLocal;
 import entity.Booking;
 import entity.Category;
@@ -32,6 +33,7 @@ import entity.SalesForUs;
 import entity.SalesRecord;
 import entity.Service;
 import entity.ServiceProvider;
+import entity.Staff;
 import entity.Tag;
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -74,6 +76,7 @@ import util.exception.ReviewExistException;
 import util.exception.ServiceExistException;
 import util.exception.ServiceProviderExistException;
 import util.exception.ServiceProviderNotFoundException;
+import util.exception.StaffUsernameExistException;
 import util.exception.UnknownPersistenceException;
 
 @Singleton
@@ -126,6 +129,9 @@ public class DataInitializationSessionBean {
 
     @EJB(name = "SalesForUsSessionBeanLocal")
     private SalesForUsSessionBeanLocal salesForUsSessionBeanLocal;
+    
+    @EJB(name = "StaffSessionBeanLocal")
+    private StaffSessionBeanLocal staffSessionBeanLocal;
 
     private CategoryTypeEnum type;
 
@@ -272,10 +278,13 @@ public class DataInitializationSessionBean {
             SalesForUs salesForUs2 = salesForUsSessionBeanLocal.createNewSalesForUsBooking(new SalesForUs(new BigDecimal("30.00").multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("02/04/2020")), booking2.getBookingId());
             SalesForUs salesForUs3 = salesForUsSessionBeanLocal.createNewSalesForUsPurchasedLineItem(new SalesForUs(new BigDecimal("13.00").multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_EVEN), sdf2.parse("25/04/2020")), purchasedLineItem4.getPurchasedLineItemId());
 
+            //staff
+            Long staffId = staffSessionBeanLocal.createNewStaff(new Staff("staff@beautify.com", "staff", "password"));
+            
         } catch (CustomerExistException | UnknownPersistenceException | InputDataValidationException | CreateNewCategoryException | ParseException | ServiceProviderExistException | ServiceProviderNotFoundException
                 | ProductExistException | CreateNewProductException | ServiceExistException | CreateNewServiceException | CustomerNotFoundException | BookingExistException | CreateNewBookingException | ReviewExistException | CreateNewReviewException
                 | CreateNewTagException | CreateNewCreditCardException | CreditCardExistsException | PromotionNameExistException | CreateNewPurchaseException | CreateNewPurchasedLineItemException | PurchasedExistException | PurchasedLineItemExistException
-                | CreateNewSalesRecordException | CreateNewSalesForUsException ex) {
+                | CreateNewSalesRecordException | CreateNewSalesForUsException | StaffUsernameExistException ex) {
             ex.printStackTrace();
         }
     }

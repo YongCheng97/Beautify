@@ -81,7 +81,7 @@ public class StaffSessionBean implements StaffSessionBeanLocal {
     @Override
     public List<Staff> retrieveAllStaffs()
     {
-        Query query = em.createQuery("SELECT s FROM StaffEntity s");
+        Query query = em.createQuery("SELECT s FROM Staff s");
         
         return query.getResultList();
     }
@@ -91,11 +91,11 @@ public class StaffSessionBean implements StaffSessionBeanLocal {
     @Override
     public Staff retrieveStaffByStaffId(Long staffId) throws StaffNotFoundException
     {
-        Staff staffEntity = em.find(Staff.class, staffId);
+        Staff staff = em.find(Staff.class, staffId);
         
-        if(staffEntity != null)
+        if(staff != null)
         {
-            return staffEntity;
+            return staff;
         }
         else
         {
@@ -106,7 +106,7 @@ public class StaffSessionBean implements StaffSessionBeanLocal {
     @Override
     public Staff retrieveStaffByUsername(String username) throws StaffNotFoundException
     {
-        Query query = em.createQuery("SELECT s FROM StaffEntity s WHERE s.username = :inUsername");
+        Query query = em.createQuery("SELECT s FROM Staff s WHERE s.username = :inUsername");
         query.setParameter("inUsername", username);
         
         try
