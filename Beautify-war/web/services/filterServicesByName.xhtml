@@ -50,12 +50,12 @@
                                 <h:outputText value = "#{filterServicesByNameManagedBean.category.name}"/>
                             </f:facet>
 
-                            <p:panel header="#{service.serviceName}" style="text-align:center;">
-                                <p:panelGrid columns="1" style="width:100%; text-align:center">
+                            <p:panel header="#{service.serviceName}" style="text-align:center; min-height:280px">
+                                <h:panelGrid columns="1" style="width:100%; text-align:center; font-family: inherit; font-size: inherit; min-height: 200px">
                                     <h:outputText value= "$#{service.price}" style="text-align:center"/>
                                     <h:outputText value="#{service.description}" style="text-align:center"/>
                                     <p:graphicImage library="images" name="#{service.serviceName}.jpg" height="120" width="150" alt ="" style="text-align:center"/>
-                                </p:panelGrid>
+                                </h:panelGrid>
                                 <p:commandLink actionListener="#{filterServicesByNameManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large">
                                     <h:outputText value = "Click here for more information!"/>
                                     <f:attribute name="serviceId" value="#{service.serviceId}" />
