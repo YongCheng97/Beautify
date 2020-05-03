@@ -10,24 +10,22 @@ package ws.datamodel;
  * @author jilon
  */
 public class CreatePromotionRsp {
-    
-    private Long promotionId; 
+    Long PromotionId; 
 
     public CreatePromotionRsp() {
     }
 
-    public CreatePromotionRsp(Long promotionId) {
-        this.promotionId = promotionId;
+    public CreatePromotionRsp(Long PromotionId) {
+        this.PromotionId = PromotionId;
     }
 
     public Long getPromotionId() {
-        return promotionId;
+        return PromotionId;
     }
 
-    public void setPromotionId(Long promotionId) {
-        this.promotionId = promotionId;
+    public void setPromotionId(Long PromotionId) {
+        this.PromotionId = PromotionId;
     }
-    
     
     
 }

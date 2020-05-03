@@ -12,24 +12,22 @@ import entity.Promotion;
  * @author jilon
  */
 public class CreatePromotionReq {
-    
-    private String username; 
-    private String password; 
+
+    private String username;
+    private String password;
     private Promotion promotion;
-    private Long serviceProviderId; 
-    //private Long serviceId; 
-    //private Long productId; 
+    private Long serviceId;
+    private Long productId; 
 
     public CreatePromotionReq() {
     }
 
-    public CreatePromotionReq(String username, String password, Promotion promotion, Long serviceProviderId) {
+    public CreatePromotionReq(String username, String password, Promotion promotion, Long serviceId, Long productId) {
         this.username = username;
         this.password = password;
         this.promotion = promotion;
-        this.serviceProviderId = serviceProviderId;
-        //this.serviceId = serviceId;
-        //this.productId = productId;
+        this.serviceId = serviceId;
+        this.productId = productId;
     }
 
     public String getUsername() {
@@ -56,15 +54,7 @@ public class CreatePromotionReq {
         this.promotion = promotion;
     }
 
-    public Long getServiceProviderId() {
-        return serviceProviderId;
-    }
-
-    public void setServiceProviderId(Long serviceProviderId) {
-        this.serviceProviderId = serviceProviderId;
-    }
-
-   /* public Long getServiceId() {
+    public Long getServiceId() {
         return serviceId;
     }
 
@@ -79,7 +69,7 @@ public class CreatePromotionReq {
     public void setProductId(Long productId) {
         this.productId = productId;
     }
-    */
     
     
+
 }

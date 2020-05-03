@@ -5,6 +5,7 @@ import entity.Promotion;
 import entity.Service;
 import entity.ServiceProvider;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public Promotion createNewPromotion(Promotion newPromotion, Long serviceProviderId) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
+    public Promotion createNewServicePromotion(Promotion newPromotion, Long serviceProviderId, Long serviceId) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
         try {
             Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(newPromotion);
 
@@ -58,6 +59,48 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
 
                 newPromotion.setServiceProvider(serviceProvider);
                 serviceProvider.getPromotions().add(newPromotion);
+                
+                Service service = em.find(Service.class, serviceId); 
+                
+                newPromotion.setService(service);
+                service.getPromotions().add(newPromotion); 
+
+                em.persist(newPromotion);
+                em.flush();
+
+                return newPromotion;
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    throw new PromotionNameExistException();
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } else {
+                throw new UnknownPersistenceException(ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public Promotion createNewProductPromotion(Promotion newPromotion, Long serviceProviderId, Long productId) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
+        try {
+            Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(newPromotion);
+
+            if (constraintViolations.isEmpty()) {
+
+                ServiceProvider serviceProvider = em.find(ServiceProvider.class, serviceProviderId);
+
+                newPromotion.setServiceProvider(serviceProvider);
+                serviceProvider.getPromotions().add(newPromotion);
+                
+                Product product = em.find(Product.class, productId); 
+                
+                newPromotion.setProduct(product);
+                product.getPromotions().add(newPromotion); 
 
                 em.persist(newPromotion);
                 em.flush();
@@ -128,6 +171,42 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         } catch (NoResultException | NonUniqueResultException ex) {
             throw new PromotionNotFoundException("Promotion name " + name + " does not exist!");
         }
+    }
+    
+    @Override
+    public List<Promotion> retrieveAllServicePromotionsByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT DISTINCT p FROM Promotion p WHERE p.serviceProvider.serviceProviderId = :inProviderId");
+        query.setParameter("inProviderId", serviceProviderId);
+
+        List<Promotion> promotions = query.getResultList();
+        
+        List<Promotion> servicePromotions = new ArrayList<>(); 
+        
+        for (Promotion p : promotions) {
+            if (p.getProduct() == null) {
+                servicePromotions.add(p); 
+            }
+        }
+        
+        return servicePromotions; 
+    }
+    
+    @Override
+    public List<Promotion> retrieveAllProductPromotionsByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT DISTINCT p FROM Promotion p WHERE p.serviceProvider.serviceProviderId = :inProviderId");
+        query.setParameter("inProviderId", serviceProviderId);
+
+        List<Promotion> promotions = query.getResultList();
+        
+        List<Promotion> productPromotions = new ArrayList<>(); 
+        
+        for (Promotion p : promotions) {
+            if (p.getService() == null) {
+                productPromotions.add(p); 
+            }
+        }
+        
+        return productPromotions; 
     }
 
     @Override

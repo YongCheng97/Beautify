@@ -12,14 +12,14 @@ import java.util.List;
  *
  * @author jilon
  */
-public class RetrieveAllPromotionsRsp {
+public class RetrieveAllProductPromotionsRsp {
     
     private List<Promotion> promotions; 
 
-    public RetrieveAllPromotionsRsp() {
+    public RetrieveAllProductPromotionsRsp() {
     }
 
-    public RetrieveAllPromotionsRsp(List<Promotion> promotions) {
+    public RetrieveAllProductPromotionsRsp(List<Promotion> promotions) {
         this.promotions = promotions;
     }
 
@@ -30,7 +30,6 @@ public class RetrieveAllPromotionsRsp {
     public void setPromotions(List<Promotion> promotions) {
         this.promotions = promotions;
     }
-    
     
     
 }
