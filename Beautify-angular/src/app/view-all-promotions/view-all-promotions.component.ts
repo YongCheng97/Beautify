@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import * as moment from 'moment';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -40,11 +41,16 @@ export class ViewAllPromotionsComponent implements OnInit {
   newStartDate: Date; 
   newEndDate: Date; 
 
+  promotionId: number; 
+
   promoSubmitted: boolean; 
 
   resultSuccess: boolean; 
   resultError: boolean; 
   message: string; 
+
+  error: boolean; 
+  errorMessage: string; 
 
   cols: any[]; 
 
@@ -53,7 +59,12 @@ export class ViewAllPromotionsComponent implements OnInit {
     private router: Router,
     private activatedRouter: ActivatedRoute, 
     private productService: ProductService, 
-    private serviceService: ServiceService) { }
+    private serviceService: ServiceService) 
+    { 
+      this.error = false; 
+
+      this.newPromotion = new Promotion(); 
+    }
 
   ngOnInit() {
 
@@ -128,8 +139,8 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.newPromotion.name = this.newPromoName;
     this.newPromotion.promoCode = this.newPromoCode; 
     this.newPromotion.discountRate = this.newDiscountRate; 
-    this.newPromotion.startDate = this.newStartDate;
-    this.newPromotion.endDate = this.newEndDate; 
+    this.newPromotion.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
+    this.newPromotion.endDate = moment(this.newEndDate, "dd/MM/yy").toDate(); 
 
     if (addProductPromoForm.valid) 
     {
@@ -170,8 +181,8 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.newPromotion.name = this.newPromoName;
     this.newPromotion.promoCode = this.newPromoCode; 
     this.newPromotion.discountRate = this.newDiscountRate; 
-    this.newPromotion.startDate = this.newStartDate;
-    this.newPromotion.endDate = this.newEndDate; 
+    this.newPromotion.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
+    this.newPromotion.endDate = moment(this.newEndDate, "dd/MM/yy").toDate(); 
 
     if (addServicePromoForm.valid) 
     {
@@ -201,6 +212,39 @@ export class ViewAllPromotionsComponent implements OnInit {
     }
 
     this.displayAddProductPromo = false; 
+  }
+
+  deletePromotion(promotionId: number)
+  {
+    this.promotionId = promotionId; 
+    this.promotionService.deletePromotion(this.promotionId).subscribe(
+      response => {
+        this.router.navigate(["/view-all-promotions"]); 
+
+        this.promotionService.getServicePromotions().subscribe(
+          response => {
+            this.servicePromotions = response.promotions; 
+          }, 
+          error => {
+            console.log('********** ViewAllPromotionsComponent.ts: ' + error);
+          }
+        )
+
+        this.promotionService.getProductPromotions().subscribe(
+          response => {
+            this.productPromotions = response.promotions; 
+          }, 
+          error => {
+            console.log('********** ViewAllPromotionsComponent.ts: ' + error);
+          }
+        )
+
+      }, 
+      error => {
+        this.error = true; 
+        this.errorMessage = error; 
+      }
+    ); 
   }
 
   parseDate(d: Date) {

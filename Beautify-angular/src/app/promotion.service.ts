@@ -60,6 +60,15 @@ export class PromotionService {
 		);
   }
 
+  deletePromotion(promotionId: number): Observable<any>
+  {
+    console.log("delete promo runs"); 
+    return this.httpClient.delete<any>(this.baseUrl + "/" + promotionId + "?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+		(
+			catchError(this.handleError)
+		);
+  }
+
 
   private handleError(error: HttpErrorResponse)
 	{

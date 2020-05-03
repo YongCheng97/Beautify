@@ -59,11 +59,11 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
 
                 newPromotion.setServiceProvider(serviceProvider);
                 serviceProvider.getPromotions().add(newPromotion);
-                
-                Service service = em.find(Service.class, serviceId); 
-                
+
+                Service service = em.find(Service.class, serviceId);
+
                 newPromotion.setService(service);
-                service.getPromotions().add(newPromotion); 
+                service.getPromotions().add(newPromotion);
 
                 em.persist(newPromotion);
                 em.flush();
@@ -96,11 +96,11 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
 
                 newPromotion.setServiceProvider(serviceProvider);
                 serviceProvider.getPromotions().add(newPromotion);
-                
-                Product product = em.find(Product.class, productId); 
-                
+
+                Product product = em.find(Product.class, productId);
+
                 newPromotion.setProduct(product);
-                product.getPromotions().add(newPromotion); 
+                product.getPromotions().add(newPromotion);
 
                 em.persist(newPromotion);
                 em.flush();
@@ -172,41 +172,41 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
             throw new PromotionNotFoundException("Promotion name " + name + " does not exist!");
         }
     }
-    
+
     @Override
     public List<Promotion> retrieveAllServicePromotionsByServiceProviderId(Long serviceProviderId) {
         Query query = em.createQuery("SELECT DISTINCT p FROM Promotion p WHERE p.serviceProvider.serviceProviderId = :inProviderId");
         query.setParameter("inProviderId", serviceProviderId);
 
         List<Promotion> promotions = query.getResultList();
-        
-        List<Promotion> servicePromotions = new ArrayList<>(); 
-        
+
+        List<Promotion> servicePromotions = new ArrayList<>();
+
         for (Promotion p : promotions) {
             if (p.getProduct() == null) {
-                servicePromotions.add(p); 
+                servicePromotions.add(p);
             }
         }
-        
-        return servicePromotions; 
+
+        return servicePromotions;
     }
-    
+
     @Override
     public List<Promotion> retrieveAllProductPromotionsByServiceProviderId(Long serviceProviderId) {
         Query query = em.createQuery("SELECT DISTINCT p FROM Promotion p WHERE p.serviceProvider.serviceProviderId = :inProviderId");
         query.setParameter("inProviderId", serviceProviderId);
 
         List<Promotion> promotions = query.getResultList();
-        
-        List<Promotion> productPromotions = new ArrayList<>(); 
-        
+
+        List<Promotion> productPromotions = new ArrayList<>();
+
         for (Promotion p : promotions) {
             if (p.getService() == null) {
-                productPromotions.add(p); 
+                productPromotions.add(p);
             }
         }
-        
-        return productPromotions; 
+
+        return productPromotions;
     }
 
     @Override
@@ -237,6 +237,19 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     @Override
     public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException {
         Promotion promotionToRemove = retrievePromotionByPromotionId(promotionId);
+
+        promotionToRemove.getServiceProvider().getPromotions().remove(promotionToRemove);
+        promotionToRemove.setServiceProvider(null);
+
+        if (promotionToRemove.getProduct() != null) {
+            promotionToRemove.getProduct().getPromotions().remove(promotionToRemove);
+            promotionToRemove.setProduct(null);
+        }
+
+        if (promotionToRemove.getService() != null) {
+            promotionToRemove.getService().getPromotions().remove(promotionToRemove);
+            promotionToRemove.setService(null);
+        }
 
         em.remove(promotionToRemove);
     }

@@ -79,7 +79,7 @@ import { ViewAllPromotionsComponent } from './view-all-promotions/view-all-promo
     SpinnerModule,
     InputTextareaModule,
     MultiSelectModule,
-    RatingModule, 
+    RatingModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

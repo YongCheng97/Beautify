@@ -77,6 +77,8 @@ public class ServiceResource {
                 service.getServiceProvider().getCreditCards().clear();
                 service.getServiceProvider().getProducts().clear();
                 service.getServiceProvider().getServices().clear();
+                
+                service.getServiceProvider().getPromotions().clear(); 
 
                 for (Tag tag : service.getTags()) {
                     tag.getServices().clear();

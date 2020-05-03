@@ -61,7 +61,7 @@
                     <td>{{parseDate(promotion.endDate) | date: 'MMM d, yyyy'}}</td>
                     <td>{{promotion.product.name}} </td>
                     <td style="text-align: center;">
-                        <p-button label="Delete" (onClick)="showPromoDialog(promotion)"></p-button>
+                        <p-button label="Delete" (onClick)="deletePromotion(promotion.promotionId)"></p-button>
                     </td>
                 </tr>
             </ng-template>
@@ -124,7 +124,7 @@
                     <td>{{parseDate(promotion.endDate) | date: 'MMM d, yyyy'}}</td>
                     <td>{{promotion.product.name}} </td>
                     <td style="text-align: center;">
-                        <p-button label="Delete" (onClick)="showPromoDialog(promotion)"></p-button>
+                        <p-button label="Delete" (onClick)="deletePromotion(promotion.promotionId)"></p-button>
                     </td>
                 </tr>
             </ng-template>
