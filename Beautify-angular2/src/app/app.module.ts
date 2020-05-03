@@ -30,7 +30,10 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ViewAllBookingSalesForUsComponent } from './view-all-booking-sales-for-us/view-all-booking-sales-for-us.component';
 import { ViewAllPurchasedLineItemSalesForUsComponent } from './view-all-purchased-line-item-sales-for-us/view-all-purchased-line-item-sales-for-us.component';
+import { ViewAllTagsComponent } from './view-all-tags/view-all-tags.component';
+
 import { ViewAllServiceProvidersComponent } from './view-all-service-providers/view-all-service-providers.component';
+>>>>>>> 0a8df6bab9f51e6016254c1d006ed695b41f3c61
 
 @NgModule({
   declarations: [
@@ -42,7 +45,9 @@ import { ViewAllServiceProvidersComponent } from './view-all-service-providers/v
     MainPageComponent,
     ViewAllBookingSalesForUsComponent,
     ViewAllPurchasedLineItemSalesForUsComponent,
+    ViewAllTagsComponent
     ViewAllServiceProvidersComponent
+
   ],
   imports: [
     BrowserModule,
