@@ -75,7 +75,6 @@ public class SalesForUsResource {
 
             List<SalesForUs> salesRecords = salesForUsSessionBeanLocal.retrieveAllSalesForUs();
             List<SalesForUs> salesForUs = new ArrayList<>();
-            System.out.println("test");
             
             for(SalesForUs salesRecord:salesRecords)
             {
@@ -94,18 +93,21 @@ public class SalesForUsResource {
                     salesRecord.getBooking().getCustomer().getPurchaseds().clear();
 
                     salesRecord.getBooking().getService().getBookings().clear();
-                    salesRecord.getBooking().getService().setServiceProvider(null);
+                    salesRecord.getBooking().getService().getServiceProvider().getCreditCards().clear();
+                    salesRecord.getBooking().getService().getServiceProvider().getServices().clear();
+                    salesRecord.getBooking().getService().getServiceProvider().getProducts().clear();
                     salesRecord.getBooking().getService().setCategory(null);
                     salesRecord.getBooking().getService().getTags().clear();
                     salesRecord.getBooking().getService().getPromotions().clear();
                     
-                    
+                    salesRecord.getBooking().getCreditCard().getBookings().clear();
+                    salesRecord.getBooking().getCreditCard().getPurchaseds().clear();
+                    salesRecord.getBooking().getCreditCard().setServiceProvider(null);
+                    salesRecord.getBooking().getCreditCard().setCustomer(null);
                     
                     salesForUs.add(salesRecord);
                 }
             }
-            
-            System.out.println("test2");
                 
             return Response.status(Response.Status.OK).entity(new RetrieveAllSalesForUsRsp(salesForUs)).build();
         }
@@ -149,7 +151,9 @@ public class SalesForUsResource {
                     }
 
                     salesRecord.getPurchasedLineItem().getProduct().setCategory(null);
-                    salesRecord.getPurchasedLineItem().getProduct().setServiceProvider(null);
+                    salesRecord.getPurchasedLineItem().getProduct().getServiceProvider().getCreditCards().clear();
+                    salesRecord.getPurchasedLineItem().getProduct().getServiceProvider().getServices().clear();
+                    salesRecord.getPurchasedLineItem().getProduct().getServiceProvider().getProducts().clear();
                     salesRecord.getPurchasedLineItem().getProduct().getFavouritedCustomers().clear();
                     salesRecord.getPurchasedLineItem().getProduct().getTags().clear();
                     salesRecord.getPurchasedLineItem().getProduct().getPromotions().clear();

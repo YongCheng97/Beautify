@@ -1,1 +1,99 @@
-<p>view-all-purchased-line-item-sales-for-us works!</p>
+<app-header></app-header>
+		
+<app-main-menu></app-main-menu>		
+
+<section id="content" class="content">
+
+	<app-breadcrumb [pageName]="'viewAllPurchasedLineItemSalesRecord'"></app-breadcrumb>
+
+			
+	<p-panel header="All Sales Record (Products)">
+	
+		<p-table #dt [value]="salesForUs">
+			<ng-template pTemplate="header">
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+						{{col.header}}
+						<p-sortIcon *ngSwitchCase="'salesForUsId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'purchasedLineItem.purchasedLineItemId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'amount'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'dateOfPayment'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'purchasedLineItem.product.serviceProvider.name'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+
+					</th>
+				</tr>
+				
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field">
+						<input placeHolder="Search" *ngSwitchCase="'salesForUsId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'purchasedLineItem.purchasedLineItemId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'amount'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">					
+						<input placeHolder="Search" *ngSwitchCase="'purchasedLineItem.product.serviceProvider.name'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">					
+					</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-salesRecord>
+				<tr>
+					<td>{{salesRecord.salesForUsId}}</td>
+					<td>{{salesRecord.purchasedLineItem.purchasedLineItemId}}</td>
+					<td>{{salesRecord.purchasedLineItem.product.serviceProvider.name}}</td>
+					<td>{{parseDate(salesRecord.dateOfPayment) | date:'EEE, MMM d, yyyy'}}</td>
+					<td>${{salesRecord.amount.toFixed(2)}}</td>
+					<td><p-button label="View" (onClick)="showDialog(salesRecord.purchasedLineItem)"></p-button></td>
+				</tr>
+			</ng-template>
+		</p-table>
+		
+		
+		<p-dialog *ngIf="display" header="View Order Item Details" modal="true" [(visible)]="display"  [style]="{width: '50vw'}">
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Order Item ID</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.purchasedLineItemId}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Order Item ID</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.product.serviceProvider.name}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Product</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.product.name}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Quantity</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.quantity}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Name</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.purchased.customer.firstName}} {{purchasedLineItemToView.purchased.customer.lastName}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Customer Contact Number</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.purchased.customer.contactNum}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Address</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.purchased.address}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Date Of Purchase</div>
+				<div class="ui-g-6">{{parseDate(purchasedLineItemToView.purchased.dateOfPurchase) | date:'EEE, MMM d, yyyy'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Status</div>
+				<div class="ui-g-6">{{purchasedLineItemToView.status}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Listed Price</div>
+				<div class="ui-g-6">${{purchasedLineItemToView.product.price.toFixed(2)}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Price Paid</div>
+				<div class="ui-g-6">${{purchasedLineItemToView.price.toFixed(2)}}</div>
+			</div>
+		</p-dialog>
+		
+	</p-panel>
+</section>
+
+
+<app-footer></app-footer>

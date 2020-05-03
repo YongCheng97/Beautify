@@ -23,7 +23,7 @@ public class SalesForUs implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long salesId;
+    private Long salesForUsId;
     
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
@@ -55,18 +55,18 @@ public class SalesForUs implements Serializable {
     
     
 
-    public Long getSalesId() {
-        return salesId;
+    public Long getSalesForUsId() {
+        return salesForUsId;
     }
 
-    public void setSalesId(Long salesId) {
-        this.salesId = salesId;
+    public void setSalesForUsId(Long salesForUsId) {
+        this.salesForUsId = salesForUsId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (salesId != null ? salesId.hashCode() : 0);
+        hash += (salesForUsId != null ? salesForUsId.hashCode() : 0);
         return hash;
     }
 
@@ -77,7 +77,7 @@ public class SalesForUs implements Serializable {
             return false;
         }
         SalesForUs other = (SalesForUs) object;
-        if ((this.salesId == null && other.salesId != null) || (this.salesId != null && !this.salesId.equals(other.salesId))) {
+        if ((this.salesForUsId == null && other.salesForUsId != null) || (this.salesForUsId != null && !this.salesForUsId.equals(other.salesForUsId))) {
             return false;
         }
         return true;
@@ -85,7 +85,7 @@ public class SalesForUs implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.SalesForUs[ id=" + salesId + " ]";
+        return "entity.SalesForUs[ id=" + salesForUsId + " ]";
     }
 
     /**

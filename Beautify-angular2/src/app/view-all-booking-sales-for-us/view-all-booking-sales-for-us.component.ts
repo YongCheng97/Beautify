@@ -50,8 +50,9 @@ export class ViewAllBookingSalesForUsComponent implements OnInit
 		);
 		
 		this.cols = [
-            { field: 'salesRecordId', header: 'Sales Record ID' },
-            { field: 'booking.bookingId', header: 'Booking ID' },
+            { field: 'salesForUsId', header: 'Sales Record ID' },
+			{ field: 'booking.bookingId', header: 'Booking ID' },
+			{ field: 'booking.service.serviceProvider.name', header: 'Service Provider' },
             { field: 'dateOfPayment', header: 'Date Of Payment' },
             { field: 'amount', header: 'Amount Earned' },
 			{ field: '', header: 'View Booking Details' }
