@@ -16,7 +16,7 @@ const routes: Routes = [
 	{ path: 'main-page', component: MainPageComponent},
 	{ path: 'view-all-booking-sales-for-us', component: ViewAllBookingSalesForUsComponent},
 	{ path: 'view-all-purchased-line-item-sales-for-us', component: ViewAllPurchasedLineItemSalesForUsComponent},
-	{ path: 'view-all-tags', component: ViewAllTagsComponent}
+	{ path: 'view-all-tags', component: ViewAllTagsComponent},
 	{ path: 'view-all-service-providers', component: ViewAllServiceProvidersComponent}
 ];
 
