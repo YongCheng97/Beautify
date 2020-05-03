@@ -102,6 +102,7 @@ public class ServiceBookingManagedBean implements Serializable {
 
         finishBooking = false;
         System.out.println("" + this.finishBooking);
+        setMsg("Appointment date and selection of credit card is required!");
     }
     
     public void createNewBooking() throws IOException {
@@ -176,80 +177,6 @@ public class ServiceBookingManagedBean implements Serializable {
 
         }
     }
-
-//    public void createNewBooking(ActionEvent event) throws IOException {
-//        System.out.println("Start time: " + sdf1.format(this.startTime));
-//        System.out.println("End time: " + sdf1.format(this.endTime));
-//
-//        FacesContext context = FacesContext.getCurrentInstance();
-//
-//        int index = sdf1.format(startTime).compareTo(sdf1.format(endTime));
-//
-//        if (index < 0) {// The start time before end time
-//
-//            //context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
-//            boolean bookingExists = checkBookingExists();
-//
-//            if (bookingExists == true) { //If new booking date and start time already existed in DB.
-//                msg = "The time slot has already been booked!";
-//                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
-//            } else {
-//                BigDecimal finalPrice = new BigDecimal("0.00");
-//                BigDecimal promoPrice = new BigDecimal("0.00");
-//                Boolean success = false;
-//                Date date = new Date();
-//                try {
-//                    Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
-//                    success = true;
-//                } catch (PromotionNotFoundException ex) {
-//                }
-//
-//                try {
-//                    if (promoCode != null && !promoCode.isEmpty() && success) {
-//                        Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
-//                        List<Promotion> servicePromotions = currentService.getPromotions();
-//                        if (servicePromotions.contains(promotion)) {
-//                            if (promotionSessionBeanLocal.checkPromoCode(promoCode) == true) {
-//                                promoPrice = (currentService.getPrice().multiply(promotion.getDiscountRate())).setScale(2, BigDecimal.ROUND_HALF_UP);
-//                                finalPrice = promoPrice;
-//                            } else {
-//                                finalPrice = currentService.getPrice();
-//                            }
-//                        } else {
-//                            finalPrice = currentService.getPrice();
-//                        }
-//                    } else {
-//                        finalPrice = currentService.getPrice();
-//                    }
-//                    setFinalAmount(finalPrice);
-//                    Booking newBooking = new Booking(date, "Approved", this.remarks, this.appointmentDate, this.startTime, this.endTime,finalPrice);
-//                    CreditCard cc = creditCardSessionBeanLocal.retrieveCreditCardByLastFourNum(creditCardNum);
-//
-//                    booking = bookingSessionBeanLocal.createNewBooking(newBooking, currentCustomer.getCustomerId(), currentService.getServiceId());
-//                    List<Booking> bookingList = bookingSessionBeanLocal.retrieveAllBookings();
-//                    setBookingListInDB(bookingList);
-//
-//                    finishBooking = true;
-//                    System.out.println("" + this.finishBooking);
-//                    //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("bookingComplete", true);
-//
-//                } catch (UnknownPersistenceException | PromotionNotFoundException | BookingExistException | CreateNewBookingException | CustomerNotFoundException | InputDataValidationException ex) {
-//                    Logger.getLogger(ServiceBookingManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//
-//        } else if (index
-//                > 0) {
-//            msg = "The starting time cannot be after the end time";
-//            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
-//
-//        } else {
-//            msg = "The starting time and ending time cannot be the same";
-//            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
-//
-//        }
-//
-//    }
 
     public void bookingComplete() {
 

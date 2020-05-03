@@ -68,9 +68,11 @@ public class ShoppingCartManagedBean implements Serializable {
     private List<Item> items;
     private int amountToCart;
     private BigDecimal totalAmount;
+    
+    private boolean finishCheckout;
 
     //FacesContext context = FacesContext.getCurrentInstance();
-    String msg = null;
+    private String msg = null;
 
     public ShoppingCartManagedBean() {
         this.items = new ArrayList<>();
@@ -90,22 +92,22 @@ public class ShoppingCartManagedBean implements Serializable {
         int index = this.existsInCart(product);
         System.out.println("test: " + this.amountToCart);
         if (this.amountToCart == 0) {
-            msg = "Choose at least 1";
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+            setMsg("Choose at least 1");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getMsg(), null));
         } else if (this.amountToCart > product.getQuantityOnHand()) {
-            msg = "Available product in stock: " + product.getQuantityOnHand();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null));
+            setMsg("Available product in stock: " + product.getQuantityOnHand());
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getMsg(), null));
         } else {
             if (index == -1) {
                 this.items.add(new Item(product, this.amountToCart));
-                msg = "Added to the cart";
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+                setMsg("Added to the cart");
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
 
             } else {
                 int quantity = this.items.get(index).getQuantity() + this.amountToCart;
                 this.items.get(index).setQuantity(quantity);
-                msg = "Updated the quantity";
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+                setMsg("Updated the quantity");
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
             }
             this.amountToCart = 0;
         }
@@ -131,8 +133,8 @@ public class ShoppingCartManagedBean implements Serializable {
 
         int index = this.existsInCart(product);
         this.items.remove(index);
-        msg = "Remove from cart";
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+        setMsg("Remove from cart");
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
 
         BigDecimal total = new BigDecimal("0.00");
 
@@ -197,16 +199,16 @@ public class ShoppingCartManagedBean implements Serializable {
         }
 
         setCreditCards(list);
-
+        setFinishCheckout(false);
+        setMsg("Delivery address and selection of credit card is required!");
     }
-
-    public void createNewOrder(ActionEvent event) {
-
+    
+    public void createNewOrder() {
         FacesContext context = FacesContext.getCurrentInstance();
 
         if (items.isEmpty()) {
-            msg = "Add item to cart before checkout!";
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+            setMsg("Add item to cart before checkout!");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("haveItems", false);
 
         } else {
@@ -264,13 +266,86 @@ public class ShoppingCartManagedBean implements Serializable {
                 CreditCard cc = creditCardSessionBeanLocal.retrieveCreditCardByLastFourNum(creditCardNum);
 
                 setOrder(purchasedSessionBeanLocal.createNewPurchased(purchased, currentCustomer.getCustomerId(), lineItemsIds, cc.getCreditCardId()));
-
+                setFinishCheckout(true);
+                
             } catch (UnknownPersistenceException | CreateNewPurchasedLineItemException | PurchasedLineItemExistException | InputDataValidationException | CustomerNotFoundException
                     | PurchasedExistException | CreateNewPurchaseException | PromotionNotFoundException ex) {
                 Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
+
+//    public void createNewOrder(ActionEvent event) {
+//
+//        FacesContext context = FacesContext.getCurrentInstance();
+//
+//        if (items.isEmpty()) {
+//            msg = "Add item to cart before checkout!";
+//            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+//            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("haveItems", false);
+//
+//        } else {
+//            List<Long> lineItemsIds = new ArrayList<>();
+//
+//            BigDecimal totalPrice = new BigDecimal("0.00");
+//            BigDecimal promoPrice = new BigDecimal("0.00");
+//            Date date = new Date();
+//
+//            Boolean success = false;
+//
+//            try {
+//                Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
+//                success = true;
+//            } catch (PromotionNotFoundException ex) {
+//            }
+//
+//            try {
+//                if (promoCode != null && !promoCode.isEmpty() && success) {
+//                    Promotion promotion = promotionSessionBeanLocal.retrievePromotionByPromoCode(promoCode);
+//                    for (Item item : items) {
+//                        List<Promotion> itemPromotions = item.getProduct().getPromotions();
+//                        if (itemPromotions.contains(promotion)) {
+//                            if (promotionSessionBeanLocal.checkPromoCode(promoCode) == true) {
+//                                promoPrice = (item.getProduct().getPrice().multiply(promotion.getDiscountRate())).setScale(2, BigDecimal.ROUND_HALF_UP);
+//
+//                                PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", promoPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
+//                                lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+//                                totalPrice = totalPrice.add(promoPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
+//                            } else {
+//                                PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+//                                lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+//
+//                                totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+//                            }
+//                        } else {
+//                            PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+//                            lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+//
+//                            totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+//                        }
+//                    }
+//                } else {
+//                    for (Item item : this.getItems()) {
+//                        PurchasedLineItem lineItem = new PurchasedLineItem(item.getQuantity(), "Order Confirmed", item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+//                        lineItemsIds.add((purchasedLineItemSessionBeanLocal.createNewPurchasedLineItem(lineItem, item.getProduct().getProductId())).getPurchasedLineItemId());
+//
+//                        totalPrice = totalPrice.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+//                    }
+//                }
+//
+//                setTotalAmount(totalPrice);
+//
+//                Purchased purchased = new Purchased(date, totalPrice, order.getAddress());
+//                CreditCard cc = creditCardSessionBeanLocal.retrieveCreditCardByLastFourNum(creditCardNum);
+//
+//                setOrder(purchasedSessionBeanLocal.createNewPurchased(purchased, currentCustomer.getCustomerId(), lineItemsIds, cc.getCreditCardId()));
+//
+//            } catch (UnknownPersistenceException | CreateNewPurchasedLineItemException | PurchasedLineItemExistException | InputDataValidationException | CustomerNotFoundException
+//                    | PurchasedExistException | CreateNewPurchaseException | PromotionNotFoundException ex) {
+//                Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
 
     public void checkPromoCode(ActionEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -281,9 +356,9 @@ public class ShoppingCartManagedBean implements Serializable {
 
             success = true;
         } catch (PromotionNotFoundException ex) {
-            msg = "Invalid Promo Code!";
+            setMsg("Invalid Promo Code!");
 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
             Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (success) {
@@ -303,7 +378,7 @@ public class ShoppingCartManagedBean implements Serializable {
                     Boolean valid = promotionSessionBeanLocal.checkPromoCode(promoCode); // promo is valid for this date
 
                     if (valid && exists) {
-                        msg = "Promo Code Applied!";
+                        setMsg("Promo Code Applied!");
 
                         BigDecimal totalPrice = new BigDecimal("0.00");
                         BigDecimal promoPrice = new BigDecimal("0.00");
@@ -321,10 +396,10 @@ public class ShoppingCartManagedBean implements Serializable {
                         setTotalAmount(totalPrice);
 
                     } else {
-                        msg = "Invalid Promo Code!";
+                        setMsg("Invalid Promo Code!");
                     }
 
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMsg(), null));
                 } catch (PromotionNotFoundException ex) {
                     Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -406,6 +481,34 @@ public class ShoppingCartManagedBean implements Serializable {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    /**
+     * @return the finishCheckout
+     */
+    public boolean isFinishCheckout() {
+        return finishCheckout;
+    }
+
+    /**
+     * @param finishCheckout the finishCheckout to set
+     */
+    public void setFinishCheckout(boolean finishCheckout) {
+        this.finishCheckout = finishCheckout;
+    }
+
+    /**
+     * @return the msg
+     */
+    public String getMsg() {
+        return msg;
+    }
+
+    /**
+     * @param msg the msg to set
+     */
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
 }
