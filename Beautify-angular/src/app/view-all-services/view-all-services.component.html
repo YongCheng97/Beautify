@@ -118,7 +118,7 @@
             <div class="ui-g">
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Service Name</div>
                 <div class="ui-g-6">
-                    <input id="name" name="name" #name="ngModel" type="text" [(ngModel)]="serviceToUpdate.name"
+                    <input id="name" name="name" #name="ngModel" type="text" [(ngModel)]="serviceToUpdate.serviceName"
                         required="true" />
                 </div>
             </div>
@@ -141,8 +141,8 @@
                 <div class="ui-g-6" style="background-color: #f4f4f4;">Service Category</div>
                 <div class="ui-g-6">
                     <p-dropdown [options]="categories" optionLabel="name" editable="true"
-                        placeholder="Select a Category" name="updatedCategory" #name="ngModel"
-                        [(ngModel)]="updatedCategory"></p-dropdown>
+                        placeholder="Select a Category" name="selectedCategory" #name="ngModel"
+                        [(ngModel)]="selectedCategory"></p-dropdown>
                 </div>
             </div>
             <div class="ui-g">

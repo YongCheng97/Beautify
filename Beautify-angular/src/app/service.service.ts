@@ -41,8 +41,9 @@ export class ServiceService {
   }
 
   updateService(serviceToUpdate: Service, categoryId: number, tagIds: number[]): Observable<any> {
+    console.log(serviceToUpdate.serviceName);
 
-    let updateBookReq = {
+    let updateServiceReq = {
       "username": this.sessionService.getUsername(),
       "password": this.sessionService.getPassword(),
       "service": serviceToUpdate,
@@ -50,7 +51,7 @@ export class ServiceService {
       "tagIds": tagIds
     };
 
-    return this.httpClient.post<any>(this.baseUrl, updateBookReq, httpOptions).pipe
+    return this.httpClient.post<any>(this.baseUrl, updateServiceReq, httpOptions).pipe
       (
         catchError(this.handleError)
       );

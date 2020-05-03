@@ -379,7 +379,6 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                     productToUpdate.setName(productEntity.getName());
                     productToUpdate.setQuantityOnHand(productEntity.getQuantityOnHand());
                     productToUpdate.setPrice(productEntity.getPrice());
-                    productToUpdate.setCategory(productEntity.getCategory());
                 } else {
                     throw new UpdateProductException("SKU Code of product record to be updated does not match the existing record");
                 }

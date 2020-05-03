@@ -2,7 +2,6 @@ package ejb.session.stateless;
 
 import entity.Booking;
 import entity.Category;
-import entity.Product;
 import entity.Service;
 import entity.ServiceProvider;
 import entity.Tag;
@@ -376,20 +375,20 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
             if (constraintViolations.isEmpty()) {
                 
                 Service serviceToUpdate = retrieveServiceByServiceId(service.getServiceId());
-                
+                System.out.println(categoryId);
                     if (categoryId != null && (!serviceToUpdate.getCategory().getCategoryId().equals(categoryId))) {
                         Category categoryEntityToUpdate = categorySessionBeanLocal.retrieveCategoryByCategoryId(categoryId);
 
                         if (!categoryEntityToUpdate.getSubCategoryEntities().isEmpty()) {
                             throw new UpdateServiceException("Selected category for the new service is not a leaf category");
                         }
-
+                        System.out.println(categoryEntityToUpdate);
                         serviceToUpdate.setCategory(categoryEntityToUpdate);
                     }
 
                     if (tagIds != null) {
                         for (Tag tagEntity : serviceToUpdate.getTags()) {
-                            tagEntity.getProducts().remove(serviceToUpdate);
+                            tagEntity.getServices().remove(serviceToUpdate);
                         }
 
                         serviceToUpdate.getTags().clear();
@@ -399,19 +398,18 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
                                 Tag tagEntity = tagsSessionBeanLocal.retrieveTagByTagId(tagId);
                                 serviceToUpdate.addTag(tagEntity);
                             } catch (TagNotFoundException ex) {
-                                Logger.getLogger(ProductSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(ServiceSessionBean.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     }
                     serviceToUpdate.setDescription(service.getDescription());
                     serviceToUpdate.setServiceName(service.getServiceName());
                     serviceToUpdate.setPrice(service.getPrice());
-                    serviceToUpdate.setCategory(service.getCategory());
             } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
             }
         } else {
-            throw new ServiceNotFoundException("Service ID not provided for product to be updated");
+            throw new ServiceNotFoundException("Service ID not provided for service to be updated");
         }
     }
     @Override

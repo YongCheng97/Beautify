@@ -43,7 +43,7 @@ export class ProductService {
   updateProduct(productToUpdate: Product, categoryId: number, tagIds: number[]): Observable<any> {
 
     console.log(productToUpdate.productId);
-    let updateBookReq = {
+    let updateProductReq = {
       "username": this.sessionService.getUsername(),
       "password": this.sessionService.getPassword(),
       "product": productToUpdate,
@@ -51,7 +51,7 @@ export class ProductService {
       "tagIds": tagIds
     };
 
-    return this.httpClient.post<any>(this.baseUrl, updateBookReq, httpOptions).pipe
+    return this.httpClient.post<any>(this.baseUrl, updateProductReq, httpOptions).pipe
       (
         catchError(this.handleError)
       );

@@ -148,7 +148,7 @@ export class ViewAllServicesComponent implements OnInit {
 
   update(updateServiceForm: NgForm) {
 
-    this.categoryId = this.updatedCategory.categoryId;
+    this.categoryId = this.selectedCategory.categoryId;
     let longTagIds: number[] = new Array();
 
     for (var i = 0; i < this.selectUpdatedTags.length; i++) {
@@ -163,6 +163,7 @@ export class ViewAllServicesComponent implements OnInit {
         this.resultSuccess = true;
         this.resultError = false;
         this.message = "Service updated successfully";
+        console.log(this.message);
         this.displayUpdate = false;
       },
       error => {
