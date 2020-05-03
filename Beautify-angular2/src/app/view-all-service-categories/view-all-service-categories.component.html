@@ -1,0 +1,45 @@
+<app-header></app-header>
+		
+<app-main-menu></app-main-menu>		
+
+<section id="content" class="content">
+
+	<p-panel header="All Service Categories">
+		<p-table #dt [value] ="serviceCategories">
+			<ng-template pTemplate="header">
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+							{{col.header}}
+							<p-sortIcon *ngSwitchCase="'categoryId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+							<p-sortIcon *ngSwitchCase="'name'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+							<p-sortIcon *ngSwitchCase="'description'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+							<p-sortIcon *ngSwitchCase="'type'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+							
+					</th>
+				</tr>
+				
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field">
+							<input placeHolder="Search" *ngSwitchCase="'categoryId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+							<input placeHolder="Search" *ngSwitchCase="'name'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+							<input placeHolder="Search" *ngSwitchCase="'description'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+							<input placeHolder="Search" *ngSwitchCase="'type'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">							
+					</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-category>
+					<tr>
+						<td>{{category.categoryId}}</td>
+						<td>{{category.name}}</td>
+						<td>{{category.description}}</td>
+						<td>{{category.type}}</td>
+						<td><p-button label="Delete" (onClick)="showDeleteDialog(tag)"></p-button></td>
+					</tr>
+			</ng-template>
+		</p-table>
+	</p-panel>
+
+
+</section>
+
+<app-footer></app-footer>
