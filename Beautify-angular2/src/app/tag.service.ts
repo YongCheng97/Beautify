@@ -42,6 +42,13 @@ export class TagService {
 	  );
   }
   
+  deleteTag(tagId: number): Observable<any> {
+    return this.httpClient.delete<any>(this.baseUrl + "/" + tagId + "?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+      (
+        catchError(this.handleError)
+      );
+  }
+  
   private handleError(error: HttpErrorResponse) {
     let errorMessage: string = "";
 

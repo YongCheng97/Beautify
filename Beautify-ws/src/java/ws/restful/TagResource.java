@@ -10,15 +10,19 @@ import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import util.exception.CreateNewTagException;
+import util.exception.DeleteTagException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.TagNotFoundException;
 import ws.datamodel.CreateTagReq;
 import ws.datamodel.CreateTagRsp;
 import ws.datamodel.ErrorRsp;
@@ -133,6 +137,35 @@ public class TagResource {
             ErrorRsp errorRsp = new ErrorRsp("Invalid create new tag request");
 
             return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
+        }
+    }
+    
+    @Path("{tagId}")
+    @DELETE
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteTag(@QueryParam("username") String username,
+            @QueryParam("password") String password,
+            @PathParam("tagId") Long tagId) {
+        try {
+                Staff staff = staffSessionBean.staffLogin(username, password);
+                System.out.println("********** TagResource.deleteTag(): Staff " + staff.getUsername() + " login remotely via web service");
+                
+                tagsSessionBean.deleteTag(tagId);
+                return Response.status(Response.Status.OK).build();
+        }
+        catch (InvalidLoginCredentialException ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+            return Response.status(Response.Status.UNAUTHORIZED).entity(errorRsp).build();
+        } catch (TagNotFoundException | DeleteTagException ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
+        } catch (Exception ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
         }
     }
 }
