@@ -59,7 +59,7 @@ export class MainMenuComponent implements OnInit {
 				]
 			},
 			{
-				label: 'View Profile', icon: 'pi pi-fw pi-user',
+				label: 'View Promotions', icon: 'pi pi-fw pi-dollar', routerLink: ['/view-all-promotions']
 			},
 			{
 				label: 'Logout', icon: 'pi pi-fw pi-sign-out', routerLink: ['/index']

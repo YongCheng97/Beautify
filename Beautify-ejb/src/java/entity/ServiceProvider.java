@@ -67,6 +67,9 @@ public class ServiceProvider implements Serializable {
     @OneToMany(mappedBy = "serviceProvider")
     private List<Service> services;
 
+    @OneToMany(mappedBy = "serviceProvider")
+    private List<Promotion> promotions;
+
     public ServiceProvider() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
 
@@ -75,6 +78,7 @@ public class ServiceProvider implements Serializable {
         creditCards = new ArrayList<>();
         products = new ArrayList<>();
         services = new ArrayList<>();
+        promotions = new ArrayList<>();
     }
 
     public ServiceProvider(String name, String email, String password, String address, Date[] openingHours, Date[] closingHours, File certification, boolean isApproved, String username) {
@@ -88,7 +92,7 @@ public class ServiceProvider implements Serializable {
         this.closingHours = closingHours;
         this.certification = certification;
         this.isApproved = isApproved;
-        this.username = username; 
+        this.username = username;
 
         setPassword(password);
     }
@@ -252,6 +256,30 @@ public class ServiceProvider implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void addPromotion(Promotion promotion) {
+        if (promotion != null) {
+            if (!this.promotions.contains(promotion)) {
+                this.getPromotions().add(promotion);
+            }
+        }
+    }
+
+    public void removePromotion(Promotion promotion) {
+        if (promotion != null) {
+            if (this.getPromotions().contains(promotion)) {
+                this.getPromotions().remove(promotion);
+            }
+        }
+    }
+
+    public List<Promotion> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
     }
 
 }

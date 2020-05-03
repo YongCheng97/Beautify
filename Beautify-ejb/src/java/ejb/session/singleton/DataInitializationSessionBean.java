@@ -237,9 +237,9 @@ public class DataInitializationSessionBean {
             Review review2 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Excellent hair cut!", null), customer1.getCustomerId(), haircut.getServiceId());
 
             // promotion
-            Promotion promotion1 = promotionSessionBeanLocal.createNewPromotion(new Promotion("10OFF", "10% off", new BigDecimal("00.90"), sdf2.parse("01/04/2020"), sdf2.parse("30/5/2020")));
-            Promotion promotion3 = promotionSessionBeanLocal.createNewPromotion(new Promotion("20OFF", "20% off", new BigDecimal("00.80"), sdf2.parse("01/06/2020"), sdf2.parse("20/8/2020")));
-            Promotion promotion2 = promotionSessionBeanLocal.createNewPromotion(new Promotion("30OFF", "30% off", new BigDecimal("00.70"), sdf2.parse("10/04/2020"), sdf2.parse("19/5/2020")));
+            Promotion promotion1 = promotionSessionBeanLocal.createNewPromotion(new Promotion("10OFF", "10% off", new BigDecimal("00.90"), sdf2.parse("01/04/2020"), sdf2.parse("30/5/2020")), provider1.getServiceProviderId());
+            Promotion promotion3 = promotionSessionBeanLocal.createNewPromotion(new Promotion("20OFF", "20% off", new BigDecimal("00.80"), sdf2.parse("01/06/2020"), sdf2.parse("20/8/2020")), provider3.getServiceProviderId());
+            Promotion promotion2 = promotionSessionBeanLocal.createNewPromotion(new Promotion("30OFF", "30% off", new BigDecimal("00.70"), sdf2.parse("10/04/2020"), sdf2.parse("19/5/2020")), provider1.getServiceProviderId());
             redPolish.addPromotion(promotion1);
             facial.addPromotion(promotion2);
             redPolish.addPromotion(promotion3);

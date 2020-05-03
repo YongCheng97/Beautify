@@ -24,7 +24,7 @@ import util.exception.UpdatePromotionException;
 @Local
 public interface PromotionSessionBeanLocal {
 
-    public Promotion createNewPromotion(Promotion newPromotion) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException;
+    public Promotion createNewPromotion(Promotion newPromotion, Long serviceProviderId) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException;
 
     public List<Promotion> retrieveAllPromotions();
 
@@ -38,10 +38,8 @@ public interface PromotionSessionBeanLocal {
 
     public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException;
 
-    //public void updateProductDiscountPrice(Product product);
-
-    //public void updateServiceDiscountPrice(Service service);
-
     public Boolean checkPromoCode(String promoCode);
+    
+    public List<Promotion> retrievePromotionsByServiceProviderId(Long serviceProviderId);
 
 }
