@@ -91,6 +91,11 @@ public class SalesRecordResource {
                 salesRecord.getBooking().getService().getTags().clear();
                 salesRecord.getBooking().getService().getPromotions().clear();
                 
+                salesRecord.getBooking().getCreditCard().getBookings().clear();
+                salesRecord.getBooking().getCreditCard().getPurchaseds().clear();
+                salesRecord.getBooking().getCreditCard().setServiceProvider(null);
+                salesRecord.getBooking().getCreditCard().setCustomer(null);
+                
             }
                 
             return Response.status(Response.Status.OK).entity(new RetrieveAllSalesRecordRsp(salesRecords)).build();

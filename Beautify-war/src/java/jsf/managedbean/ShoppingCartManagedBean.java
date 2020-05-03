@@ -12,6 +12,7 @@ import entity.Product;
 import entity.Promotion;
 import entity.Purchased;
 import entity.PurchasedLineItem;
+import entity.Tag;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -163,8 +164,12 @@ public class ShoppingCartManagedBean implements Serializable {
         for (Item item : this.getItems()) {
             Product product = item.getProduct(); 
             product.setQuantityOnHand(item.getProduct().getQuantityOnHand() - item.getQuantity());
+            List<Long> tagIds = new ArrayList<>();
+            for (Tag tag : product.getTags()) {
+                tagIds.add(tag.getTagId());
+            }
             try { 
-                productSessionBeanLocal.updateProduct(product, product.getCategory().getCategoryId());
+                productSessionBeanLocal.updateProduct(product, product.getCategory().getCategoryId(), tagIds);
             } catch (ProductNotFoundException ex) {
                 Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             } catch (CategoryNotFoundException ex) {

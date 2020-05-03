@@ -2,6 +2,7 @@ package ejb.session.stateless;
 
 import entity.Category;
 import entity.Product;
+import entity.PurchasedLineItem;
 import entity.ServiceProvider;
 import entity.Tag;
 import java.math.BigDecimal;
@@ -10,6 +11,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -37,6 +40,9 @@ import util.exception.UpdateProductException;
 @Local(ProductSessionBeanLocal.class)
 
 public class ProductSessionBean implements ProductSessionBeanLocal {
+
+    @EJB
+    private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBean;
 
     @EJB
     private TagsSessionBeanLocal tagsSessionBeanLocal;
@@ -114,7 +120,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<Product> retrieveAllProducts() {
-        Query query = em.createQuery("SELECT p FROM Product p ORDER BY p.skuCode ASC");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.isDeleted = FALSE ORDER BY p.skuCode ASC");
         List<Product> products = query.getResultList();
 
         for (Product product : products) {
@@ -127,7 +133,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<Product> retrieveAllProductsByServiceProvider(Long serviceProviderId) {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.serviceProvider.serviceProviderId = :serviceProviderId ORDER BY p.skuCode ASC");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.serviceProvider.serviceProviderId = :serviceProviderId AND p.isDeleted = FALSE ORDER BY p.skuCode ASC");
         query.setParameter("serviceProviderId", serviceProviderId);
         List<Product> products = query.getResultList();
 
@@ -141,7 +147,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<Product> retrieveAllProductsFromCategory(Long categoryId) {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.category.categoryId = :categoryId ORDER BY p.skuCode ASC");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.category.categoryId = :categoryId AND p.isDeleted = FALSE ORDER BY p.skuCode ASC");
         query.setParameter("categoryId", categoryId);
         List<Product> products = query.getResultList();
 
@@ -155,7 +161,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<Product> filterProductsByName(String searchString, Long categoryId) {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.name LIKE :inSearchString ORDER BY p.skuCode ASC");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.name LIKE :inSearchString AND p.isDeleted = FALSE ORDER BY p.skuCode ASC");
         query.setParameter("inSearchString", "%" + searchString + "%");
         List<Product> products = query.getResultList();
         List<Product> newProducts = new ArrayList<>();
@@ -176,7 +182,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<Product> filterProductsByMinimumPrice(BigDecimal minPrice, Long categoryId) {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.price >= :minPrice ORDER BY p.skuCode ASC");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.price >= :minPrice AND p.isDeleted = FALSE ORDER BY p.skuCode ASC");
         query.setParameter("minPrice", minPrice);
         List<Product> products = query.getResultList();
         List<Product> newProducts = new ArrayList<>();
@@ -197,7 +203,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public List<Product> filterProductsByMaximumPrice(BigDecimal maxPrice, Long categoryId) {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.price <= :minPrice ORDER BY p.skuCode ASC");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.price <= :minPrice AND p.isDeleted = FALSE ORDER BY p.skuCode ASC");
         query.setParameter("minPrice", maxPrice);
         List<Product> products = query.getResultList();
         List<Product> newProducts = new ArrayList<>();
@@ -281,7 +287,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
             List<Product> newProducts = new ArrayList<>();
 
             for (Product product : products) {
-                if (product.getCategory().getCategoryId() == categoryId) {
+                if (product.getCategory().getCategoryId() == categoryId && product.getIsDeleted() == false) {
                     newProducts.add(product);
                 }
             }
@@ -305,7 +311,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     public Product retrieveProductByProdId(Long productId) throws ProductNotFoundException {
         Product product = em.find(Product.class, productId);
 
-        if (product != null) {
+        if (product != null && product.getIsDeleted() == false) {
             product.getCategory();
             product.getServiceProvider();
             product.getTags().size();
@@ -318,7 +324,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 
     @Override
     public Product retrieveProductByProductSkuCode(String skuCode) throws ProductNotFoundException {
-        Query query = em.createQuery("SELECT p FROM Product p WHERE p.skuCode = :inSkuCode");
+        Query query = em.createQuery("SELECT p FROM Product p WHERE p.skuCode = :inSkuCode AND p.isDeleted = FALSE");
         query.setParameter("inSkuCode", skuCode);
 
         try {
@@ -333,13 +339,14 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     }
 
     @Override
-    public void updateProduct(Product productEntity, Long categoryId /*List<Long> tagIds*/) throws ProductNotFoundException, CategoryNotFoundException, /*TagNotFoundException,*/ UpdateProductException, InputDataValidationException {
+    public void updateProduct(Product productEntity, Long categoryId, List<Long> tagIds) throws ProductNotFoundException, CategoryNotFoundException, /*TagNotFoundException,*/ UpdateProductException, InputDataValidationException {
         if (productEntity != null && productEntity.getProductId() != null) {
             Set<ConstraintViolation<Product>> constraintViolations = validator.validate(productEntity);
 
             if (constraintViolations.isEmpty()) {
+                
                 Product productToUpdate = retrieveProductByProdId(productEntity.getProductId());
-
+                
                 if (productToUpdate.getSkuCode().equals(productEntity.getSkuCode())) {
                     // Added in v5.1
                     if (categoryId != null && (!productToUpdate.getCategory().getCategoryId().equals(categoryId))) {
@@ -352,29 +359,26 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
                         productToUpdate.setCategory(categoryEntityToUpdate);
                     }
 
-                    /*
-                    // Added in v5.1
                     if (tagIds != null) {
-                        for (TagEntity tagEntity : productEntityToUpdate.getTagEntities()) {
-                            tagEntity.getProductEntities().remove(productEntityToUpdate);
+                        for (Tag tagEntity : productToUpdate.getTags()) {
+                            tagEntity.getProducts().remove(productToUpdate);
                         }
 
-                        productEntityToUpdate.getTagEntities().clear();
+                        productToUpdate.getTags().clear();
 
                         for (Long tagId : tagIds) {
-                            TagEntity tagEntity = tagEntitySessionBeanLocal.retrieveTagByTagId(tagId);
-                            productEntityToUpdate.addTag(tagEntity);
+                            try {
+                                Tag tagEntity = tagsSessionBeanLocal.retrieveTagByTagId(tagId);
+                                productToUpdate.addTag(tagEntity);
+                            } catch (TagNotFoundException ex) {
+                                Logger.getLogger(ProductSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                     }
-                     */
                     productToUpdate.setDescription(productEntity.getDescription());
                     productToUpdate.setName(productEntity.getName());
                     productToUpdate.setQuantityOnHand(productEntity.getQuantityOnHand());
                     productToUpdate.setPrice(productEntity.getPrice());
-                    // Removed in v5.0
-                    // productEntityToUpdate.setCategory(productEntity.getCategory());
-                    // Added in v5.1
-                    //productEntityToUpdate.setProductRating((productEntity.getProductRating()));
                 } else {
                     throw new UpdateProductException("SKU Code of product record to be updated does not match the existing record");
                 }
@@ -390,21 +394,16 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     public void deleteProduct(Long productId) throws ProductNotFoundException, DeleteProductException {
         Product productEntityToRemove = retrieveProductByProdId(productId);
 
-        //List<SaleTransactionLineItemEntity> saleTransactionLineItemEntities = saleTransactionEntitySessionBeanLocal.retrieveSaleTransactionLineItemsByProductId(productId);
-        //if (saleTransactionLineItemEntities.isEmpty()) {
-        productEntityToRemove.getCategory().getProducts().remove(productEntityToRemove);
+            productEntityToRemove.getCategory().getProducts().remove(productEntityToRemove);
+            productEntityToRemove.setCategory(null);
 
-        /*
-            for (TagEntity tagEntity : productEntityToRemove.getTagEntities()) {
-                tagEntity.getProductEntities().remove(productEntityToRemove);
+            for (Tag tag : productEntityToRemove.getTags()) {
+                tag.getProducts().remove(productEntityToRemove);
             }
 
-            productEntityToRemove.getTagEntities().clear();
-         */
-        em.remove(productEntityToRemove);
-        //} else {
-        throw new DeleteProductException("Product ID " + productId + " is associated with existing sale transaction line item(s) and cannot be deleted!");
-        //}
+            productEntityToRemove.getTags().clear();
+
+            productEntityToRemove.setIsDeleted(true);
     }
 
     private List<Product> addSubCategoryProducts(Category categoryEntity) {

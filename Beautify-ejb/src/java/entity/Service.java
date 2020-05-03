@@ -45,7 +45,8 @@ public class Service implements Serializable {
     @Size(max = 128)
     private String description;
     private File photo;
-
+    private Boolean isDeleted;
+    
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private ServiceProvider serviceProvider;
@@ -71,6 +72,7 @@ public class Service implements Serializable {
         this.promotions = new ArrayList<>();
         this.bookings = new ArrayList<>();
         this.favouritedCustomers = new ArrayList<>();
+        this.isDeleted = false;
     }
 
     public Service(String serviceName, BigDecimal price, String description, File photo) {
@@ -78,6 +80,7 @@ public class Service implements Serializable {
         this.price = price;
         this.description = description;
         this.photo = photo;
+        this.isDeleted = false;
     }
 
     public Long getServiceId() {
@@ -231,6 +234,20 @@ public class Service implements Serializable {
 
     public void setFavouritedCustomers(List<Customer> favouritedCustomers) {
         this.favouritedCustomers = favouritedCustomers;
+    }
+
+    /**
+     * @return the isDeleted
+     */
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    /**
+     * @param isDeleted the isDeleted to set
+     */
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
 

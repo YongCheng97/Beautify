@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { SessionService } from '../session.service';
 import { StaffService } from '../staff.service';
+import { Staff } from '../staff';
 
 @Component({
   selector: 'app-main-page',

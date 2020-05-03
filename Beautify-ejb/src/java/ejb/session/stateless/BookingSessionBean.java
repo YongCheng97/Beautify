@@ -90,10 +90,10 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 service.getBookings().add(newBooking);
 
                 CreditCard creditcard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(creditCardId);
-                
+
                 newBooking.setCreditCard(creditcard);
-                creditcard.getBookings().add(newBooking);   
-                
+                creditcard.getBookings().add(newBooking);
+
                 em.persist(newBooking);
                 em.flush();
 
@@ -141,6 +141,15 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         } else {
             throw new BookingNotFoundException("Booking ID " + bookingId + " does not exist!");
         }
+    }
+
+    @Override
+    public List<Booking> retrieveAllBookingsByServiceId(Long serviceId) {
+        Query query = em.createQuery("SELECT b FROM Booking b WHERE b.service.serviceId = :inServiceId ORDER BY b.dateOfAppointment DESC, b.startTime ASC");
+        query.setParameter("inServiceId", serviceId);
+        List<Booking> bookings = query.getResultList();
+
+        return bookings;
     }
 
     @Override

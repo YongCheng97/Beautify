@@ -37,23 +37,23 @@ export class MainMenuComponent implements OnInit {
 				]
 			},
 			{
-				label: 'View Tags', icon: 'pi pi-fw pi-tags',
+				label: 'View Tags', icon: 'pi pi-fw pi-tags', routerLink: ['/view-all-tags']
 			},
 			{
 				label: 'View Sales Record', icon: 'pi pi-fw pi-chart-bar',
 				items: [
 					[
 						{
-							items: [{ label: 'Products' }]
+							items: [{ label: 'Products' , routerLink: ['/view-all-purchased-line-item-sales-for-us']}]
 						},
 						{
-							items: [{ label: 'Services' }]
+							items: [{ label: 'Services' , routerLink: ['/view-all-booking-sales-for-us']}]
 						},
 					],
 				]
 			},
 			{
-				label: 'View Service Providers', icon: 'pi pi-fw pi-user',
+				label: 'View Service Providers', icon: 'pi pi-fw pi-user', routerLink: ['/view-all-service-providers'],
 			},
 			{
 				label: 'Logout', icon: 'pi pi-fw pi-sign-out', routerLink: ['/index']

@@ -40,6 +40,31 @@ export class ServiceService {
     );
   }
 
+  updateService(serviceToUpdate: Service, categoryId: number, tagIds: number[]): Observable<any> {
+    console.log(serviceToUpdate.serviceName);
+
+    let updateServiceReq = {
+      "username": this.sessionService.getUsername(),
+      "password": this.sessionService.getPassword(),
+      "service": serviceToUpdate,
+      "categoryId": categoryId,
+      "tagIds": tagIds
+    };
+
+    return this.httpClient.post<any>(this.baseUrl, updateServiceReq, httpOptions).pipe
+      (
+        catchError(this.handleError)
+      );
+  }
+
+  deleteService(serviceId: number): Observable<any> {
+    return this.httpClient.delete<any>(this.baseUrl + "/" + serviceId + "?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+      (
+        catchError(this.handleError)
+      );
+  }
+
+
   private handleError(error: HttpErrorResponse) {
     let errorMessage: string = "";
 
