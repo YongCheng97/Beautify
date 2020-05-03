@@ -15,9 +15,11 @@ export class ViewAllTagsComponent implements OnInit
 {
 	tags: Tag[];
 	newTag: Tag;
+	tagToDelete: Tag;
 	displayTag: boolean = false;
 	
-	displayAdd: boolean = false;
+	displayCreate: boolean = false;
+	displayDelete: boolean = false;
 	submitted: boolean;
 	
 	resultSuccess: boolean;
@@ -55,8 +57,13 @@ export class ViewAllTagsComponent implements OnInit
 	  
 	}
 	showDialog() {
-		this.displayAdd = true;
+		this.displayCreate = true;
 	}
+	
+	showDeleteDialog(tagToDelete: Tag) {
+    this.displayDelete = true;
+    this.tagToDelete = tagToDelete;
+  }
 		
 	clear() {
 		this.submitted = false;
@@ -66,8 +73,8 @@ export class ViewAllTagsComponent implements OnInit
 	create(createTagForm: NgForm)
 	{
 		this.submitted = true;
-		if (createTagForm.valid)
-		{
+		//if (createTagForm.valid)
+		//{
 			this.tagService.createTag(this.newTag).subscribe(
 			response => {
 				let newTagId = response.newTagId;
@@ -82,7 +89,19 @@ export class ViewAllTagsComponent implements OnInit
 				console.log('********** CreateNewTagComponent.ts: ' + error);
 			}
 			);
-		}
-		this.displayAdd = false;
+		//}
+		this.displayCreate = false;
 	}
+	
+	delete(deleteTagForm: NgForm) {
+    this.tagService.deleteTag(this.tagToDelete.tagId).subscribe(
+      response => {
+        this.router.navigate(["/view-all-tags"]);
+        this.displayDelete = false;
+      },
+      error => {
+        console.log('********** DeleteServiceComponent.ts: ' + error);
+      }
+    );
+  }
 }

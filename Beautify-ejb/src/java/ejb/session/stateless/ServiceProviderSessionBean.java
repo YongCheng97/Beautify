@@ -168,6 +168,27 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
             throw new ServiceProviderNotFoundException("Service Provider ID not provided for service provider to be updated");
         }
     }
+    
+    @Override
+    public void changePassword(ServiceProvider serviceProvider) throws ServiceProviderNotFoundException, UpdateServiceProviderException, InputDataValidationException {
+        if (serviceProvider != null && serviceProvider.getServiceProviderId() != null) {
+            Set<ConstraintViolation<ServiceProvider>> constraintViolations = validator.validate(serviceProvider);
+
+            if (constraintViolations.isEmpty()) {
+                ServiceProvider serviceProviderToUpdate = retrieveServiceProviderById(serviceProvider.getServiceProviderId());
+
+                if (serviceProviderToUpdate.getUsername().equals(serviceProvider.getUsername())) {
+                    serviceProviderToUpdate.setPassword(serviceProvider.getPassword());
+                } else {
+                    throw new UpdateServiceProviderException("Name of service provider record to be updated does not match the existing record");
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new ServiceProviderNotFoundException("Service Provider ID not provided for service provider to be updated");
+        }
+    }
 
     @Override
     public void deleteServiceProvider(Long serviceProviderId) throws ServiceProviderNotFoundException, DeleteServiceProviderException {

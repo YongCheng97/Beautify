@@ -4,34 +4,71 @@
 
 <section id="content" class="content">
 
-<p-panel header="All available tags">
-	<p-table #dt [value] ="tags">
-		<ng-template pTemplate="header">
-			<tr>
-				<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
-						{{col.header}}
-						<p-sortIcon *ngSwitchCase="'tagId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-						<p-sortIcon *ngSwitchCase="'name'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-						
-				</th>
-			</tr>
-			
-			<tr>
-				<th *ngFor="let col of cols" [ngSwitch]="col.field">
-						<input placeHolder="Search" *ngSwitchCase="'tagId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
-						<input placeHolder="Search" *ngSwitchCase="'name'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">										
-				</th>
-			</tr>
-		</ng-template>
-		<ng-template pTemplate="body" let-tag>
+	<p-panel header="All available tags">
+		<p-table #dt [value] ="tags">
+			<ng-template pTemplate="header">
 				<tr>
-					<td>{{tag.tagId}}</td>
-					<td>{{tag.name}}</td>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+							{{col.header}}
+							<p-sortIcon *ngSwitchCase="'tagId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+							<p-sortIcon *ngSwitchCase="'name'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+							
+					</th>
 				</tr>
-		</ng-template>
-	</p-table>
-</p-panel>
+				
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field">
+							<input placeHolder="Search" *ngSwitchCase="'tagId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+							<input placeHolder="Search" *ngSwitchCase="'name'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">										
+					</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-tag>
+					<tr>
+						<td>{{tag.tagId}}</td>
+						<td>{{tag.name}}</td>
+						<td><p-button label="Delete" (onClick)="showDeleteDialog(tag)"></p-button></td>
+					</tr>
+			</ng-template>
+		</p-table>
+	</p-panel>
+	<br />
+	
+	<p-button label="Create new tag" icon="pi pi-plus" (onClick)= "showDialog()"></p-button>
 
+	<p-dialog *ngIf="displayCreate" header="Create new tag" modal="true" [(visible)]="displayCreate" height="200"
+        [style]="{width: '60vw'}">
+		<form (ngSubmit) = "create(createTagForm)">
+			<div class="ui-g">
+                <div class="ui-g-6" style="background-color: #f4f4f4;">Tag Name</div>
+                <div class="ui-g-6">
+                    <input id="name" name="name" #name="ngModel" type="text" [(ngModel)]="newTag.name"
+                        required="true" />
+                </div>
+            </div>
+			<br />
+            <div class="ui-g" style="float:right">
+                <button (click)="clear()">Clear</button>
+                &nbsp;
+                <input type="submit" value="Submit" />
+            </div>
+		</form>
+	</p-dialog>
+	
+	<p-dialog *ngIf="displayDelete" header="Delete tag" modal="true" [(visible)]="displayDelete" height="200"
+        [style]="{width: '60vw'}">
+		<form (ngSubmit) = "delete(deleteTagForm)">
+			<div style="text-align: center;">
+                <div style="text-align: center;">
+                    Are you sure you want to delete this tag?
+                </div>
+                <div style="clear:both;">&nbsp;</div>
+                <div>
+                    <input type="submit" value="Confirm" />
+                </div>
+            </div>
+		</form>
+	</p-dialog>
 
 </section>
 
