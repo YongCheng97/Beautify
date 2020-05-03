@@ -53,7 +53,7 @@ export class MainMenuComponent implements OnInit {
 				]
 			},
 			{
-				label: 'View Service Providers', icon: 'pi pi-fw pi-user',
+				label: 'View Service Providers', icon: 'pi pi-fw pi-user', routerLink: ['/view-all-service-providers'],
 			},
 			{
 				label: 'Logout', icon: 'pi pi-fw pi-sign-out', routerLink: ['/index']

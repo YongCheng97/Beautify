@@ -1,5 +1,6 @@
 package ejb.session.stateless;
 
+import entity.Booking;
 import entity.Category;
 import entity.Service;
 import entity.ServiceProvider;
@@ -10,6 +11,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -23,17 +26,24 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateNewServiceException;
+import util.exception.DeleteServiceException;
 import util.exception.InputDataValidationException;
+import util.exception.ProductNotFoundException;
 import util.exception.ServiceExistException;
 import util.exception.ServiceNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
 import util.exception.TagNotFoundException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateProductException;
+import util.exception.UpdateServiceException;
 
 @Stateless
 @Local(ServiceSessionBeanLocal.class)
 
 public class ServiceSessionBean implements ServiceSessionBeanLocal {
+
+    @EJB
+    private BookingSessionBeanLocal bookingSessionBean;
 
     @EJB(name = "TagsSessionBeanLocal")
     private TagsSessionBeanLocal tagsSessionBeanLocal;
@@ -118,7 +128,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
     @Override
     public List<Service> retrieveAllServices() {
-        Query query = em.createQuery("SELECT s FROM Service s ORDER BY s.price ASC");
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.isDeleted = FALSE ORDER BY s.price ASC");
         List<Service> services = query.getResultList();
 
         for (Service service : services) {
@@ -135,7 +145,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
     @Override
     public List<Service> retrieveAllServicesByServiceProvider(Long serviceProviderId) {
-        Query query = em.createQuery("SELECT s FROM Service s ORDER BY s.price ASC");
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.isDeleted = FALSE ORDER BY s.price ASC");
         List<Service> services = query.getResultList();
         List<Service> newServices = new ArrayList<>();
 
@@ -159,7 +169,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
     @Override
     public List<Service> retrieveAllServicesFromCategory(Long categoryId) {
-        Query query = em.createQuery("SELECT s FROM Service s WHERE s.category.categoryId = :categoryId ORDER BY s.price ASC");
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.category.categoryId = :categoryId AND s.isDeleted = FALSE ORDER BY s.price ASC");
         query.setParameter("categoryId", categoryId);
         List<Service> services = query.getResultList();
 
@@ -195,7 +205,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
     @Override
     public List<Service> filterServicesByName(String searchString, Long categoryId) {
-        Query query = em.createQuery("SELECT s FROM Service s WHERE s.serviceName LIKE :inSearchString ORDER BY s.price ASC");
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.serviceName LIKE :inSearchString AND s.isDeleted = FALSE ORDER BY s.price ASC");
         query.setParameter("inSearchString", "%" + searchString + "%");
         List<Service> services = query.getResultList();
         List<Service> newServices = new ArrayList<>();
@@ -220,7 +230,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
     @Override
     public List<Service> filterServicesByMinimumPrice(BigDecimal minPrice, Long categoryId) {
-        Query query = em.createQuery("SELECT s FROM Service s WHERE s.price >= :minPrice ORDER BY s.price ASC");
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.price >= :minPrice AND s.isDeleted = FALSE ORDER BY s.price ASC");
         query.setParameter("minPrice", minPrice);
         List<Service> services = query.getResultList();
         List<Service> newServices = new ArrayList<>();
@@ -245,7 +255,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
     @Override
     public List<Service> filterServicesByMaximumPrice(BigDecimal maxPrice, Long categoryId) {
-        Query query = em.createQuery("SELECT s FROM Service s WHERE s.price <= :maxPrice ORDER BY s.price ASC");
+        Query query = em.createQuery("SELECT s FROM Service s WHERE s.price <= :maxPrice AND s.isDeleted = FALSE ORDER BY s.price ASC");
         query.setParameter("maxPrice", maxPrice);
         List<Service> services = query.getResultList();
         List<Service> newServices = new ArrayList<>();
@@ -338,7 +348,7 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
             List<Service> newServices = new ArrayList<>();
 
             for (Service service : services) {
-                if (service.getCategory().getCategoryId() == categoryId) {
+                if (service.getCategory().getCategoryId() == categoryId && service.getIsDeleted() == false) {
                     newServices.add(service);
                 }
             }
@@ -356,6 +366,67 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
 
             return newServices;
         }
+    }
+
+    @Override
+    public void updateService(Service service, Long categoryId, List<Long> tagIds) throws ServiceNotFoundException, CategoryNotFoundException, TagNotFoundException, UpdateServiceException, InputDataValidationException {
+        if (service != null && service.getServiceId() != null) {
+            Set<ConstraintViolation<Service>> constraintViolations = validator.validate(service);
+
+            if (constraintViolations.isEmpty()) {
+
+                Service serviceToUpdate = retrieveServiceByServiceId(service.getServiceId());
+                System.out.println(categoryId);
+                if (categoryId != null && (!serviceToUpdate.getCategory().getCategoryId().equals(categoryId))) {
+                    Category categoryEntityToUpdate = categorySessionBeanLocal.retrieveCategoryByCategoryId(categoryId);
+
+                    if (!categoryEntityToUpdate.getSubCategoryEntities().isEmpty()) {
+                        throw new UpdateServiceException("Selected category for the new service is not a leaf category");
+                    }
+                    System.out.println(categoryEntityToUpdate);
+                    serviceToUpdate.setCategory(categoryEntityToUpdate);
+                }
+
+                if (tagIds != null) {
+                    for (Tag tagEntity : serviceToUpdate.getTags()) {
+                        tagEntity.getServices().remove(serviceToUpdate);
+                    }
+
+                    serviceToUpdate.getTags().clear();
+
+                    for (Long tagId : tagIds) {
+                        try {
+                            Tag tagEntity = tagsSessionBeanLocal.retrieveTagByTagId(tagId);
+                            serviceToUpdate.addTag(tagEntity);
+                        } catch (TagNotFoundException ex) {
+                            Logger.getLogger(ServiceSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                serviceToUpdate.setDescription(service.getDescription());
+                serviceToUpdate.setServiceName(service.getServiceName());
+                serviceToUpdate.setPrice(service.getPrice());
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new ServiceNotFoundException("Service ID not provided for service to be updated");
+        }
+    }
+
+    @Override
+    public void deleteService(Long serviceId) throws ServiceNotFoundException, DeleteServiceException {
+        Service serviceToRemove = retrieveServiceByServiceId(serviceId);
+
+        serviceToRemove.getCategory().getServices().remove(serviceToRemove);
+
+        for (Tag tag : serviceToRemove.getTags()) {
+            tag.getServices().remove(serviceToRemove);
+        }
+
+        serviceToRemove.getTags().clear();
+
+        serviceToRemove.setIsDeleted(true);
     }
 
     private List<Service> addSubCategoryServices(Category categoryEntity) {

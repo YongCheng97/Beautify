@@ -20,16 +20,24 @@ export class ViewAllProductsComponent implements OnInit {
 
   products: Product[];
   newProduct: Product;
+  productToView: Product;
+  productToDelete: Product;
+  productToUpdate: Product;
   serviceProvider: ServiceProvider;
   displayAdd: boolean = false;
+  displayView: boolean = false;
+  displayUpdate: boolean = false;
+  displayDelete: boolean = false;
   submitted: boolean;
 
   categoryId: number;
   selectedCategory: Category;
+  updatedCategory: Category;
   tagIds: string[];
   categories: Category[];
   categoryNames: string[];
   selectedTags: Tag[];
+  selectUpdatedTags: Tag[];
   tags: Tag[];
 
   resultSuccess: boolean;
@@ -85,6 +93,21 @@ export class ViewAllProductsComponent implements OnInit {
     this.displayAdd = true;
   }
 
+  showViewDialog(productToView: Product) {
+    this.displayView = true;
+    this.productToView = productToView;
+  }
+
+  showUpdateDialog(productToUpdate: Product) {
+    this.displayUpdate = true;
+    this.productToUpdate = productToUpdate;
+  }
+
+  showDeleteDialog(productToDelete: Product) {
+    this.displayDelete = true;
+    this.productToDelete = productToDelete;
+  }
+
   clear() {
     this.submitted = false;
     this.newProduct = new Product();
@@ -103,23 +126,65 @@ export class ViewAllProductsComponent implements OnInit {
     this.submitted = true;
 
     // if (addProductForm.valid) {
-      this.productService.createProduct(this.newProduct, this.categoryId, longTagIds).subscribe(
+    this.productService.createProduct(this.newProduct, this.categoryId, longTagIds).subscribe(
+      response => {
+        let newProductId: number = response.productId;
+        this.resultSuccess = true;
+        this.resultError = false;
+        this.message = "New product " + newProductId + " created successfully";
+      },
+      error => {
+        this.resultError = true;
+        this.resultSuccess = false;
+        this.message = "An error has occurred while creating the new product: " + error;
+
+        console.log('********** CreateNewProductComponent.ts: ' + error);
+      }
+    );
+    // }
+    this.displayAdd = false;
+  }
+
+  update(updateProductForm: NgForm) {
+
+    this.categoryId = this.updatedCategory.categoryId;
+    let longTagIds: number[] = new Array();
+
+    for (var i = 0; i < this.selectUpdatedTags.length; i++) {
+      longTagIds.push(this.selectUpdatedTags[i].tagId);
+    }
+
+    this.submitted = true;
+
+    // if (updateProductForm.valid) {
+      this.productService.updateProduct(this.productToUpdate, this.categoryId, longTagIds).subscribe(
         response => {
-          let newProductId: number = response.productId;
           this.resultSuccess = true;
           this.resultError = false;
-          this.message = "New product " + newProductId + " created successfully";
+          this.message = "Product updated successfully";
+          this.displayUpdate = false;
         },
         error => {
           this.resultError = true;
           this.resultSuccess = false;
-          this.message = "An error has occurred while creating the new product: " + error;
+          this.message = "An error has occurred while updating the product: " + error;
 
-          console.log('********** CreateNewProductComponent.ts: ' + error);
+          console.log('********** UpdateProductComponent.ts: ' + error);
         }
       );
     // }
-    this.displayAdd = false;
+  }
+
+  delete(deleteProductForm: NgForm) {
+    this.productService.deleteProduct(this.productToDelete.productId).subscribe(
+      response => {
+        this.router.navigate(["/view-all-products"]);
+        this.displayDelete = false;
+      },
+      error => {
+        console.log('********** DeleteServiceComponent.ts: ' + error);
+      }
+    );
   }
 }
 

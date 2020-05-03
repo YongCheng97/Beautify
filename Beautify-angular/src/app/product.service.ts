@@ -29,15 +29,39 @@ export class ProductService {
   createProduct(newProduct: Product, categoryId: number, tagIds: number[]): Observable<any> {
     let createProductReq = {
       "username": this.sessionService.getUsername(),
-			"password": this.sessionService.getPassword(),
+      "password": this.sessionService.getPassword(),
       "product": newProduct,
       "categoryId": categoryId,
-			"tagIds": tagIds
+      "tagIds": tagIds
     }
 
     return this.httpClient.put<any>(this.baseUrl, createProductReq, httpOptions).pipe(
       catchError(this.handleError)
     );
+  }
+
+  updateProduct(productToUpdate: Product, categoryId: number, tagIds: number[]): Observable<any> {
+
+    console.log(productToUpdate.productId);
+    let updateProductReq = {
+      "username": this.sessionService.getUsername(),
+      "password": this.sessionService.getPassword(),
+      "product": productToUpdate,
+      "categoryId": categoryId,
+      "tagIds": tagIds
+    };
+
+    return this.httpClient.post<any>(this.baseUrl, updateProductReq, httpOptions).pipe
+      (
+        catchError(this.handleError)
+      );
+  }
+
+  deleteProduct(productId: number): Observable<any> {
+    return this.httpClient.delete<any>(this.baseUrl + "/" + productId + "?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+      (
+        catchError(this.handleError)
+      );
   }
 
   private handleError(error: HttpErrorResponse) {

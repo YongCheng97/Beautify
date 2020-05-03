@@ -29,7 +29,7 @@ public interface ProductSessionBeanLocal {
 
     public Product retrieveProductByProductSkuCode(String skuCode) throws ProductNotFoundException;
 
-    public void updateProduct(Product productEntity, Long categoryId) throws ProductNotFoundException, CategoryNotFoundException, UpdateProductException, InputDataValidationException;
+    public void updateProduct(Product productEntity, Long categoryId, List<Long> tagIds) throws ProductNotFoundException, CategoryNotFoundException, UpdateProductException, InputDataValidationException;
 
     public void deleteProduct(Long productId) throws ProductNotFoundException, DeleteProductException;
 
