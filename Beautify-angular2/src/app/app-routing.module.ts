@@ -7,7 +7,8 @@ import { ViewAllBookingSalesForUsComponent } from './view-all-booking-sales-for-
 import { ViewAllPurchasedLineItemSalesForUsComponent } from './view-all-purchased-line-item-sales-for-us/view-all-purchased-line-item-sales-for-us.component';
 import { ViewAllTagsComponent } from './view-all-tags/view-all-tags.component';
 import { ViewAllServiceProvidersComponent } from './view-all-service-providers/view-all-service-providers.component';
-
+import { ViewAllProductCategoriesComponent } from './view-all-product-categories/view-all-product-categories.component';
+import { ViewAllServiceCategoriesComponent } from './view-all-service-categories/view-all-service-categories.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,9 @@ const routes: Routes = [
 	{ path: 'view-all-booking-sales-for-us', component: ViewAllBookingSalesForUsComponent},
 	{ path: 'view-all-purchased-line-item-sales-for-us', component: ViewAllPurchasedLineItemSalesForUsComponent},
 	{ path: 'view-all-tags', component: ViewAllTagsComponent},
-	{ path: 'view-all-service-providers', component: ViewAllServiceProvidersComponent}
+	{ path: 'view-all-service-providers', component: ViewAllServiceProvidersComponent},
+	{ path: 'view-all-product-categories', component: ViewAllProductCategoriesComponent},
+	{ path: 'view-all-service-categories', component: ViewAllServiceCategoriesComponent}
 ];
 
 @NgModule({
