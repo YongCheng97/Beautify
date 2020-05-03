@@ -10,6 +10,7 @@ import { ViewAllReviewsComponent } from './view-all-reviews/view-all-reviews.com
 import { ViewAllPurchasedLineItemsComponent } from './view-all-purchased-line-items/view-all-purchased-line-items.component';
 import { ViewAllBookingSalesRecordComponent } from './view-all-booking-sales-record/view-all-booking-sales-record.component';
 import { ViewAllPurchasedLineItemSalesRecordComponent } from './view-all-purchased-line-item-sales-record/view-all-purchased-line-item-sales-record.component';
+import { ViewAllPromotionsComponent } from './view-all-promotions/view-all-promotions.component'; 
 
 const routes: Routes = [
   { path: '', redirectTo: '/index', pathMatch: 'full' },
@@ -22,7 +23,8 @@ const routes: Routes = [
   { path: 'view-all-reviews', component: ViewAllReviewsComponent},
   { path: 'view-all-purchased-line-items', component: ViewAllPurchasedLineItemsComponent},
   { path: 'view-all-booking-sales-record', component: ViewAllBookingSalesRecordComponent},
-  { path: 'view-all-purchased-line-item-sales-record', component: ViewAllPurchasedLineItemSalesRecordComponent}
+  { path: 'view-all-purchased-line-item-sales-record', component: ViewAllPurchasedLineItemSalesRecordComponent},
+  { path: 'view-all-promotions', component: ViewAllPromotionsComponent}
 ];
 
 @NgModule({

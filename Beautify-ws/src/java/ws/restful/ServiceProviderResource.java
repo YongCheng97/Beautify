@@ -60,6 +60,7 @@ public class ServiceProviderResource {
             serviceProvider.getCreditCards().clear();
             serviceProvider.getProducts().clear();
             serviceProvider.getServices().clear();
+            serviceProvider.getPromotions().clear(); 
 
             return Response.status(Status.OK).entity(new ServiceProviderLoginRsp(serviceProvider)).build();
         } catch (InvalidLoginCredentialException ex) {

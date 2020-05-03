@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.Product;
 import entity.Promotion;
 import entity.Service;
+import entity.ServiceProvider;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -47,11 +48,17 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public Promotion createNewPromotion(Promotion newPromotion) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
+    public Promotion createNewPromotion(Promotion newPromotion, Long serviceProviderId) throws UnknownPersistenceException, InputDataValidationException, PromotionNameExistException {
         try {
             Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(newPromotion);
 
             if (constraintViolations.isEmpty()) {
+
+                ServiceProvider serviceProvider = em.find(ServiceProvider.class, serviceProviderId);
+
+                newPromotion.setServiceProvider(serviceProvider);
+                serviceProvider.getPromotions().add(newPromotion);
+
                 em.persist(newPromotion);
                 em.flush();
 
@@ -75,6 +82,14 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     @Override
     public List<Promotion> retrieveAllPromotions() {
         Query query = em.createQuery("SELECT p FROM Promotion p");
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Promotion> retrievePromotionsByServiceProviderId(Long serviceProviderId) {
+        Query query = em.createQuery("SELECT DISTINCT p FROM Promotion p WHERE p.serviceProvider.serviceProviderId = :inProviderId");
+        query.setParameter("inProviderId", serviceProviderId);
 
         return query.getResultList();
     }
@@ -147,54 +162,6 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         em.remove(promotionToRemove);
     }
 
-    /*@Override
-    public void updateServiceDiscountPrice(Service service) {
-        List<Promotion> promotions = service.getPromotions();
-        if (promotions.isEmpty()) {
-            service.setDiscountPrice(null);
-        } else {
-            Date date = new Date();
-            BigDecimal discountPrice = new BigDecimal("0.00");
-            Boolean update = false;
-
-            for (Promotion promotion : promotions) {
-                if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
-                    discountPrice = service.getPrice().multiply(promotion.getDiscountRate());
-                    service.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
-                    update = true;
-                }
-            }
-
-            if (!update) {
-                service.setDiscountPrice(null);
-            }
-        }
-    }
-
-    @Override
-    public void updateProductDiscountPrice(Product product) {
-        List<Promotion> promotions = product.getPromotions();
-        if (promotions.isEmpty()) {
-            product.setDiscountPrice(null);
-        } else {
-            Date date = new Date();
-            BigDecimal discountPrice = new BigDecimal("0.00");
-            Boolean update = false;
-
-            for (Promotion promotion : promotions) {
-                if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
-                    discountPrice = product.getPrice().multiply(promotion.getDiscountRate());
-                    product.setDiscountPrice(discountPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
-                    update = true;
-                }
-            }
-
-            if (!update) { // no current working promo 
-                product.setDiscountPrice(null);
-            }
-        }
-    } */
-    
     @Override
     public Boolean checkPromoCode(String promoCode) {
         Boolean valid = false;
@@ -205,7 +172,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
             Date date = new Date();
 
             if (promotion.getStartDate().compareTo(date) < 0 && promotion.getEndDate().compareTo(date) > 0) {
-                valid = true; 
+                valid = true;
             }
 
         } catch (PromotionNotFoundException ex) {

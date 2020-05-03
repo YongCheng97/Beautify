@@ -37,6 +37,7 @@ import { ViewAllServicesComponent } from './view-all-services/view-all-services.
 import { ViewAllProductsComponent } from './view-all-products/view-all-products.component';
 import { ViewAllBookingSalesRecordComponent } from './view-all-booking-sales-record/view-all-booking-sales-record.component';
 import { ViewAllPurchasedLineItemSalesRecordComponent } from './view-all-purchased-line-item-sales-record/view-all-purchased-line-item-sales-record.component';
+import { ViewAllPromotionsComponent } from './view-all-promotions/view-all-promotions.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { ViewAllPurchasedLineItemSalesRecordComponent } from './view-all-purchas
     ViewAllBookingsComponent,
     ViewAllBookingSalesRecordComponent,
     ViewAllPurchasedLineItemSalesRecordComponent,
+    ViewAllPromotionsComponent,
   ],
   imports: [
     BrowserModule,
