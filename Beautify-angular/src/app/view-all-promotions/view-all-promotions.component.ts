@@ -185,9 +185,8 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error);
         }
       )
+      this.displayAddProductPromo = false;
     }
-
-    this.displayAddProductPromo = false;
   }
 
   addServicePromo(addServicePromoForm: NgForm) {
@@ -226,9 +225,8 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error);
         }
       )
-
+      this.displayAddServicePromo = false;
     }
-    this.displayAddServicePromo = false;
   }
 
   deletePromotion(promotionId: number) {
@@ -275,7 +273,7 @@ export class ViewAllPromotionsComponent implements OnInit {
 
   updateProductPromo(updateProductPromoForm: NgForm) {
 
-    this.newProductId = this.newProduct.productId;
+    this.newProductId = this.productPromotionToUpdate.product.productId;
     this.newServiceId = null;
 
     this.productPromotionToUpdate.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
@@ -304,10 +302,8 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error);
         }
       )
+      this.displayUpdateProductPromo = false;
     }
-
-    this.displayUpdateProductPromo = false;
-
   }
 
   updateServicePromo(updateServicePromoForm: NgForm) {
@@ -341,9 +337,8 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error);
         }
       )
+      this.displayUpdateServicePromo = false;
     }
-
-    this.displayUpdateServicePromo = false;
 
   }
 
