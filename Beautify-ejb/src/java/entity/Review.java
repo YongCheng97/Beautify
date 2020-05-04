@@ -32,8 +32,7 @@ public class Review implements Serializable {
     @Column(length = 128)
     @Size(max = 128)
     private String description;
-    
-    private File photo;
+   
     
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
@@ -50,12 +49,11 @@ public class Review implements Serializable {
     public Review() {      
     }
     
-    public Review(Integer rating,String description, File photo) {
+    public Review(Integer rating,String description) {
         this();
         
         this.rating = rating;
         this.description = description;
-        this.photo = photo;
     }
 
     public Long getReviewId() {
@@ -117,20 +115,6 @@ public class Review implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return the photo
-     */
-    public File getPhoto() {
-        return photo;
-    }
-
-    /**
-     * @param photo the photo to set
-     */
-    public void setPhoto(File photo) {
-        this.photo = photo;
     }
 
     /**

@@ -41,15 +41,15 @@ export class ViewAllPromotionsComponent implements OnInit {
   newStartDate: Date;
   newEndDate: Date;
 
-  updateProductId: number; 
-  updateServiceId: number; 
+  updateProductId: number;
+  updateServiceId: number;
 
-  productPromotionToUpdate: Promotion; 
-  servicePromotionToUpdate: Promotion; 
-  displayUpdateProductPromo: boolean = false; 
-  displayUpdateServicePromo: boolean = false; 
+  productPromotionToUpdate: Promotion;
+  servicePromotionToUpdate: Promotion;
+  displayUpdateProductPromo: boolean = false;
+  displayUpdateServicePromo: boolean = false;
 
-  promotionId: number; 
+  promotionId: number;
 
   promoSubmitted: boolean;
 
@@ -72,15 +72,7 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.error = false;
 
     this.newPromotion = new Promotion();
-
-    this.newProduct = new Product();
-
-      this.newService = new Service(); 
-
-      this.productPromotionToUpdate = new Promotion(); 
-
-      this.servicePromotionToUpdate = new Promotion(); 
-    }
+  }
 
   ngOnInit() {
 
@@ -106,10 +98,10 @@ export class ViewAllPromotionsComponent implements OnInit {
       { field: 'promotionId', header: 'Promotion ID' },
       { field: 'promoCode', header: 'Code' },
       { field: 'name', header: 'Name' },
-      { field: 'discountRate', header: 'Discount Rate'},
-      { field: 'startDate', header: 'Start Date'},
-      { field: 'endDate', header: 'End Date'},
-      { field: 'product.name', header: 'Product Name' }, 
+      { field: 'discountRate', header: 'Discount Rate' },
+      { field: 'startDate', header: 'Start Date' },
+      { field: 'endDate', header: 'End Date' },
+      { field: 'product.name', header: 'Product Name' },
       { field: '', }
     ]
 
@@ -117,10 +109,10 @@ export class ViewAllPromotionsComponent implements OnInit {
       { field: 'promotionId', header: 'Promotion ID' },
       { field: 'promoCode', header: 'Code' },
       { field: 'name', header: 'Name' },
-      { field: 'discountRate', header: 'Discount Rate'},
-      { field: 'startDate', header: 'Start Date'},
-      { field: 'endDate', header: 'End Date'},
-      { field: 'service.serviceName', header: 'Service Name' }, 
+      { field: 'discountRate', header: 'Discount Rate' },
+      { field: 'startDate', header: 'Start Date' },
+      { field: 'endDate', header: 'End Date' },
+      { field: 'service.serviceName', header: 'Service Name' },
       { field: '', }
     ]
 
@@ -155,8 +147,6 @@ export class ViewAllPromotionsComponent implements OnInit {
 
   showAddServicePromoDialog() {
     this.displayAddServicePromo = true;
-    var htmlTag = document.getElementById('serviceDialog');
-    htmlTag.style.height = Math.floor(window.innerHeight * 0.7) + "px";
   }
 
   addProductPromo(addProductPromoForm: NgForm) {
@@ -205,8 +195,6 @@ export class ViewAllPromotionsComponent implements OnInit {
 
     this.newServiceId = this.newService.serviceId;
     this.newProductId = null;
-
-    console.log(this.newProduct.productId);
 
     this.newPromotion.name = this.newPromoName;
     this.newPromotion.promoCode = this.newPromoCode;
@@ -276,92 +264,86 @@ export class ViewAllPromotionsComponent implements OnInit {
   }
 
   showUpdateProductDialog(productPromotionToUpdate: Promotion) {
-    this.displayUpdateProductPromo = true; 
+    this.displayUpdateProductPromo = true;
     this.productPromotionToUpdate = productPromotionToUpdate;
   }
 
   showUpdateServiceDialog(servicePromotionToUpdate: Promotion) {
-    this.displayUpdateServicePromo = true; 
-    this.servicePromotionToUpdate = servicePromotionToUpdate; 
+    this.displayUpdateServicePromo = true;
+    this.servicePromotionToUpdate = servicePromotionToUpdate;
   }
 
   updateProductPromo(updateProductPromoForm: NgForm) {
 
-    this.newProductId = this.newProduct.productId; 
-    this.newServiceId = null; 
+    this.newProductId = this.newProduct.productId;
+    this.newServiceId = null;
 
-    this.productPromotionToUpdate.name = this.newPromoName; 
-    this.productPromotionToUpdate.discountRate = this.newDiscountRate; 
     this.productPromotionToUpdate.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
-    this.productPromotionToUpdate.endDate = moment(this.newEndDate, "dd/MM/yy").toDate(); 
+    this.productPromotionToUpdate.endDate = moment(this.newEndDate, "dd/MM/yy").toDate();
 
-    if (updateProductPromoForm.valid) 
-    {
+    if (updateProductPromoForm.valid) {
       this.promotionService.updatePromotion(this.productPromotionToUpdate, this.newServiceId, this.newProductId).subscribe(
         response => {
-          this.resultSuccess = true; 
-          this.resultError = false; 
-          this.message = "Service promotion updated successfully!"; 
+          this.resultSuccess = true;
+          this.resultError = false;
+          this.message = "Service promotion updated successfully!";
           this.promotionService.getProductPromotions().subscribe(
             response => {
-              this.productPromotions = response.promotions; 
-            }, 
+              this.productPromotions = response.promotions;
+            },
             error => {
-              console.log("***************** PromotionComponent.ts: " + error); 
+              console.log("***************** PromotionComponent.ts: " + error);
             }
           )
-        }, 
+        },
         error => {
-          this.resultError = true; 
-          this.resultSuccess = false; 
-          this.message = "An error has occured while created the new promotion"; 
-          
-          console.log("*************** PromotionComponent.ts: " + error); 
+          this.resultError = true;
+          this.resultSuccess = false;
+          this.message = "An error has occured while created the new promotion";
+
+          console.log("*************** PromotionComponent.ts: " + error);
         }
       )
     }
 
-    this.displayUpdateProductPromo = false; 
+    this.displayUpdateProductPromo = false;
 
   }
 
   updateServicePromo(updateServicePromoForm: NgForm) {
 
-    this.newServiceId = this.newService.serviceId; 
+    this.newServiceId = this.newService.serviceId;
     this.newProductId = null;
 
-    this.servicePromotionToUpdate.name = this.newPromoName;
-    this.servicePromotionToUpdate.discountRate = this.newDiscountRate; 
     this.servicePromotionToUpdate.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
-    this.servicePromotionToUpdate.endDate = moment(this.newEndDate, "dd/MM/yy").toDate(); 
+    this.servicePromotionToUpdate.endDate = moment(this.newEndDate, "dd/MM/yy").toDate();
 
-    if (updateServicePromoForm.valid) 
-    {
+    if (updateServicePromoForm.valid) {
       this.promotionService.updatePromotion(this.servicePromotionToUpdate, this.newServiceId, this.newProductId).subscribe(
         response => {
-          this.resultSuccess = true; 
-          this.resultError = false; 
-          this.message = "Service promotion updated successfully!"; 
+          this.resultSuccess = true;
+          this.resultError = false;
+          this.message = "Service promotion updated successfully!";
           this.promotionService.getProductPromotions().subscribe(
             response => {
-              this.productPromotions = response.promotions; 
-            }, 
+              this.productPromotions = response.promotions;
+            },
             error => {
-              console.log("***************** PromotionComponent.ts: " + error); 
+              console.log("***************** PromotionComponent.ts: " + error);
             }
           )
-        }, 
+        },
         error => {
-          this.resultError = true; 
-          this.resultSuccess = false; 
-          this.message = "An error has occured while created the new promotion"; 
-          
-          console.log("*************** PromotionComponent.ts: " + error); 
+          this.resultError = true;
+          this.resultSuccess = false;
+          this.message = "An error has occured while created the new promotion";
+
+          console.log("*************** PromotionComponent.ts: " + error);
         }
       )
     }
 
-    this.displayUpdateServicePromo = false; 
+    this.displayUpdateServicePromo = false;
 
   }
 

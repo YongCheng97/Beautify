@@ -155,6 +155,7 @@ public class ServiceProviderSessionBean implements ServiceProviderSessionBeanLoc
                     serviceProviderToUpdate.setEmail(serviceProvider.getEmail());
                     serviceProviderToUpdate.setAddress(serviceProvider.getAddress());
                     serviceProviderToUpdate.setOpeningHours(serviceProvider.getOpeningHours());
+                    serviceProviderToUpdate.setClosingHours(serviceProvider.getClosingHours());
                     serviceProviderToUpdate.setIsApproved(serviceProvider.isIsApproved());
                     System.out.println(serviceProvider.isIsApproved());
                     // Username and password are deliberately NOT updated to demonstrate that client is not allowed to update account credential through this business method

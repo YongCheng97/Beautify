@@ -58,7 +58,7 @@
                                     <h:outputText value="#{product.description}" />
                                     <p:graphicImage value="/uploadedFiles/#{product.name}.jpg" height="120" width="150" alt ="" />
                                 </h:panelGrid>
-                                <p:commandLink actionListener="#{filterProductsByMaxPriceManagedBean.viewProduct}" style="text-decoration:none;color:blue; font-size: large">
+                                <p:commandLink actionListener="#{filterProductsByMaxPriceManagedBean.viewProduct}" style="text-decoration:none;color:blue;font-size: large; font-family: inherit; font-size: inherit; ">
                                     <h:outputText value = "Click here for more information!"/>
                                     <f:attribute name="productId" value="#{product.productId}" />
                                 </p:commandLink>

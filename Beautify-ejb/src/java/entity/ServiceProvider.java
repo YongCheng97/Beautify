@@ -48,7 +48,6 @@ public class ServiceProvider implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Date[] closingHours;
-    private File certification;
     private boolean isApproved;
     @Column(unique = true, nullable = false, length = 32)
     @NotNull
@@ -81,7 +80,7 @@ public class ServiceProvider implements Serializable {
         promotions = new ArrayList<>();
     }
 
-    public ServiceProvider(String name, String email, String password, String address, Date[] openingHours, Date[] closingHours, File certification, boolean isApproved, String username) {
+    public ServiceProvider(String name, String email, String password, String address, Date[] openingHours, Date[] closingHours, boolean isApproved, String username) {
 
         this();
 
@@ -90,7 +89,6 @@ public class ServiceProvider implements Serializable {
         this.address = address;
         this.openingHours = openingHours;
         this.closingHours = closingHours;
-        this.certification = certification;
         this.isApproved = isApproved;
         this.username = username;
 
@@ -172,14 +170,6 @@ public class ServiceProvider implements Serializable {
 
     public void setOpeningHours(Date[] openingHours) {
         this.openingHours = openingHours;
-    }
-
-    public File getCertification() {
-        return certification;
-    }
-
-    public void setCertification(File certification) {
-        this.certification = certification;
     }
 
     public boolean isIsApproved() {

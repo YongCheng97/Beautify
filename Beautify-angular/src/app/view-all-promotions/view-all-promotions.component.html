@@ -180,8 +180,10 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
                     <div class="ui-g-6">
-                        <input required="true" type="text" name="discountRate" id="discountRate" #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
-                        <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)" class="errorText">
+                        <input required="true" type="number" min="0" step="0.01" max="0.9" name="discountRate" id="discountRate" #discountRate="ngModel"
+                            [(ngModel)]="newDiscountRate" />
+                        <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)"
+                            class="errorText">
                             <div *ngIf="discountRate.errors.required" style="color: red;">
                                 Discount rate is required.
                             </div>
@@ -254,8 +256,10 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
                     <div class="ui-g-6">
                         <div class="ui-g-6">
-                            <input required="true" type="text" name="discountRate" id="discountRate" #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
-                            <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)" class="errorText">
+                            <input required="true" type="number" min="0" step="0.01" max="0.9" name="discountRate" id="discountRate"
+                                #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
+                            <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)"
+                                class="errorText">
                                 <div *ngIf="discountRate.errors.required" style="color: red;">
                                     Discount rate is required.
                                 </div>
@@ -294,38 +298,39 @@
             (ngSubmit)="updateProductPromo(updateProductPromoForm)">
             <p-dialog *ngIf="displayUpdateProductPromo" header="Edit Product Promotion" modal="true"
                 [(visible)]="displayUpdateProductPromo" [style]="{width: '60vw'}">
-                <!-- <div class="ui-g">
+                <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
-                    <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
-                    </div>
-                </div> -->
+                    <div class="ui-g-6">{{productPromotionToUpdate.promoCode}}</div>
+                </div> 
                 <div class=" ui-g">
-                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name:
-                        {{productPromotionToUpdate.promoName}}</div>
-                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
+                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="productPromotionToUpdate.name" />
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
-                    <div class="ui-g-6"><input type="text" name="discountRate" id="discountRate"
-                            [(ngModel)]="newDiscountRate" />
+                    <div class="ui-g-6"><input type="number" min="0" step="0.01" max="0.9" name="discountRate" id="discountRate"
+                            [(ngModel)]="productPromotionToUpdate.discountRate" />
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Start Date: </div>
                     <div class="ui-g-6">
+                        current start date: {{parseDate(productPromotionToUpdate.startDate) | date: 'MMM d, yyyy'}}
                         <p-calendar [inline]="true" name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
                     <div class="ui-g-6">
+                        current end date: {{parseDate(productPromotionToUpdate.endDate) | date: 'MMM d, yyyy'}}
                         <p-calendar [inline]="true" name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Select product: </div>
                     <div class="ui-g-6">
+                        current product: {{productPromotionToUpdate.product.name}}
                         <p-dropdown [options]="products" optionLabel="name" editable="true"
                             placeholder="Select a Product" name="newProduct" #name="ngModel" [(ngModel)]="newProduct">
                         </p-dropdown>
@@ -342,31 +347,32 @@
             (ngSubmit)="updateServicePromo(updateServicePromoForm)">
             <p-dialog *ngIf="displayUpdateServicePromo" header="Edit Service Promotion" modal="true"
                 [(visible)]="displayUpdateServicePromo" [style]="{width: '60vw'}">
-                <!-- <div class="ui-g">
+                <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
-                    <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
-                    </div>
-                </div> -->
+                    <div class="ui-g-6">{{servicePromotionToUpdate.promoCode}}</div>
+                </div> 
                 <div class=" ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
-                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
+                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="servicePromotionToUpdate.name" />
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
-                    <div class="ui-g-6"><input type="text" name="discountRate" id="discountRate"
-                            [(ngModel)]="newDiscountRate" />
+                    <div class="ui-g-6"><input type="number" min="0" step="0.01" max="0.9" name="discountRate" id="discountRate"
+                            [(ngModel)]="servicePromotionToUpdate.discountRate" />
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Start Date: </div>
                     <div class="ui-g-6">
+                        current start date: {{parseDate(servicePromotionToUpdate.startDate) | date: 'MMM d, yyyy'}}
                         <p-calendar [inline]="true" name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
                     <div class="ui-g-6">
+                        current end date: {{parseDate(servicePromotionToUpdate.endDate) | date: 'MMM d, yyyy'}}
                         <p-calendar [inline]="true" name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
                     </div>
                 </div>
@@ -374,6 +380,7 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Select service: </div>
                     <div class="ui-g-6">
                         <div class="ui-g-6">
+                            current service: {{servicePromotionToUpdate.service.serviceName}}
                             <p-dropdown [options]="services" optionLabel="serviceName" editable="true"
                                 placeholder="Select a Service" name="services" #serviceName="ngModel"
                                 [(ngModel)]="newService"></p-dropdown>

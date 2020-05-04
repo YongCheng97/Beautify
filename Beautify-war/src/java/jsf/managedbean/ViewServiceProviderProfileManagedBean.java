@@ -68,7 +68,7 @@ public class ViewServiceProviderProfileManagedBean implements Serializable {
         }
 
         List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-        List< String> storeHours = new ArrayList<>();
+        List<String> storeHours = new ArrayList<>();
 
         for (int i = 0; i < openingHours.length; i++) {
             if (open.get(i).equals("null")) {
