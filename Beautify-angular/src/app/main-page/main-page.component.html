@@ -296,15 +296,39 @@
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Name: </div>
-                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccName" /></div>
+                    <div class="ui-g-6">
+                        <input required="true" type="text" #name="ngModel" name="name" id="name" [(ngModel)]="ccName" />
+                        <div *ngIf="name.invalid && (name.dirty || name.touched || submitted)" class="errorText">
+                            <div *ngIf="name.errors.required" style="color: red;">
+                                Credit card name is required.
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Number: </div>
-                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccNum" /></div>
+                    <div class="ui-g-6">
+                        <input type="text" required="true" #num="ngModel" maxlength="16" minlength="16" name="num" id="num" [(ngModel)]="ccNum" />
+                        <div *ngIf="num.invalid && (num.dirty || num.touched || submitted)" class="errorText">
+                            <div *ngIf="num.errors.required" style="color: red;">
+                                Credit card number is required.
+                            </div>
+                            <div *ngIf="num.errors.minlength" style="color: red;">
+                                Minimum length 16.
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Expiry Date: </div>
-                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccDate" /></div>
+                    <div class="ui-g-6">
+                        <input required="true" type="text" name="date" id="date" #date="ngModel" [(ngModel)]="ccDate" />
+                        <div *ngIf="date.invalid && (date.dirty || date.touched || submitted)" class="errorText">
+                            <div *ngIf="date.errors.required" style="color: red;">
+                                Expiry date is required.
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 &nbsp;
                 <div style="text-align: center;">
