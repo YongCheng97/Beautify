@@ -28,10 +28,10 @@ export class IndexComponent implements OnInit {
   }
 
   ngOnInit() {
-	  this.sessionService.setUsername(null);
-	  this.sessionService.setPassword(null);
-	  this.sessionService.setIsLogin(false);
-	  this.sessionService.setCurrentServiceProvider(null);
+    this.sessionService.setUsername(null);
+    this.sessionService.setPassword(null);
+    this.sessionService.setIsLogin(false);
+    this.sessionService.setCurrentServiceProvider(null);
   }
 
   login(): void {
@@ -41,23 +41,18 @@ export class IndexComponent implements OnInit {
     this.serviceProviderService.login(this.username, this.password).subscribe(
       response => {
         let serviceProvider: ServiceProvider = response.serviceProvider;
-        if (serviceProvider.isApproved == false) {
-          this.loginError = true;
-          this.errorMessage = "You are not verified yet!";
+        if (serviceProvider != null) {
+          this.sessionService.setIsLogin(true);
+          this.sessionService.setCurrentServiceProvider(serviceProvider);
+          console.log(serviceProvider.name);
+          sessionStorage.setItem('serviceProvider', JSON.stringify(serviceProvider));
+          this.loginError = false;
+
+          this.childEvent.emit();
+
+          this.router.navigate(["/main-page"]);
         } else {
-          if (serviceProvider != null) {
-            this.sessionService.setIsLogin(true);
-            this.sessionService.setCurrentServiceProvider(serviceProvider);
-            console.log(serviceProvider.name);
-            sessionStorage.setItem('serviceProvider', JSON.stringify(serviceProvider));
-            this.loginError = false;
-
-            this.childEvent.emit();
-
-            this.router.navigate(["/main-page"]);
-          } else {
-            this.loginError = true;
-          }
+          this.loginError = true;
         }
       },
       error => {

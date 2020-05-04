@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import * as moment from 'moment';
 
 import { ServiceProviderService } from '../service-provider.service';
+import { FileUploadService } from '../file-upload.service';
 import { ServiceProvider } from '../service-provider';
 
 @Component({
@@ -40,9 +41,15 @@ export class SignUpComponent implements OnInit {
   resultError: boolean;
   message: string;
 
+  showImage: Boolean = false;
+  fileName: String = null;
+  fileToUpload: File = null;
+
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     public serviceProviderService: ServiceProviderService,
+    private fileUploadService: FileUploadService,
     private fb: FormBuilder,
     private messageService: MessageService) {
     this.submitted = false;

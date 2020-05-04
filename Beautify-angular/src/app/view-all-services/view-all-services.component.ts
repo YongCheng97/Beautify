@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 
 import { SessionService } from '../session.service';
 import { CategoryService } from '../category.service';
+import { FileUploadService } from '../file-upload.service';
 import { TagService } from '../tag.service';
 import { ServiceProvider } from '../service-provider';
 import { Tag } from '../tag';
@@ -23,11 +24,13 @@ export class ViewAllServicesComponent implements OnInit {
   serviceToView: Service;
   serviceToUpdate: Service;
   serviceToDelete: Service;
+  serviceToUpload: Service;
   serviceProvider: ServiceProvider;
   displayAdd: boolean = false;
   displayView: boolean = false;
   displayUpdate: boolean = false;
   displayDelete: boolean = false;
+  displayPhoto: boolean = false;
   submitted: boolean;
 
   categoryId: number;
@@ -44,12 +47,17 @@ export class ViewAllServicesComponent implements OnInit {
   resultError: boolean;
   message: string;
 
+  showImage: Boolean = false;
+  fileName: String = null;
+  fileToUpload: File = null;
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     public sessionService: SessionService,
     private serviceService: ServiceService,
     private categoryService: CategoryService,
-    private tagService: TagService) {
+    private tagService: TagService,
+    private fileUploadService: FileUploadService) {
 
     this.submitted = false;
     this.newService = new Service();
@@ -89,6 +97,22 @@ export class ViewAllServicesComponent implements OnInit {
     );
   }
 
+  handlePrimeNgFileInput(event) {
+    this.fileToUpload = event.files[0];
+  
+    this.fileUploadService.uploadFile(this.fileToUpload).subscribe(
+      response => {
+        this.fileName = this.fileToUpload.name;
+        this.showImage = true;
+        console.log('********** FileUploadComponent.ts: File uploaded successfully: ' + response.status);
+        this.displayPhoto = false;
+      },
+      error => {				
+        console.log('********** FileUploadComponent.ts: ' + error);
+      }
+    );
+  }
+
   showDialog() {
     this.displayAdd = true;
   }
@@ -108,6 +132,11 @@ export class ViewAllServicesComponent implements OnInit {
     this.serviceToDelete = serviceToDelete;
   }
 
+  
+  showPhotoDialog(serviceToUpload: Service) {
+    this.displayPhoto = true;
+    this.serviceToUpload = serviceToUpload;
+  }
 
   clear() {
     this.submitted = false;

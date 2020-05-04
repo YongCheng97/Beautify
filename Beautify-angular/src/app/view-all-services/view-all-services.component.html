@@ -34,6 +34,8 @@
                         </div>
                     </div>
                     <div style="text-align: right;">
+                        <p-button icon="pi pi-camera" (onClick)="showPhotoDialog(service)"></p-button>
+                        &nbsp;
                         <p-button icon="pi pi-info-circle" (onClick)="showViewDialog(service)"></p-button>
                         &nbsp;
                         <p-button icon="pi pi-pencil" (onClick)="showUpdateDialog(service)"></p-button>
@@ -49,6 +51,8 @@
                     <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" width="60"> -->
                     <div class="product-detail">${{service.price}}</div>
                     <div class="product-detail">Category: {{service.category.name}}</div>
+                    <p-button icon="pi pi-camera" (onClick)="showPhotoDialog(service)"></p-button>
+                    &nbsp;
                     <p-button icon="pi pi-info-circle" (onClick)="showViewDialog(service)"></p-button>
                     &nbsp;
                     <p-button icon="pi pi-pencil" (onClick)="showUpdateDialog(service)"></p-button>
@@ -58,6 +62,26 @@
             </div>
         </ng-template>
     </p-dataView>
+
+    <p-dialog *ngIf="displayPhoto" header="Upload Image" modal="true" [(visible)]="displayPhoto" height="200"
+        [style]="{width: '50vw'}">
+        <form>
+            <div style="text-align: center;">
+                <div style="text-align: center;">
+                    <output> When uploading the images, please remember to name
+                        them exactly the same as your 
+                        service name and number your image 
+                        sequentially. Example: Service.jpg, Service1.jpg, Service2.jpg
+                    </output>
+                    <output style="color: red;">
+                        Only JPG images are allowed!!
+                    </output>
+                </div>
+                    <p-fileUpload mode="basic" customUpload="true" (uploadHandler)="handlePrimeNgFileInput($event)"
+                        [auto]="true"></p-fileUpload>
+            </div>
+        </form>
+    </p-dialog>
 
     <p-dialog *ngIf="displayAdd" header="Create New Service" modal="true" [(visible)]="displayAdd" height="200"
         [style]="{width: '60vw'}">

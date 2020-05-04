@@ -36,7 +36,7 @@
     }
     h2{
     color: black;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 32px;
     font-weight: 400;
     font: roboto;
@@ -95,12 +95,12 @@
   }
 
   .panel { 
-              width:800px; 
+              width:850px; 
               height:200px; 
               position: absolute;
               top: 50%; 
               left: 50%; 
-              margin-top: -150px; 
+              margin-top: -100px; 
               margin-left: -300px; 
               text-align: center;
           }

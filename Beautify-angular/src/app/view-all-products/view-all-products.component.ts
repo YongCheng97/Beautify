@@ -105,6 +105,7 @@ handlePrimeNgFileInput(event) {
       this.fileName = this.fileToUpload.name;
       this.showImage = true;
       console.log('********** FileUploadComponent.ts: File uploaded successfully: ' + response.status);
+      this.displayPhoto = false;
     },
     error => {				
       console.log('********** FileUploadComponent.ts: ' + error);

@@ -31,6 +31,7 @@ export class ServiceProviderService {
 	}
 
 	createNewServiceProvider(newServiceProvider: ServiceProvider): Observable<any> {
+		console.log(newServiceProvider.name);
 		let createServiceProviderReq = {
 			"serviceProvider": newServiceProvider,
 		}

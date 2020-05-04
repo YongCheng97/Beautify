@@ -58,7 +58,7 @@ public class viewProductDetailsManagedBean implements Serializable {
         productIdToView = (Long) session.getAttribute("productIdToView");
         try {
             productToView = productSessionBeanLocal.retrieveProductByProdId(productIdToView);
-            
+
             List<Customer> favouriteCustomers = productToView.getFavouritedCustomers();
             if (!favouriteCustomers.isEmpty() && currentCustomer != null) {
                 for (Customer customer : favouriteCustomers) {
@@ -73,10 +73,14 @@ public class viewProductDetailsManagedBean implements Serializable {
             System.out.println("test load");
             productImages = new ArrayList<String>();
 
-            for (int i = 1; i <= 3; i++) {
-                productImages.add(productToView.getName() + i + ".jpg");
+            for (int i = 0; i <= 2; i++) {
+                if (i == 0) {
+                    productImages.add(productToView.getName() + ".jpg");
+                } else {
+                    productImages.add(productToView.getName() + i + ".jpg");
+                }
             }
-            
+
         } catch (ProductNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the product details: " + ex.getMessage(), null));
         } catch (Exception ex) {
