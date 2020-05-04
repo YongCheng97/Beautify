@@ -19,7 +19,7 @@
                         <p:layoutUnit position="west" size="520" >
 
                             <p:galleria value="#{viewProductDetailsManagedBean.productImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
-                                <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
+                                <p:graphicImage value="/uploadedFiles/#{image}" height = "350" width = "500" title ="#{image}"/>
                             </p:galleria>
                         </p:layoutUnit>
 

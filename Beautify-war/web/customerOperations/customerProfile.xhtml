@@ -33,12 +33,13 @@
             <h:form id="profileInfo">
                 <p:layout style="min-width:400px;min-height:300px;">
                     <p:layoutUnit position="west" resizable="false" size="200">
-                        <div update="profileInfo">
-                        <h:graphicImage value="/uploadedFiles/Customer#{customerManagementManagedBean.currentCustomer.customerId}.jpg" height="150" width="190" alt ="" />
+                            <h:outputText style="font-weight: bold;" value="Profile Photo "/>
+                        <div update="profileInfo">                            
+                            <p:graphicImage value="/uploadedFiles/Customer#{customerManagementManagedBean.currentCustomer.customerId}.jpg" height="150" width="190" alt =""  />
                         </div>
                         <h:form>  
                             <p:fileUpload fileUploadListener="#{customerManagementManagedBean.handleFileUpload}" mode="advanced" dragDropSupport="false"
-                                          update="messages @form" sizeLimit="100000000" fileLimit="100" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                                          update="messages @form" sizeLimit="100000000" fileLimit="100" allowTypes="/(\.|\/)(jpg)$/" />
 
                             <p:growl id="messages" showDetail="true" />     
                         </h:form>

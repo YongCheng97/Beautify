@@ -204,6 +204,7 @@ public class ServiceProviderResource {
                 serviceProvider.getCreditCards().clear();
                 serviceProvider.getProducts().clear();
                 serviceProvider.getServices().clear();
+                serviceProvider.getPromotions().clear();
             }
             
             return Response.status(Response.Status.OK).entity(new RetrieveAllServiceProvidersRsp(serviceProviders)).build();
@@ -240,6 +241,7 @@ public class ServiceProviderResource {
             serviceProvider.getCreditCards().clear();
             serviceProvider.getProducts().clear();
             serviceProvider.getServices().clear();
+            serviceProvider.getPromotions().clear();
             
             return Response.status(Response.Status.OK).entity(new RetrieveServiceProviderRsp(serviceProvider)).build();
         }

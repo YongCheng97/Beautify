@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 
 import { SessionService } from './session.service';
 import { ServiceProvider } from './service-provider';
+import { CreditCard } from './credit-card';
 
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' })

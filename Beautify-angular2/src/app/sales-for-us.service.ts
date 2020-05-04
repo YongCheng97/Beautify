@@ -47,6 +47,14 @@ export class SalesForUsService
 		);
 	}	
 	
+	getServiceProviderSalesRecords(): Observable<any>
+	{				
+		return this.httpClient.get<any>(this.baseUrl + "/retrieveAllSalesRecordServiceProvider?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+		(
+			catchError(this.handleError)
+		);
+	}	
+	
 	
 	private handleError(error: HttpErrorResponse)
 	{

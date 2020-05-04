@@ -96,6 +96,8 @@ public class SalesForUsResource {
                     salesRecord.getBooking().getService().getServiceProvider().getCreditCards().clear();
                     salesRecord.getBooking().getService().getServiceProvider().getServices().clear();
                     salesRecord.getBooking().getService().getServiceProvider().getProducts().clear();
+                    salesRecord.getBooking().getService().getServiceProvider().getPromotions().clear();
+                    
                     salesRecord.getBooking().getService().setCategory(null);
                     salesRecord.getBooking().getService().getTags().clear();
                     salesRecord.getBooking().getService().getPromotions().clear();
@@ -154,6 +156,7 @@ public class SalesForUsResource {
                     salesRecord.getPurchasedLineItem().getProduct().getServiceProvider().getCreditCards().clear();
                     salesRecord.getPurchasedLineItem().getProduct().getServiceProvider().getServices().clear();
                     salesRecord.getPurchasedLineItem().getProduct().getServiceProvider().getProducts().clear();
+                    salesRecord.getPurchasedLineItem().getProduct().getServiceProvider().getPromotions().clear();                    
                     salesRecord.getPurchasedLineItem().getProduct().getFavouritedCustomers().clear();
                     salesRecord.getPurchasedLineItem().getProduct().getTags().clear();
                     salesRecord.getPurchasedLineItem().getProduct().getPromotions().clear();
@@ -166,6 +169,62 @@ public class SalesForUsResource {
                     salesRecord.getPurchasedLineItem().getPurchased().getCustomer().getFavouriteServices().clear();
                     salesRecord.getPurchasedLineItem().getPurchased().getCustomer().getReviews().clear();
                     salesRecord.getPurchasedLineItem().getPurchased().getCustomer().getPurchaseds().clear();
+                    
+                    salesForUs.add(salesRecord);
+                }
+                
+            }
+                
+            return Response.status(Response.Status.OK).entity(new RetrieveAllSalesForUsRsp(salesForUs)).build();
+        }
+        catch(InvalidLoginCredentialException ex)
+        {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+            
+            return Response.status(Response.Status.UNAUTHORIZED).entity(errorRsp).build();
+        }
+        catch(Exception ex)
+        {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+            
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+        }
+    }
+    
+    @Path("retrieveAllSalesRecordServiceProvider")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllSalesRecordServiceProvider(@QueryParam("username") String username, 
+                                                            @QueryParam("password") String password)
+    {
+        try
+        {
+            Staff staff = staffSessionBeanLocal.staffLogin(username, password);
+            System.out.println("********** SalesForUsResource.retrieveAllSalesRecordServiceProvider(): Staff " + staff.getUsername()+ " login remotely via web service");
+
+            List<SalesForUs> salesRecords = salesForUsSessionBeanLocal.retrieveAllSalesForUs();
+            List<SalesForUs> salesForUs = new ArrayList<>();
+                                               
+            for(SalesForUs salesRecord:salesRecords)
+            {
+                if(salesRecord.getServiceProvider()!= null) {
+                    
+                    if(salesRecord.getServiceProvider().getCreditCards()!= null){
+                        salesRecord.getServiceProvider().getCreditCards().clear();
+                    }
+                    
+                    if(salesRecord.getServiceProvider().getProducts()!= null){
+                        salesRecord.getServiceProvider().getProducts().clear();
+                    }
+                    
+                    if(salesRecord.getServiceProvider().getServices()!= null){
+                        salesRecord.getServiceProvider().getServices().clear();
+                    }
+                    
+                    if(salesRecord.getServiceProvider().getPromotions()!= null){
+                        salesRecord.getServiceProvider().getPromotions().clear();
+                    }
                     
                     salesForUs.add(salesRecord);
                 }
