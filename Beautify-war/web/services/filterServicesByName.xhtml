@@ -54,7 +54,7 @@
                                 <h:panelGrid columns="1" style="width:100%; text-align:center; font-family: inherit; font-size: inherit; min-height: 200px">
                                     <h:outputText value= "$#{service.price}" style="text-align:center"/>
                                     <h:outputText value="#{service.description}" style="text-align:center"/>
-                                    <p:graphicImage library="images" name="#{service.serviceName}.jpg" height="120" width="150" alt ="" style="text-align:center"/>
+                                    <p:graphicImage value="/uploadedFiles/#{service.serviceName}.jpg" height="120" width="150" alt ="" style="text-align:center"/>
                                 </h:panelGrid>
                                 <p:commandLink actionListener="#{filterServicesByNameManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large">
                                     <h:outputText value = "Click here for more information!"/>

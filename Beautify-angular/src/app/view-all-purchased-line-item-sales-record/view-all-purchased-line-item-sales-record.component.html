@@ -36,7 +36,7 @@
 					<td>{{salesRecord.purchasedLineItem.purchasedLineItemId}}</td>
 					<td>{{parseDate(salesRecord.dateOfPayment) | date:'EEE, MMM d, yyyy'}}</td>
 					<td>${{salesRecord.amount.toFixed(2)}}</td>
-					<td><p-button label="View" (onClick)="showDialog(salesRecord.purchasedLineItem)"></p-button></td>
+					<td style="text-align: center;"><p-button label="View" (onClick)="showDialog(salesRecord.purchasedLineItem)"></p-button></td>
 				</tr>
 			</ng-template>
 		</p-table>

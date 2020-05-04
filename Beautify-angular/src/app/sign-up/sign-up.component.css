@@ -35,10 +35,11 @@
     color:#4c5357;
     }
     h2{
-    color: #5e8396;
-    font-size: 21px;
+    color: black;
+    font-size: 18px;
     line-height: 32px;
     font-weight: 400;
+    font: roboto;
     }
     .login-or {
     position: relative;
@@ -71,3 +72,39 @@
     font-size: 20px;
     }
     }
+
+    :host ::ng-deep .forms-grid > div {
+      display: flex;
+      align-items: center;
+      padding: 1em;
+  }
+  :host ::ng-deep .forms-grid > div > div:first-child {
+     min-width: 10em;
+  }
+  
+  input, textarea {
+      flex: 1 1 auto;
+  }
+  :host ::ng-deep .ui-message {
+      margin-left: 1em;
+  }
+  @media screen and (max-width: 64em) {
+      :host ::ng-deep .ui-message-text {
+          display: none;
+      }
+  }
+
+  .panel { 
+              width:800px; 
+              height:200px; 
+              position: absolute;
+              top: 50%; 
+              left: 50%; 
+              margin-top: -150px; 
+              margin-left: -300px; 
+              text-align: center;
+          }
+
+.timings {
+  margin-left: 100px
+}

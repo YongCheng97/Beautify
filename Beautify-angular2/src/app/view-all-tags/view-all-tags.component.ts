@@ -52,7 +52,8 @@ export class ViewAllTagsComponent implements OnInit
 	  
 	  this.cols = [
 		{ field: 'tagId',header:'Tag ID' },
-		{ field: 'name',header:'Tag name' }
+		{ field: 'name',header:'Tag name' },
+		{ feild: '',header:'Delete Tag'}
 	  ];
 	  
 	}

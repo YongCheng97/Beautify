@@ -18,7 +18,7 @@
                         <p:layoutUnit position="west" size="520">
 
                             <p:galleria value="#{viewServiceDetailsManagedBean.serviceImages}" var="image" panelWidth="500" panelHeight="350" showCaption="true">
-                                <p:graphicImage library="images" name ="#{image}" height = "350" width = "500" title ="#{image}"/>
+                                <p:graphicImage value="/uploadedFiles/#{image}" height = "350" width = "500" title ="#{image}"/>
                             </p:galleria>
                         </p:layoutUnit>
 
@@ -83,7 +83,7 @@
 
                     <p:panel style="text-align:center">
 
-                        <p:graphicImage library="images" name="#{viewServiceDetailsManagedBean.serviceToView.serviceName}.jpg" height="150" width="250" alt="Service Photo"/>
+                        <p:graphicImage value="/uploadedFiles/#{viewServiceDetailsManagedBean.serviceToView.serviceName}.jpg" height="150" width="250" alt="Service Photo"/>
                         <h:panelGrid columns="2" cellpadding="5" style="width:100%; text-align: left">
                             <p:outputLabel value="Service Name:" style="font-weight: bold"/>
                             <h:outputText value="#{viewServiceDetailsManagedBean.serviceToView.serviceName}"/>

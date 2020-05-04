@@ -29,7 +29,7 @@
 
                 <p:layoutUnit position="center">
                     <h:form id="form">
-                        <p:dataGrid var="product" value="#{categoryManagementManagedBean.newCategory.products}" columns="3" layout="grid"
+                        <p:dataGrid var="product" value="#{categoryManagementManagedBean.products}" columns="3" layout="grid"
                                     rows="12" paginator="true" id="products"
                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                     rowsPerPageTemplate="6,12,16">
@@ -43,7 +43,7 @@
                                     <h:outputText value="#{product.skuCode}" />
                                     <h:outputText value= "$#{product.price}" />
                                     <h:outputText value="#{product.description}" />
-                                    <p:graphicImage library="images" name ="#{product.name}.jpg" height="120" width="170" alt ="" />
+                                    <p:graphicImage value="/uploadedFiles/#{product.name}.jpg" height="120" width="170" alt ="" />
                                 </h:panelGrid>
                                 <p:commandLink actionListener="#{categoryManagementManagedBean.viewProduct}" style="text-decoration:none;color:blue; font-size: large">
                                     <h:outputText value = "Click here for more information!"/>

@@ -34,6 +34,7 @@ import { ViewAllTagsComponent } from './view-all-tags/view-all-tags.component';
 import { ViewAllServiceProvidersComponent } from './view-all-service-providers/view-all-service-providers.component';
 import { ViewAllProductCategoriesComponent } from './view-all-product-categories/view-all-product-categories.component';
 import { ViewAllServiceCategoriesComponent } from './view-all-service-categories/view-all-service-categories.component';
+import { ViewAllServiceProviderSalesforUsComponent } from './view-all-service-provider-salesfor-us/view-all-service-provider-salesfor-us.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ViewAllServiceCategoriesComponent } from './view-all-service-categories
     ViewAllTagsComponent,
     ViewAllServiceProvidersComponent,
     ViewAllProductCategoriesComponent,
-    ViewAllServiceCategoriesComponent
+    ViewAllServiceCategoriesComponent,
+    ViewAllServiceProviderSalesforUsComponent
 
   ],
   imports: [

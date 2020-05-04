@@ -394,14 +394,17 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
     public void deleteProduct(Long productId) throws ProductNotFoundException, DeleteProductException {
         Product productEntityToRemove = retrieveProductByProdId(productId);
 
-            productEntityToRemove.getCategory().getProducts().remove(productEntityToRemove);
-            productEntityToRemove.setCategory(null);
-
-            for (Tag tag : productEntityToRemove.getTags()) {
-                tag.getProducts().remove(productEntityToRemove);
-            }
-
-            productEntityToRemove.getTags().clear();
+//            productEntityToRemove.getCategory().getProducts().remove(productEntityToRemove);
+//            productEntityToRemove.setCategory(null);
+//            
+//            productEntityToRemove.getServiceProvider().getProducts().remove(productEntityToRemove);
+//            productEntityToRemove.setServiceProvider(null);
+//
+//            for (Tag tag : productEntityToRemove.getTags()) {
+//                tag.getProducts().remove(productEntityToRemove);
+//            }
+//
+//            productEntityToRemove.getTags().clear();
 
             productEntityToRemove.setIsDeleted(true);
     }
