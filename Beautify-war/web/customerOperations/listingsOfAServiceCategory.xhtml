@@ -40,12 +40,12 @@
                                 <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}"/>
                             </f:facet>
 
-                            <p:panel header="#{service.serviceName}" style="text-align:center;">
-                                <p:panelGrid columns="1" style="width:100%; text-align:center">
+                            <p:panel header="#{service.serviceName}" style="text-align:center; min-height:280px">
+                                <h:panelGrid columns="1" style="width:100%; text-align:center; min-height:200px">
                                     <h:outputText value="$#{service.price}" />
                                     <h:outputText value="#{service.description}" />
                                     <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
-                                </p:panelGrid>
+                                </h:panelGrid>
                                 <p:commandLink actionListener="#{categoryManagementManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large">
                                     <h:outputText value = "Click here for more information!"/>
                                     <f:attribute name="serviceId" value="#{service.serviceId}" />

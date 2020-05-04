@@ -22,6 +22,9 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import {RatingModule} from 'primeng/rating';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import {PasswordModule} from 'primeng/password';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
 
 import { AppComponent } from './app.component';
 import { IndexComponent } from './index/index.component';
@@ -79,7 +82,10 @@ import { ViewAllPromotionsComponent } from './view-all-promotions/view-all-promo
     SpinnerModule,
     InputTextareaModule,
     MultiSelectModule,
-    RatingModule
+    RatingModule, 
+	PasswordModule,
+	MessagesModule,
+	MessageModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

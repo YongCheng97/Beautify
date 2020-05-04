@@ -9,7 +9,7 @@
 			
 	<p-panel header="All Sales Record (Products)">
 	
-		<p-table #dt [value]="salesRecords">
+		<p-table #dt [value]="salesRecords" [paginator]="true" [rows]="10">
 			<ng-template pTemplate="header">
 				<tr>
 					<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">

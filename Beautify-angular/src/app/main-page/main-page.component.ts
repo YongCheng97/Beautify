@@ -333,15 +333,18 @@ export class MainPageComponent implements OnInit {
     this.displayEditHours = false; 
   }
   
-  changePW(changePWForm: NgForm) {
+  changePassword(changePWForm: NgForm) {
 	  
 	  if (changePWForm.valid) {
-		   
-			if (this.currentPassword==this.serviceProviderToUpdate.password && this.newPassword==this.confirmPassword){
+		   console.log(this.currentPassword ,this.newPassword ,this.confirmPassword);
+			
+			if (this.currentPassword==this.sessionService.getPassword() && this.newPassword==this.confirmPassword){
 
 			  this.serviceProviderToUpdate.password = this.confirmPassword;
+			  
+			  console.log(this.serviceProviderToUpdate.password);
 
-			  this.serviceProviderService.changePassword(this.serviceProviderToUpdate).subscribe(
+			  this.serviceProviderService.changePassword(this.serviceProviderToUpdate.password).subscribe(
 				response => {
 				  this.resultSuccess = true;
 				  this.resultError = true;
@@ -356,11 +359,15 @@ export class MainPageComponent implements OnInit {
 				  console.log('********** MainPageComponent.ts: ' + error);
 				}
 			  );
-			}
-			this.displayChangePW = false;   
+			  
+			  this.sessionService.setPassword(this.serviceProviderToUpdate.password);
+			  
+			this.displayChangePW = false;  			
 		  } else {
 			  this.message = "Password does not match";
+			  
 		  }
+	  }
   }
   
 
@@ -402,6 +409,9 @@ export class MainPageComponent implements OnInit {
   showPasswordDialog(serviceProvider: ServiceProvider) {
     this.displayChangePW = true;
     this.serviceProviderToUpdate = serviceProvider;
+	this.currentPassword = null;
+	this.newPassword = null;
+	this.confirmPassword = null;
   }
 
   parseDate(d: Date)
