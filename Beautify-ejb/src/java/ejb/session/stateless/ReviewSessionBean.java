@@ -230,7 +230,6 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
 
                 reviewToUpdate.setDescription(review.getDescription());
                 reviewToUpdate.setRating(review.getRating());
-                reviewToUpdate.setPhoto(review.getPhoto());
             } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
             }

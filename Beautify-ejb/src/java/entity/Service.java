@@ -44,7 +44,6 @@ public class Service implements Serializable {
     @NotNull
     @Size(max = 128)
     private String description;
-    private File photo;
     private Boolean isDeleted;
     
     @ManyToOne(optional = false)
@@ -75,11 +74,10 @@ public class Service implements Serializable {
         this.isDeleted = false;
     }
 
-    public Service(String serviceName, BigDecimal price, String description, File photo) {
+    public Service(String serviceName, BigDecimal price, String description) {
         this.serviceName = serviceName;
         this.price = price;
         this.description = description;
-        this.photo = photo;
         this.isDeleted = false;
     }
 
@@ -138,14 +136,6 @@ public class Service implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public File getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(File photo) {
-        this.photo = photo;
     }
 
     public ServiceProvider getServiceProvider() {

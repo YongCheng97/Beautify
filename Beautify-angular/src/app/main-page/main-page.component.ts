@@ -99,6 +99,8 @@ export class MainPageComponent implements OnInit {
 
     this.newCreditCard = new CreditCard(); 
 
+    this.serviceProviderToUpdate = new ServiceProvider(); 
+
     this.error = false; 
   }
 
@@ -282,6 +284,8 @@ export class MainPageComponent implements OnInit {
 
     if (editHoursForm.valid) {
 
+      this.serviceProviderToUpdate = this.sessionService.getCurrentServiceProvider(); 
+
       this.serviceProviderToUpdate.openingHours = [];
       this.serviceProviderToUpdate.closingHours = [];
 
@@ -443,7 +447,9 @@ export class MainPageComponent implements OnInit {
 
   parseDate(d: Date)
 	{		
-		return d.toString().replace('[UTC]', '');
+    if (d != null) {
+      return d.toString().replace('[UTC]', '');
+    }
   }
 
 }

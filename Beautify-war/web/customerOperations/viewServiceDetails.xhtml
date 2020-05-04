@@ -62,7 +62,7 @@
                                 <p:commandButton actionListener="#{favouritesManagedBean.removeFavouriteService}" update="@form" value="Unfavourite" icon="fa fa-star-o" title="Unfavourite" rendered="#{sessionScope.isLogin==true and viewServiceDetailsManagedBean.serviceFavourited==true}">
                                     <f:attribute name="serviceToFavourite" value="#{viewServiceDetailsManagedBean.serviceToView}" />
                                 </p:commandButton>
-                                    
+
                                 <h:panelGroup rendered="#{sessionScope.isLogin == false}">
                                     <p:commandButton value="Book service" oncomplete="PF('dialogLogin').show()"  icon="fa fa-calendar"/>
                                 </h:panelGroup>
@@ -97,6 +97,8 @@
 
                             <p:outputLabel for="startTime" value="Start Time:" style="font-weight: bolder"/>
                             <p:selectOneMenu effect="fade" id="startTime" value="#{serviceBookingManagedBean.startTime}" style="width: 100px" required="true" requiredMessage="Start time is required">
+                                <f:selectItem itemLabel="7 AM" itemValue="07:00"/>
+                                <f:selectItem itemLabel="8 AM" itemValue="08:00"/>
                                 <f:selectItem itemLabel="9 AM" itemValue="09:00"/>
                                 <f:selectItem itemLabel="10 AM" itemValue="10:00"/>
                                 <f:selectItem itemLabel="11 AM" itemValue="11:00"/>
@@ -105,11 +107,19 @@
                                 <f:selectItem itemLabel="2 PM" itemValue="14:00"/>
                                 <f:selectItem itemLabel="3 PM" itemValue="15:00"/>
                                 <f:selectItem itemLabel="4 PM" itemValue="16:00"/>
+                                <f:selectItem itemLabel="5 PM" itemValue="17:00"/>
+                                <f:selectItem itemLabel="6 PM" itemValue="18:00"/>
+                                <f:selectItem itemLabel="7 PM" itemValue="19:00"/>
+                                <f:selectItem itemLabel="8 PM" itemValue="20:00"/>
+                                <f:selectItem itemLabel="9 PM" itemValue="21:00"/>
+                                <f:selectItem itemLabel="10 PM" itemValue="22:00"/>
                                 <f:convertDateTime type="time" pattern="HH:mm" timeZone="#{serviceBookingManagedBean.timeZone}"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel for="endTime" value="End Time:" style="font-weight: bolder"/>
                             <p:selectOneMenu effect="fade" id="endTime" value="#{serviceBookingManagedBean.endTime}" style="width: 100px" required="true" requiredMessage="End time is required">
+                                <f:selectItem itemLabel="8 AM" itemValue="08:00"/>
+                                <f:selectItem itemLabel="9 AM" itemValue="09:00"/>
                                 <f:selectItem itemLabel="10 AM" itemValue="10:00"/>
                                 <f:selectItem itemLabel="11 AM" itemValue="11:00"/>
                                 <f:selectItem itemLabel="12 AM" itemValue="12:00"/>
@@ -118,6 +128,12 @@
                                 <f:selectItem itemLabel="3 PM" itemValue="15:00"/>
                                 <f:selectItem itemLabel="4 PM" itemValue="16:00"/>
                                 <f:selectItem itemLabel="5 PM" itemValue="17:00"/>
+                                <f:selectItem itemLabel="6 PM" itemValue="18:00"/>
+                                <f:selectItem itemLabel="7 PM" itemValue="19:00"/>
+                                <f:selectItem itemLabel="8 PM" itemValue="20:00"/>
+                                <f:selectItem itemLabel="9 PM" itemValue="21:00"/>
+                                <f:selectItem itemLabel="10 PM" itemValue="22:00"/>
+                                <f:selectItem itemLabel="11 PM" itemValue="22:00"/> 
                                 <f:convertDateTime type="time" pattern="HH:mm" timeZone="#{serviceBookingManagedBean.timeZone}"/>
                             </p:selectOneMenu>
 
