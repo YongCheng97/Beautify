@@ -175,12 +175,11 @@ public class DataInitializationSessionBean {
             Date[] openingHours = {sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00"), sdf.parse("09:00")};
             Date[] closingHours = {sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00"), sdf.parse("17:00")};
             ServiceProvider provider1 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Nail Lounge", "thenaillounge@gmail.com", "password", "123 Hougang Road",
-                    openingHours, closingHours, null, true, "thenaillounge")));
+                    openingHours, closingHours, true, "thenaillounge")));
             ServiceProvider provider2 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Beautiful Hair Salon", "thebeautifulhairsalon@gmail.com", "password", "3 Yishun Drive",
-                    openingHours, closingHours, null, true, "thebeautifulhairsalon")));
+                    openingHours, closingHours, true, "thebeautifulhairsalon")));
             ServiceProvider provider3 = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderSessionBeanLocal.createNewServiceProvider(new ServiceProvider("The Makeup Place", "themakeupplace@gmail.com", "password", "56 Serangoon Way",
-                    openingHours, closingHours, null, true, "themakeupplace")));
-
+                    openingHours, closingHours, true, "themakeupplace")));
             // tags
             Tag tag1 = tagsSessionBeanLocal.createNewTagEntity(new Tag("New"));
             Tag tag2 = tagsSessionBeanLocal.createNewTagEntity(new Tag("Popular"));
@@ -214,9 +213,9 @@ public class DataInitializationSessionBean {
                     categoryFaceCare.getCategoryId(), provider3.getServiceProviderId(), tagIdsPopular);
 
             // services 
-            Service manicure = serviceSessionBeanLocal.createNewService(new Service("Gel Manicure", new BigDecimal("80.00"), "Gels last longer and feels stronger", null), provider1.getServiceProviderId(), categoryManicure.getCategoryId(), tagIdsEmpty);
-            Service haircut = serviceSessionBeanLocal.createNewService(new Service("Express Hair Cut", new BigDecimal("30.00"), "Express Hair Cut with no washing included", null), provider2.getServiceProviderId(), categoryHaircut.getCategoryId(), tagIdsEmpty);
-            Service facial = serviceSessionBeanLocal.createNewService(new Service("Facial", new BigDecimal("80.00"), "The best and most relaxing Facial Treatment", null), provider3.getServiceProviderId(), categoryFacial.getCategoryId(), tagIdsEmpty);
+            Service manicure = serviceSessionBeanLocal.createNewService(new Service("Gel Manicure", new BigDecimal("80.00"), "Gels last longer and feels stronger"), provider1.getServiceProviderId(), categoryManicure.getCategoryId(), tagIdsEmpty);
+            Service haircut = serviceSessionBeanLocal.createNewService(new Service("Express Hair Cut", new BigDecimal("30.00"), "Express Hair Cut with no washing included"), provider2.getServiceProviderId(), categoryHaircut.getCategoryId(), tagIdsEmpty);
+            Service facial = serviceSessionBeanLocal.createNewService(new Service("Facial", new BigDecimal("80.00"), "The best and most relaxing Facial Treatment"), provider3.getServiceProviderId(), categoryFacial.getCategoryId(), tagIdsEmpty);
 
             // credit cards
             CreditCard creditCard1 = creditCardSessionBeanLocal.createNewCreditCardEntityForCustomer(new CreditCard("VISA", "Bob Lim", "4024007176761897", "02/23"), customer1.getCustomerId());
@@ -233,8 +232,8 @@ public class DataInitializationSessionBean {
             Booking booking3 = bookingSessionBeanLocal.createNewBooking(new Booking(sdf1.parse("05/05/2020 12:00"), "Approved", "remarks", sdf2.parse("10/05/2020"), sdf.parse("12:00"), sdf.parse("13:00"), new BigDecimal("80.00")), customer1.getCustomerId(), facial.getServiceId(), creditCard2.getCreditCardId());
 
             // service reviews
-            Review review1 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Very good service", null), customer1.getCustomerId(), manicure.getServiceId());
-            Review review2 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Excellent hair cut!", null), customer1.getCustomerId(), haircut.getServiceId());
+            Review review1 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Very good service"), customer1.getCustomerId(), manicure.getServiceId());
+            Review review2 = reviewSessionBeanLocal.createNewServiceReview(new Review(5, "Excellent hair cut!"), customer1.getCustomerId(), haircut.getServiceId());
 
             // promotion
             Promotion promotion1 = promotionSessionBeanLocal.createNewProductPromotion(new Promotion("10OFF", "10% off", new BigDecimal("00.90"), sdf2.parse("01/04/2020"), sdf2.parse("30/5/2020")), provider1.getServiceProviderId(), redPolish.getProductId());

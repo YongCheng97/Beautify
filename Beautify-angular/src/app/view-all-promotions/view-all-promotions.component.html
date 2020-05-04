@@ -180,8 +180,10 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
                     <div class="ui-g-6">
-                        <input required="true" type="text" name="discountRate" id="discountRate" #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
-                        <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)" class="errorText">
+                        <input required="true" type="text" name="discountRate" id="discountRate" #discountRate="ngModel"
+                            [(ngModel)]="newDiscountRate" />
+                        <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)"
+                            class="errorText">
                             <div *ngIf="discountRate.errors.required" style="color: red;">
                                 Discount rate is required.
                             </div>
@@ -204,8 +206,8 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Select service: </div>
                     <div class="ui-g-6">
                         <p-dropdown [options]="services" optionLabel="serviceName" editable="true"
-                            placeholder="Select a Service" name="services" #serviceName="ngModel"
-                            [(ngModel)]="newService"></p-dropdown>
+                            placeholder="Select a Service" name="newService" #name="ngModel" [(ngModel)]="newService">
+                        </p-dropdown>
                     </div>
                 </div>
                 &nbsp;
@@ -254,8 +256,10 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
                     <div class="ui-g-6">
                         <div class="ui-g-6">
-                            <input required="true" type="text" name="discountRate" id="discountRate" #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
-                            <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)" class="errorText">
+                            <input required="true" type="text" name="discountRate" id="discountRate"
+                                #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
+                            <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)"
+                                class="errorText">
                                 <div *ngIf="discountRate.errors.required" style="color: red;">
                                     Discount rate is required.
                                 </div>
