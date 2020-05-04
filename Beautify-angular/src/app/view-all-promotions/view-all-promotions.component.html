@@ -150,18 +150,42 @@
                 [(visible)]="displayAddServicePromo" [style]="{width: '60vw'}">
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
-                    <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
+                    <div class="ui-g-6">
+                        <input type="text" name="promoCode" #promoCode="ngModel" id="promoCode"
+                            [(ngModel)]="newPromoCode" required="true" minlength="5" maxlength="10">
+                        <div *ngIf="promoCode.invalid && (promoCode.dirty || promoCode.touched || submitted)"
+                            class="errorText">
+                            <div *ngIf="promoCode.errors.required" style="color: red;">
+                                Promotion code is required.
+                            </div>
+                            <div *ngIf="promoCode.errors.minlength" style="color: red;">
+                                Minimum length is 5.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class=" ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
-                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
+                    <div class="ui-g-6">
+                        <input required="true" type="text" name="promoName" id="promoName" #promoName="ngModel"
+                            [(ngModel)]="newPromoName" />
+                        <div *ngIf="promoName.invalid && (promoName.dirty || promoName.touched || submitted)"
+                            class="errorText">
+                            <div *ngIf="promoName.errors.required" style="color: red;">
+                                Promotion name is required.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
-                    <div class="ui-g-6"><input type="text" name="discountRate" id="discountRate"
-                            [(ngModel)]="newDiscountRate" />
+                    <div class="ui-g-6">
+                        <input required="true" type="text" name="discountRate" id="discountRate" #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
+                        <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)" class="errorText">
+                            <div *ngIf="discountRate.errors.required" style="color: red;">
+                                Discount rate is required.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -197,18 +221,46 @@
                 [(visible)]="displayAddProductPromo" [style]="{width: '60vw'}">
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
-                    <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
+                    <div class="ui-g-6">
+                        <input type="text" name="promoCode" #promoCode="ngModel" id="promoCode"
+                            [(ngModel)]="newPromoCode" required="true" minlength="5">
+                        <div *ngIf="promoCode.invalid && (promoCode.dirty || promoCode.touched || submitted)"
+                            class="errorText">
+                            <div *ngIf="promoCode.errors.required" style="color: red;">
+                                Promotion code is required.
+                            </div>
+                            <div *ngIf="promoCode.errors.minlength" style="color: red;">
+                                Minimum length is 5.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class=" ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
-                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
+                    <div class="ui-g-6">
+                        <div class="ui-g-6">
+                            <input required="true" type="text" name="promoName" id="promoName" #promoName="ngModel"
+                                [(ngModel)]="newPromoName" />
+                            <div *ngIf="promoName.invalid && (promoName.dirty || promoName.touched || submitted)"
+                                class="errorText">
+                                <div *ngIf="promoName.errors.required" style="color: red;">
+                                    Promotion name is required.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
-                    <div class="ui-g-6"><input type="text" name="discountRate" id="discountRate"
-                            [(ngModel)]="newDiscountRate" />
+                    <div class="ui-g-6">
+                        <div class="ui-g-6">
+                            <input required="true" type="text" name="discountRate" id="discountRate" #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
+                            <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)" class="errorText">
+                                <div *ngIf="discountRate.errors.required" style="color: red;">
+                                    Discount rate is required.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -246,9 +298,10 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
                     </div>
-                </div> --> 
+                </div> -->
                 <div class=" ui-g">
-                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: {{productPromotionToUpdate.promoName}}</div>
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name:
+                        {{productPromotionToUpdate.promoName}}</div>
                     <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
                     </div>
                 </div>
@@ -267,7 +320,7 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar [inline]="true"  name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
+                        <p-calendar [inline]="true" name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -293,7 +346,7 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
                     </div>
-                </div> --> 
+                </div> -->
                 <div class=" ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
                     <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
