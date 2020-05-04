@@ -279,7 +279,7 @@ export class ViewAllPromotionsComponent implements OnInit {
 
   showUpdateProductDialog(productPromotionToUpdate: Promotion) {
     this.displayUpdateProductPromo = true; 
-    this.productPromotionToUpdate = productPromotionToUpdate; 
+    this.productPromotionToUpdate = productPromotionToUpdate;
   }
 
   showUpdateServiceDialog(servicePromotionToUpdate: Promotion) {

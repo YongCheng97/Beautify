@@ -147,7 +147,7 @@
         <form *ngIf="displayAddServicePromo" #addServicePromoForm="ngForm"
             (ngSubmit)="addServicePromo(addServicePromoForm)">
             <p-dialog *ngIf="displayAddServicePromo" header="Add New Service Promotion" modal="true"
-                [(visible)]="displayAddServicePromo" [style]="{width: '50vw'}">
+                [(visible)]="displayAddServicePromo" [style]="{width: '60vw'}">
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
@@ -167,13 +167,13 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Start Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
+                        <p-calendar name="newStartDate" [inline]="true" [(ngModel)]="newStartDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
+                        <p-calendar name="newEndDate" [inline]="true" [(ngModel)]="newEndDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -194,7 +194,7 @@
         <form *ngIf="displayAddProductPromo" #addProductPromoForm="ngForm"
             (ngSubmit)="addProductPromo(addProductPromoForm)">
             <p-dialog *ngIf="displayAddProductPromo" header="Add New Product Promotion" modal="true"
-                [(visible)]="displayAddProductPromo" [style]="{width: '50vw'}">
+                [(visible)]="displayAddProductPromo" [style]="{width: '60vw'}">
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
@@ -214,13 +214,13 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Start Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
+                        <p-calendar [inline]="true" name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
+                        <p-calendar [inline]="true" name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -241,14 +241,14 @@
         <form *ngIf="displayUpdateProductPromo" #updateProductPromoForm="ngForm"
             (ngSubmit)="updateProductPromo(updateProductPromoForm)">
             <p-dialog *ngIf="displayUpdateProductPromo" header="Edit Product Promotion" modal="true"
-                [(visible)]="displayUpdateProductPromo" [style]="{width: '50vw'}">
+                [(visible)]="displayUpdateProductPromo" [style]="{width: '60vw'}">
                 <!-- <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
                     </div>
                 </div> --> 
                 <div class=" ui-g">
-                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
+                    <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: {{productPromotionToUpdate.promoName}}</div>
                     <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="newPromoName" />
                     </div>
                 </div>
@@ -261,13 +261,13 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Start Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
+                        <p-calendar [inline]="true" name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
+                        <p-calendar [inline]="true"  name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -288,7 +288,7 @@
         <form *ngIf="displayUpdateServicePromo" #updateServicePromoForm="ngForm"
             (ngSubmit)="updateServicePromo(updateServicePromoForm)">
             <p-dialog *ngIf="displayUpdateServicePromo" header="Edit Service Promotion" modal="true"
-                [(visible)]="displayUpdateServicePromo" [style]="{width: '50vw'}">
+                [(visible)]="displayUpdateServicePromo" [style]="{width: '60vw'}">
                 <!-- <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
@@ -308,13 +308,13 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Start Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
+                        <p-calendar [inline]="true" name="newStartDate" [(ngModel)]="newStartDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">End Date: </div>
                     <div class="ui-g-6">
-                        <p-calendar name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
+                        <p-calendar [inline]="true" name="newEndDate" [(ngModel)]="newEndDate"></p-calendar>
                     </div>
                 </div>
                 <div class="ui-g">
