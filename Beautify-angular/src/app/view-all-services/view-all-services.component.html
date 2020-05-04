@@ -7,8 +7,11 @@
         <p-header>
             <div class="ui-helper-clearfix">
                 <div class="p-grid">
-                    <div class="p-col-12 p-md-4">
+                    <div *ngIf="serviceProvider.isApproved == true" class="p-col-12 p-md-4">
                         <p-button label="Create New Service" icon="pi pi-plus" (onClick)="showDialog()"></p-button>
+                    </div>
+                    <div *ngIf="serviceProvider.isApproved == false" class="p-col-12 p-md-4">
+                        <p-button label="Create New Service" icon="pi pi-plus" (onClick)="showDialog()" disabled = true></p-button>
                     </div>
                     <div class="p-col-6 p-md-4 filter-container">
                         <div style="position:relative">
@@ -69,16 +72,16 @@
             <div style="text-align: center;">
                 <div style="text-align: center;">
                     <output> When uploading the images, please remember to name
-                        them exactly the same as your 
-                        service name and number your image 
+                        them exactly the same as your
+                        service name and number your image
                         sequentially. Example: Service.jpg, Service1.jpg, Service2.jpg
                     </output>
                     <output style="color: red;">
                         Only JPG images are allowed!!
                     </output>
                 </div>
-                    <p-fileUpload mode="basic" customUpload="true" (uploadHandler)="handlePrimeNgFileInput($event)"
-                        [auto]="true"></p-fileUpload>
+                <p-fileUpload mode="basic" customUpload="true" (uploadHandler)="handlePrimeNgFileInput($event)"
+                    [auto]="true"></p-fileUpload>
             </div>
         </form>
     </p-dialog>

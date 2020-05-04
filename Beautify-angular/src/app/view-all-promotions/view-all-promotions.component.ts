@@ -9,6 +9,7 @@ import { PromotionService } from '../promotion.service';
 import { Promotion } from '../promotion';
 import { Product } from '../product';
 import { Service } from '../service';
+import { ServiceProvider } from '../service-provider';
 import { ProductService } from '../product.service';
 import { ServiceService } from '../service.service';
 
@@ -44,6 +45,7 @@ export class ViewAllPromotionsComponent implements OnInit {
   updateProductId: number;
   updateServiceId: number;
 
+  serviceProvider: ServiceProvider;
   productPromotionToUpdate: Promotion;
   servicePromotionToUpdate: Promotion;
   displayUpdateProductPromo: boolean = false;
@@ -75,6 +77,8 @@ export class ViewAllPromotionsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.serviceProvider = this.sessionService.getCurrentServiceProvider();
 
     this.promotionService.getServicePromotions().subscribe(
       response => {

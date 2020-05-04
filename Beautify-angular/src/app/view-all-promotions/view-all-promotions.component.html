@@ -7,8 +7,15 @@
     <p-panel header="Promotions">
 
         <h2> Product Promotions </h2>
-        <p-button label="Create New Product Promotion" icon="pi pi-plus" (onClick)="showAddProductPromoDialog()">
-        </p-button>
+        <div *ngIf="serviceProvider.isApproved == true">
+            <p-button label="Create New Product Promotion" icon="pi pi-plus" (onClick)="showAddProductPromoDialog()">
+            </p-button>
+        </div>
+        <div *ngIf="serviceProvider.isApproved == false">
+            <p-button label="Create New Product Promotion" icon="pi pi-plus" (onClick)="showAddProductPromoDialog()"
+                disabled=true> </p-button>
+        </div>
+
 
         <br /><br />
 
@@ -77,8 +84,15 @@
         <br /><br />
 
         <h2> Service Promotions </h2>
-        <p-button label="Create New Service Promotion" icon="pi pi-plus" (onClick)="showAddServicePromoDialog()">
-        </p-button>
+        <div *ngIf="serviceProvider.isApproved == true">
+            <p-button label="Create New Service Promotion" icon="pi pi-plus" (onClick)="showAddServicePromoDialog()">
+            </p-button>
+        </div>
+        <div *ngIf="serviceProvider.isApproved == false">
+            <p-button label="Create New Service Promotion" icon="pi pi-plus" (onClick)="showAddServicePromoDialog()"
+                disabled=true>
+            </p-button>
+        </div>
 
         <br /><br />
 
@@ -180,8 +194,8 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
                     <div class="ui-g-6">
-                        <input required="true" type="number" min="0" step="0.01" max="0.9" name="discountRate" id="discountRate" #discountRate="ngModel"
-                            [(ngModel)]="newDiscountRate" />
+                        <input required="true" type="number" min="0" step="0.01" max="0.9" name="discountRate"
+                            id="discountRate" #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
                         <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)"
                             class="errorText">
                             <div *ngIf="discountRate.errors.required" style="color: red;">
@@ -256,8 +270,8 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
                     <div class="ui-g-6">
                         <div class="ui-g-6">
-                            <input required="true" type="number" min="0" step="0.01" max="0.9" name="discountRate" id="discountRate"
-                                #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
+                            <input required="true" type="number" min="0" step="0.01" max="0.9" name="discountRate"
+                                id="discountRate" #discountRate="ngModel" [(ngModel)]="newDiscountRate" />
                             <div *ngIf="discountRate.invalid && (discountRate.dirty || discountRate.touched || submitted)"
                                 class="errorText">
                                 <div *ngIf="discountRate.errors.required" style="color: red;">
@@ -301,16 +315,17 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6">{{productPromotionToUpdate.promoCode}}</div>
-                </div> 
+                </div>
                 <div class=" ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
-                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="productPromotionToUpdate.name" />
+                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName"
+                            [(ngModel)]="productPromotionToUpdate.name" />
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
-                    <div class="ui-g-6"><input type="number" min="0" step="0.01" max="0.9" name="discountRate" id="discountRate"
-                            [(ngModel)]="productPromotionToUpdate.discountRate" />
+                    <div class="ui-g-6"><input type="number" min="0" step="0.01" max="0.9" name="discountRate"
+                            id="discountRate" [(ngModel)]="productPromotionToUpdate.discountRate" />
                     </div>
                 </div>
                 <div class="ui-g">
@@ -350,16 +365,17 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6">{{servicePromotionToUpdate.promoCode}}</div>
-                </div> 
+                </div>
                 <div class=" ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Name: </div>
-                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName" [(ngModel)]="servicePromotionToUpdate.name" />
+                    <div class="ui-g-6"><input type="text" name="promoName" id="promoName"
+                            [(ngModel)]="servicePromotionToUpdate.name" />
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Discount Rate: </div>
-                    <div class="ui-g-6"><input type="number" min="0" step="0.01" max="0.9" name="discountRate" id="discountRate"
-                            [(ngModel)]="servicePromotionToUpdate.discountRate" />
+                    <div class="ui-g-6"><input type="number" min="0" step="0.01" max="0.9" name="discountRate"
+                            id="discountRate" [(ngModel)]="servicePromotionToUpdate.discountRate" />
                     </div>
                 </div>
                 <div class="ui-g">

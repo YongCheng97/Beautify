@@ -5,10 +5,11 @@ import * as moment from 'moment';
 
 import { SessionService } from '../session.service';
 import { ServiceProviderService } from '../service-provider.service';
+import { FileUploadService } from '../file-upload.service';
 import { ServiceProvider } from '../service-provider';
-import { CreditCard } from '../credit-card'; 
-import { CreditCardService } from '../credit-card.service'; 
-import { Storehour } from '../storehour'; 
+import { CreditCard } from '../credit-card';
+import { CreditCardService } from '../credit-card.service';
+import { Storehour } from '../storehour';
 
 @Component({
   selector: 'app-main-page',
@@ -22,38 +23,40 @@ export class MainPageComponent implements OnInit {
   serviceProviderToUpdate: ServiceProvider;
   approvalStatus = "";
 
-  creditCards: CreditCard[]; 
-  creditCardToDelete: CreditCard; 
-  error: boolean; 
-  errorMessage: string; 
-  creditCardId: number; 
-  newCreditCard: CreditCard; 
-  ccSubmitted: boolean; 
+  creditCards: CreditCard[];
+  creditCardToDelete: CreditCard;
+  error: boolean;
+  errorMessage: string;
+  creditCardId: number;
+  newCreditCard: CreditCard;
+  ccSubmitted: boolean;
 
-  displayAddCC: boolean = false; 
-  types: string[]; 
-  ccType: string; 
-  ccName: string; 
-  ccNum: string; 
-  ccDate: string; 
-  
+  displayAddCC: boolean = false;
+  types: string[];
+  ccType: string;
+  ccName: string;
+  ccNum: string;
+  ccDate: string;
+
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
-  
+
   selectedCreditCard: CreditCard;
 
   displayName: boolean = false;
   displayEmail: boolean = false;
   displayAddress: boolean = false;
   displayHours: boolean = false;
-  displayEditHours: boolean = false; 
-  storeHours: Storehour[]; 
-  openingHours: Date[]; 
-  closingHours: Date[]; 
-  displayCC: boolean = false; 
+  displayEditHours: boolean = false;
+  displayPhoto: boolean = false;
+  storeHours: Storehour[];
+  openingHours: Date[];
+  closingHours: Date[];
+  displayCC: boolean = false;
   displayChangePW: boolean = false;
   displayMakePayment: boolean = false;
+  displayCert: boolean = false;
 
   nameSubmitted: boolean;
   newName: string
@@ -61,7 +64,7 @@ export class MainPageComponent implements OnInit {
   newEmail: string
   addressSubmitted: boolean;
   newAddress: string
-  hoursSubmitted: boolean; 
+  hoursSubmitted: boolean;
 
   mondayOpeningHour: Date;
   tuesdayOpeningHour: Date;
@@ -83,25 +86,32 @@ export class MainPageComponent implements OnInit {
   resultError: boolean;
   message: string;
 
+  showImage: Boolean = false;
+  fileName: String = null;
+  fileToUpload: File = null;
+
+  certMsg: string;
+  picMsg: string;
+
   constructor(public sessionService: SessionService,
-    private serviceProviderService: ServiceProviderService, 
+    private serviceProviderService: ServiceProviderService,
     private creditCardService: CreditCardService,
-    private router: Router, 
-    private activatedRouter: ActivatedRoute
-    )
-  {
+    private router: Router,
+    private activatedRouter: ActivatedRoute,
+    private fileUploadService: FileUploadService
+  ) {
     this.nameSubmitted = false;
     this.emailSubmitted = false;
     this.addressSubmitted = false;
-    this.hoursSubmitted = false; 
+    this.hoursSubmitted = false;
     this.resultSuccess = false;
     this.resultError = false;
 
-    this.newCreditCard = new CreditCard(); 
+    this.newCreditCard = new CreditCard();
 
-    this.serviceProviderToUpdate = new ServiceProvider(); 
+    this.serviceProviderToUpdate = new ServiceProvider();
 
-    this.error = false; 
+    this.error = false;
   }
 
   ngOnInit() {
@@ -115,29 +125,29 @@ export class MainPageComponent implements OnInit {
 
     this.creditCardService.getCreditCards().subscribe(
       response => {
-        this.creditCards = response.creditCards; 
-      }, 
+        this.creditCards = response.creditCards;
+      },
       error => {
         console.log('********** MainPageComponent.ts: ' + error);
       }
     )
 
-    this.storeHours = [] as Storehour[]; 
+    this.storeHours = [] as Storehour[];
     this.openingHours = this.sessionService.getCurrentServiceProvider().openingHours;
     this.closingHours = this.sessionService.getCurrentServiceProvider().closingHours;
     let days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     for (var i = 0; i < this.openingHours.length; i++) {
-      let hr: Storehour = new Storehour(); 
+      let hr: Storehour = new Storehour();
 
-      hr.day = days[i]; 
-      hr.openHour = this.openingHours[i]; 
-      hr.closeHour = this.closingHours[i]; 
+      hr.day = days[i];
+      hr.openHour = this.openingHours[i];
+      hr.closeHour = this.closingHours[i];
 
-      this.storeHours.push(hr);   
+      this.storeHours.push(hr);
     }
 
-    this.types = ['VISA', 'MasterCard', 'Amex']; 
+    this.types = ['VISA', 'MasterCard', 'Amex'];
 
   }
 
@@ -165,7 +175,7 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
-    this.displayName = false; 
+    this.displayName = false;
   }
 
   updateEmail(updateEmailForm: NgForm) {
@@ -191,7 +201,7 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
-    this.displayEmail = false; 
+    this.displayEmail = false;
   }
 
   updateAddress(updateAddressForm: NgForm) {
@@ -217,66 +227,64 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
-    this.displayAddress = false; 
+    this.displayAddress = false;
   }
 
-  deleteCreditCard(creditCardId: number)
-  {
-    this.creditCardId = creditCardId; 
+  deleteCreditCard(creditCardId: number) {
+    this.creditCardId = creditCardId;
     this.creditCardService.deleteCreditCard(this.creditCardId).subscribe(
       response => {
-        this.router.navigate(["/main-page"]); 
+        this.router.navigate(["/main-page"]);
         this.creditCardService.getCreditCards().subscribe(
           response => {
-            this.creditCards = response.creditCards; 
-          }, 
+            this.creditCards = response.creditCards;
+          },
           error => {
             console.log('********** MainPageComponent.ts: ' + error);
           }
         )
-      }, 
+      },
       error => {
-        this.error = true; 
-        this.errorMessage = error; 
+        this.error = true;
+        this.errorMessage = error;
       }
-    ); 
+    );
   }
 
   addCC(addCCForm: NgForm) {
-    this.ccSubmitted = true; 
+    this.ccSubmitted = true;
 
-    this.newCreditCard.type = this.ccType; 
-    this.newCreditCard.cardName = this.ccName; 
-    this.newCreditCard.cardNumber = this.ccNum; 
-    this.newCreditCard.expiryDate = this.ccDate; 
+    this.newCreditCard.type = this.ccType;
+    this.newCreditCard.cardName = this.ccName;
+    this.newCreditCard.cardNumber = this.ccNum;
+    this.newCreditCard.expiryDate = this.ccDate;
 
-    if (addCCForm.valid) 
-    {
+    if (addCCForm.valid) {
       this.creditCardService.createCreditCard(this.newCreditCard).subscribe(
         response => {
-          let newCCid: number = response.creditCardId; 
+          let newCCid: number = response.creditCardId;
           this.resultSuccess = true;
-          this.resultError = false; 
-          this.message = "New Credit Card " + newCCid + " created successfully"; 
+          this.resultError = false;
+          this.message = "New Credit Card " + newCCid + " created successfully";
           this.creditCardService.getCreditCards().subscribe(
             response => {
-              this.creditCards = response.creditCards; 
-            }, 
+              this.creditCards = response.creditCards;
+            },
             error => {
               console.log('********** MainPageComponent.ts: ' + error);
             }
           )
-        }, 
+        },
         error => {
-          this.resultError = true; 
-          this.resultSuccess = false; 
-          this.message = "An errror has occured while creating the new Credit Card: " + error; 
+          this.resultError = true;
+          this.resultSuccess = false;
+          this.message = "An errror has occured while creating the new Credit Card: " + error;
 
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
     }
-    this.displayAddCC = false; 
+    this.displayAddCC = false;
   }
 
   editHours(editHoursForm: NgForm) {
@@ -284,7 +292,7 @@ export class MainPageComponent implements OnInit {
 
     if (editHoursForm.valid) {
 
-      this.serviceProviderToUpdate = this.sessionService.getCurrentServiceProvider(); 
+      this.serviceProviderToUpdate = this.sessionService.getCurrentServiceProvider();
 
       this.serviceProviderToUpdate.openingHours = [];
       this.serviceProviderToUpdate.closingHours = [];
@@ -311,20 +319,20 @@ export class MainPageComponent implements OnInit {
           this.resultError = true;
           this.message = "Opening and Closing Hours updated successfully";
           this.sessionService.setCurrentServiceProvider(this.serviceProviderToUpdate);
-          
-          this.storeHours = [] as Storehour[]; 
+
+          this.storeHours = [] as Storehour[];
           this.openingHours = this.sessionService.getCurrentServiceProvider().openingHours;
           this.closingHours = this.sessionService.getCurrentServiceProvider().closingHours;
           let days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      
+
           for (var i = 0; i < this.openingHours.length; i++) {
-            let hr: Storehour = new Storehour(); 
-      
-            hr.day = days[i]; 
-            hr.openHour = this.openingHours[i]; 
-            hr.closeHour = this.closingHours[i]; 
-      
-            this.storeHours.push(hr);   
+            let hr: Storehour = new Storehour();
+
+            hr.day = days[i];
+            hr.openHour = this.openingHours[i];
+            hr.closeHour = this.closingHours[i];
+
+            this.storeHours.push(hr);
           }
 
         },
@@ -337,65 +345,100 @@ export class MainPageComponent implements OnInit {
         }
       )
     }
-    this.displayEditHours = false; 
+    this.displayEditHours = false;
   }
-  
+
+  handlePrimeNgFileInputCert(event) {
+    this.fileToUpload = event.files[0];
+
+    this.fileUploadService.uploadFile(this.fileToUpload).subscribe(
+      response => {
+        this.fileName = this.fileToUpload.name;
+        this.showImage = true;
+        console.log('********** FileUploadComponent.ts: File uploaded successfully: ' + response.status);
+        this.certMsg = "File Uploaded Successfully!"
+      },
+      error => {
+        console.log('********** FileUploadComponent.ts: ' + error);
+        this.certMsg = error;
+      }
+    );
+  }
+
+  handlePrimeNgFileInputPic(event) {
+    this.fileToUpload = event.files[0];
+
+    this.fileUploadService.uploadFile(this.fileToUpload).subscribe(
+      response => {
+        this.fileName = this.fileToUpload.name;
+        this.showImage = true;
+        console.log('********** FileUploadComponent.ts: File uploaded successfully: ' + response.status);
+        this.picMsg = "File Uploaded Successfully!"
+        this.displayPhoto = false;
+      },
+      error => {
+        console.log('********** FileUploadComponent.ts: ' + error);
+        this.picMsg = error;
+      }
+    );
+  }
+
   changePassword(changePWForm: NgForm) {
-	  
-	  if (changePWForm.valid) {
-			
-			if (this.currentPassword==this.sessionService.getPassword() && this.newPassword==this.confirmPassword){
 
-			  this.serviceProviderToUpdate.password = this.confirmPassword;
-			  
-			  this.serviceProviderService.changePassword(this.serviceProviderToUpdate.password).subscribe(
-				response => {
-				  this.resultSuccess = true;
-				  this.resultError = true;
-				  this.message = "Password updated successfully";
-				  this.sessionService.setCurrentServiceProvider(this.serviceProviderToUpdate);
-				},
-				error => {
-				  this.resultError = true;
-				  this.resultSuccess = false;
-				  this.message = "An error has occured while updating the password: " + error;
+    if (changePWForm.valid) {
 
-				  console.log('********** MainPageComponent.ts: ' + error);
-				}
-			  );
-			  
-			  this.sessionService.setPassword(this.serviceProviderToUpdate.password);
-			  
-			this.displayChangePW = false;  			
-		  } else {
-			  this.message = "Password does not match";
-			  
-		  }
-	  }
+      if (this.currentPassword == this.sessionService.getPassword() && this.newPassword == this.confirmPassword) {
+
+        this.serviceProviderToUpdate.password = this.confirmPassword;
+
+        this.serviceProviderService.changePassword(this.serviceProviderToUpdate.password).subscribe(
+          response => {
+            this.resultSuccess = true;
+            this.resultError = true;
+            this.message = "Password updated successfully";
+            this.sessionService.setCurrentServiceProvider(this.serviceProviderToUpdate);
+          },
+          error => {
+            this.resultError = true;
+            this.resultSuccess = false;
+            this.message = "An error has occured while updating the password: " + error;
+
+            console.log('********** MainPageComponent.ts: ' + error);
+          }
+        );
+
+        this.sessionService.setPassword(this.serviceProviderToUpdate.password);
+
+        this.displayChangePW = false;
+      } else {
+        this.message = "Password does not match";
+
+      }
+    }
   }
-  
+
   makePayment(makePaymentForm: NgForm) {
-	  
-	  if(makePaymentForm.valid) {
-		  
-		  this.serviceProviderService.makePayment(this.selectedCreditCard).subscribe(
-			response => {
-				  this.resultSuccess = true;
-				  this.resultError = true;
-				  this.message = "Payment made successfully";
-				},
-				error => {
-				  this.resultError = true;
-				  this.resultSuccess = false;
-				  this.message = "An error has occured while making payment: " + error;
 
-				  console.log('********** MainPageComponent.ts: ' + error);
-				}
-			  );
-		this.displayMakePayment = false;
-	  }
+    if (makePaymentForm.valid) {
+
+      this.serviceProviderService.makePayment(this.selectedCreditCard).subscribe(
+        response => {
+          this.resultSuccess = true;
+          this.resultError = true;
+          this.message = "Payment made successfully";
+        },
+        error => {
+          this.resultError = true;
+          this.resultSuccess = false;
+          this.message = "An error has occured while making payment: " + error;
+
+          console.log('********** MainPageComponent.ts: ' + error);
+        }
+      );
+      this.displayMakePayment = false;
+    }
   }
-  
+
 
   showNameDialog(serviceProvider: ServiceProvider) {
     this.displayName = true;
@@ -423,30 +466,39 @@ export class MainPageComponent implements OnInit {
   }
 
   showAddCCDialog(serviceProvider: ServiceProvider) {
-    this.displayAddCC = true; 
-    this.serviceProvider = serviceProvider; 
+    this.displayAddCC = true;
+    this.serviceProvider = serviceProvider;
+  }
+
+  showPhotoDialog(serviceProvider: ServiceProvider) {
+    this.displayPhoto = true;
+    this.serviceProvider = serviceProvider;
+  }
+
+  showCertDialog(serviceProvider: ServiceProvider) {
+    this.displayCert = true;
+    this.serviceProvider = serviceProvider;
   }
 
   showEditHoursDialog(serviceProvider: ServiceProvider) {
-    this.displayEditHours = true; 
-    this.serviceProvider = serviceProvider; 
+    this.displayEditHours = true;
+    this.serviceProvider = serviceProvider;
   }
-  
+
   showPasswordDialog(serviceProvider: ServiceProvider) {
     this.displayChangePW = true;
     this.serviceProviderToUpdate = serviceProvider;
-	this.currentPassword = null;
-	this.newPassword = null;
-	this.confirmPassword = null;
-  }
-  
-  showMakePaymentDialog(serviceProvider: ServiceProvider) {
-    this.displayMakePayment = true; 
-    this.serviceProvider = serviceProvider; 
+    this.currentPassword = null;
+    this.newPassword = null;
+    this.confirmPassword = null;
   }
 
-  parseDate(d: Date)
-	{		
+  showMakePaymentDialog(serviceProvider: ServiceProvider) {
+    this.displayMakePayment = true;
+    this.serviceProvider = serviceProvider;
+  }
+
+  parseDate(d: Date) {
     if (d != null) {
       return d.toString().replace('[UTC]', '');
     }
