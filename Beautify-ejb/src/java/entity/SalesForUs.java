@@ -44,6 +44,15 @@ public class SalesForUs implements Serializable {
     @JoinColumn(nullable = true)
     private PurchasedLineItem purchasedLineItem;
     
+    @OneToOne(optional = true)
+    @JoinColumn(nullable = true)
+    private CreditCard creditCard;
+    
+    @OneToOne(optional = true)
+    @JoinColumn(nullable = true)
+    private ServiceProvider serviceProvider;
+    
+    
     public SalesForUs() {
         
     }
@@ -136,6 +145,22 @@ public class SalesForUs implements Serializable {
 
     public void setPurchasedLineItem(PurchasedLineItem purchasedLineItem) {
         this.purchasedLineItem = purchasedLineItem;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public ServiceProvider getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
     
 }

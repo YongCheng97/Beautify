@@ -50,6 +50,11 @@
             <b> Change Password: </b>
             <p-button (onClick)="showPasswordDialog(serviceProvider)" label="Change"></p-button>
         </p>
+		
+		<p>
+            <b> Make Subcription Fee Payment: </b>
+            <p-button (onClick)="showMakePaymentDialog(serviceProvider)" label="Make Payment"></p-button>
+        </p>
 
         <form *ngIf="displayName" #updateNameForm="ngForm" (ngSubmit)="updateName(updateNameForm)">
             <p-dialog *ngIf="displayName" header="Update Name" modal="true" [(visible)]="displayName"
@@ -335,6 +340,28 @@
                 </div>
             </p-dialog>
         </form>
+		
+		<p-dialog *ngIf="displayMakePayment" header="Make Payment" modal="true" [(visible)]="displayMakePayment" height="200"
+        [style]="{width: '60vw'}">
+			<form (ngSubmit)="makePayment(makePaymentForm)" #makePaymentForm="ngForm" >
+				<div class="ui-g">
+					<div class="ui-g-6" style="background-color: #f4f4f4;">Monthly Subscription</div>
+					<div class="ui-g-6">$60.00</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-6" style="background-color: #f4f4f4;">Product Category</div>
+					<div class="ui-g-6">
+						<p-dropdown [options]="creditCards" optionLabel="cardNumber" editable="true"
+							placeholder="Select a Credit Card" name="selectedCreditCard" #name="ngModel"
+							[(ngModel)]="selectedCreditCard"></p-dropdown>
+					</div>
+				</div>
+				<br />
+				<div style="text-align: center;">
+                    <input class="button button3" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+			</form>
+		</p-dialog>
 		
     </p-panel>
 
