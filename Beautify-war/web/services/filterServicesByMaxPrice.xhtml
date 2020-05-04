@@ -56,7 +56,7 @@
                                     <h:outputText value="#{service.description}" style="text-align:center"/>
                                     <p:graphicImage value="/uploadedFiles/#{service.serviceName}.jpg" height="120" width="150" alt ="" style="text-align:center; font-size: large"/>
                                 </h:panelGrid>
-                                <p:commandLink actionListener="#{filterServicesByMaxPriceManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large">
+                                <p:commandLink actionListener="#{filterServicesByMaxPriceManagedBean.viewService}" style="text-decoration:none;color:blue;font-size: large; font-family: inherit; font-size: inherit; ">
                                     <h:outputText value = "Click here for more information!"/>
                                     <f:attribute name="serviceId" value="#{service.serviceId}" />
                                 </p:commandLink>

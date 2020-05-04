@@ -27,13 +27,13 @@
                 <br/>
                 <p:carousel value="#{viewAllProductsManagedBean.products}" headerText="Browse by Products" var="product" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
                     <p:panel header="#{product.name}" style="text-align:center; min-height:280px">
-                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px">
+                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px; font-family: inherit; font-size: inherit; ">
                             <h:outputText value= "Price: $#{product.price}" style="text-align:center"/>
                             <h:outputText value="Description: #{product.description}" style="text-align:center"/>
                             <p:graphicImage library="images" name ="#{product.name}.jpg" height="120" width="170" alt ="" />
                         </h:panelGrid>
-                        <p:commandLink actionListener="#{viewAllProductsManagedBean.viewProduct}" style="text-decoration:none;color:blue; font-size: large">
-                            <h:outputText value = "Click here for more information!"/>
+                        <p:commandLink actionListener="#{viewAllProductsManagedBean.viewProduct}" style="text-decoration:none;color:blue; font-size: large; font-family: inherit; font-size: inherit;">
+                            <h:outputText value = "Click here for more information!" style=" font-family: inherit; font-size: inherit; "/>
                             <f:attribute name="productId" value="#{product.productId}" />
                         </p:commandLink>
                     </p:panel>
@@ -41,13 +41,13 @@
                 <br/>
                 <p:carousel value="#{viewAllServicesManagedBean.services}" headerText="Browse by Services" var="service" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
                     <p:panel header="#{service.serviceName}" style="text-align:center; min-height:280px">
-                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent;  min-height:200px">
+                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent;  min-height:200px;  font-family: inherit; font-size: inherit; ">
                             <h:outputText value= "Price: $#{service.price}" style="text-align:center"/>
                             <h:outputText value="Description: #{service.description}" style="text-align:center"/>
                             <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
                         </h:panelGrid>
-                        <p:commandLink actionListener="#{viewAllServicesManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large">
-                            <h:outputText value = "Click here for more information!"/>
+                        <p:commandLink actionListener="#{viewAllServicesManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large; font-family: inherit; font-size: inherit;">
+                            <h:outputText value = "Click here for more information!" style="font-family: inherit; font-size: inherit; "/>
                             <f:attribute name="serviceId" value="#{service.serviceId}" />
                         </p:commandLink>
                     </p:panel>
@@ -55,12 +55,12 @@
                 <br/>
                 <p:carousel value="#{viewAllServiceProvidersManagedBean.serviceProviders}" headerText="Browse by Service Providers" var="serviceProvider" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500" >
                     <p:panel header="#{serviceProvider.name}" style="text-align:center; min-height:280px">
-                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px">
+                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px;  font-family: inherit; font-size: inherit; ">
                             <h:outputText value="Address: #{serviceProvider.address}" />&nbsp;
                             <p:graphicImage library="images" name ="#{serviceProvider.name}.jpg" height="150" width="190" alt="photo"/> 
                         </h:panelGrid>
-                        <p:commandLink actionListener="#{viewAllServiceProvidersManagedBean.clickLink(serviceProvider.serviceProviderId)}" style="text-decoration:none;color:blue; font-size: large">
-                            <h:outputText value = "Click here for more information!"/>
+                        <p:commandLink actionListener="#{viewAllServiceProvidersManagedBean.clickLink(serviceProvider.serviceProviderId)}" style="text-decoration:none;color:blue; font-size: large; font-family: inherit; font-size: inherit;">
+                            <h:outputText value = "Click here for more information!" style=" font-family: inherit; font-size: inherit; "/>
                         </p:commandLink>
                     </p:panel>
                 </p:carousel>
@@ -82,13 +82,13 @@
                 <br/>
                 <p:carousel value="#{viewAllProductsManagedBean.products}" headerText="Browse by Products" var="product" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
                     <p:panel header="#{product.name}" style="text-align:center; min-height:280px">
-                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px">
+                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px;  font-family: inherit; font-size: inherit; ">
                             <h:outputText value= "Price: $#{product.price}" style="text-align:center"/>
                             <h:outputText value="Description: #{product.description}" style="text-align:center"/>
                             <p:graphicImage library="images" name ="#{product.name}.jpg" height="120" width="170" alt ="" />
                         </h:panelGrid>
-                        <p:commandLink actionListener="#{viewAllProductsManagedBean.viewProduct}" style="text-decoration:none;color:blue; font-size: large">
-                            <h:outputText value = "Click here for more information!"/>
+                        <p:commandLink actionListener="#{viewAllProductsManagedBean.viewProduct}" style="text-decoration:none;color:blue; font-size: large; font-family: inherit; font-size: inherit;">
+                            <h:outputText value = "Click here for more information!" style=" font-family: inherit; font-size: inherit; "/>
                             <f:attribute name="productId" value="#{product.productId}" />
                         </p:commandLink>
                     </p:panel>
@@ -96,13 +96,13 @@
                 <br/>
                 <p:carousel value="#{viewAllServicesManagedBean.services}" headerText="Browse by Services" var="service" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500">
                     <p:panel header="#{service.serviceName}" style="text-align:center; min-height:280px">
-                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px">
+                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px;  font-family: inherit; font-size: inherit; ">
                             <h:outputText value= "Price: $#{service.price}" style="text-align:center"/>
                             <h:outputText value="Description: #{service.description}" style="text-align:center"/>
                             <p:graphicImage library="images" name ="#{service.serviceName}.jpg" height="120" width="170" alt ="" />
                         </h:panelGrid>
-                        <p:commandLink actionListener="#{viewAllServicesManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large">
-                            <h:outputText value = "Click here for more information!"/>
+                        <p:commandLink actionListener="#{viewAllServicesManagedBean.viewService}" style="text-decoration:none;color:blue; font-size: large; font-family: inherit; font-size: inherit;">
+                            <h:outputText value = "Click here for more information!" style=" font-family: inherit; font-size: inherit; "/>
                             <f:attribute name="serviceId" value="#{service.serviceId}" />
                         </p:commandLink>
                     </p:panel>
@@ -110,12 +110,12 @@
                 <br/>
                 <p:carousel value="#{viewAllServiceProvidersManagedBean.serviceProviders}" headerText="Browse by Service Providers" var="serviceProvider" itemStyle="text-align:center" responsive="true" autoPlayInterval="3500" >
                     <p:panel header="#{serviceProvider.name}" style="text-align:center; min-height:280px">
-                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px">
+                        <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px;  font-family: inherit; font-size: inherit; ">
                             <h:outputText value="Address: #{serviceProvider.address}" />&nbsp;
                             <p:graphicImage library="images" name ="#{serviceProvider.name}.jpg" height="150" width="190" alt="photo"/> 
                         </h:panelGrid>
-                        <p:commandLink actionListener="#{viewAllServiceProvidersManagedBean.clickLink(serviceProvider.serviceProviderId)}" style="text-decoration:none;color:blue; font-size: large">
-                            <h:outputText value = "Click here for more information!"/>
+                        <p:commandLink actionListener="#{viewAllServiceProvidersManagedBean.clickLink(serviceProvider.serviceProviderId)}" style="text-decoration:none;color:blue; font-size: large; font-family: inherit; font-size: inherit;">
+                            <h:outputText value = "Click here for more information!" style=" font-family: inherit; font-size: inherit; "/>
                         </p:commandLink>
                     </p:panel>
                 </p:carousel>
