@@ -2,6 +2,7 @@ package ws.restful;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 
 
@@ -13,6 +14,8 @@ public class ApplicationConfig extends Application {
     {
         Set<Class<?>> resources = new java.util.HashSet<>();
         addRestResourceClasses(resources);
+        
+        resources.add(MultiPartFeature.class);
         return resources;
     }
 
@@ -23,6 +26,7 @@ public class ApplicationConfig extends Application {
         resources.add(ws.restful.BookingResource.class);
         resources.add(ws.restful.CategoryResource.class);
         resources.add(ws.restful.CreditCardResource.class);
+        resources.add(ws.restful.FileResource.class);
         resources.add(ws.restful.ProductResource.class);
         resources.add(ws.restful.PromotionResource.class);
         resources.add(ws.restful.PurchasedLineItemResource.class);

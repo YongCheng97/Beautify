@@ -417,14 +417,14 @@ public class ServiceSessionBean implements ServiceSessionBeanLocal {
     @Override
     public void deleteService(Long serviceId) throws ServiceNotFoundException, DeleteServiceException {
         Service serviceToRemove = retrieveServiceByServiceId(serviceId);
-
-        serviceToRemove.getCategory().getServices().remove(serviceToRemove);
-
-        for (Tag tag : serviceToRemove.getTags()) {
-            tag.getServices().remove(serviceToRemove);
-        }
-
-        serviceToRemove.getTags().clear();
+//
+//        serviceToRemove.getCategory().getServices().remove(serviceToRemove);
+//
+//        for (Tag tag : serviceToRemove.getTags()) {
+//            tag.getServices().remove(serviceToRemove);
+//        }
+//
+//        serviceToRemove.getTags().clear();
 
         serviceToRemove.setIsDeleted(true);
     }

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DatePipe } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { DialogModule } from 'primeng/dialog';
@@ -16,15 +17,16 @@ import { MegaMenuModule } from 'primeng/megamenu';
 import { DataViewModule } from 'primeng/dataview';
 import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
-import {ListboxModule} from 'primeng/listbox';
-import {SpinnerModule} from 'primeng/spinner';
-import {InputTextareaModule} from 'primeng/inputtextarea';
+import { ListboxModule } from 'primeng/listbox';
+import { SpinnerModule } from 'primeng/spinner';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
-import {RatingModule} from 'primeng/rating';
+import { RatingModule } from 'primeng/rating';
+import { FileUploadModule } from 'primeng/fileupload';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import {PasswordModule} from 'primeng/password';
-import {MessagesModule} from 'primeng/messages';
-import {MessageModule} from 'primeng/message';
+import { PasswordModule } from 'primeng/password';
 
 import { AppComponent } from './app.component';
 import { IndexComponent } from './index/index.component';
@@ -66,6 +68,7 @@ import { ViewAllPromotionsComponent } from './view-all-promotions/view-all-promo
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     DialogModule,
     ButtonModule,
     TableModule,
@@ -82,10 +85,11 @@ import { ViewAllPromotionsComponent } from './view-all-promotions/view-all-promo
     SpinnerModule,
     InputTextareaModule,
     MultiSelectModule,
-    RatingModule, 
-	PasswordModule,
-	MessagesModule,
-	MessageModule,
+    RatingModule,
+    FileUploadModule,
+    MessageModule,
+    MessagesModule,
+    PasswordModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
