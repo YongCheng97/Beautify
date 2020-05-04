@@ -174,8 +174,8 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
+      this.displayName = false; 
     }
-    this.displayName = false;
   }
 
   updateEmail(updateEmailForm: NgForm) {
@@ -200,8 +200,8 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
+      this.displayEmail = false; 
     }
-    this.displayEmail = false;
   }
 
   updateAddress(updateAddressForm: NgForm) {
@@ -226,8 +226,8 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
+      this.displayAddress = false; 
     }
-    this.displayAddress = false;
   }
 
   deleteCreditCard(creditCardId: number) {
@@ -283,8 +283,8 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
+      this.displayAddCC = false; 
     }
-    this.displayAddCC = false;
   }
 
   editHours(editHoursForm: NgForm) {
@@ -344,8 +344,8 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
+      this.displayEditHours = false; 
     }
-    this.displayEditHours = false;
   }
 
   handlePrimeNgFileInputCert(event) {

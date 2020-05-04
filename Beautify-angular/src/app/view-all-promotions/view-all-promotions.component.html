@@ -345,9 +345,8 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Select product: </div>
                     <div class="ui-g-6">
-                        current product: {{productPromotionToUpdate.product.name}}
                         <p-dropdown [options]="products" optionLabel="name" editable="true"
-                            placeholder="Select a Product" name="newProduct" #name="ngModel" [(ngModel)]="newProduct">
+                            placeholder="{{productPromotionToUpdate.product.name}}" name="newProduct" #name="ngModel" [(ngModel)]="newProduct">
                         </p-dropdown>
                     </div>
                 </div>
@@ -396,9 +395,8 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Select service: </div>
                     <div class="ui-g-6">
                         <div class="ui-g-6">
-                            current service: {{servicePromotionToUpdate.service.serviceName}}
                             <p-dropdown [options]="services" optionLabel="serviceName" editable="true"
-                                placeholder="Select a Service" name="services" #serviceName="ngModel"
+                                placeholder="servicePromotionToUpdate.service.serviceName" name="services" #serviceName="ngModel"
                                 [(ngModel)]="newService"></p-dropdown>
                         </div>
                     </div>
