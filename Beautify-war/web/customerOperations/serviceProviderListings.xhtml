@@ -61,7 +61,7 @@
                     <p:carousel value="#{listingsManagedBean.productEntities}" headerText="Products" var="product" itemStyle="text-align:left" responsive="true">
                         <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                             <f:facet name="header">
-                                <p:graphicImage library="images" name ="#{product.name}.jpg" height="120" width="170" alt="photo"/> 
+                                <p:graphicImage library="images" value="/uploadedFiles/#{product.name}.jpg" height="120" width="170" alt="photo"/> 
                             </f:facet>
 
                             <h:outputText style="font-weight: bold;" value="Product Name:" />

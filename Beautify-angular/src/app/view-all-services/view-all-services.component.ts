@@ -99,7 +99,7 @@ export class ViewAllServicesComponent implements OnInit {
 
   handlePrimeNgFileInput(event) {
     this.fileToUpload = event.files[0];
-  
+
     this.fileUploadService.uploadFile(this.fileToUpload).subscribe(
       response => {
         this.fileName = this.fileToUpload.name;
@@ -107,7 +107,7 @@ export class ViewAllServicesComponent implements OnInit {
         console.log('********** FileUploadComponent.ts: File uploaded successfully: ' + response.status);
         this.displayPhoto = false;
       },
-      error => {				
+      error => {
         console.log('********** FileUploadComponent.ts: ' + error);
       }
     );
@@ -132,7 +132,7 @@ export class ViewAllServicesComponent implements OnInit {
     this.serviceToDelete = serviceToDelete;
   }
 
-  
+
   showPhotoDialog(serviceToUpload: Service) {
     this.displayPhoto = true;
     this.serviceToUpload = serviceToUpload;
@@ -162,6 +162,14 @@ export class ViewAllServicesComponent implements OnInit {
         this.resultSuccess = true;
         this.resultError = false;
         this.message = "New service " + newServiceId + " created successfully";
+        this.serviceService.getServices().subscribe(
+          response => {
+            this.services = response.services;
+          },
+          error => {
+            console.log('********** ViewAllProductsComponent.ts: ' + error);
+          }
+        );
       },
       error => {
         this.resultError = true;
@@ -194,6 +202,14 @@ export class ViewAllServicesComponent implements OnInit {
         this.message = "Service updated successfully";
         console.log(this.message);
         this.displayUpdate = false;
+        this.serviceService.getServices().subscribe(
+          response => {
+            this.services = response.services;
+          },
+          error => {
+            console.log('********** ViewAllProductsComponent.ts: ' + error);
+          }
+        );
       },
       error => {
         this.resultError = true;
@@ -211,6 +227,14 @@ export class ViewAllServicesComponent implements OnInit {
       response => {
         this.router.navigate(["/view-all-services"]);
         this.displayDelete = false;
+        this.serviceService.getServices().subscribe(
+          response => {
+            this.services = response.services;
+          },
+          error => {
+            console.log('********** ViewAllProductsComponent.ts: ' + error);
+          }
+        );
       },
       error => {
         console.log('********** DeleteServiceComponent.ts: ' + error);
