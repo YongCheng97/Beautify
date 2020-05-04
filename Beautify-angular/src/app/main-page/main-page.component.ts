@@ -165,6 +165,7 @@ export class MainPageComponent implements OnInit {
           this.resultError = true;
           this.message = "Name updated successfully";
           this.sessionService.setCurrentServiceProvider(this.serviceProviderToUpdate);
+          this.displayName = false; 
         },
         error => {
           this.resultError = true;
@@ -174,7 +175,7 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
-      this.displayName = false; 
+      
     }
   }
 
@@ -191,6 +192,7 @@ export class MainPageComponent implements OnInit {
           this.resultError = true;
           this.message = "Name updated successfully";
           this.sessionService.setCurrentServiceProvider(this.serviceProviderToUpdate);
+          this.displayEmail = false; 
         },
         error => {
           this.resultError = true;
@@ -200,7 +202,7 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
-      this.displayEmail = false; 
+      
     }
   }
 
@@ -217,6 +219,7 @@ export class MainPageComponent implements OnInit {
           this.resultError = true;
           this.message = "Name updated successfully";
           this.sessionService.setCurrentServiceProvider(this.serviceProviderToUpdate);
+          this.displayAddress = false; 
         },
         error => {
           this.resultError = true;
@@ -226,7 +229,7 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
-      this.displayAddress = false; 
+     
     }
   }
 
@@ -266,6 +269,7 @@ export class MainPageComponent implements OnInit {
           this.resultSuccess = true;
           this.resultError = false;
           this.message = "New Credit Card " + newCCid + " created successfully";
+          this.displayAddCC = false; 
           this.creditCardService.getCreditCards().subscribe(
             response => {
               this.creditCards = response.creditCards;
@@ -283,7 +287,7 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
-      this.displayAddCC = false; 
+      
     }
   }
 
@@ -334,7 +338,7 @@ export class MainPageComponent implements OnInit {
 
             this.storeHours.push(hr);
           }
-
+          this.displayEditHours = false; 
         },
         error => {
           this.resultError = true;
@@ -344,7 +348,7 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       )
-      this.displayEditHours = false; 
+      
     }
   }
 
@@ -426,6 +430,7 @@ export class MainPageComponent implements OnInit {
           this.resultSuccess = true;
           this.resultError = true;
           this.message = "Payment made successfully";
+          this.displayMakePayment = false;
         },
         error => {
           this.resultError = true;
@@ -435,7 +440,7 @@ export class MainPageComponent implements OnInit {
           console.log('********** MainPageComponent.ts: ' + error);
         }
       );
-      this.displayMakePayment = false;
+      
     }
   }
 

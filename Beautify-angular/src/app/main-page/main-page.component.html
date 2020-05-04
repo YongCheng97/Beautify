@@ -355,7 +355,7 @@
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Expiry Date: </div>
                     <div class="ui-g-6">
-                        <input required="true" type="text" name="date" id="date" #date="ngModel" [(ngModel)]="ccDate" />
+                        <input required="true" type="text" name="date" id="date" #date="ngModel" [(ngModel)]="ccDate" placeholder="mm/yy" />
                         <div *ngIf="date.invalid && (date.dirty || date.touched || submitted)" class="errorText">
                             <div *ngIf="date.errors.required" style="color: red;">
                                 Expiry date is required.

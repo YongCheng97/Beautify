@@ -9,7 +9,7 @@
             <div class="ui-helper-clearfix">
                 <div class="p-grid">
                     <div *ngIf="serviceProvider.isApproved == true" class="p-col-12 p-md-4">
-                        <p-button label="Create New Product" icon="pi pi-plus" (onClick)="showDialog"></p-button>
+                        <p-button label="Create New Product" icon="pi pi-plus" (onClick)="showDialog()"></p-button>
                     </div>
                     <div *ngIf="serviceProvider.isApproved == false" class="p-col-12 p-md-4">
                         <p-button label="Create New Product" icon="pi pi-plus" (onClick)="showDialog()" disabled = true></p-button>

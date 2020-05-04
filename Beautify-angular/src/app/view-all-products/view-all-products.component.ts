@@ -97,21 +97,21 @@ export class ViewAllProductsComponent implements OnInit {
     );
   }
 
-handlePrimeNgFileInput(event) {
-  this.fileToUpload = event.files[0];
+  handlePrimeNgFileInput(event) {
+    this.fileToUpload = event.files[0];
 
-  this.fileUploadService.uploadFile(this.fileToUpload).subscribe(
-    response => {
-      this.fileName = this.fileToUpload.name;
-      this.showImage = true;
-      console.log('********** FileUploadComponent.ts: File uploaded successfully: ' + response.status);
-      this.displayPhoto = false;
-    },
-    error => {				
-      console.log('********** FileUploadComponent.ts: ' + error);
-    }
-  );
-}
+    this.fileUploadService.uploadFile(this.fileToUpload).subscribe(
+      response => {
+        this.fileName = this.fileToUpload.name;
+        this.showImage = true;
+        console.log('********** FileUploadComponent.ts: File uploaded successfully: ' + response.status);
+        this.displayPhoto = false;
+      },
+      error => {
+        console.log('********** FileUploadComponent.ts: ' + error);
+      }
+    );
+  }
 
   showDialog() {
     this.displayAdd = true;
@@ -161,6 +161,15 @@ handlePrimeNgFileInput(event) {
         this.resultSuccess = true;
         this.resultError = false;
         this.message = "New product " + newProductId + " created successfully";
+        this.displayAdd = false;
+        this.productService.getProducts().subscribe(
+          response => {
+            this.products = response.products;
+          },
+          error => {
+            console.log('********** ViewAllProductsComponent.ts: ' + error);
+          }
+        );
       },
       error => {
         this.resultError = true;
@@ -171,7 +180,6 @@ handlePrimeNgFileInput(event) {
       }
     );
     // }
-    this.displayAdd = false;
   }
 
   update(updateProductForm: NgForm) {
@@ -186,21 +194,29 @@ handlePrimeNgFileInput(event) {
     this.submitted = true;
 
     // if (updateProductForm.valid) {
-      this.productService.updateProduct(this.productToUpdate, this.categoryId, longTagIds).subscribe(
-        response => {
-          this.resultSuccess = true;
-          this.resultError = false;
-          this.message = "Product updated successfully";
-          this.displayUpdate = false;
-        },
-        error => {
-          this.resultError = true;
-          this.resultSuccess = false;
-          this.message = "An error has occurred while updating the product: " + error;
+    this.productService.updateProduct(this.productToUpdate, this.categoryId, longTagIds).subscribe(
+      response => {
+        this.resultSuccess = true;
+        this.resultError = false;
+        this.message = "Product updated successfully";
+        this.displayUpdate = false;
+        this.productService.getProducts().subscribe(
+          response => {
+            this.products = response.products;
+          },
+          error => {
+            console.log('********** ViewAllProductsComponent.ts: ' + error);
+          }
+        );
+      },
+      error => {
+        this.resultError = true;
+        this.resultSuccess = false;
+        this.message = "An error has occurred while updating the product: " + error;
 
-          console.log('********** UpdateProductComponent.ts: ' + error);
-        }
-      );
+        console.log('********** UpdateProductComponent.ts: ' + error);
+      }
+    );
     // }
   }
 
@@ -209,6 +225,14 @@ handlePrimeNgFileInput(event) {
       response => {
         this.router.navigate(["/view-all-products"]);
         this.displayDelete = false;
+        this.productService.getProducts().subscribe(
+          response => {
+            this.products = response.products;
+          },
+          error => {
+            console.log('********** ViewAllProductsComponent.ts: ' + error);
+          }
+        );
       },
       error => {
         console.log('********** DeleteServiceComponent.ts: ' + error);

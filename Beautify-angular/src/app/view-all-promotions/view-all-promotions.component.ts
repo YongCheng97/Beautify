@@ -172,6 +172,7 @@ export class ViewAllPromotionsComponent implements OnInit {
           this.resultSuccess = true;
           this.resultError = false;
           this.message = "New Product Promotion " + newPromoId + " created successfully!";
+          this.displayAddProductPromo = false;
           this.promotionService.getProductPromotions().subscribe(
             response => {
               this.productPromotions = response.promotions;
@@ -189,7 +190,7 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error);
         }
       )
-      this.displayAddProductPromo = false;
+      
     }
   }
 
@@ -212,6 +213,7 @@ export class ViewAllPromotionsComponent implements OnInit {
           this.resultSuccess = true;
           this.resultError = false;
           this.message = "New service Promotion " + newPromoId + " created successfully!";
+          this.displayAddServicePromo = false;
           this.promotionService.getServicePromotions().subscribe(
             response => {
               this.servicePromotions = response.promotions;
@@ -229,7 +231,7 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error);
         }
       )
-      this.displayAddServicePromo = false;
+      
     }
   }
 
@@ -289,6 +291,7 @@ export class ViewAllPromotionsComponent implements OnInit {
           this.resultSuccess = true;
           this.resultError = false;
           this.message = "Service promotion updated successfully!";
+          this.displayUpdateProductPromo = false;
           this.promotionService.getProductPromotions().subscribe(
             response => {
               this.productPromotions = response.promotions;
@@ -306,7 +309,7 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error);
         }
       )
-      this.displayUpdateProductPromo = false;
+      
     }
   }
 
@@ -324,6 +327,7 @@ export class ViewAllPromotionsComponent implements OnInit {
           this.resultSuccess = true;
           this.resultError = false;
           this.message = "Service promotion updated successfully!";
+          this.displayUpdateServicePromo = false;
           this.promotionService.getProductPromotions().subscribe(
             response => {
               this.productPromotions = response.promotions;
@@ -341,7 +345,7 @@ export class ViewAllPromotionsComponent implements OnInit {
           console.log("*************** PromotionComponent.ts: " + error);
         }
       )
-      this.displayUpdateServicePromo = false;
+      
     }
 
   }
