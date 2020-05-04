@@ -73,7 +73,6 @@ export class ViewAllServiceCategoriesComponent implements OnInit {
 		{ field: 'name', header:'Category name'},
 		{ field: 'description', header:'Category description'},
 		{ field: 'type', header:'Category type'},
-		{ feild: '',header:'Delete Category'}
 		];
 		
 		

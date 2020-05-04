@@ -98,7 +98,9 @@ export class ViewAllServiceProvidersComponent implements OnInit
 	
 	parseDate(d: Date)
 	{		
-		return d.toString().replace('[UTC]', '');
+		if (d != null) {
+			return d.toString().replace('[UTC]', '');
+		}
 	}
 	
 }
