@@ -24,7 +24,7 @@ public class Promotion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long promotionId;
-    @Column(nullable = false, unique = true, length = 7)
+    @Column(nullable = false, unique = true)
     @NotNull
     @Size(min = 5, max = 10)
     private String promoCode;

@@ -28,6 +28,10 @@ export class IndexComponent implements OnInit {
   }
 
   ngOnInit() {
+	  this.sessionService.setUsername(null);
+	  this.sessionService.setPassword(null);
+	  this.sessionService.setIsLogin(false);
+	  this.sessionService.setCurrentStaff(null);
   }
 
   login(): void {

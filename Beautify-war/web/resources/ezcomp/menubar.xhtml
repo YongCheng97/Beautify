@@ -27,6 +27,7 @@ and open the template in the editor.
                 <p:growl id="messages"/>
                 <p:menubar model="#{menuBean.model}">
                     <f:facet name="options">
+                        <p:button value = "View All Service Providers" outcome="/customerOperations/viewAllServiceProviders" style="margin:1px 550px 1px 1px;" />
                         <p:commandButton value = "Login" onclick="PF('dialogLogin').show()" style="margin:1px 10px 1px 1px;" icon="fa fa-envelope"/>
                         <p:commandButton value = "Shopping Cart" onclick = "PF('dialogCart').show()" style="margin:1px 10px 1px 1px;" icon = "fa fa-shopping-cart"/>
                         <p:commandButton value = "Register" onclick="PF('dialogRegister').show()" style="margin:1px 10px 1px 1px;" icon="fa fa-user-plus"/>
@@ -40,6 +41,7 @@ and open the template in the editor.
                 <p:growl id="messages"/>
                 <p:menubar model="#{menuBean.model}">
                     <f:facet name="options">
+                        <p:button value = "View All Service Providers" outcome="/customerOperations/viewAllServiceProviders" style="margin:1px 542px 1px 1px;" />
                         <p:commandButton value = "#{customerManagementManagedBean.currentCustomer.firstName} #{customerManagementManagedBean.currentCustomer.lastName}" actionListener="#{loginManagedBean.directToCustProfile}" icon="fa fa-user" style="margin:1px 10px 1px 1px;" />
                         <p:commandButton value = "Shopping Cart" onclick = "PF('dialogCart').show()" style="margin:1px 10px 1px 1px;" icon = "fa fa-shopping-cart"/>
                         <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="fa fa-sign-out" style="margin:1px 10px 1px 1px;"/>

@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Booking;
+import entity.CreditCard;
 import entity.PurchasedLineItem;
 import entity.SalesForUs;
 import entity.SalesRecord;
@@ -14,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.BookingNotFoundException;
 import util.exception.CreateNewSalesForUsException;
+import util.exception.CreditCardNotFoundException;
 import util.exception.PurchasedLineItemNotFoundException;
 import util.exception.SalesForUsNotFoundException;
 import util.exception.SalesRecordNotFoundException;
@@ -28,6 +30,9 @@ public class SalesForUsSessionBean implements SalesForUsSessionBeanLocal {
     
     @EJB
     private PurchasedLineItemSessionBeanLocal purchasedLineItemSessionBeanLocal;
+    
+    @EJB
+    private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
@@ -92,6 +97,37 @@ public class SalesForUsSessionBean implements SalesForUsSessionBeanLocal {
         else 
         {
             throw new CreateNewSalesForUsException("Sales For Us information not provided");
+        }
+    }
+    
+    @Override
+    public SalesForUs createNewSalesForUsServiceProvider(SalesForUs newSalesForUs, Long serviceProviderId, Long creditCardId) throws CreateNewSalesForUsException
+    {
+        if(newSalesForUs != null)
+        {
+           try {
+                if (serviceProviderId == null || creditCardId == null) {
+                      throw new CreateNewSalesForUsException("A new sales for us must be associated with a serviceProviderId and credit card");
+                } else {
+                  ServiceProvider serviceProvider = serviceProviderSessionBeanLocal.retrieveServiceProviderById(serviceProviderId);
+                  newSalesForUs.setServiceProvider(serviceProvider);
+                  
+                  CreditCard creditCard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(creditCardId);
+                  newSalesForUs.setCreditCard(creditCard);
+                }
+              
+                em.persist(newSalesForUs);
+                em.flush();
+              
+                return newSalesForUs;
+           }
+           catch (ServiceProviderNotFoundException | CreditCardNotFoundException ex) {
+                throw new CreateNewSalesForUsException(ex.getMessage());
+           }
+        }
+        else 
+        {
+            throw new CreateNewSalesForUsException("Sales Record information not provided");
         }
     }
     

@@ -24,7 +24,7 @@ export class MainMenuComponent implements OnInit {
 				label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['/main-page']
 			},
 			{
-				label: 'View Categories', icon: 'pi pi-fw pi-list',
+				label: 'View All Categories', icon: 'pi pi-fw pi-list',
 				items: [
 					[
 						{
@@ -37,7 +37,7 @@ export class MainMenuComponent implements OnInit {
 				]
 			},
 			{
-				label: 'View Tags', icon: 'pi pi-fw pi-tags', routerLink: ['/view-all-tags']
+				label: 'View All Tags', icon: 'pi pi-fw pi-tags', routerLink: ['/view-all-tags']
 			},
 			{
 				label: 'View Sales Record', icon: 'pi pi-fw pi-chart-bar',
@@ -48,6 +48,9 @@ export class MainMenuComponent implements OnInit {
 						},
 						{
 							items: [{ label: 'Services' , routerLink: ['/view-all-booking-sales-for-us']}]
+						},
+						{
+							items: [{ label: 'Service Provider' , routerLink: ['/view-all-service-provider-salesfor-us']}]
 						},
 					],
 				]

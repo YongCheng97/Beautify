@@ -6,7 +6,6 @@
 package ws.datamodel;
 
 import entity.Category;
-import entity.Tag;
 
 /**
  *
@@ -17,16 +16,18 @@ public class CreateCategoryReq {
     private String username;
     private String password;
     private Category newCategory;
+    private String categoryType;
     private Long categoryId;
     
     public CreateCategoryReq() {
         
     }
 
-    public CreateCategoryReq(String username, String password, Category newCategory, Long categoryId) {
+    public CreateCategoryReq(String username, String password, Category newCategory, String categoryType, Long categoryId) {
         this.username = username;
         this.password = password;
         this.newCategory = newCategory;
+        this.categoryType = categoryType;
         this.categoryId = categoryId;
     }
 
@@ -78,6 +79,20 @@ public class CreateCategoryReq {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    /**
+     * @return the categoryType
+     */
+    public String getCategoryType() {
+        return categoryType;
+    }
+
+    /**
+     * @param categoryType the categoryType to set
+     */
+    public void setCategoryType(String categoryType) {
+        this.categoryType = categoryType;
     }
     
 }

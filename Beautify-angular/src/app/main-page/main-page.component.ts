@@ -40,6 +40,8 @@ export class MainPageComponent implements OnInit {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
+  
+  selectedCreditCard: CreditCard;
 
   displayName: boolean = false;
   displayEmail: boolean = false;
@@ -51,6 +53,7 @@ export class MainPageComponent implements OnInit {
   closingHours: Date[]; 
   displayCC: boolean = false; 
   displayChangePW: boolean = false;
+  displayMakePayment: boolean = false;
 
   nameSubmitted: boolean;
   newName: string
@@ -333,15 +336,15 @@ export class MainPageComponent implements OnInit {
     this.displayEditHours = false; 
   }
   
-  changePW(changePWForm: NgForm) {
+  changePassword(changePWForm: NgForm) {
 	  
 	  if (changePWForm.valid) {
-		   
-			if (this.currentPassword==this.serviceProviderToUpdate.password && this.newPassword==this.confirmPassword){
+			
+			if (this.currentPassword==this.sessionService.getPassword() && this.newPassword==this.confirmPassword){
 
 			  this.serviceProviderToUpdate.password = this.confirmPassword;
-
-			  this.serviceProviderService.changePassword(this.serviceProviderToUpdate).subscribe(
+			  
+			  this.serviceProviderService.changePassword(this.serviceProviderToUpdate.password).subscribe(
 				response => {
 				  this.resultSuccess = true;
 				  this.resultError = true;
@@ -356,11 +359,37 @@ export class MainPageComponent implements OnInit {
 				  console.log('********** MainPageComponent.ts: ' + error);
 				}
 			  );
-			}
-			this.displayChangePW = false;   
+			  
+			  this.sessionService.setPassword(this.serviceProviderToUpdate.password);
+			  
+			this.displayChangePW = false;  			
 		  } else {
 			  this.message = "Password does not match";
+			  
 		  }
+	  }
+  }
+  
+  makePayment(makePaymentForm: NgForm) {
+	  
+	  if(makePaymentForm.valid) {
+		  
+		  this.serviceProviderService.makePayment(this.selectedCreditCard).subscribe(
+			response => {
+				  this.resultSuccess = true;
+				  this.resultError = true;
+				  this.message = "Payment made successfully";
+				},
+				error => {
+				  this.resultError = true;
+				  this.resultSuccess = false;
+				  this.message = "An error has occured while making payment: " + error;
+
+				  console.log('********** MainPageComponent.ts: ' + error);
+				}
+			  );
+		this.displayMakePayment = false;
+	  }
   }
   
 
@@ -402,6 +431,14 @@ export class MainPageComponent implements OnInit {
   showPasswordDialog(serviceProvider: ServiceProvider) {
     this.displayChangePW = true;
     this.serviceProviderToUpdate = serviceProvider;
+	this.currentPassword = null;
+	this.newPassword = null;
+	this.confirmPassword = null;
+  }
+  
+  showMakePaymentDialog(serviceProvider: ServiceProvider) {
+    this.displayMakePayment = true; 
+    this.serviceProvider = serviceProvider; 
   }
 
   parseDate(d: Date)

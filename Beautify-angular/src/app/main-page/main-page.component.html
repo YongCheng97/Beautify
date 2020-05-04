@@ -50,6 +50,11 @@
             <b> Change Password: </b>
             <p-button (onClick)="showPasswordDialog(serviceProvider)" label="Change"></p-button>
         </p>
+		
+		<p>
+            <b> Make Subcription Fee Payment: </b>
+            <p-button (onClick)="showMakePaymentDialog(serviceProvider)" label="Make Payment"></p-button>
+        </p>
 
         <form *ngIf="displayName" #updateNameForm="ngForm" (ngSubmit)="updateName(updateNameForm)">
             <p-dialog *ngIf="displayName" header="Update Name" modal="true" [(visible)]="displayName"
@@ -296,15 +301,39 @@
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Name: </div>
-                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccName" /></div>
+                    <div class="ui-g-6">
+                        <input required="true" type="text" #name="ngModel" name="name" id="name" [(ngModel)]="ccName" />
+                        <div *ngIf="name.invalid && (name.dirty || name.touched || submitted)" class="errorText">
+                            <div *ngIf="name.errors.required" style="color: red;">
+                                Credit card name is required.
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Credit Card Number: </div>
-                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccNum" /></div>
+                    <div class="ui-g-6">
+                        <input type="text" required="true" #num="ngModel" maxlength="16" minlength="16" name="num" id="num" [(ngModel)]="ccNum" />
+                        <div *ngIf="num.invalid && (num.dirty || num.touched || submitted)" class="errorText">
+                            <div *ngIf="num.errors.required" style="color: red;">
+                                Credit card number is required.
+                            </div>
+                            <div *ngIf="num.errors.minlength" style="color: red;">
+                                Minimum length 16.
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Expiry Date: </div>
-                    <div class="ui-g-6"><input type="text" name="name" id="name" [(ngModel)]="ccDate" /></div>
+                    <div class="ui-g-6">
+                        <input required="true" type="text" name="date" id="date" #date="ngModel" [(ngModel)]="ccDate" />
+                        <div *ngIf="date.invalid && (date.dirty || date.touched || submitted)" class="errorText">
+                            <div *ngIf="date.errors.required" style="color: red;">
+                                Expiry date is required.
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 &nbsp;
                 <div style="text-align: center;">
@@ -313,21 +342,21 @@
             </p-dialog>
         </form>
 		
-		<form *ngIf="displayChangePW" #changePWForm="ngForm" (ngSubmit)="changePW(changePWForm)">
+		<form *ngIf="displayChangePW" #changePWForm="ngForm" (ngSubmit)="changePassword(changePWForm)">
             <p-dialog *ngIf="displayChangePW" header="Change Password" modal="true" [(visible)]="displayChangePW"
                 [style]="{width: '50vw'}">
                 
                 <div class="ui-g">
                     <div class="ui-g-6">Current Password: </div>
-                    <div class="ui-g-6"><input pPassword type="password" name="currentPW" id="currentPW" [(ngModel)]="currentPW" /></div>
+                    <div class="ui-g-6"><input pPassword type="password" name="currentPW" id="currentPW" [(ngModel)]="currentPassword" /></div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6">New Password: </div>
-                    <div class="ui-g-6"><input pPassword type="password" name="newPW" id="newPW" [(ngModel)]="newPW" /></div>
+                    <div class="ui-g-6"><input pPassword type="password" name="newPW" id="newPW" [(ngModel)]="newPassword" /></div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-6">Confirm New Password: </div>
-                    <div class="ui-g-6"><input pPassword type="password" name="confirmPW" id="confirmPW" [(ngModel)]="confirmPW" /></div>
+                    <div class="ui-g-6"><input pPassword type="password" name="confirmPW" id="confirmPW" [(ngModel)]="confirmPassword" /></div>
                 </div>
                 &nbsp;
                 <div style="text-align: center;">
@@ -335,6 +364,29 @@
                 </div>
             </p-dialog>
         </form>
+		
+		<p-dialog *ngIf="displayMakePayment" header="Make Payment" modal="true" [(visible)]="displayMakePayment" height="200"
+        [style]="{width: '60vw'}">
+			<form (ngSubmit)="makePayment(makePaymentForm)" #makePaymentForm="ngForm" >
+				<div class="ui-g">
+					<div class="ui-g-6" style="background-color: #f4f4f4;">Monthly Subscription</div>
+					<div class="ui-g-6">$60.00</div>
+				</div>
+				<div class="ui-g">
+					<div class="ui-g-6" style="background-color: #f4f4f4;">Product Category</div>
+					<div class="ui-g-6">
+						<p-dropdown [options]="creditCards" optionLabel="cardNumber" editable="true"
+							placeholder="Select a Credit Card" name="selectedCreditCard" #name="ngModel"
+							[(ngModel)]="selectedCreditCard"></p-dropdown>
+					</div>
+				</div>
+				<br />
+				<div style="text-align: center;">
+                    <input class="button button3" type="submit" value="Confirm" icon="pi pi-check" />
+                </div>
+			</form>
+		</p-dialog>
+		
     </p-panel>
 
 </section>

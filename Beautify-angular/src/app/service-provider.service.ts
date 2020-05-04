@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 
 import { SessionService } from './session.service';
 import { ServiceProvider } from './service-provider';
+import { CreditCard } from './credit-card';
 
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -34,7 +35,7 @@ export class ServiceProviderService {
 			"serviceProvider": newServiceProvider,
 		}
 
-		return this.httpClient.put<any>(this.baseUrl, createServiceProviderReq, httpOptions).pipe(
+		return this.httpClient.put<any>(this.baseUrl + "/createServiceProvider", createServiceProviderReq, httpOptions).pipe(
 			catchError(this.handleError)
 		);
 	}
@@ -52,17 +53,33 @@ export class ServiceProviderService {
 			);
 	}
 	
-	changePassword(providerToUpdate: ServiceProvider): Observable<any> {
-		let updateProviderReq = {
+	changePassword(newPassword: String): Observable<any> {
+		let changeServiceProviderPasswordReq = {
 			"username": this.sessionService.getUsername(),
 			"password": this.sessionService.getPassword(),
-			"serviceProvider": providerToUpdate,
+			"serviceProvider": this.sessionService.getCurrentServiceProvider(),
+			"newPassword": newPassword,
 		};
+		
 
-		return this.httpClient.post<any>(this.baseUrl + "/changePassword" , updateProviderReq, httpOptions).pipe
+		return this.httpClient.post<any>(this.baseUrl + "/changePassword" , changeServiceProviderPasswordReq, httpOptions).pipe
 			(
 				catchError(this.handleError)
 			);
+	}
+	
+	makePayment(creditCardUsed: CreditCard): Observable<any> {
+		let createNewSalesForUsReq = {
+			"username": this.sessionService.getUsername(),
+			"password": this.sessionService.getPassword(),
+			"serviceProvider": this.sessionService.getCurrentServiceProvider(),
+			"creditCard": creditCardUsed,
+		};
+		
+
+		return this.httpClient.put<any>(this.baseUrl + "/makePayment",createNewSalesForUsReq, httpOptions).pipe(
+			catchError(this.handleError)
+		);
 	}
 
 	private handleError(error: HttpErrorResponse) {

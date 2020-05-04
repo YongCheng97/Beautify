@@ -1,0 +1,113 @@
+<app-header></app-header>
+		
+<app-main-menu></app-main-menu>		
+
+<section id="content" class="content">
+
+
+	<app-breadcrumb [pageName]="'viewAllBookingSalesRecord'"></app-breadcrumb>
+
+			
+	<p-panel header="All Sales Record (Service Provider)">
+	
+		<p-table #dt [value]="salesForUs">
+			<ng-template pTemplate="header">
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+						{{col.header}}
+						<p-sortIcon *ngSwitchCase="'salesForUsId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'serviceProvider.serviceProviderId'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'amount'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'dateOfPayment'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						<p-sortIcon *ngSwitchCase="'serviceProvider.name'" [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+
+					</th>
+				</tr>
+				
+				<tr>
+					<th *ngFor="let col of cols" [ngSwitch]="col.field">
+						<input placeHolder="Search" *ngSwitchCase="'salesForUsId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'serviceProvider.serviceProviderId'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+						<input placeHolder="Search" *ngSwitchCase="'amount'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">					
+						<input placeHolder="Search" *ngSwitchCase="'serviceProvider.name'" pInputText size="15" type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">										
+					</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-salesRecord>
+				<tr>
+					<td>{{salesRecord.salesForUsId}}</td>
+					<td>{{salesRecord.serviceProvider.serviceProviderId}}</td>
+					<td>{{salesRecord.serviceProvider.name}}</td>
+					<td>{{parseDate(salesRecord.dateOfPayment) | date:'EEE, MMM d, yyyy'}}</td>
+					<td>${{salesRecord.amount.toFixed(2)}}</td>
+					<td><p-button label="View" (onClick)="showDialog(salesRecord.serviceProvider)" ></p-button></td>
+				</tr>
+			</ng-template>
+		</p-table>
+		
+		
+		<p-dialog *ngIf="display" header="View Service Provider Details" modal="true" [(visible)]="display"  [style]="{width: '50vw'}">
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Service Provider ID</div>
+				<div class="ui-g-6">{{serviceProviderToView.serviceProviderId}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Service Provider Name</div>
+				<div class="ui-g-6">{{serviceProviderToView.name}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Username</div>
+				<div class="ui-g-6">{{serviceProviderToView.username}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Email</div>
+				<div class="ui-g-6">{{serviceProviderToView.email}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Address</div>
+				<div class="ui-g-6">{{serviceProviderToView.address}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Approval Status</div>
+				<div class="ui-g-6" *ngIf="serviceProviderToView.isApproved==false">Not Approved</div>
+				<div class="ui-g-6" *ngIf="serviceProviderToView.isApproved==true">Approved</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;"><b><u>Opening Hours</u></b></div>
+				<div class="ui-g-6"></div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Monday</div>
+				<div class="ui-g-6">{{parseDate(serviceProviderToView.openingHours[0]) | date:'HH:mm'}} - {{parseDate(serviceProviderToView.closingHours[0]) | date:'HH:mm'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Tuesday</div>
+				<div class="ui-g-6">{{parseDate(serviceProviderToView.openingHours[1]) | date:'HH:mm'}} - {{parseDate(serviceProviderToView.closingHours[1]) | date:'HH:mm'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Wednesday</div>
+				<div class="ui-g-6">{{parseDate(serviceProviderToView.openingHours[2]) | date:'HH:mm'}} - {{parseDate(serviceProviderToView.closingHours[2]) | date:'HH:mm'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Thursday</div>
+				<div class="ui-g-6">{{parseDate(serviceProviderToView.openingHours[3]) | date:'HH:mm'}} - {{parseDate(serviceProviderToView.closingHours[3]) | date:'HH:mm'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Friday</div>
+				<div class="ui-g-6">{{parseDate(serviceProviderToView.openingHours[4]) | date:'HH:mm'}} - {{parseDate(serviceProviderToView.closingHours[4]) | date:'HH:mm'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Saturday</div>
+				<div class="ui-g-6">{{parseDate(serviceProviderToView.openingHours[5]) | date:'HH:mm'}} - {{parseDate(serviceProviderToView.closingHours[5]) | date:'HH:mm'}}</div>
+			</div>
+			<div class="ui-g">
+				<div class="ui-g-6" style="background-color: #f4f4f4;">Sunday</div>
+				<div class="ui-g-6">{{parseDate(serviceProviderToView.openingHours[5]) | date:'HH:mm'}} - {{parseDate(serviceProviderToView.closingHours[6]) | date:'HH:mm'}}</div>
+			</div>
+			
+		</p-dialog>
+		
+	</p-panel>
+</section>
+
+<app-footer></app-footer>

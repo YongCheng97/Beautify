@@ -38,13 +38,13 @@
                                 <h:outputText value = "#{categoryManagementManagedBean.newCategory.name}" />
                             </f:facet>
 
-                            <p:panel header="#{product.name}" style="text-align:center;">
-                                <p:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent;">
+                            <p:panel header="#{product.name}" style="text-align:center; min-height:280px">
+                                <h:panelGrid columns="1" style="width:100%; text-align:center; border: 1px solid transparent; min-height:200px">
                                     <h:outputText value="#{product.skuCode}" />
                                     <h:outputText value= "$#{product.price}" />
                                     <h:outputText value="#{product.description}" />
-                                    <p:graphicImage library="images" name ="#{product.name}.jpg" height="120" width="170" alt ="" />
-                                </p:panelGrid>
+                                    <p:graphicImage value="/uploadedFiles/#{product.name}.jpg" height="120" width="170" alt ="" />
+                                </h:panelGrid>
                                 <p:commandLink actionListener="#{categoryManagementManagedBean.viewProduct}" style="text-decoration:none;color:blue; font-size: large">
                                     <h:outputText value = "Click here for more information!"/>
                                     <f:attribute name="productId" value="#{product.productId}" />
