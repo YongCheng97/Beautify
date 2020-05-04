@@ -36,16 +36,18 @@ public interface PromotionSessionBeanLocal {
 
     public Promotion retrievePromotionByName(String name) throws PromotionNotFoundException;
 
-    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException;
+    public void updateProductPromotion(Promotion promotion, Long productId) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException;
+
+    public void updateServicePromotion(Promotion promotion, Long serviceId) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException;
 
     public void deletePromotion(Long promotionId) throws PromotionNotFoundException, DeletePromotionException;
 
     public Boolean checkPromoCode(String promoCode);
 
     public List<Promotion> retrievePromotionsByServiceProviderId(Long serviceProviderId);
-    
-    public List<Promotion> retrieveAllServicePromotionsByServiceProviderId(Long serviceProviderId); 
-    
-    public List<Promotion> retrieveAllProductPromotionsByServiceProviderId(Long serviceProviderId); 
+
+    public List<Promotion> retrieveAllServicePromotionsByServiceProviderId(Long serviceProviderId);
+
+    public List<Promotion> retrieveAllProductPromotionsByServiceProviderId(Long serviceProviderId);
 
 }

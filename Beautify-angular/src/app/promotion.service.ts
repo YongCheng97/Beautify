@@ -71,6 +71,22 @@ export class PromotionService {
 		);
   }
 
+  updatePromotion(promotionToUpdate: Promotion, serviceId: number, productId: number): Observable<any> {
+
+    let updatePromotionReq = {
+      "username": this.sessionService.getUsername(),
+      "password": this.sessionService.getPassword(),
+      "promotion": promotionToUpdate, 
+      "serviceId": serviceId,
+      "productId": productId
+    }; 
+
+    return this.httpClient.post<any>(this.baseUrl, updatePromotionReq, httpOptions).pipe
+		(
+			catchError(this.handleError)
+		);
+  }
+
 
   private handleError(error: HttpErrorResponse)
 	{
