@@ -41,9 +41,6 @@ export class ViewAllPromotionsComponent implements OnInit {
   newStartDate: Date;
   newEndDate: Date;
 
-<<<<<<< HEAD
-  promotionId: number;
-=======
   updateProductId: number; 
   updateServiceId: number; 
 
@@ -53,7 +50,6 @@ export class ViewAllPromotionsComponent implements OnInit {
   displayUpdateServicePromo: boolean = false; 
 
   promotionId: number; 
->>>>>>> 8da74d5b76463846919ede89ff4a65ec7654535a
 
   promoSubmitted: boolean;
 
@@ -79,17 +75,12 @@ export class ViewAllPromotionsComponent implements OnInit {
 
     this.newProduct = new Product();
 
-<<<<<<< HEAD
-    this.newService = new Service();
-  }
-=======
       this.newService = new Service(); 
 
       this.productPromotionToUpdate = new Promotion(); 
 
       this.servicePromotionToUpdate = new Promotion(); 
     }
->>>>>>> 8da74d5b76463846919ede89ff4a65ec7654535a
 
   ngOnInit() {
 
