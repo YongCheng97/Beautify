@@ -72,10 +72,6 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.error = false;
 
     this.newPromotion = new Promotion();
-
-    this.productPromotionToUpdate = new Promotion();
-
-    this.servicePromotionToUpdate = new Promotion();
   }
 
   ngOnInit() {
@@ -200,8 +196,6 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.newServiceId = this.newService.serviceId;
     this.newProductId = null;
 
-    console.log(this.newProduct.productId);
-
     this.newPromotion.name = this.newPromoName;
     this.newPromotion.promoCode = this.newPromoCode;
     this.newPromotion.discountRate = this.newDiscountRate;
@@ -284,8 +278,6 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.newProductId = this.newProduct.productId;
     this.newServiceId = null;
 
-    this.productPromotionToUpdate.name = this.newPromoName;
-    this.productPromotionToUpdate.discountRate = this.newDiscountRate;
     this.productPromotionToUpdate.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
     this.productPromotionToUpdate.endDate = moment(this.newEndDate, "dd/MM/yy").toDate();
 
@@ -323,8 +315,6 @@ export class ViewAllPromotionsComponent implements OnInit {
     this.newServiceId = this.newService.serviceId;
     this.newProductId = null;
 
-    this.servicePromotionToUpdate.name = this.newPromoName;
-    this.servicePromotionToUpdate.discountRate = this.newDiscountRate;
     this.servicePromotionToUpdate.startDate = moment(this.newStartDate, "dd/MM/yy").toDate();
     this.servicePromotionToUpdate.endDate = moment(this.newEndDate, "dd/MM/yy").toDate();
 
