@@ -29,5 +29,7 @@ public interface SalesForUsSessionBeanLocal {
     public SalesForUs createNewSalesForUsPurchasedLineItem(SalesForUs newSalesForUs, Long purchasedLineItemId) throws CreateNewSalesForUsException;
 
     public SalesForUs createNewSalesForUsBooking(SalesForUs newSalesForUs, Long bookingId) throws CreateNewSalesForUsException;
+
+    public SalesForUs createNewSalesForUsServiceProvider(SalesForUs newSalesForUs, Long serviceProviderId, Long creditCardId) throws CreateNewSalesForUsException;
     
 }

@@ -34,7 +34,7 @@ export class ServiceProviderService {
 			"serviceProvider": newServiceProvider,
 		}
 
-		return this.httpClient.put<any>(this.baseUrl, createServiceProviderReq, httpOptions).pipe(
+		return this.httpClient.put<any>(this.baseUrl + "/createServiceProvider", createServiceProviderReq, httpOptions).pipe(
 			catchError(this.handleError)
 		);
 	}
@@ -65,6 +65,20 @@ export class ServiceProviderService {
 			(
 				catchError(this.handleError)
 			);
+	}
+	
+	makePayment(creditCardUsed: CreditCard): Observable<any> {
+		let createNewSalesForUsReq = {
+			"username": this.sessionService.getUsername(),
+			"password": this.sessionService.getPassword(),
+			"serviceProvider": this.sessionService.getCurrentServiceProvider(),
+			"creditCard": creditCardUsed,
+		};
+		
+
+		return this.httpClient.put<any>(this.baseUrl + "/makePayment",createNewSalesForUsReq, httpOptions).pipe(
+			catchError(this.handleError)
+		);
 	}
 
 	private handleError(error: HttpErrorResponse) {

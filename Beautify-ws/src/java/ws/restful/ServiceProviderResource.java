@@ -1,9 +1,13 @@
 package ws.restful;
 
+import ejb.session.stateless.SalesForUsSessionBeanLocal;
 import ejb.session.stateless.ServiceProviderSessionBeanLocal;
 import ejb.session.stateless.StaffSessionBeanLocal;
+import entity.SalesForUs;
 import entity.ServiceProvider;
 import entity.Staff;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +32,8 @@ import util.exception.ServiceProviderExistException;
 import util.exception.ServiceProviderNotFoundException;
 import util.exception.UnknownPersistenceException;
 import ws.datamodel.ChangeServiceProviderPasswordReq;
+import ws.datamodel.CreateNewSalesForUsReq;
+import ws.datamodel.CreateNewSalesForUsRsp;
 import ws.datamodel.CreateServiceProviderReq;
 import ws.datamodel.CreateServiceProviderRsp;
 import ws.datamodel.ErrorRsp;
@@ -44,6 +50,7 @@ public class ServiceProviderResource {
 
     private ServiceProviderSessionBeanLocal serviceProviderSessionBean = lookupServiceProviderSessionBeanLocal();
     private StaffSessionBeanLocal staffSessionBean = lookupStaffSessionBeanLocal();
+    private SalesForUsSessionBeanLocal salesForUsSessionBean = lookupSalesForUsSessionBeanLocal();
 
     public ServiceProviderResource() {
     }
@@ -76,6 +83,7 @@ public class ServiceProviderResource {
         }
     }
 
+    @Path("createServiceProvider")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -292,6 +300,36 @@ public class ServiceProviderResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
         }
     }
+    
+    @Path("makePayment")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response makePayment(CreateNewSalesForUsReq createNewSalesForUsReq) {
+
+        if (createNewSalesForUsReq != null) {
+            try {
+                ServiceProvider serviceProvider = serviceProviderSessionBean.serviceProviderLogin(createNewSalesForUsReq.getUsername(), createNewSalesForUsReq.getPassword());
+                System.out.println("********** ServiceProviderResouce.makePayment(): Service Provider " + serviceProvider.getName() + " login remotely via web service");
+                
+                SalesForUs newSalesForUs = salesForUsSessionBean.createNewSalesForUsServiceProvider(new SalesForUs(new BigDecimal("60.00"), new Date()), 
+                        createNewSalesForUsReq.getServiceProvider().getServiceProviderId(), createNewSalesForUsReq.getCreditCard().getCreditCardId() );
+                
+                CreateNewSalesForUsRsp createNewSalesForUsRsp = new CreateNewSalesForUsRsp(newSalesForUs.getSalesForUsId());
+
+                return Response.status(Response.Status.OK).entity(createNewSalesForUsRsp).build();
+            } catch (InvalidLoginCredentialException ex) {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+            } catch (Exception ex) {
+                ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+            }
+        } else {
+            ErrorRsp errorRsp = new ErrorRsp("Invalid create new service provider request");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorRsp).build();
+        }
+    }
 
     private ServiceProviderSessionBeanLocal lookupServiceProviderSessionBeanLocal() {
         try {
@@ -307,6 +345,16 @@ public class ServiceProviderResource {
         try {
             javax.naming.Context c = new InitialContext();
             return (StaffSessionBeanLocal) c.lookup("java:global/Beautify/Beautify-ejb/StaffSessionBean!ejb.session.stateless.StaffSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    private SalesForUsSessionBeanLocal lookupSalesForUsSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (SalesForUsSessionBeanLocal) c.lookup("java:global/Beautify/Beautify-ejb/SalesForUsSessionBean!ejb.session.stateless.SalesForUsSessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

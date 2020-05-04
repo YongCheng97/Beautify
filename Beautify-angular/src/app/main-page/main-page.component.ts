@@ -40,6 +40,8 @@ export class MainPageComponent implements OnInit {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
+  
+  selectedCreditCard: CreditCard;
 
   displayName: boolean = false;
   displayEmail: boolean = false;
@@ -51,6 +53,7 @@ export class MainPageComponent implements OnInit {
   closingHours: Date[]; 
   displayCC: boolean = false; 
   displayChangePW: boolean = false;
+  displayMakePayment: boolean = false;
 
   nameSubmitted: boolean;
   newName: string
@@ -336,14 +339,11 @@ export class MainPageComponent implements OnInit {
   changePassword(changePWForm: NgForm) {
 	  
 	  if (changePWForm.valid) {
-		   console.log(this.currentPassword ,this.newPassword ,this.confirmPassword);
 			
 			if (this.currentPassword==this.sessionService.getPassword() && this.newPassword==this.confirmPassword){
 
 			  this.serviceProviderToUpdate.password = this.confirmPassword;
 			  
-			  console.log(this.serviceProviderToUpdate.password);
-
 			  this.serviceProviderService.changePassword(this.serviceProviderToUpdate.password).subscribe(
 				response => {
 				  this.resultSuccess = true;
@@ -367,6 +367,28 @@ export class MainPageComponent implements OnInit {
 			  this.message = "Password does not match";
 			  
 		  }
+	  }
+  }
+  
+  makePayment(makePaymentForm: NgForm) {
+	  
+	  if(makePaymentForm.valid) {
+		  
+		  this.serviceProviderService.makePayment(this.selectedCreditCard).subscribe(
+			response => {
+				  this.resultSuccess = true;
+				  this.resultError = true;
+				  this.message = "Payment made successfully";
+				},
+				error => {
+				  this.resultError = true;
+				  this.resultSuccess = false;
+				  this.message = "An error has occured while making payment: " + error;
+
+				  console.log('********** MainPageComponent.ts: ' + error);
+				}
+			  );
+		this.displayMakePayment = false;
 	  }
   }
   
@@ -412,6 +434,11 @@ export class MainPageComponent implements OnInit {
 	this.currentPassword = null;
 	this.newPassword = null;
 	this.confirmPassword = null;
+  }
+  
+  showMakePaymentDialog(serviceProvider: ServiceProvider) {
+    this.displayMakePayment = true; 
+    this.serviceProvider = serviceProvider; 
   }
 
   parseDate(d: Date)
