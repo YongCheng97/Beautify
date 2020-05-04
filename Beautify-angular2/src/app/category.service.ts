@@ -20,6 +20,13 @@ export class CategoryService {
   constructor(private httpClient: HttpClient,
     private sessionService: SessionService) {
   }
+  
+  getRootCategories(): Observable<any> {
+	 return this.httpClient.get<any>(this.baseUrl + "/retrieveAllRootCategoriesForStaff?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+      (
+        catchError(this.handleError)
+      ); 
+  }
 
   getProductCategories(): Observable<any> {
     return this.httpClient.get<any>(this.baseUrl + "/retrieveAllProductCategoriesForStaff?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
@@ -35,18 +42,28 @@ export class CategoryService {
       );
   }
   
-  createCategory(newCategory: Category): Observable<any>
+  createCategory(newCategory: Category, categoryType: string, categoryId: number): Observable<any>
   {
 	  let createCategoryReq = {
 		  "username": this.sessionService.getUsername(),
 		  "password": this.sessionService.getPassword(),
-		  "newCategory": newCategory 
+		  "newCategory": newCategory,
+		  "categoryType": categoryType,
+		  "categoryId": categoryId
 		  };
 	  
 	  return this.httpClient.put<any>(this.baseUrl, createCategoryReq, httpOptions).pipe
 	  (
 		catchError(this.handleError)
 	  );
+  }
+  
+  deleteCategory(categoryId: number): Observable<any>
+  {
+	  return this.httpClient.delete<any>(this.baseUrl + "/" + categoryId + "?username=" + this.sessionService.getUsername() + "&password=" + this.sessionService.getPassword()).pipe
+      (
+        catchError(this.handleError)
+      );
   }
 
   private handleError(error: HttpErrorResponse) {

@@ -82,6 +82,14 @@ export class ViewAllTagsComponent implements OnInit
 				this.resultSuccess = true;
 				this.resultError = false;
 				this.message = "New tag " + newTagId + " created successfully";
+				this.tagService.getTags().subscribe(
+					response => {
+						this.tags = response.tags;
+					},
+					error => {
+						console.log('********** ViewAllTagsComponent.ts: ' + error);
+					}
+				)
 			},
 			error => {
 				this.resultError = true;
@@ -98,11 +106,20 @@ export class ViewAllTagsComponent implements OnInit
     this.tagService.deleteTag(this.tagToDelete.tagId).subscribe(
       response => {
         this.router.navigate(["/view-all-tags"]);
-        this.displayDelete = false;
+		
+		this.tagService.getTags().subscribe(
+			response => {
+				this.tags = response.tags;
+			},
+			error => {
+				console.log('********** ViewAllTagsComponent.ts: ' + error);
+			}
+		)
       },
       error => {
         console.log('********** DeleteServiceComponent.ts: ' + error);
       }
     );
+	this.displayDelete = false;
   }
 }
