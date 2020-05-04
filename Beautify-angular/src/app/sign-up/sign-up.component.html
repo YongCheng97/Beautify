@@ -16,30 +16,244 @@
             <h1 class="wv-heading--title">
                 Sign up now — it’s free!
             </h1>
-            <!-- <h2 class="wv-heading--subtitle">
-                    Lorem ipsum dolor sit amet! Neque porro quisquam est qui do dolor amet, adipisci velit...
-                </h2> -->
+            <h2 class="wv-heading--subtitle">
+                Welcome to Beautify! Over here, we provide you with all the services you need
+                to expand your business. By signing up, you would be able to publish your service
+                onto our website once you are verified, exposing your business to our wide database
+                of customers. What are you waiting for!!
+            </h2>
 
         </div>
-        <div *ngIf="resultError == true" style="text-align: center; color: red;">
-            {{message}}
-        </div>
-        <p-messages [(value)]="message"></p-messages>
         <br />
         <div class="row">
-            <div class="col-md-4 mx-auto">
-                <div class="myform form ">
-                    <form (ngSubmit)="createNewAccount(createServiceProviderForm)">
-                        <div class="form-group">
-                            <input type="text" name="name" #name="ngModel" class="form-control my-input" id="name"
-                                placeholder="Name" [(ngModel)]="newServiceProvider.name" required="true">
+            <!-- <div class="col-md-4 mx-auto">
+                <div class="myform form "> -->
+            <form [formGroup]="userform" (ngSubmit)="createNewAccount(userform.value)">
+                <section id="panel" class="panel">
+                    <p-panel showHeader=false style="border:none">
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 1em 0">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-2">
+                                    Name *:
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <input pInputText type="text" class="form-control my-input" id="name"
+                                        placeholder="Name" required="true" formControlName="name" />
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <p-message severity="error"
+                                        [text]="userform.controls['name'].errors['required'] ? 'Name is required' : userform.controls['name'].errors['maxlength'] ? 'Cannot be longer than 32 characters' : ''"
+                                        *ngIf="!userform.controls['name'].valid&&userform.controls['name'].dirty">
+                                    </p-message>
+                                </div>
+                            </div>
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-2">
+                                    Username *:
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <input pInputText type="text" class="form-control my-input" id="name"
+                                        placeholder="Username" required="true" formControlName="username" />
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <p-message severity="error"
+                                        [text]="userform.controls['username'].errors['required'] ? 'Username is required' : userform.controls['username'].errors['maxlength'] ? 'Cannot be longer than 32 characters' : ''"
+                                        *ngIf="!userform.controls['username'].valid&&userform.controls['username'].dirty">
+                                    </p-message>
+                                </div>
+                            </div>
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-2">
+                                    Email *:
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <input pInputText type="email" class="form-control my-input" id="name"
+                                        placeholder="Email" required="true" formControlName="email" />
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <p-message
+                                        [text]="userform.controls['email'].errors['required'] ? 'Email is required' : userform.controls['email'].errors['email'] ? 'Please input the correct email format' : ''"
+                                        *ngIf="!userform.controls['email'].valid&&userform.controls['email'].dirty">
+                                    </p-message>
+                                </div>
+                            </div>
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-2">
+                                    Password *:
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <input pInputText type="password" class="form-control my-input" id="name"
+                                        placeholder="Password" required="true" formControlName="password" />
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <p-message severity="error"
+                                        [text]="userform.controls['password'].errors['required'] ? 'Username is required' : userform.controls['password'].errors['maxlength'] ? 'Cannot be longer than 32 characters' : ''"
+                                        *ngIf="!userform.controls['password'].valid&&userform.controls['password'].dirty">
+                                    </p-message>
+                                </div>
+                            </div>
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-2">
+                                    Address *:
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <input pInputText type="text" class="form-control my-input" id="name"
+                                        placeholder="Address" required="true" formControlName="address" />
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <p-message severity="error"
+                                        [text]="userform.controls['address'].errors['required'] ? 'Username is required' : userform.controls['address'].errors['maxlength'] ? 'Cannot be longer than 32 characters' : ''"
+                                        *ngIf="!userform.controls['address'].valid&&userform.controls['address'].dirty">
+                                    </p-message>
+                                </div>
+                            </div>
+                            <div style="clear:both;">&nbsp;</div>
+                            <div class="timings">
+                                <div class="form-group" style="text-align:center">
+                                    <div style="float:left;">
+                                        <output type="text"
+                                            style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Monday</output>
+                                    </div>
+                                    <div style="float:left; margin-left: 53px">
+                                        <input id="mondayOpeningHours" placeholder="Opening Hours"
+                                            aria-label="24hr format" [ngxTimepicker]="mondayOpeningHr" [format]="24"
+                                            class="form-control my-input" formControlName="mondayOpeningHrs">
+                                        <ngx-material-timepicker #mondayOpeningHr></ngx-material-timepicker>
+                                        <input id="mondayClosingHours" placeholder="Closing Hours"
+                                            aria-label="24hr format" [ngxTimepicker]="mondayClosingHr" [format]="24"
+                                            class="form-control my-input" style="margin-top: 20px;"
+                                            formControlName="mondayClosingHrs">
+                                        <ngx-material-timepicker #mondayClosingHr></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div style="clear:both;">&nbsp;</div>
+                                <div class="form-group" style="text-align:center">
+                                    <div style="float:left;">
+                                        <output type="text"
+                                            style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Tuesday</output>
+                                    </div>
+                                    <div style="float:left; margin-left: 50px">
+                                        <input placeholder="Opening Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="tuesdayOpeningHr" [format]="24"
+                                            class="form-control my-input" formControlName="tuesdayOpeningHrs">
+                                        <ngx-material-timepicker #tuesdayOpeningHr></ngx-material-timepicker>
+
+                                        <input placeholder="Closing Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="tuesdayClosingHr" [format]="24"
+                                            class="form-control my-input" style="margin-top: 10px;"
+                                            formControlName="tuesdayClosingHrs">
+                                        <ngx-material-timepicker #tuesdayClosingHr></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div style="clear:both;">&nbsp;</div>
+                                <div class="form-group" style="text-align:center">
+                                    <div style="float:left;">
+                                        <output type="text"
+                                            style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Wednesday</output>
+                                    </div>
+                                    <div style="float:left; margin-left: 25px">
+                                        <input placeholder="Opening Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="wednesdayOpeningHr" [format]="24"
+                                            class="form-control my-input" formControlName="wednesdayOpeningHrs">
+                                        <ngx-material-timepicker #wednesdayOpeningHr></ngx-material-timepicker>
+
+                                        <input placeholder="Closing Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="wednesdayClosingHr" [format]="24"
+                                            class="form-control my-input" style="margin-top: 10px;"
+                                            formControlName="wednesdayClosingHrs">
+                                        <ngx-material-timepicker #wednesdayClosingHr></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div style="clear:both;">&nbsp;</div>
+                                <div class="form-group" style="text-align:center">
+                                    <div style="float:left;">
+                                        <output type="text"
+                                            style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Thursday</output>
+                                    </div>
+                                    <div style="float:left; margin-left: 43px">
+                                        <input placeholder="Opening Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="thursdayOpeningHr" [format]="24"
+                                            class="form-control my-input" formControlName="thursdayOpeningHrs">
+                                        <ngx-material-timepicker #thursdayOpeningHr></ngx-material-timepicker>
+
+                                        <input placeholder="Closing Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="thursdayClosingHr" [format]="24"
+                                            class="form-control my-input" style="margin-top: 10px;"
+                                            formControlName="thursdayClosingHrs">
+                                        <ngx-material-timepicker #thursdayClosingHr></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div style="clear:both;">&nbsp;</div>
+                                <div class="form-group" style="text-align:center">
+                                    <div style="float:left;">
+                                        <output type="text"
+                                            style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Friday</output>
+                                    </div>
+                                    <div style="float:left; margin-left: 67px">
+                                        <input placeholder="Opening Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="fridayOpeningHr" [format]="24"
+                                            class="form-control my-input" formControlName="fridayOpeningHrs">
+                                        <ngx-material-timepicker #fridayOpeningHr></ngx-material-timepicker>
+
+                                        <input placeholder="Closing Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="fridayClosingHr" [format]="24"
+                                            class="form-control my-input" style="margin-top: 10px;"
+                                            formControlName="fridayClosingHrs">
+                                        <ngx-material-timepicker #fridayClosingHr></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div style="clear:both;">&nbsp;</div>
+                                <div class="form-group" style="text-align:center">
+                                    <div style="float:left;">
+                                        <output type="text"
+                                            style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Saturday</output>
+                                    </div>
+                                    <div style="float:left; margin-left: 43px">
+                                        <input placeholder="Opening Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="saturdayOpeningHr" [format]="24"
+                                            class="form-control my-input" formControlName="saturdayOpeningHrs">
+                                        <ngx-material-timepicker #saturdayOpeningHr></ngx-material-timepicker>
+
+                                        <input placeholder="Closing Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="saturdayClosingHr" [format]="24"
+                                            class="form-control my-input" style="margin-top: 10px;"
+                                            formControlName="saturdayClosingHrs">
+                                        <ngx-material-timepicker #saturdayClosingHr></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div style="clear:both;">&nbsp;</div>
+                                <div class="form-group" style="text-align:center">
+                                    <div style="float:left;">
+                                        <output type="text"
+                                            style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Sunday</output>
+                                    </div>
+                                    <div style="float:left; margin-left: 55px">
+                                        <input placeholder="Opening Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="sundayOpeningHr" [format]="24"
+                                            class="form-control my-input" formControlName="sundayOpeningHrs">
+                                        <ngx-material-timepicker #sundayOpeningHr></ngx-material-timepicker>
+
+                                        <input placeholder="Closing Hours" aria-label="24hr format"
+                                            [ngxTimepicker]="sundayClosingHr" [format]="24"
+                                            class="form-control my-input" style="margin-top: 10px;"
+                                            formControlName="sundayClosingHrs">
+                                        <ngx-material-timepicker #sundayClosingHr></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                            <input pInputText type="text" class="form-control my-input" id="name"
+                                placeholder="Name"  required="true" formControlName="name" />
                             <div *ngIf="name.invalid && (name.dirty || name.touched || submitted)" class="errorText">
                                 <div *ngIf="name.errors.required" style="color: red;">
                                     Name is required.
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
+                            <div style="margin-top: 0px;">
+                                <p-message severity="error" text="Name is required" *ngIf="!userform.controls['name'].valid&&userform.controls['name'].dirty"></p-message>
+                            </div>
+                        </div> -->
+                            <!-- <div class="form-group">
                             <input type="text" name="username" #username="ngModel" class="form-control my-input"
                                 id="username" placeholder="Username" [(ngModel)]="newServiceProvider.username"
                                 required="true">
@@ -85,8 +299,8 @@
                                     Address is required.
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group" style="text-align:center">
+                        </div> -->
+                            <!-- <div class="form-group" style="text-align:center">
                             <div style="float:left;">
                                 <output type="text"
                                     style="font-family:Verdana, Geneva, Tahoma, sans-serif; margin-top: 30px;">Monday</output>
@@ -220,23 +434,29 @@
                                     [(ngModel)]="sundayClosingHour">
                                 <ngx-material-timepicker #sundayClosingHr></ngx-material-timepicker>
                             </div>
-                        </div>
-                        <div style="clear:both;">&nbsp;</div>
-                        <!-- <div class="form-group">
+                        </div> -->
+                            <div style="clear:both;">&nbsp;</div>
+                            <!-- <div class="form-group">
                             <input type="file" name="certification" id="certification" style="text-align: center;" #certification="ngModel"
                                [(ngModel)]="newServiceProvider.certification" required="true">
                         </div> -->
-                        <div class="text-center ">
-                            <input type="submit" class=" btn btn-block send-button tx-tfm"
-                                value="Create Your Free Acount" />
+                            <div class="text-center ">
+                                <input type="submit" class=" btn btn-block send-button tx-tfm"
+                                    value="Create Your Free Acount" />
+                            </div>
+                            <div *ngIf="resultError == true" style="text-align: center; color: red;">
+                                {{message}}
+                            </div>
+                            <p class="small mt-3" style="text-align: center;">By signing up, you are indicating that you
+                                have read and agree to the Terms of Use and Privacy Policy.
+                            </p>
                         </div>
-                        <p class="small mt-3" style="text-align: center;">By signing up, you are indicating that you
-                            have read and agree to the Terms of Use and Privacy Policy.
-                        </p>
-                    </form>
-                </div>
-            </div>
+                    </p-panel>
+                </section>
+            </form>
         </div>
+        <!-- </div>
+        </div> -->
     </div>
 </body>
 

@@ -138,8 +138,8 @@
 
         <form *ngIf="displayAddServicePromo" #addServicePromoForm="ngForm"
             (ngSubmit)="addServicePromo(addServicePromoForm)">
-            <p-dialog *ngIf="displayAddServicePromo" header="Add New Service Promotion" modal="true"
-                [(visible)]="displayAddServicePromo" [style]="{width: '50vw'}">
+            <p-dialog id="serviceDialog" styleClass="my-style-class" *ngIf="displayAddServicePromo" header="Add New Service Promotion" modal="true"
+                [(visible)]="displayAddServicePromo" [style]="{'width': '50vw'}" width="70%" height="100%">
                 <div class="ui-g">
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Promotion Code: </div>
                     <div class="ui-g-6"><input type="text" name="promoCode" id="promoCode" [(ngModel)]="newPromoCode" />
@@ -172,7 +172,7 @@
                     <div class="ui-g-6" style="background-color: #f4f4f4;">Select service: </div>
                     <div class="ui-g-6">
                         <p-dropdown [options]="services" optionLabel="serviceName" editable="true"
-                            placeholder="Select a Service" name="services" #serviceName="ngModel"
+                            placeholder="Select a Service" name="serviceName" #serviceName="ngModel"
                             [(ngModel)]="newService"></p-dropdown>
                     </div>
                 </div>

@@ -5,8 +5,8 @@ import { NgForm } from '@angular/forms';
 import { SessionService } from '../session.service';
 import { ProductService } from '../product.service';
 import { CategoryService } from '../category.service';
+import { FileUploadService } from '../file-upload.service';
 import { TagService } from '../tag.service';
-import { ImageService } from '../image.service';
 import { ServiceProvider } from '../service-provider';
 import { Product } from '../product';
 import { Tag } from '../tag';
@@ -47,7 +47,9 @@ export class ViewAllProductsComponent implements OnInit {
   resultError: boolean;
   message: string;
 
-  uploadedFiles: any[] = [];
+  showImage: Boolean = false;
+  fileName: String = null;
+  fileToUpload: File = null;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -55,7 +57,7 @@ export class ViewAllProductsComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private tagService: TagService,
-    private imageService: ImageService) {
+    private fileUploadService: FileUploadService) {
 
     this.submitted = false;
     this.newProduct = new Product();
@@ -95,20 +97,19 @@ export class ViewAllProductsComponent implements OnInit {
     );
   }
 
-  onUpload(event) {
-    for(let file of event.files) {
-        this.uploadedFiles.push(file);
+handlePrimeNgFileInput(event) {
+  this.fileToUpload = event.files[0];
+
+  this.fileUploadService.uploadFile(this.fileToUpload).subscribe(
+    response => {
+      this.fileName = this.fileToUpload.name;
+      this.showImage = true;
+      console.log('********** FileUploadComponent.ts: File uploaded successfully: ' + response.status);
+    },
+    error => {				
+      console.log('********** FileUploadComponent.ts: ' + error);
     }
-    console.log("test");
-    this.imageService.uploadImage(this.uploadedFiles, this.productToUpload).subscribe(
-      response => {
-        this.resultSuccess = true;
-        this.resultError = false;
-        this.message = "Files uploaded successfully!";
-      },
-      error => {
-        console.log('********** CreateNewProductComponent.ts: ' + error);
-      })
+  );
 }
 
   showDialog() {
