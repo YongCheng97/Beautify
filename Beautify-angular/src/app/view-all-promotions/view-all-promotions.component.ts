@@ -73,10 +73,6 @@ export class ViewAllPromotionsComponent implements OnInit {
 
     this.newPromotion = new Promotion();
 
-    this.newProduct = new Product();
-
-      this.newService = new Service(); 
-
       this.productPromotionToUpdate = new Promotion(); 
 
       this.servicePromotionToUpdate = new Promotion(); 
