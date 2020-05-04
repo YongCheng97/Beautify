@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -27,7 +28,9 @@ import util.exception.CreateNewProductException;
 import util.exception.DeletePromotionException;
 import util.exception.PromotionNameExistException;
 import util.exception.InputDataValidationException;
+import util.exception.ProductNotFoundException;
 import util.exception.PromotionNotFoundException;
+import util.exception.ServiceNotFoundException;
 import util.exception.StaffUsernameExistException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdatePromotionException;
@@ -36,6 +39,12 @@ import util.exception.UpdatePromotionException;
 @Local(PromotionSessionBeanLocal.class)
 
 public class PromotionSessionBean implements PromotionSessionBeanLocal {
+
+    @EJB
+    private ServiceSessionBeanLocal serviceSessionBeanLocal;
+
+    @EJB
+    private ProductSessionBeanLocal productSessionBeanLocal;
 
     @PersistenceContext(unitName = "Beautify-ejbPU")
     private EntityManager em;
@@ -210,7 +219,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException {
+    public void updateProductPromotion(Promotion promotion, Long productId) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException {
         if (promotion != null && promotion.getPromotionId() != null) {
             Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(promotion);
 
@@ -218,10 +227,67 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
                 Promotion promotionToUpdate = retrievePromotionByPromotionId(promotion.getPromotionId());
 
                 if (promotionToUpdate.getPromoCode().equals(promotion.getPromoCode())) {
-                    promotionToUpdate.setDiscountRate(promotion.getDiscountRate());
-                    promotionToUpdate.setStartDate(promotion.getStartDate());
-                    promotionToUpdate.setEndDate(promotion.getEndDate());
-                    promotionToUpdate.setName(promotion.getName());
+
+                    promotionToUpdate.getProduct().getPromotions().remove(promotionToUpdate);
+
+                    Product product = new Product();
+
+                    if (productId != null) {
+                        try {
+                            product = productSessionBeanLocal.retrieveProductByProdId(productId);
+                        } catch (ProductNotFoundException ex) {
+                            Logger.getLogger(PromotionSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        promotionToUpdate.setProduct(product);
+                        product.getPromotions().add(promotionToUpdate); 
+
+                        promotionToUpdate.setDiscountRate(promotion.getDiscountRate());
+                        promotionToUpdate.setStartDate(promotion.getStartDate());
+                        promotionToUpdate.setEndDate(promotion.getEndDate());
+                        promotionToUpdate.setName(promotion.getName());
+                    }
+
+                } else {
+                    throw new UpdatePromotionException("Promo Code of promotion record to be updated does not match the existing record");
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new PromotionNotFoundException("Promotion ID not provided for promotion to be updated");
+        }
+    }
+
+    @Override
+    public void updateServicePromotion(Promotion promotion, Long serviceId) throws PromotionNotFoundException, UpdatePromotionException, InputDataValidationException {
+        if (promotion != null && promotion.getPromotionId() != null) {
+            Set<ConstraintViolation<Promotion>> constraintViolations = validator.validate(promotion);
+
+            if (constraintViolations.isEmpty()) {
+                Promotion promotionToUpdate = retrievePromotionByPromotionId(promotion.getPromotionId());
+
+                if (promotionToUpdate.getPromoCode().equals(promotion.getPromoCode())) {
+
+                    promotionToUpdate.getService().getPromotions().remove(promotionToUpdate);
+
+                    Service service = new Service(); 
+
+                    if (serviceId != null) {
+                        try {
+                            service = serviceSessionBeanLocal.retrieveServiceByServiceId(serviceId); 
+                        } catch (ServiceNotFoundException ex) {
+                            Logger.getLogger(PromotionSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        promotionToUpdate.setService(service);
+                        service.getPromotions().add(promotionToUpdate); 
+
+                        promotionToUpdate.setDiscountRate(promotion.getDiscountRate());
+                        promotionToUpdate.setStartDate(promotion.getStartDate());
+                        promotionToUpdate.setEndDate(promotion.getEndDate());
+                        promotionToUpdate.setName(promotion.getName());
+                    }
 
                 } else {
                     throw new UpdatePromotionException("Promo Code of promotion record to be updated does not match the existing record");
